@@ -4,6 +4,8 @@ Rendering engine and editor
 
 Editor UI uses Qt.
 
+![alt text](https://github.com/Karmiska/Darkness/blob/master/editor.png "Editor screenshot")
+
 <p>Engine description</p>
 
 <ul>
