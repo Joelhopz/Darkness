@@ -1,0 +1,469 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug Vulkan|Win32">
+      <Configuration>Debug Vulkan</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug Vulkan|x64">
+      <Configuration>Debug Vulkan</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug DX12|Win32">
+      <Configuration>Debug DX12</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release Vulkan|Win32">
+      <Configuration>Release Vulkan</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release Vulkan|x64">
+      <Configuration>Release Vulkan</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release DX12|Win32">
+      <Configuration>Release DX12</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug DX12|x64">
+      <Configuration>Debug DX12</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release DX12|x64">
+      <Configuration>Release DX12</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{CCC29684-3CB4-48CD-A949-A97AF8413B3E}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>DarknessEditor</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\external\assimp-3.2\include;$(ProjectDir)..\..\external\amd-tootle\src\TootleLib\include;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\external\Compressonator;$(ProjectDir)..\..\external\FreeImage\Dist\x32;C:\Qt\5.7\msvc2015\include;C:\Qt\5.7\msvc2015\include\QtCore;C:\Qt\5.7\msvc2015\include\QtConcurrent;C:\Qt\5.7\msvc2015\include\QtGui;C:\Qt\5.7\msvc2015\include\QtHelp;C:\Qt\5.7\msvc2015\include\QtLocation;C:\Qt\5.7\msvc2015\include\QtMultimedia;C:\Qt\5.7\msvc2015\include\QtMultimediaWidgets;C:\Qt\5.7\msvc2015\include\QtNetwork;C:\Qt\5.7\msvc2015\include\QtPlatformHeaders;C:\Qt\5.7\msvc2015\include\QtPlatformSupport;C:\Qt\5.7\msvc2015\include\QtPositioning;C:\Qt\5.7\msvc2015\include\QtQml;C:\Qt\5.7\msvc2015\include\QtQuick;C:\Qt\5.7\msvc2015\include\QtQuickWidgets;C:\Qt\5.7\msvc2015\include\QtScript;C:\Qt\5.7\msvc2015\include\QtScriptTools;C:\Qt\5.7\msvc2015\include\QtSvg;C:\Qt\5.7\msvc2015\include\QtUiPlugin;C:\Qt\5.7\msvc2015\include\QtUiTools;C:\Qt\5.7\msvc2015\include\QtWidgets;C:\Qt\5.7\msvc2015\include\QtXml;C:\Qt\5.7\msvc2015\include\QtXmlPatterns;C:\Qt\5.7\msvc2015\include\QtZlib;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\external\ISPCTextureCompressor\ISPC Texture Compressor\ispc_texcomp;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\src</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4711</DisableSpecificWarnings>
+      <OpenMPSupport>true</OpenMPSupport>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Compressonator_MDd.lib;DarknessEngine.lib;bzip2.lib;ispc_texcomp.lib;zlibstaticd.lib;FreeImageLibd.lib;zstdlib_x86.lib;assimp-vc130-mtd.lib;d3d12.lib;dxgi.lib;d3dcompiler.lib;dxguid.lib;qtmaind.lib;Qt5Cored.lib;Qt5Guid.lib;Qt5Helpd.lib;Qt5Multimediad.lib;Qt5MultimediaWidgetsd.lib;Qt5Networkd.lib;Qt5PlatformSupportd.lib;Qt5Positioningd.lib;Qt5Qmld.lib;Qt5Quickd.lib;Qt5QuickWidgetsd.lib;Qt5Widgetsd.lib;Qt5Xmld.lib;Qt5XmlPatternsd.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);ChronoEngine.lib;TootleStatic_2015_DX11_1_MTDLL_d.lib;DirectXMesh.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Qt\5.7\msvc2015\lib;$(ProjectDir)..\..\external\FreeImage\Dist\x32;$(ProjectDir)..\..\..\darkness-engine\external\bzip2-1.0.6\bin\Win32\Debug;$(ProjectDir)..\..\..\darkness-engine\external\zstd\bin\Win32\Debug;$(ProjectDir)..\..\..\darkness-engine\bin\$(Platform)\$(Configuration);$(ProjectDir)..\..\external\assimp-3.2\bin\Win32\Debug;C:\Program Files (x86)\Windows Kits\10\Lib\10.0.15063.0\um\x86;$(ProjectDir)..\..\external\ISPCTextureCompressor\bin\Win32\Debug;$(ProjectDir)..\..\external\Compressonator\Compressonator\Build\VS2015\Debug_MD\Win32;$(ProjectDir)..\..\external\amd-tootle\lib;$(ProjectDir)..\..\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\Win32\Debug</AdditionalLibraryDirectories>
+      <Profile>true</Profile>
+    </Link>
+    <PreBuildEvent>
+      <Command>python $(ProjectDir)..\..\compilation\MocCompile.py -a x86 &amp; python $(ProjectDir)..\..\compilation\RccCompile.py -a x86 -c debug -b dx12</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\external\assimp-3.2\include;$(ProjectDir)..\..\external\amd-tootle\src\TootleLib\include;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\external\Compressonator;$(ProjectDir)..\..\external\FreeImage\Dist\x32;C:\Qt\5.7\msvc2015\include;C:\Qt\5.7\msvc2015\include\QtCore;C:\Qt\5.7\msvc2015\include\QtConcurrent;C:\Qt\5.7\msvc2015\include\QtGui;C:\Qt\5.7\msvc2015\include\QtHelp;C:\Qt\5.7\msvc2015\include\QtLocation;C:\Qt\5.7\msvc2015\include\QtMultimedia;C:\Qt\5.7\msvc2015\include\QtMultimediaWidgets;C:\Qt\5.7\msvc2015\include\QtNetwork;C:\Qt\5.7\msvc2015\include\QtPlatformHeaders;C:\Qt\5.7\msvc2015\include\QtPlatformSupport;C:\Qt\5.7\msvc2015\include\QtPositioning;C:\Qt\5.7\msvc2015\include\QtQml;C:\Qt\5.7\msvc2015\include\QtQuick;C:\Qt\5.7\msvc2015\include\QtQuickWidgets;C:\Qt\5.7\msvc2015\include\QtScript;C:\Qt\5.7\msvc2015\include\QtScriptTools;C:\Qt\5.7\msvc2015\include\QtSvg;C:\Qt\5.7\msvc2015\include\QtUiPlugin;C:\Qt\5.7\msvc2015\include\QtUiTools;C:\Qt\5.7\msvc2015\include\QtWidgets;C:\Qt\5.7\msvc2015\include\QtXml;C:\Qt\5.7\msvc2015\include\QtXmlPatterns;C:\Qt\5.7\msvc2015\include\QtZlib;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\external\ISPCTextureCompressor\ISPC Texture Compressor\ispc_texcomp;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\src</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4711</DisableSpecificWarnings>
+      <OpenMPSupport>true</OpenMPSupport>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Compressonator_MDd.lib;vulkan-1.lib;DarknessEngine.lib;bzip2.lib;ispc_texcomp.lib;zlibstaticd.lib;FreeImageLibd.lib;zstdlib_x86.lib;assimp-vc130-mtd.lib;d3d12.lib;dxgi.lib;d3dcompiler.lib;qtmaind.lib;Qt5Cored.lib;Qt5Guid.lib;Qt5Helpd.lib;Qt5Multimediad.lib;Qt5MultimediaWidgetsd.lib;Qt5Networkd.lib;Qt5PlatformSupportd.lib;Qt5Positioningd.lib;Qt5Qmld.lib;Qt5Quickd.lib;Qt5QuickWidgetsd.lib;Qt5Widgetsd.lib;Qt5Xmld.lib;Qt5XmlPatternsd.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);ChronoEngine.lib;TootleStatic_2015_DX11_1_MTDLL_d.lib;DirectXMesh.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\VulkanSDK\1.0.61.1\Lib32;C:\Qt\5.7\msvc2015\lib;$(ProjectDir)..\..\external\FreeImage\Dist\x32;$(ProjectDir)..\..\..\darkness-engine\external\bzip2-1.0.6\bin\Win32\Debug;$(ProjectDir)..\..\..\darkness-engine\external\zstd\bin\Win32\Debug;$(ProjectDir)..\..\..\darkness-engine\bin\$(Platform)\$(Configuration);$(ProjectDir)..\..\external\assimp-3.2\bin\Win32\Debug;C:\Program Files (x86)\Windows Kits\10\Lib\10.0.10586.0\um\x86;$(ProjectDir)..\..\external\ISPCTextureCompressor\bin\Win32\Debug;$(ProjectDir)..\..\external\Compressonator\Compressonator\Build\VS2015\Debug_MD\Win32;$(ProjectDir)..\..\external\amd-tootle\lib;$(ProjectDir)..\..\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\Win32\Debug</AdditionalLibraryDirectories>
+    </Link>
+    <PreBuildEvent>
+      <Command>python $(ProjectDir)..\..\compilation\MocCompile.py -a x86 &amp; python $(ProjectDir)..\..\compilation\RccCompile.py -a x86 -c debug -b vulkan</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\external\assimp-3.2\include;$(ProjectDir)..\..\external\amd-tootle\src\TootleLib\include;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\external\Compressonator;$(ProjectDir)..\..\external\FreeImage\Dist\x64;C:\Qt\5.7\msvc2015_64\include;C:\Qt\5.7\msvc2015_64\include\QtCore;C:\Qt\5.7\msvc2015_64\include\QtConcurrent;C:\Qt\5.7\msvc2015_64\include\QtGui;C:\Qt\5.7\msvc2015_64\include\QtHelp;C:\Qt\5.7\msvc2015_64\include\QtLocation;C:\Qt\5.7\msvc2015_64\include\QtMultimedia;C:\Qt\5.7\msvc2015_64\include\QtMultimediaWidgets;C:\Qt\5.7\msvc2015_64\include\QtNetwork;C:\Qt\5.7\msvc2015_64\include\QtPlatformHeaders;C:\Qt\5.7\msvc2015_64\include\QtPlatformSupport;C:\Qt\5.7\msvc2015_64\include\QtPositioning;C:\Qt\5.7\msvc2015_64\include\QtQml;C:\Qt\5.7\msvc2015_64\include\QtQuick;C:\Qt\5.7\msvc2015_64\include\QtQuickWidgets;C:\Qt\5.7\msvc2015_64\include\QtScript;C:\Qt\5.7\msvc2015_64\include\QtScriptTools;C:\Qt\5.7\msvc2015_64\include\QtSvg;C:\Qt\5.7\msvc2015_64\include\QtUiPlugin;C:\Qt\5.7\msvc2015_64\include\QtUiTools;C:\Qt\5.7\msvc2015_64\include\QtWidgets;C:\Qt\5.7\msvc2015_64\include\QtXml;C:\Qt\5.7\msvc2015_64\include\QtXmlPatterns;C:\Qt\5.7\msvc2015_64\include\QtZlib;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\external\ISPCTextureCompressor\ISPC Texture Compressor\ispc_texcomp;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\src</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4711</DisableSpecificWarnings>
+      <OpenMPSupport>true</OpenMPSupport>
+      <BrowseInformation>false</BrowseInformation>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>WinPixEventRuntime.lib;Compressonator_MDd.lib;DarknessEngine.lib;bzip2.lib;ispc_texcomp.lib;zlibstaticd.lib;FreeImageLibd.lib;zstdlib_x64.lib;assimp-vc130-mtd.lib;d3d12.lib;dxgi.lib;d3dcompiler.lib;dxguid.lib;qtmaind.lib;Qt5Cored.lib;Qt5Guid.lib;Qt5Helpd.lib;Qt5Multimediad.lib;Qt5MultimediaWidgetsd.lib;Qt5Networkd.lib;Qt5PlatformSupportd.lib;Qt5Positioningd.lib;Qt5Qmld.lib;Qt5Quickd.lib;Qt5QuickWidgetsd.lib;Qt5Widgetsd.lib;Qt5Xmld.lib;Qt5XmlPatternsd.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);BulletDynamics_vs2010_x64_debug.lib;BulletCollision_vs2010_x64_debug.lib;LinearMath_vs2010_x64_debug.lib;TootleStatic_2015_DX11_1_MTDLL_d64.lib;DirectXMesh.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Qt\5.7\msvc2015_64\lib;$(ProjectDir)..\..\external\FreeImage\Dist\x64;$(ProjectDir)..\..\..\darkness-engine\external\bzip2-1.0.6\bin\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\zstd\bin\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\bin\$(Platform)\$(Configuration);$(ProjectDir)..\..\external\assimp-3.2\bin\x64\Debug;C:\Program Files (x86)\Windows Kits\10\Lib\10.0.15063.0\um\x64;$(ProjectDir)..\..\external\ISPCTextureCompressor\bin\x64\Debug;$(ProjectDir)..\..\external\Compressonator\Compressonator\Build\VS2015\Debug_MD\x64;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\bin;$(ProjectDir)..\..\external\amd-tootle\lib;$(ProjectDir)..\..\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\winpixeventruntime\bin</AdditionalLibraryDirectories>
+      <Profile>true</Profile>
+    </Link>
+    <PreBuildEvent>
+      <Command>python $(ProjectDir)..\..\compilation\MocCompile.py -a x64 &amp; python $(ProjectDir)..\..\compilation\RccCompile.py -a x64 -c debug -b dx12</Command>
+    </PreBuildEvent>
+    <Bscmake>
+      <PreserveSbr>false</PreserveSbr>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\external\assimp-3.2\include;$(ProjectDir)..\..\external\amd-tootle\src\TootleLib\include;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\external\Compressonator;$(ProjectDir)..\..\external\FreeImage\Dist\x64;C:\Qt\5.7\msvc2015_64\include;C:\Qt\5.7\msvc2015_64\include\QtCore;C:\Qt\5.7\msvc2015_64\include\QtConcurrent;C:\Qt\5.7\msvc2015_64\include\QtGui;C:\Qt\5.7\msvc2015_64\include\QtHelp;C:\Qt\5.7\msvc2015_64\include\QtLocation;C:\Qt\5.7\msvc2015_64\include\QtMultimedia;C:\Qt\5.7\msvc2015_64\include\QtMultimediaWidgets;C:\Qt\5.7\msvc2015_64\include\QtNetwork;C:\Qt\5.7\msvc2015_64\include\QtPlatformHeaders;C:\Qt\5.7\msvc2015_64\include\QtPlatformSupport;C:\Qt\5.7\msvc2015_64\include\QtPositioning;C:\Qt\5.7\msvc2015_64\include\QtQml;C:\Qt\5.7\msvc2015_64\include\QtQuick;C:\Qt\5.7\msvc2015_64\include\QtQuickWidgets;C:\Qt\5.7\msvc2015_64\include\QtScript;C:\Qt\5.7\msvc2015_64\include\QtScriptTools;C:\Qt\5.7\msvc2015_64\include\QtSvg;C:\Qt\5.7\msvc2015_64\include\QtUiPlugin;C:\Qt\5.7\msvc2015_64\include\QtUiTools;C:\Qt\5.7\msvc2015_64\include\QtWidgets;C:\Qt\5.7\msvc2015_64\include\QtXml;C:\Qt\5.7\msvc2015_64\include\QtXmlPatterns;C:\Qt\5.7\msvc2015_64\include\QtZlib;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\external\ISPCTextureCompressor\ISPC Texture Compressor\ispc_texcomp;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\src</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4711</DisableSpecificWarnings>
+      <OpenMPSupport>true</OpenMPSupport>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Compressonator_MDd.lib;vulkan-1.lib;DarknessEngine.lib;bzip2.lib;ispc_texcomp.lib;zlibstaticd.lib;FreeImageLibd.lib;zstdlib_x64.lib;assimp-vc130-mtd.lib;d3d12.lib;dxgi.lib;d3dcompiler.lib;qtmaind.lib;Qt5Cored.lib;Qt5Guid.lib;Qt5Helpd.lib;Qt5Multimediad.lib;Qt5MultimediaWidgetsd.lib;Qt5Networkd.lib;Qt5PlatformSupportd.lib;Qt5Positioningd.lib;Qt5Qmld.lib;Qt5Quickd.lib;Qt5QuickWidgetsd.lib;Qt5Widgetsd.lib;Qt5Xmld.lib;Qt5XmlPatternsd.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);BulletDynamics_vs2010_x64_debug.lib;BulletCollision_vs2010_x64_debug.lib;LinearMath_vs2010_x64_debug.lib;TootleStatic_2015_DX11_1_MTDLL_d64.lib;DirectXMesh.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\VulkanSDK\1.0.61.1\Lib;C:\Qt\5.7\msvc2015_64\lib;$(ProjectDir)..\..\external\FreeImage\Dist\x64;$(ProjectDir)..\..\..\darkness-engine\external\bzip2-1.0.6\bin\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\zstd\bin\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\bin\$(Platform)\$(Configuration);$(ProjectDir)..\..\external\assimp-3.2\bin\x64\Debug;C:\Program Files (x86)\Windows Kits\10\Lib\10.0.15063.0\um\x64;$(ProjectDir)..\..\external\ISPCTextureCompressor\bin\x64\Debug;$(ProjectDir)..\..\external\Compressonator\Compressonator\Build\VS2015\Debug_MD\x64;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\bin;$(ProjectDir)..\..\external\amd-tootle\lib;$(ProjectDir)..\..\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\x64\Debug</AdditionalLibraryDirectories>
+    </Link>
+    <PreBuildEvent>
+      <Command>python $(ProjectDir)..\..\compilation\MocCompile.py -a x64 &amp; python $(ProjectDir)..\..\compilation\RccCompile.py -a x64 -c debug -b vulkan</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\external\assimp-3.2\include;$(ProjectDir)..\..\external\amd-tootle\src\TootleLib\include;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\external\Compressonator;$(ProjectDir)..\..\external\FreeImage\Dist\x32;C:\Qt\5.7\msvc2015\include;C:\Qt\5.7\msvc2015\include\QtCore;C:\Qt\5.7\msvc2015\include\QtConcurrent;C:\Qt\5.7\msvc2015\include\QtGui;C:\Qt\5.7\msvc2015\include\QtHelp;C:\Qt\5.7\msvc2015\include\QtLocation;C:\Qt\5.7\msvc2015\include\QtMultimedia;C:\Qt\5.7\msvc2015\include\QtMultimediaWidgets;C:\Qt\5.7\msvc2015\include\QtNetwork;C:\Qt\5.7\msvc2015\include\QtPlatformHeaders;C:\Qt\5.7\msvc2015\include\QtPlatformSupport;C:\Qt\5.7\msvc2015\include\QtPositioning;C:\Qt\5.7\msvc2015\include\QtQml;C:\Qt\5.7\msvc2015\include\QtQuick;C:\Qt\5.7\msvc2015\include\QtQuickWidgets;C:\Qt\5.7\msvc2015\include\QtScript;C:\Qt\5.7\msvc2015\include\QtScriptTools;C:\Qt\5.7\msvc2015\include\QtSvg;C:\Qt\5.7\msvc2015\include\QtUiPlugin;C:\Qt\5.7\msvc2015\include\QtUiTools;C:\Qt\5.7\msvc2015\include\QtWidgets;C:\Qt\5.7\msvc2015\include\QtXml;C:\Qt\5.7\msvc2015\include\QtXmlPatterns;C:\Qt\5.7\msvc2015\include\QtZlib;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\external\ISPCTextureCompressor\ISPC Texture Compressor\ispc_texcomp;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\src</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4711</DisableSpecificWarnings>
+      <OpenMPSupport>true</OpenMPSupport>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>Compressonator_MD.lib;DarknessEngine.lib;bzip2.lib;ispc_texcomp.lib;zlibstatic.lib;FreeImageLib.lib;zstdlib_x86.lib;assimp-vc130-mt.lib;d3d12.lib;dxgi.lib;d3dcompiler.lib;dxguid.lib;qtmain.lib;Qt5Core.lib;Qt5Gui.lib;Qt5Help.lib;Qt5Multimedia.lib;Qt5MultimediaWidgets.lib;Qt5Network.lib;Qt5PlatformSupport.lib;Qt5Positioning.lib;Qt5Qml.lib;Qt5Quick.lib;Qt5QuickWidgets.lib;Qt5Widgets.lib;Qt5Xml.lib;Qt5XmlPatterns.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);ChronoEngine.lib;TootleStatic_2015_DX11_1_MTDLL.lib;DirectXMesh.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Qt\5.7\msvc2015\lib;$(ProjectDir)..\..\external\FreeImage\Dist\x32;$(ProjectDir)..\..\..\darkness-engine\external\bzip2-1.0.6\bin\Win32\Release;$(ProjectDir)..\..\..\darkness-engine\external\zstd\bin\Win32\Release;$(ProjectDir)..\..\..\darkness-engine\bin\$(Platform)\$(Configuration);$(ProjectDir)..\..\external\assimp-3.2\bin\Win32\Release;C:\Program Files (x86)\Windows Kits\10\Lib\10.0.15063.0\um\x86;$(ProjectDir)..\..\external\ISPCTextureCompressor\bin\Win32\Release;$(ProjectDir)..\..\external\Compressonator\Compressonator\Build\VS2015\Release_MD\Win32;$(ProjectDir)..\..\external\amd-tootle\lib;$(ProjectDir)..\..\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\Win32\Release</AdditionalLibraryDirectories>
+    </Link>
+    <PreBuildEvent>
+      <Command>python $(ProjectDir)..\..\compilation\MocCompile.py -a x86 &amp; python $(ProjectDir)..\..\compilation\RccCompile.py -a x86 -c release -b dx12</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\external\assimp-3.2\include;$(ProjectDir)..\..\external\amd-tootle\src\TootleLib\include;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\external\Compressonator;$(ProjectDir)..\..\external\FreeImage\Dist\x32;C:\Qt\5.7\msvc2015\include;C:\Qt\5.7\msvc2015\include\QtCore;C:\Qt\5.7\msvc2015\include\QtConcurrent;C:\Qt\5.7\msvc2015\include\QtGui;C:\Qt\5.7\msvc2015\include\QtHelp;C:\Qt\5.7\msvc2015\include\QtLocation;C:\Qt\5.7\msvc2015\include\QtMultimedia;C:\Qt\5.7\msvc2015\include\QtMultimediaWidgets;C:\Qt\5.7\msvc2015\include\QtNetwork;C:\Qt\5.7\msvc2015\include\QtPlatformHeaders;C:\Qt\5.7\msvc2015\include\QtPlatformSupport;C:\Qt\5.7\msvc2015\include\QtPositioning;C:\Qt\5.7\msvc2015\include\QtQml;C:\Qt\5.7\msvc2015\include\QtQuick;C:\Qt\5.7\msvc2015\include\QtQuickWidgets;C:\Qt\5.7\msvc2015\include\QtScript;C:\Qt\5.7\msvc2015\include\QtScriptTools;C:\Qt\5.7\msvc2015\include\QtSvg;C:\Qt\5.7\msvc2015\include\QtUiPlugin;C:\Qt\5.7\msvc2015\include\QtUiTools;C:\Qt\5.7\msvc2015\include\QtWidgets;C:\Qt\5.7\msvc2015\include\QtXml;C:\Qt\5.7\msvc2015\include\QtXmlPatterns;C:\Qt\5.7\msvc2015\include\QtZlib;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\external\ISPCTextureCompressor\ISPC Texture Compressor\ispc_texcomp;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\src</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4711</DisableSpecificWarnings>
+      <OpenMPSupport>true</OpenMPSupport>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>Compressonator_MD.lib;vulkan-1.lib;DarknessEngine.lib;bzip2.lib;ispc_texcomp.lib;zlibstatic.lib;FreeImageLib.lib;zstdlib_x86.lib;assimp-vc130-mt.lib;d3d12.lib;dxgi.lib;d3dcompiler.lib;qtmain.lib;Qt5Core.lib;Qt5Gui.lib;Qt5Help.lib;Qt5Multimedia.lib;Qt5MultimediaWidgets.lib;Qt5Network.lib;Qt5PlatformSupport.lib;Qt5Positioning.lib;Qt5Qml.lib;Qt5Quick.lib;Qt5QuickWidgets.lib;Qt5Widgets.lib;Qt5Xml.lib;Qt5XmlPatterns.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);ChronoEngine.lib;TootleStatic_2015_DX11_1_MTDLL.lib;DirectXMesh.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\VulkanSDK\1.0.61.1\Lib32;C:\Qt\5.7\msvc2015\lib;$(ProjectDir)..\..\external\FreeImage\Dist\x32;$(ProjectDir)..\..\..\darkness-engine\external\bzip2-1.0.6\bin\Win32\Release;$(ProjectDir)..\..\..\darkness-engine\external\zstd\bin\Win32\Release;$(ProjectDir)..\..\..\darkness-engine\bin\$(Platform)\$(Configuration);$(ProjectDir)..\..\external\assimp-3.2\bin\Win32\Release;C:\Program Files (x86)\Windows Kits\10\Lib\10.0.10586.0\um\x86;$(ProjectDir)..\..\external\ISPCTextureCompressor\bin\Win32\Release;$(ProjectDir)..\..\external\Compressonator\Compressonator\Build\VS2015\Release_MD\Win32;$(ProjectDir)..\..\external\amd-tootle\lib;$(ProjectDir)..\..\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\Win32\Release</AdditionalLibraryDirectories>
+    </Link>
+    <PreBuildEvent>
+      <Command>python $(ProjectDir)..\..\compilation\MocCompile.py -a x86 &amp; python $(ProjectDir)..\..\compilation\RccCompile.py -a x86 -c release -b vulkan</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\external\assimp-3.2\include;$(ProjectDir)..\..\external\amd-tootle\src\TootleLib\include;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\external\Compressonator;$(ProjectDir)..\..\external\FreeImage\Dist\x64;C:\Qt\5.7\msvc2015_64\include;C:\Qt\5.7\msvc2015_64\include\QtCore;C:\Qt\5.7\msvc2015_64\include\QtConcurrent;C:\Qt\5.7\msvc2015_64\include\QtGui;C:\Qt\5.7\msvc2015_64\include\QtHelp;C:\Qt\5.7\msvc2015_64\include\QtLocation;C:\Qt\5.7\msvc2015_64\include\QtMultimedia;C:\Qt\5.7\msvc2015_64\include\QtMultimediaWidgets;C:\Qt\5.7\msvc2015_64\include\QtNetwork;C:\Qt\5.7\msvc2015_64\include\QtPlatformHeaders;C:\Qt\5.7\msvc2015_64\include\QtPlatformSupport;C:\Qt\5.7\msvc2015_64\include\QtPositioning;C:\Qt\5.7\msvc2015_64\include\QtQml;C:\Qt\5.7\msvc2015_64\include\QtQuick;C:\Qt\5.7\msvc2015_64\include\QtQuickWidgets;C:\Qt\5.7\msvc2015_64\include\QtScript;C:\Qt\5.7\msvc2015_64\include\QtScriptTools;C:\Qt\5.7\msvc2015_64\include\QtSvg;C:\Qt\5.7\msvc2015_64\include\QtUiPlugin;C:\Qt\5.7\msvc2015_64\include\QtUiTools;C:\Qt\5.7\msvc2015_64\include\QtWidgets;C:\Qt\5.7\msvc2015_64\include\QtXml;C:\Qt\5.7\msvc2015_64\include\QtXmlPatterns;C:\Qt\5.7\msvc2015_64\include\QtZlib;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\external\ISPCTextureCompressor\ISPC Texture Compressor\ispc_texcomp;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\src</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4711</DisableSpecificWarnings>
+      <OpenMPSupport>true</OpenMPSupport>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>WinPixEventRuntime.lib;Compressonator_MD.lib;DarknessEngine.lib;bzip2.lib;ispc_texcomp.lib;zlibstatic.lib;FreeImageLib.lib;zstdlib_x64.lib;assimp-vc130-mt.lib;d3d12.lib;dxgi.lib;d3dcompiler.lib;dxguid.lib;qtmain.lib;Qt5Core.lib;Qt5Gui.lib;Qt5Help.lib;Qt5Multimedia.lib;Qt5MultimediaWidgets.lib;Qt5Network.lib;Qt5PlatformSupport.lib;Qt5Positioning.lib;Qt5Qml.lib;Qt5Quick.lib;Qt5QuickWidgets.lib;Qt5Widgets.lib;Qt5Xml.lib;Qt5XmlPatterns.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);BulletDynamics_vs2010_x64_release.lib;BulletCollision_vs2010_x64_release.lib;LinearMath_vs2010_x64_release.lib;TootleStatic_2015_DX11_1_MTDLL_64.lib;DirectXMesh.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Qt\5.7\msvc2015_64\lib;$(ProjectDir)..\..\external\FreeImage\Dist\x64;$(ProjectDir)..\..\..\darkness-engine\external\bzip2-1.0.6\bin\x64\Release;$(ProjectDir)..\..\..\darkness-engine\external\zstd\bin\x64\Release;$(ProjectDir)..\..\..\darkness-engine\bin\$(Platform)\$(Configuration);$(ProjectDir)..\..\external\assimp-3.2\bin\x64\Release;C:\Program Files (x86)\Windows Kits\10\Lib\10.0.15063.0\um\x64;$(ProjectDir)..\..\external\ISPCTextureCompressor\bin\x64\Release;$(ProjectDir)..\..\external\Compressonator\Compressonator\Build\VS2015\Release_MD\x64;$(ProjectDir)..\..\..\darkness-engine\external\chrono\builds\lib64\Release;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\bin;$(ProjectDir)..\..\external\amd-tootle\lib;$(ProjectDir)..\..\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\x64\Release;$(ProjectDir)..\..\..\darkness-engine\external\winpixeventruntime\bin</AdditionalLibraryDirectories>
+    </Link>
+    <PreBuildEvent>
+      <Command>python $(ProjectDir)..\..\compilation\MocCompile.py -a x64 &amp; python $(ProjectDir)..\..\compilation\RccCompile.py -a x64 -c release -b dx12</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\external\assimp-3.2\include;$(ProjectDir)..\..\external\amd-tootle\src\TootleLib\include;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\external\Compressonator;$(ProjectDir)..\..\external\FreeImage\Dist\x64;C:\Qt\5.7\msvc2015_64\include;C:\Qt\5.7\msvc2015_64\include\QtCore;C:\Qt\5.7\msvc2015_64\include\QtConcurrent;C:\Qt\5.7\msvc2015_64\include\QtGui;C:\Qt\5.7\msvc2015_64\include\QtHelp;C:\Qt\5.7\msvc2015_64\include\QtLocation;C:\Qt\5.7\msvc2015_64\include\QtMultimedia;C:\Qt\5.7\msvc2015_64\include\QtMultimediaWidgets;C:\Qt\5.7\msvc2015_64\include\QtNetwork;C:\Qt\5.7\msvc2015_64\include\QtPlatformHeaders;C:\Qt\5.7\msvc2015_64\include\QtPlatformSupport;C:\Qt\5.7\msvc2015_64\include\QtPositioning;C:\Qt\5.7\msvc2015_64\include\QtQml;C:\Qt\5.7\msvc2015_64\include\QtQuick;C:\Qt\5.7\msvc2015_64\include\QtQuickWidgets;C:\Qt\5.7\msvc2015_64\include\QtScript;C:\Qt\5.7\msvc2015_64\include\QtScriptTools;C:\Qt\5.7\msvc2015_64\include\QtSvg;C:\Qt\5.7\msvc2015_64\include\QtUiPlugin;C:\Qt\5.7\msvc2015_64\include\QtUiTools;C:\Qt\5.7\msvc2015_64\include\QtWidgets;C:\Qt\5.7\msvc2015_64\include\QtXml;C:\Qt\5.7\msvc2015_64\include\QtXmlPatterns;C:\Qt\5.7\msvc2015_64\include\QtZlib;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\external\ISPCTextureCompressor\ISPC Texture Compressor\ispc_texcomp;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\src</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4711</DisableSpecificWarnings>
+      <OpenMPSupport>true</OpenMPSupport>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>Compressonator_MD.lib;vulkan-1.lib;DarknessEngine.lib;bzip2.lib;ispc_texcomp.lib;zlibstatic.lib;FreeImageLib.lib;zstdlib_x64.lib;assimp-vc130-mt.lib;d3d12.lib;dxgi.lib;d3dcompiler.lib;qtmain.lib;Qt5Core.lib;Qt5Gui.lib;Qt5Help.lib;Qt5Multimedia.lib;Qt5MultimediaWidgets.lib;Qt5Network.lib;Qt5PlatformSupport.lib;Qt5Positioning.lib;Qt5Qml.lib;Qt5Quick.lib;Qt5QuickWidgets.lib;Qt5Widgets.lib;Qt5Xml.lib;Qt5XmlPatterns.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);BulletDynamics_vs2010_x64_release.lib;BulletCollision_vs2010_x64_release.lib;LinearMath_vs2010_x64_release.lib;TootleStatic_2015_DX11_1_MTDLL_64.lib;DirectXMesh.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\VulkanSDK\1.0.61.1\Lib;C:\Qt\5.7\msvc2015_64\lib;$(ProjectDir)..\..\external\FreeImage\Dist\x64;$(ProjectDir)..\..\..\darkness-engine\external\bzip2-1.0.6\bin\x64\Release;$(ProjectDir)..\..\..\darkness-engine\external\zstd\bin\x64\Release;$(ProjectDir)..\..\..\darkness-engine\bin\$(Platform)\$(Configuration);$(ProjectDir)..\..\external\assimp-3.2\bin\x64\Release;C:\Program Files (x86)\Windows Kits\10\Lib\10.0.15063.0\um\x64;$(ProjectDir)..\..\external\ISPCTextureCompressor\bin\x64\Release;$(ProjectDir)..\..\external\Compressonator\Compressonator\Build\VS2015\Release_MD\x64;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\bin;$(ProjectDir)..\..\external\amd-tootle\lib;$(ProjectDir)..\..\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\x64\Release</AdditionalLibraryDirectories>
+    </Link>
+    <PreBuildEvent>
+      <Command>python $(ProjectDir)..\..\compilation\MocCompile.py -a x64 &amp; python $(ProjectDir)..\..\compilation\RccCompile.py -a x64 -c release -b vulkan</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\moc\assets\AssetDecodePopup_moc.cpp" />
+    <ClCompile Include="..\..\moc\assets\AssetImporter_moc.cpp" />
+    <ClCompile Include="..\..\moc\ColorDock_moc.cpp" />
+    <ClCompile Include="..\..\moc\ColorSwatch_moc.cpp" />
+    <ClCompile Include="..\..\moc\drawers\ButtonDrawers_moc.cpp" />
+    <ClCompile Include="..\..\moc\drawers\CollisionShapeDrawer_moc.cpp" />
+    <ClCompile Include="..\..\moc\drawers\DragableLabel_moc.cpp" />
+    <ClCompile Include="..\..\moc\drawers\FloatDrawer_moc.cpp" />
+    <ClCompile Include="..\..\moc\drawers\IntDrawer_moc.cpp" />
+    <ClCompile Include="..\..\moc\drawers\LightTypeDrawer_moc.cpp" />
+    <ClCompile Include="..\..\moc\drawers\Matrix4fDrawer_moc.cpp" />
+    <ClCompile Include="..\..\moc\drawers\ProjectionDrawer_moc.cpp" />
+    <ClCompile Include="..\..\moc\drawers\StringDrawer_moc.cpp" />
+    <ClCompile Include="..\..\moc\drawers\TextureTypeDrawer_moc.cpp" />
+    <ClCompile Include="..\..\moc\drawers\Vector3fDrawer_moc.cpp" />
+    <ClCompile Include="..\..\moc\engine\EngineWindow_moc.cpp" />
+    <ClCompile Include="..\..\moc\MainWindow_moc.cpp" />
+    <ClCompile Include="..\..\moc\toolbars\PhysicsToolbar_moc.cpp" />
+    <ClCompile Include="..\..\moc\toolbars\TransformToolbar_moc.cpp" />
+    <ClCompile Include="..\..\moc\ToolBar_moc.cpp" />
+    <ClCompile Include="..\..\moc\widgets\Browser_moc.cpp" />
+    <ClCompile Include="..\..\moc\widgets\HierarchyTreeModel_moc.cpp" />
+    <ClCompile Include="..\..\moc\widgets\Hierarchy_moc.cpp" />
+    <ClCompile Include="..\..\moc\widgets\ImportSettings_moc.cpp" />
+    <ClCompile Include="..\..\moc\widgets\Inspector_moc.cpp" />
+    <ClCompile Include="..\..\src\assets\AssetDecodePopup.cpp" />
+    <ClCompile Include="..\..\src\assets\AssetImporter.cpp" />
+    <ClCompile Include="..\..\src\assets\AssetTools.cpp" />
+    <ClCompile Include="..\..\src\ColorDock.cpp" />
+    <ClCompile Include="..\..\src\ColorSwatch.cpp" />
+    <ClCompile Include="..\..\src\drawers\ButtonDrawers.cpp" />
+    <ClCompile Include="..\..\src\drawers\CollisionShapeDrawer.cpp" />
+    <ClCompile Include="..\..\src\drawers\DragableLabel.cpp" />
+    <ClCompile Include="..\..\src\drawers\FloatDrawer.cpp" />
+    <ClCompile Include="..\..\src\drawers\IntDrawer.cpp" />
+    <ClCompile Include="..\..\src\drawers\LightTypeDrawer.cpp" />
+    <ClCompile Include="..\..\src\drawers\Matrix4fDrawer.cpp" />
+    <ClCompile Include="..\..\src\drawers\PlaceholderDrawers.cpp" />
+    <ClCompile Include="..\..\src\drawers\ProjectionDrawer.cpp" />
+    <ClCompile Include="..\..\src\drawers\StringDrawer.cpp" />
+    <ClCompile Include="..\..\src\drawers\TextureTypeDrawer.cpp" />
+    <ClCompile Include="..\..\src\drawers\Vector3fDrawer.cpp" />
+    <ClCompile Include="..\..\src\engine\EngineWindow.cpp" />
+    <ClCompile Include="..\..\src\engine\EngineWrap.cpp" />
+    <ClCompile Include="..\..\src\main.cpp" />
+    <ClCompile Include="..\..\src\MainWindow.cpp" />
+    <ClCompile Include="..\..\src\settings\BrowserSettings.cpp" />
+    <ClCompile Include="..\..\src\settings\ProjectSettings.cpp" />
+    <ClCompile Include="..\..\src\settings\Settings.cpp" />
+    <ClCompile Include="..\..\src\ToolBar.cpp" />
+    <ClCompile Include="..\..\src\toolbars\PhysicsToolbar.cpp" />
+    <ClCompile Include="..\..\src\toolbars\TransformToolbar.cpp" />
+    <ClCompile Include="..\..\src\widgets\Browser.cpp" />
+    <ClCompile Include="..\..\src\widgets\Hierarchy.cpp" />
+    <ClCompile Include="..\..\src\widgets\HierarchyTreeModel.cpp" />
+    <ClCompile Include="..\..\src\widgets\ImportSettings.cpp" />
+    <ClCompile Include="..\..\src\widgets\Inspector.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\assets\AssetDecodePopup.h" />
+    <ClInclude Include="..\..\src\assets\AssetImporter.h" />
+    <ClInclude Include="..\..\src\assets\AssetTools.h" />
+    <ClInclude Include="..\..\src\ColorDock.h" />
+    <ClInclude Include="..\..\src\ColorSwatch.h" />
+    <ClInclude Include="..\..\src\drawers\ButtonDrawers.h" />
+    <ClInclude Include="..\..\src\drawers\CollisionShapeDrawer.h" />
+    <ClInclude Include="..\..\src\drawers\DragableLabel.h" />
+    <ClInclude Include="..\..\src\drawers\FloatDrawer.h" />
+    <ClInclude Include="..\..\src\drawers\IntDrawer.h" />
+    <ClInclude Include="..\..\src\drawers\LightTypeDrawer.h" />
+    <ClInclude Include="..\..\src\drawers\Matrix4fDrawer.h" />
+    <ClInclude Include="..\..\src\drawers\PlaceholderDrawers.h" />
+    <ClInclude Include="..\..\src\drawers\ProjectionDrawer.h" />
+    <ClInclude Include="..\..\src\drawers\StringDrawer.h" />
+    <ClInclude Include="..\..\src\drawers\TextureTypeDrawer.h" />
+    <ClInclude Include="..\..\src\drawers\Vector3fDrawer.h" />
+    <ClInclude Include="..\..\src\engine\EngineWindow.h" />
+    <ClInclude Include="..\..\src\engine\EngineWrap.h" />
+    <ClInclude Include="..\..\src\MainWindow.h" />
+    <ClInclude Include="..\..\src\settings\BrowserSettings.h" />
+    <ClInclude Include="..\..\src\settings\ProjectSettings.h" />
+    <ClInclude Include="..\..\src\settings\Settings.h" />
+    <ClInclude Include="..\..\src\ToolBar.h" />
+    <ClInclude Include="..\..\src\toolbars\PhysicsToolbar.h" />
+    <ClInclude Include="..\..\src\toolbars\TransformToolbar.h" />
+    <ClInclude Include="..\..\src\widgets\AssetProgress.h" />
+    <ClInclude Include="..\..\src\widgets\Browser.h" />
+    <ClInclude Include="..\..\src\widgets\Hierarchy.h" />
+    <ClInclude Include="..\..\src\widgets\HierarchyTreeModel.h" />
+    <ClInclude Include="..\..\src\widgets\ImportSettings.h" />
+    <ClInclude Include="..\..\src\widgets\Inspector.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="resource1.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\compilation\MocCompile.py" />
+    <None Include="..\..\compilation\RccCompile.py" />
+    <None Include="..\..\data\DarknessEditor.qrc">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="..\..\data\DarknessEditor.qss" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DarknessEditor.rc" />
+    <ResourceCompile Include="DarknessEditor1.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\data\editor.ico" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

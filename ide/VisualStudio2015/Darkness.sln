@@ -1,0 +1,168 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DarknessEngine", "..\..\darkness-engine\ide\VIsualStudio2015\DarknessEngine.vcxproj", "{5214C556-A443-4D25-A803-5B5EFCA0E522}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1BE56972-023E-4F18-BF59-E604CB17FB28} = {1BE56972-023E-4F18-BF59-E604CB17FB28}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DarknessEditor", "..\..\darkness-editor\ide\VisualStudio2015\DarknessEditor.vcxproj", "{CCC29684-3CB4-48CD-A949-A97AF8413B3E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5214C556-A443-4D25-A803-5B5EFCA0E522} = {5214C556-A443-4D25-A803-5B5EFCA0E522}
+		{1BE56972-023E-4F18-BF59-E604CB17FB28} = {1BE56972-023E-4F18-BF59-E604CB17FB28}
+		{AA6F94D9-078B-407F-9660-24F8007F058C} = {AA6F94D9-078B-407F-9660-24F8007F058C}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DarknessGame", "..\..\darkness-game\ide\VisualStudio2015\DarknessGame.vcxproj", "{B4FADEE8-72F8-47A6-A433-D4FFB43AC569}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5214C556-A443-4D25-A803-5B5EFCA0E522} = {5214C556-A443-4D25-A803-5B5EFCA0E522}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DarknessLauncher", "..\..\darkness-launcher\ide\VisualStudio2015\DarknessLauncher.vcxproj", "{DA4949CC-C5F8-4363-8A82-580CC64BF0EA}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestGraphics", "..\..\test-graphics\ide\VisualStudio2015\TestGraphics.vcxproj", "{6C6E3053-E9AE-416D-B41F-367F36F47141}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5214C556-A443-4D25-A803-5B5EFCA0E522} = {5214C556-A443-4D25-A803-5B5EFCA0E522}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DarknessShared", "..\..\darkness-shared\ide\VisualStudio2015\Shared.vcxproj", "{1BE56972-023E-4F18-BF59-E604CB17FB28}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DarknessCorePlugins", "..\..\darkness-coreplugins\ide\VisualStudio2015\CorePlugins.vcxproj", "{AA6F94D9-078B-407F-9660-24F8007F058C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1BE56972-023E-4F18-BF59-E604CB17FB28} = {1BE56972-023E-4F18-BF59-E604CB17FB28}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug DX12|x64 = Debug DX12|x64
+		Debug DX12|x86 = Debug DX12|x86
+		Debug Vulkan|x64 = Debug Vulkan|x64
+		Debug Vulkan|x86 = Debug Vulkan|x86
+		Release DX12|x64 = Release DX12|x64
+		Release DX12|x86 = Release DX12|x86
+		Release Vulkan|x64 = Release Vulkan|x64
+		Release Vulkan|x86 = Release Vulkan|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5214C556-A443-4D25-A803-5B5EFCA0E522}.Debug DX12|x64.ActiveCfg = Debug DX12|x64
+		{5214C556-A443-4D25-A803-5B5EFCA0E522}.Debug DX12|x64.Build.0 = Debug DX12|x64
+		{5214C556-A443-4D25-A803-5B5EFCA0E522}.Debug DX12|x86.ActiveCfg = Debug DX12|Win32
+		{5214C556-A443-4D25-A803-5B5EFCA0E522}.Debug DX12|x86.Build.0 = Debug DX12|Win32
+		{5214C556-A443-4D25-A803-5B5EFCA0E522}.Debug Vulkan|x64.ActiveCfg = Debug Vulkan|x64
+		{5214C556-A443-4D25-A803-5B5EFCA0E522}.Debug Vulkan|x64.Build.0 = Debug Vulkan|x64
+		{5214C556-A443-4D25-A803-5B5EFCA0E522}.Debug Vulkan|x86.ActiveCfg = Debug Vulkan|Win32
+		{5214C556-A443-4D25-A803-5B5EFCA0E522}.Debug Vulkan|x86.Build.0 = Debug Vulkan|Win32
+		{5214C556-A443-4D25-A803-5B5EFCA0E522}.Release DX12|x64.ActiveCfg = Release DX12|x64
+		{5214C556-A443-4D25-A803-5B5EFCA0E522}.Release DX12|x64.Build.0 = Release DX12|x64
+		{5214C556-A443-4D25-A803-5B5EFCA0E522}.Release DX12|x86.ActiveCfg = Release DX12|Win32
+		{5214C556-A443-4D25-A803-5B5EFCA0E522}.Release DX12|x86.Build.0 = Release DX12|Win32
+		{5214C556-A443-4D25-A803-5B5EFCA0E522}.Release Vulkan|x64.ActiveCfg = Release Vulkan|x64
+		{5214C556-A443-4D25-A803-5B5EFCA0E522}.Release Vulkan|x64.Build.0 = Release Vulkan|x64
+		{5214C556-A443-4D25-A803-5B5EFCA0E522}.Release Vulkan|x86.ActiveCfg = Release Vulkan|Win32
+		{5214C556-A443-4D25-A803-5B5EFCA0E522}.Release Vulkan|x86.Build.0 = Release Vulkan|Win32
+		{CCC29684-3CB4-48CD-A949-A97AF8413B3E}.Debug DX12|x64.ActiveCfg = Debug DX12|x64
+		{CCC29684-3CB4-48CD-A949-A97AF8413B3E}.Debug DX12|x64.Build.0 = Debug DX12|x64
+		{CCC29684-3CB4-48CD-A949-A97AF8413B3E}.Debug DX12|x86.ActiveCfg = Debug DX12|Win32
+		{CCC29684-3CB4-48CD-A949-A97AF8413B3E}.Debug DX12|x86.Build.0 = Debug DX12|Win32
+		{CCC29684-3CB4-48CD-A949-A97AF8413B3E}.Debug Vulkan|x64.ActiveCfg = Debug Vulkan|x64
+		{CCC29684-3CB4-48CD-A949-A97AF8413B3E}.Debug Vulkan|x64.Build.0 = Debug Vulkan|x64
+		{CCC29684-3CB4-48CD-A949-A97AF8413B3E}.Debug Vulkan|x86.ActiveCfg = Debug Vulkan|Win32
+		{CCC29684-3CB4-48CD-A949-A97AF8413B3E}.Debug Vulkan|x86.Build.0 = Debug Vulkan|Win32
+		{CCC29684-3CB4-48CD-A949-A97AF8413B3E}.Release DX12|x64.ActiveCfg = Release DX12|x64
+		{CCC29684-3CB4-48CD-A949-A97AF8413B3E}.Release DX12|x64.Build.0 = Release DX12|x64
+		{CCC29684-3CB4-48CD-A949-A97AF8413B3E}.Release DX12|x86.ActiveCfg = Release DX12|Win32
+		{CCC29684-3CB4-48CD-A949-A97AF8413B3E}.Release DX12|x86.Build.0 = Release DX12|Win32
+		{CCC29684-3CB4-48CD-A949-A97AF8413B3E}.Release Vulkan|x64.ActiveCfg = Release Vulkan|x64
+		{CCC29684-3CB4-48CD-A949-A97AF8413B3E}.Release Vulkan|x64.Build.0 = Release Vulkan|x64
+		{CCC29684-3CB4-48CD-A949-A97AF8413B3E}.Release Vulkan|x86.ActiveCfg = Release Vulkan|Win32
+		{CCC29684-3CB4-48CD-A949-A97AF8413B3E}.Release Vulkan|x86.Build.0 = Release Vulkan|Win32
+		{B4FADEE8-72F8-47A6-A433-D4FFB43AC569}.Debug DX12|x64.ActiveCfg = Debug DX12|x64
+		{B4FADEE8-72F8-47A6-A433-D4FFB43AC569}.Debug DX12|x64.Build.0 = Debug DX12|x64
+		{B4FADEE8-72F8-47A6-A433-D4FFB43AC569}.Debug DX12|x86.ActiveCfg = Debug DX12|Win32
+		{B4FADEE8-72F8-47A6-A433-D4FFB43AC569}.Debug DX12|x86.Build.0 = Debug DX12|Win32
+		{B4FADEE8-72F8-47A6-A433-D4FFB43AC569}.Debug Vulkan|x64.ActiveCfg = Debug Vulkan|x64
+		{B4FADEE8-72F8-47A6-A433-D4FFB43AC569}.Debug Vulkan|x64.Build.0 = Debug Vulkan|x64
+		{B4FADEE8-72F8-47A6-A433-D4FFB43AC569}.Debug Vulkan|x86.ActiveCfg = Debug Vulkan|Win32
+		{B4FADEE8-72F8-47A6-A433-D4FFB43AC569}.Debug Vulkan|x86.Build.0 = Debug Vulkan|Win32
+		{B4FADEE8-72F8-47A6-A433-D4FFB43AC569}.Release DX12|x64.ActiveCfg = Release DX12|x64
+		{B4FADEE8-72F8-47A6-A433-D4FFB43AC569}.Release DX12|x64.Build.0 = Release DX12|x64
+		{B4FADEE8-72F8-47A6-A433-D4FFB43AC569}.Release DX12|x86.ActiveCfg = Release DX12|Win32
+		{B4FADEE8-72F8-47A6-A433-D4FFB43AC569}.Release DX12|x86.Build.0 = Release DX12|Win32
+		{B4FADEE8-72F8-47A6-A433-D4FFB43AC569}.Release Vulkan|x64.ActiveCfg = Release Vulkan|x64
+		{B4FADEE8-72F8-47A6-A433-D4FFB43AC569}.Release Vulkan|x64.Build.0 = Release Vulkan|x64
+		{B4FADEE8-72F8-47A6-A433-D4FFB43AC569}.Release Vulkan|x86.ActiveCfg = Release Vulkan|Win32
+		{B4FADEE8-72F8-47A6-A433-D4FFB43AC569}.Release Vulkan|x86.Build.0 = Release Vulkan|Win32
+		{DA4949CC-C5F8-4363-8A82-580CC64BF0EA}.Debug DX12|x64.ActiveCfg = Debug DX12|x64
+		{DA4949CC-C5F8-4363-8A82-580CC64BF0EA}.Debug DX12|x64.Build.0 = Debug DX12|x64
+		{DA4949CC-C5F8-4363-8A82-580CC64BF0EA}.Debug DX12|x86.ActiveCfg = Debug DX12|Win32
+		{DA4949CC-C5F8-4363-8A82-580CC64BF0EA}.Debug DX12|x86.Build.0 = Debug DX12|Win32
+		{DA4949CC-C5F8-4363-8A82-580CC64BF0EA}.Debug Vulkan|x64.ActiveCfg = Debug Vulkan|x64
+		{DA4949CC-C5F8-4363-8A82-580CC64BF0EA}.Debug Vulkan|x64.Build.0 = Debug Vulkan|x64
+		{DA4949CC-C5F8-4363-8A82-580CC64BF0EA}.Debug Vulkan|x86.ActiveCfg = Debug Vulkan|Win32
+		{DA4949CC-C5F8-4363-8A82-580CC64BF0EA}.Debug Vulkan|x86.Build.0 = Debug Vulkan|Win32
+		{DA4949CC-C5F8-4363-8A82-580CC64BF0EA}.Release DX12|x64.ActiveCfg = Release DX12|x64
+		{DA4949CC-C5F8-4363-8A82-580CC64BF0EA}.Release DX12|x64.Build.0 = Release DX12|x64
+		{DA4949CC-C5F8-4363-8A82-580CC64BF0EA}.Release DX12|x86.ActiveCfg = Release DX12|Win32
+		{DA4949CC-C5F8-4363-8A82-580CC64BF0EA}.Release DX12|x86.Build.0 = Release DX12|Win32
+		{DA4949CC-C5F8-4363-8A82-580CC64BF0EA}.Release Vulkan|x64.ActiveCfg = Release Vulkan|x64
+		{DA4949CC-C5F8-4363-8A82-580CC64BF0EA}.Release Vulkan|x64.Build.0 = Release Vulkan|x64
+		{DA4949CC-C5F8-4363-8A82-580CC64BF0EA}.Release Vulkan|x86.ActiveCfg = Release Vulkan|Win32
+		{DA4949CC-C5F8-4363-8A82-580CC64BF0EA}.Release Vulkan|x86.Build.0 = Release Vulkan|Win32
+		{6C6E3053-E9AE-416D-B41F-367F36F47141}.Debug DX12|x64.ActiveCfg = Debug DX12|x64
+		{6C6E3053-E9AE-416D-B41F-367F36F47141}.Debug DX12|x64.Build.0 = Debug DX12|x64
+		{6C6E3053-E9AE-416D-B41F-367F36F47141}.Debug DX12|x86.ActiveCfg = Debug DX12|Win32
+		{6C6E3053-E9AE-416D-B41F-367F36F47141}.Debug DX12|x86.Build.0 = Debug DX12|Win32
+		{6C6E3053-E9AE-416D-B41F-367F36F47141}.Debug Vulkan|x64.ActiveCfg = Debug Vulkan|x64
+		{6C6E3053-E9AE-416D-B41F-367F36F47141}.Debug Vulkan|x64.Build.0 = Debug Vulkan|x64
+		{6C6E3053-E9AE-416D-B41F-367F36F47141}.Debug Vulkan|x86.ActiveCfg = Debug Vulkan|Win32
+		{6C6E3053-E9AE-416D-B41F-367F36F47141}.Debug Vulkan|x86.Build.0 = Debug Vulkan|Win32
+		{6C6E3053-E9AE-416D-B41F-367F36F47141}.Release DX12|x64.ActiveCfg = Release DX12|x64
+		{6C6E3053-E9AE-416D-B41F-367F36F47141}.Release DX12|x64.Build.0 = Release DX12|x64
+		{6C6E3053-E9AE-416D-B41F-367F36F47141}.Release DX12|x86.ActiveCfg = Release DX12|Win32
+		{6C6E3053-E9AE-416D-B41F-367F36F47141}.Release DX12|x86.Build.0 = Release DX12|Win32
+		{6C6E3053-E9AE-416D-B41F-367F36F47141}.Release Vulkan|x64.ActiveCfg = Release Vulkan|x64
+		{6C6E3053-E9AE-416D-B41F-367F36F47141}.Release Vulkan|x64.Build.0 = Release Vulkan|x64
+		{6C6E3053-E9AE-416D-B41F-367F36F47141}.Release Vulkan|x86.ActiveCfg = Release Vulkan|Win32
+		{6C6E3053-E9AE-416D-B41F-367F36F47141}.Release Vulkan|x86.Build.0 = Release Vulkan|Win32
+		{1BE56972-023E-4F18-BF59-E604CB17FB28}.Debug DX12|x64.ActiveCfg = Debug DX12|x64
+		{1BE56972-023E-4F18-BF59-E604CB17FB28}.Debug DX12|x64.Build.0 = Debug DX12|x64
+		{1BE56972-023E-4F18-BF59-E604CB17FB28}.Debug DX12|x86.ActiveCfg = Debug DX12|Win32
+		{1BE56972-023E-4F18-BF59-E604CB17FB28}.Debug DX12|x86.Build.0 = Debug DX12|Win32
+		{1BE56972-023E-4F18-BF59-E604CB17FB28}.Debug Vulkan|x64.ActiveCfg = Debug Vulkan|x64
+		{1BE56972-023E-4F18-BF59-E604CB17FB28}.Debug Vulkan|x64.Build.0 = Debug Vulkan|x64
+		{1BE56972-023E-4F18-BF59-E604CB17FB28}.Debug Vulkan|x86.ActiveCfg = Debug Vulkan|Win32
+		{1BE56972-023E-4F18-BF59-E604CB17FB28}.Debug Vulkan|x86.Build.0 = Debug Vulkan|Win32
+		{1BE56972-023E-4F18-BF59-E604CB17FB28}.Release DX12|x64.ActiveCfg = Release DX12|x64
+		{1BE56972-023E-4F18-BF59-E604CB17FB28}.Release DX12|x64.Build.0 = Release DX12|x64
+		{1BE56972-023E-4F18-BF59-E604CB17FB28}.Release DX12|x86.ActiveCfg = Release DX12|Win32
+		{1BE56972-023E-4F18-BF59-E604CB17FB28}.Release DX12|x86.Build.0 = Release DX12|Win32
+		{1BE56972-023E-4F18-BF59-E604CB17FB28}.Release Vulkan|x64.ActiveCfg = Release Vulkan|x64
+		{1BE56972-023E-4F18-BF59-E604CB17FB28}.Release Vulkan|x64.Build.0 = Release Vulkan|x64
+		{1BE56972-023E-4F18-BF59-E604CB17FB28}.Release Vulkan|x86.ActiveCfg = Release Vulkan|Win32
+		{1BE56972-023E-4F18-BF59-E604CB17FB28}.Release Vulkan|x86.Build.0 = Release Vulkan|Win32
+		{AA6F94D9-078B-407F-9660-24F8007F058C}.Debug DX12|x64.ActiveCfg = Debug DX12|x64
+		{AA6F94D9-078B-407F-9660-24F8007F058C}.Debug DX12|x64.Build.0 = Debug DX12|x64
+		{AA6F94D9-078B-407F-9660-24F8007F058C}.Debug DX12|x86.ActiveCfg = Debug DX12|Win32
+		{AA6F94D9-078B-407F-9660-24F8007F058C}.Debug DX12|x86.Build.0 = Debug DX12|Win32
+		{AA6F94D9-078B-407F-9660-24F8007F058C}.Debug Vulkan|x64.ActiveCfg = Debug Vulkan|x64
+		{AA6F94D9-078B-407F-9660-24F8007F058C}.Debug Vulkan|x64.Build.0 = Debug Vulkan|x64
+		{AA6F94D9-078B-407F-9660-24F8007F058C}.Debug Vulkan|x86.ActiveCfg = Debug Vulkan|Win32
+		{AA6F94D9-078B-407F-9660-24F8007F058C}.Debug Vulkan|x86.Build.0 = Debug Vulkan|Win32
+		{AA6F94D9-078B-407F-9660-24F8007F058C}.Release DX12|x64.ActiveCfg = Release DX12|x64
+		{AA6F94D9-078B-407F-9660-24F8007F058C}.Release DX12|x64.Build.0 = Release DX12|x64
+		{AA6F94D9-078B-407F-9660-24F8007F058C}.Release DX12|x86.ActiveCfg = Release DX12|Win32
+		{AA6F94D9-078B-407F-9660-24F8007F058C}.Release DX12|x86.Build.0 = Release DX12|Win32
+		{AA6F94D9-078B-407F-9660-24F8007F058C}.Release Vulkan|x64.ActiveCfg = Release Vulkan|x64
+		{AA6F94D9-078B-407F-9660-24F8007F058C}.Release Vulkan|x64.Build.0 = Release Vulkan|x64
+		{AA6F94D9-078B-407F-9660-24F8007F058C}.Release Vulkan|x86.ActiveCfg = Release Vulkan|Win32
+		{AA6F94D9-078B-407F-9660-24F8007F058C}.Release Vulkan|x86.Build.0 = Release Vulkan|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

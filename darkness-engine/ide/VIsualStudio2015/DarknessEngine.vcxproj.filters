@@ -1,0 +1,2064 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{3b8a1ba9-2e42-4851-b79e-21c9110ee025}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{3e5a5ed8-071a-4d59-b3e4-3b4f41f0a728}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="private-include">
+      <UniqueIdentifier>{3ebee5a0-85f5-4b94-8a06-d2e249b668f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="private-src">
+      <UniqueIdentifier>{b1816b99-f0b5-453a-863d-2634ea05f44c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\engine">
+      <UniqueIdentifier>{89c96999-f963-4e33-90f9-24457e77d7db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\platform">
+      <UniqueIdentifier>{2cfca6fd-479c-4a5b-a1fe-a92f694a6c1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\tools">
+      <UniqueIdentifier>{a48c5e23-1be3-4682-891c-8b48ed5454a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\engine\graphics">
+      <UniqueIdentifier>{511489f3-6a76-472d-9541-3ba0c0f76a28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\engine\rendering">
+      <UniqueIdentifier>{ce64dd72-14d7-4d38-8848-62ce3701c0b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\platform\window">
+      <UniqueIdentifier>{8db2e03d-7bf3-4169-ab8e-8d160cb92191}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="private-src\engine">
+      <UniqueIdentifier>{9abb4ff1-e248-4bcb-8d28-1075cb77eaf1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="private-src\engine\graphics">
+      <UniqueIdentifier>{3a87a77f-877f-4868-82b5-1eca2858bef1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="private-src\engine\graphics\dx12">
+      <UniqueIdentifier>{69392352-d8ec-46de-a348-f9c77e6bc1b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="private-src\engine\graphics\metal">
+      <UniqueIdentifier>{5506e1d6-f0f5-498c-a097-7fa88fcb2880}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="private-src\platform">
+      <UniqueIdentifier>{9847b358-fac3-4d66-a11e-f7c2a1bad963}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="private-src\platform\window">
+      <UniqueIdentifier>{19371876-81ec-4f49-b26d-36b4e25f2975}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="private-include\engine">
+      <UniqueIdentifier>{cb33e971-6041-411f-8950-7ed0f84dabb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="private-include\engine\graphics">
+      <UniqueIdentifier>{9e506c3a-b0f0-42f7-9389-eda5b6cb87eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="private-include\engine\graphics\dx12">
+      <UniqueIdentifier>{73110601-aca6-45ed-aab0-36dacb6c058a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="private-include\engine\graphics\metal">
+      <UniqueIdentifier>{85f9d7b0-f4fe-4773-9473-fe4e58fb494c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="private-include\platform">
+      <UniqueIdentifier>{ff3b07f8-2448-4e46-b053-beefd650e938}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="private-include\platform\window">
+      <UniqueIdentifier>{d74b3ef4-32f8-426d-a953-ad0409002341}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\engine">
+      <UniqueIdentifier>{f7ebeb5f-4c77-4b4b-b844-2d897fcd3954}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\platform">
+      <UniqueIdentifier>{c5214720-7a23-4336-a3e5-f6602f8ee2fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\engine\graphics">
+      <UniqueIdentifier>{b5d59ce9-2178-48e8-a1ee-3de2359b3ec9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\platform\window">
+      <UniqueIdentifier>{b46f5ac7-d2a0-40cd-854b-43fd2706711b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\engine\rendering">
+      <UniqueIdentifier>{07a72518-a0f6-452f-9ae3-f5b680f8b541}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\tools">
+      <UniqueIdentifier>{fb520ff6-ce22-402b-b38b-4b7054d6fecf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders">
+      <UniqueIdentifier>{066c6cb3-c149-4fc8-9788-c0a5d1596b5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\core">
+      <UniqueIdentifier>{8b4eb570-f474-4128-8898-01499a1c7b8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tests">
+      <UniqueIdentifier>{7c063679-5250-4548-82cd-c7acd4c08223}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="private-src\engine\graphics\vulkan">
+      <UniqueIdentifier>{3ac1fe46-15b9-4b69-8fc5-66376af5ef2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="private-include\engine\graphics\vulkan">
+      <UniqueIdentifier>{5dab92bb-ebbc-4e54-9ce4-80638d2f0e36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\tools\image">
+      <UniqueIdentifier>{9d00142f-e983-43de-b71e-08e45952a1df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\tools\image">
+      <UniqueIdentifier>{7e254cc5-5f7a-4891-a66b-d85f9af453e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\components">
+      <UniqueIdentifier>{3b7ae4e9-e9f6-47d0-98b0-94c6c617f539}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\plugins">
+      <UniqueIdentifier>{3ad72291-2bf1-4feb-893b-94cd40461e48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\plugins">
+      <UniqueIdentifier>{19c0b10e-7117-4160-95d3-4397fcbf8f26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\components">
+      <UniqueIdentifier>{3409a000-f6f4-4329-bb6c-0037af7df6b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external">
+      <UniqueIdentifier>{8bcb846c-2230-4c56-806b-4329be130409}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external\spirv-cross">
+      <UniqueIdentifier>{fa4488b6-a3f3-40ae-9098-247cda642b01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tools">
+      <UniqueIdentifier>{61ecabad-e8c3-4fe9-bd46-c32bfd58139e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tools\codegen">
+      <UniqueIdentifier>{89d34b64-49ae-4a6b-9120-157a8ef554f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\shaders">
+      <UniqueIdentifier>{d44f8dbc-1316-4552-8c23-91f3bf7c2e54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\shaders\core">
+      <UniqueIdentifier>{0fb45142-46cc-4daf-95b0-1ca7f71ae489}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external\imgui">
+      <UniqueIdentifier>{4aa8a8f6-43ed-4bf7-817e-c16960f102fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external\imguizmo">
+      <UniqueIdentifier>{94159267-dde6-419b-897f-e97fcb8016e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\core\model">
+      <UniqueIdentifier>{4e34f558-2c79-4ced-ad0f-04a5f00e68e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\core\postprocess">
+      <UniqueIdentifier>{d1fc807b-cc5f-417f-9874-b8b98f5726ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\core\tests">
+      <UniqueIdentifier>{e7d6894d-8de1-4d11-b281-aef649fe3e35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\core\tools">
+      <UniqueIdentifier>{5d57e71d-efaa-450c-aa61-8f5782a03f9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\core\lighting">
+      <UniqueIdentifier>{d93449bc-ae84-436a-8381-8eb0a58494fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\core\transparent">
+      <UniqueIdentifier>{bf432e2d-e26f-4d72-bd28-45b0f47a455e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\core\shadows">
+      <UniqueIdentifier>{a3b4f447-4ed7-410c-a617-6e16b7df7308}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\core\ssao">
+      <UniqueIdentifier>{e1d03454-8f34-458a-bef9-c7fdfcda17ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\core\imgui">
+      <UniqueIdentifier>{a01ba8f6-7ff2-447c-af42-ba5987a316c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\core\forward">
+      <UniqueIdentifier>{6e2fe78c-2a5f-4a44-b0ad-9d43a6630e31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\core\temporal">
+      <UniqueIdentifier>{da2d4994-07d3-4ca3-addd-472d8f372c3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\shaders\core\model">
+      <UniqueIdentifier>{9c96d854-8b47-4d5f-bb7d-ba91fba7b3d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\core\ibl">
+      <UniqueIdentifier>{b938ff0f-9c4c-408e-bc0e-f390c1626fe3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\shaders\core\forward">
+      <UniqueIdentifier>{2cfd4ace-2064-4673-bc88-773fef697a44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\shaders\core\imgui">
+      <UniqueIdentifier>{e1e04bb3-27ec-4756-b27f-93f2648e0c4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\shaders\core\lighting">
+      <UniqueIdentifier>{2eb0c76d-c821-47da-9476-3bf2081d8c7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\shaders\core\ibl">
+      <UniqueIdentifier>{2f5f1c8f-5ddb-4b2d-bfef-06be3ab56517}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\shaders\core\postprocess">
+      <UniqueIdentifier>{80b34f92-f0cd-4919-95de-d3241ef34686}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\shaders\core\shadows">
+      <UniqueIdentifier>{08bb1022-1265-4c8e-bed8-c161f7c59498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\shaders\core\ssao">
+      <UniqueIdentifier>{28759973-40eb-4537-99d2-383a8cf3b258}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\shaders\core\temporal">
+      <UniqueIdentifier>{32339601-6a35-4772-a440-60d3476cfd45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\shaders\core\tests">
+      <UniqueIdentifier>{87b3701e-b4c1-4c1a-b11c-4dd292e32af4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\shaders\core\tools">
+      <UniqueIdentifier>{5959b66d-5e67-437e-a522-220f3bef7b8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\shaders\core\transparent">
+      <UniqueIdentifier>{2ec87ccb-97e5-4c18-8f74-dec3313b0084}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\core\outline">
+      <UniqueIdentifier>{0dee0079-1131-433f-990b-529b3b4b0578}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\shaders\core\outline">
+      <UniqueIdentifier>{d6b9301c-36fb-4c09-a135-2fcb9887ed3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external\entityx">
+      <UniqueIdentifier>{f415fcc6-72af-47f1-b836-a9ad02b55d0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external\entityx\help">
+      <UniqueIdentifier>{3a032718-f2df-45be-ab03-cbb547d3566e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external\entityx\deps">
+      <UniqueIdentifier>{8e4df74e-c117-4c68-b7eb-9f874a58f9a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external\entityx\tags">
+      <UniqueIdentifier>{6841b89a-a8a2-475d-afea-e405e46b83f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external\entityx\3rdparty">
+      <UniqueIdentifier>{7f6965b7-d229-4ba1-abfb-9d9bd8e08d34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\tools\hash">
+      <UniqueIdentifier>{44567516-195a-4ca9-9de0-6ee884c0a949}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\tools\hash">
+      <UniqueIdentifier>{f5feb435-d242-4355-af33-4b33aae0aebb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\core\culling">
+      <UniqueIdentifier>{4fdd058b-0725-410f-b117-b283efd103e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\shaders\core\culling">
+      <UniqueIdentifier>{a2ee5864-1960-44f9-932f-ef3977a6ed34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external\winpixeventruntime">
+      <UniqueIdentifier>{d856fa3c-b424-4e1f-8669-cf02c281fe01}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\engine\graphics\CommandList.h">
+      <Filter>include\engine\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\Device.h">
+      <Filter>include\engine\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\Fence.h">
+      <Filter>include\engine\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\Graphics.h">
+      <Filter>include\engine\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\SwapChain.h">
+      <Filter>include\engine\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\Barrier.h">
+      <Filter>include\engine\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\platform\Platform.h">
+      <Filter>include\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\platform\window\Window.h">
+      <Filter>include\platform\window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\ComPtr.h">
+      <Filter>include\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\SmartPimpl.h">
+      <Filter>include\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\dx12\DX12CommandList.h">
+      <Filter>private-include\engine\graphics\dx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\dx12\DX12DescriptorHandle.h">
+      <Filter>private-include\engine\graphics\dx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\dx12\DX12DescriptorHeap.h">
+      <Filter>private-include\engine\graphics\dx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\dx12\DX12Device.h">
+      <Filter>private-include\engine\graphics\dx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\dx12\DX12Fence.h">
+      <Filter>private-include\engine\graphics\dx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\dx12\DX12Headers.h">
+      <Filter>private-include\engine\graphics\dx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\dx12\DX12SwapChain.h">
+      <Filter>private-include\engine\graphics\dx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\dx12\DX12Barrier.h">
+      <Filter>private-include\engine\graphics\dx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\dx12\DX12CommandAllocator.h">
+      <Filter>private-include\engine\graphics\dx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\metal\MetalDescriptorHandle.h">
+      <Filter>private-include\engine\graphics\metal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\metal\MetalDescriptorHeap.h">
+      <Filter>private-include\engine\graphics\metal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\metal\MetalDevice.h">
+      <Filter>private-include\engine\graphics\metal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\metal\MetalFence.h">
+      <Filter>private-include\engine\graphics\metal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\metal\MetalHeaders.h">
+      <Filter>private-include\engine\graphics\metal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\metal\MetalSwapChain.h">
+      <Filter>private-include\engine\graphics\metal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\metal\MetalBarrier.h">
+      <Filter>private-include\engine\graphics\metal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\metal\MetalBuffer.h">
+      <Filter>private-include\engine\graphics\metal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\metal\MetalCommandAllocator.h">
+      <Filter>private-include\engine\graphics\metal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\metal\MetalCommandList.h">
+      <Filter>private-include\engine\graphics\metal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\platform\window\OsxWindow.h">
+      <Filter>private-include\platform\window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\platform\window\WindowsWindow.h">
+      <Filter>private-include\platform\window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\rendering\Rendering.h">
+      <Filter>include\engine\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\RootSignature.h">
+      <Filter>include\engine\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\dx12\DX12RootSignature.h">
+      <Filter>private-include\engine\graphics\dx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\RootParameter.h">
+      <Filter>include\engine\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\dx12\DX12RootParameter.h">
+      <Filter>private-include\engine\graphics\dx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\SamplerDescription.h">
+      <Filter>include\engine\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\Sampler.h">
+      <Filter>include\engine\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\dx12\DX12Sampler.h">
+      <Filter>private-include\engine\graphics\dx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\Engine.h">
+      <Filter>include\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\dx12\DX12Conversions.h">
+      <Filter>private-include\engine\graphics\dx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\dx12\DX12Debug.h">
+      <Filter>private-include\engine\graphics\dx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\dx12\DX12FormatSetups.h">
+      <Filter>private-include\engine\graphics\dx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\Viewport.h">
+      <Filter>include\engine\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\Rect.h">
+      <Filter>include\engine\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\ShaderBinary.h">
+      <Filter>include\engine\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\dx12\DX12ShaderBinary.h">
+      <Filter>private-include\engine\graphics\dx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\Common.h">
+      <Filter>include\engine\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\ShaderStorage.h">
+      <Filter>include\engine\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\rendering\Mesh.h">
+      <Filter>include\engine\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\Scene.h">
+      <Filter>include\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\rendering\SubMesh.h">
+      <Filter>include\engine\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\CompressedFile.h">
+      <Filter>include\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\CompressedFileZstd.h">
+      <Filter>include\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\CompressedFileBzip2.h">
+      <Filter>include\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\CompressedFileIf.h">
+      <Filter>include\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tests\CompressionTest.h">
+      <Filter>tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\vulkan\VulkanDescriptorHandle.h">
+      <Filter>private-include\engine\graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\vulkan\VulkanDescriptorHeap.h">
+      <Filter>private-include\engine\graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\vulkan\VulkanDevice.h">
+      <Filter>private-include\engine\graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\vulkan\VulkanFence.h">
+      <Filter>private-include\engine\graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\vulkan\VulkanHeaders.h">
+      <Filter>private-include\engine\graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\vulkan\VulkanRootParameter.h">
+      <Filter>private-include\engine\graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\vulkan\VulkanRootSignature.h">
+      <Filter>private-include\engine\graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\vulkan\VulkanSampler.h">
+      <Filter>private-include\engine\graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\vulkan\VulkanShaderBinary.h">
+      <Filter>private-include\engine\graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\vulkan\VulkanSwapChain.h">
+      <Filter>private-include\engine\graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\vulkan\VulkanBarrier.h">
+      <Filter>private-include\engine\graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\vulkan\VulkanCommandAllocator.h">
+      <Filter>private-include\engine\graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\vulkan\VulkanCommandList.h">
+      <Filter>private-include\engine\graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\vulkan\VulkanConversions.h">
+      <Filter>private-include\engine\graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\vulkan\VulkanInstance.h">
+      <Filter>private-include\engine\graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\vulkan\VulkanCommon.h">
+      <Filter>private-include\engine\graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\vulkan\VulkanSemaphore.h">
+      <Filter>private-include\engine\graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\Semaphore.h">
+      <Filter>include\engine\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\Codegen.h">
+      <Filter>include\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\CommonNoDep.h">
+      <Filter>include\engine\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\image\DdsBoilerplate.h">
+      <Filter>include\tools\image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\image\Image.h">
+      <Filter>include\tools\image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\image\ImageIf.h">
+      <Filter>include\tools\image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\image\Dds.h">
+      <Filter>include\tools\image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\Drawer.h">
+      <Filter>include\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\components\Transform.h">
+      <Filter>include\components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\ComponentRegister.h">
+      <Filter>include\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\components\Camera.h">
+      <Filter>include\components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\AssetTools.h">
+      <Filter>include\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\rendering\Material.h">
+      <Filter>include\engine\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\Property.h">
+      <Filter>include\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\Serialization.h">
+      <Filter>include\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\platform\Directory.h">
+      <Filter>include\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\platform\dirent.h">
+      <Filter>include\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\plugins\PluginIf.h">
+      <Filter>include\plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\plugins\PluginManager.h">
+      <Filter>include\plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\plugins\TypeFactory.h">
+      <Filter>include\plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\EngineComponent.h">
+      <Filter>include\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\plugins\Component.h">
+      <Filter>include\plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\plugins\TypeFactoryIf.h">
+      <Filter>include\plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\StringTools.h">
+      <Filter>include\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\Queue.h">
+      <Filter>include\engine\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\dx12\DX12Queue.h">
+      <Filter>private-include\engine\graphics\dx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\vulkan\VulkanQueue.h">
+      <Filter>private-include\engine\graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\metal\MetalQueue.h">
+      <Filter>private-include\engine\graphics\metal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\Pipeline.h">
+      <Filter>include\engine\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\vulkan\VulkanPipeline.h">
+      <Filter>private-include\engine\graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\metal\MetalPipeline.h">
+      <Filter>private-include\engine\graphics\metal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\dx12\DX12Pipeline.h">
+      <Filter>private-include\engine\graphics\dx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\platform\Environment.h">
+      <Filter>include\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\SPIRV-Cross\GLSL.std.450.h">
+      <Filter>external\spirv-cross</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\SPIRV-Cross\spirv.hpp">
+      <Filter>external\spirv-cross</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\SPIRV-Cross\spirv_cfg.hpp">
+      <Filter>external\spirv-cross</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\SPIRV-Cross\spirv_common.hpp">
+      <Filter>external\spirv-cross</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\SPIRV-Cross\spirv_cpp.hpp">
+      <Filter>external\spirv-cross</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\SPIRV-Cross\spirv_cross.hpp">
+      <Filter>external\spirv-cross</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\SPIRV-Cross\spirv_glsl.hpp">
+      <Filter>external\spirv-cross</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\SPIRV-Cross\spirv_hlsl.hpp">
+      <Filter>external\spirv-cross</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\SPIRV-Cross\spirv_msl.hpp">
+      <Filter>external\spirv-cross</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tools\codegen\ShaderLoadInterfaceTemplate.h">
+      <Filter>tools\codegen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shaders\ShaderTypes.h">
+      <Filter>shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tools\codegen\ShaderPipelineTemplate.h">
+      <Filter>tools\codegen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\dx12\DX12Semaphore.h">
+      <Filter>private-include\engine\graphics\dx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\dx12\DX12Common.h">
+      <Filter>private-include\engine\graphics\dx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\Format.h">
+      <Filter>include\engine\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\dx12\DX12Resources.h">
+      <Filter>private-include\engine\graphics\dx12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\Resources.h">
+      <Filter>include\engine\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\components\MaterialComponent.h">
+      <Filter>include\components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\RenderSetup.h">
+      <Filter>include\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\components\MeshRendererComponent.h">
+      <Filter>include\components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\rendering\ModelRenderer.h">
+      <Filter>include\engine\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\MemoryAllocator.h">
+      <Filter>include\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\platform\FileWatcher.h">
+      <Filter>include\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\platform\FileWatcherWin.h">
+      <Filter>include\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\PathTools.h">
+      <Filter>include\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\ShaderSupport.h">
+      <Filter>include\engine\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\components\ImagePropertiesComponent.h">
+      <Filter>include\components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\components\ModelPropertiesComponent.h">
+      <Filter>include\components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tools\Settings.h">
+      <Filter>include\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\imgui\stb_textedit.h">
+      <Filter>external\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\imgui\stb_truetype.h">
+      <Filter>external\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\imgui\imconfig.h">
+      <Filter>external\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\imgui\imgui.h">
+      <Filter>external\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\imgui\imgui_internal.h">
+      <Filter>external\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\imgui\stb_rect_pack.h">
+      <Filter>external\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\rendering\ImguiRenderer.h">
+      <Filter>include\engine\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\InputEvents.h">
+      <Filter>include\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\components\LightComponent.h">
+      <Filter>include\components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\Measure.h">
+      <Filter>include\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\LinearAllocator.h">
+      <Filter>include\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\ToolsCommon.h">
+      <Filter>include\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\ByteRange.h">
+      <Filter>include\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\Allocator.h">
+      <Filter>include\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\ResourceCache.h">
+      <Filter>include\engine\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\rendering\LightData.h">
+      <Filter>include\engine\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\RefCounted.h">
+      <Filter>include\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\rendering\LogWindow.h">
+      <Filter>include\engine\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\platform\File.h">
+      <Filter>include\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\rendering\ShadowRenderer.h">
+      <Filter>include\engine\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\rendering\DebugView.h">
+      <Filter>include\engine\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\rendering\SSAORenderer.h">
+      <Filter>include\engine\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\rendering\ModelTransparentRenderer.h">
+      <Filter>include\engine\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\rendering\RenderCubemap.h">
+      <Filter>include\engine\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\rendering\Postprocess.h">
+      <Filter>include\engine\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\components\PostprocessComponent.h">
+      <Filter>include\components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\private-include\engine\graphics\vulkan\VulkanResources.h">
+      <Filter>private-include\engine\graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\Recompile.h">
+      <Filter>include\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\components\RigidBodyComponent.h">
+      <Filter>include\components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\components\CollisionShapeComponent.h">
+      <Filter>include\components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\ImGuizmo\ImGuizmo.h">
+      <Filter>external\imguizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\model\MeshRendererPbr.vs.h">
+      <Filter>include\shaders\core\model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\model\MeshRendererPbr.h">
+      <Filter>include\shaders\core\model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\model\MeshRendererPbr.ps.h">
+      <Filter>include\shaders\core\model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\forward\MeshRendererTransparent.vs.h">
+      <Filter>include\shaders\core\forward</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\forward\MeshRenderer.h">
+      <Filter>include\shaders\core\forward</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\forward\MeshRenderer.ps.h">
+      <Filter>include\shaders\core\forward</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\forward\MeshRenderer.vs.h">
+      <Filter>include\shaders\core\forward</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\forward\MeshRendererTransparent.h">
+      <Filter>include\shaders\core\forward</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\forward\MeshRendererTransparent.ps.h">
+      <Filter>include\shaders\core\forward</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\imgui\ImguiRender.h">
+      <Filter>include\shaders\core\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\imgui\ImguiRender.ps.h">
+      <Filter>include\shaders\core\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\imgui\ImguiRender.vs.h">
+      <Filter>include\shaders\core\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\lighting\Lighting.h">
+      <Filter>include\shaders\core\lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\lighting\Lighting.ps.h">
+      <Filter>include\shaders\core\lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\lighting\Lighting.vs.h">
+      <Filter>include\shaders\core\lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\ibl\BrdfConvolution.h">
+      <Filter>include\shaders\core\ibl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\ibl\BrdfConvolution.ps.h">
+      <Filter>include\shaders\core\ibl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\ibl\BrdfConvolution.vs.h">
+      <Filter>include\shaders\core\ibl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\ibl\Irradiance.h">
+      <Filter>include\shaders\core\ibl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\ibl\Irradiance.ps.h">
+      <Filter>include\shaders\core\ibl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\ibl\Irradiance.vs.h">
+      <Filter>include\shaders\core\ibl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\ibl\PrefilterConvolution.h">
+      <Filter>include\shaders\core\ibl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\ibl\PrefilterConvolution.ps.h">
+      <Filter>include\shaders\core\ibl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\ibl\PrefilterConvolution.vs.h">
+      <Filter>include\shaders\core\ibl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\postprocess\Bloom.h">
+      <Filter>include\shaders\core\postprocess</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\postprocess\Bloom.ps.h">
+      <Filter>include\shaders\core\postprocess</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\postprocess\Bloom.vs.h">
+      <Filter>include\shaders\core\postprocess</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\postprocess\BloomExtractBright.h">
+      <Filter>include\shaders\core\postprocess</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\postprocess\BloomExtractBright.ps.h">
+      <Filter>include\shaders\core\postprocess</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\postprocess\BloomExtractBright.vs.h">
+      <Filter>include\shaders\core\postprocess</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\postprocess\Tonemap.h">
+      <Filter>include\shaders\core\postprocess</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\postprocess\Tonemap.ps.h">
+      <Filter>include\shaders\core\postprocess</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\postprocess\Tonemap.vs.h">
+      <Filter>include\shaders\core\postprocess</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\shadows\ShadowRender.h">
+      <Filter>include\shaders\core\shadows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\shadows\ShadowRender.ps.h">
+      <Filter>include\shaders\core\shadows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\shadows\ShadowRender.vs.h">
+      <Filter>include\shaders\core\shadows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\shadows\ShadowRenderTransparent.h">
+      <Filter>include\shaders\core\shadows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\shadows\ShadowRenderTransparent.ps.h">
+      <Filter>include\shaders\core\shadows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\shadows\ShadowRenderTransparent.vs.h">
+      <Filter>include\shaders\core\shadows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\ssao\SSAO.h">
+      <Filter>include\shaders\core\ssao</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\ssao\SSAO.ps.h">
+      <Filter>include\shaders\core\ssao</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\ssao\SSAO.vs.h">
+      <Filter>include\shaders\core\ssao</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\ssao\SSAOBlur.h">
+      <Filter>include\shaders\core\ssao</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\ssao\SSAOBlur.ps.h">
+      <Filter>include\shaders\core\ssao</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\ssao\SSAOBlur.vs.h">
+      <Filter>include\shaders\core\ssao</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\temporal\TemporalResolve.h">
+      <Filter>include\shaders\core\temporal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\temporal\TemporalResolve.ps.h">
+      <Filter>include\shaders\core\temporal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\temporal\TemporalResolve.vs.h">
+      <Filter>include\shaders\core\temporal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tests\DrawWithConstants.vs.h">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tests\DrawWithoutBuffers.h">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tests\DrawWithoutBuffers.ps.h">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tests\DrawWithoutBuffers.vs.h">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tests\DrawWithPixelShaderResources.h">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tests\DrawWithPixelShaderResources.ps.h">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tests\DrawWithPixelShaderResources.vs.h">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tests\DrawWithTexture.h">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tests\DrawWithTexture.ps.h">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tests\DrawWithTexture.vs.h">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tests\HLSLTest.h">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tests\HLSLTest.ps.h">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tests\HLSLTest.vs.h">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tests\DrawWithConstants.h">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tests\DrawWithConstants.ps.h">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\DebugViewer.vs.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\Downsample.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\Downsample.ps.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\Downsample.vs.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\EarlyZ.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\EarlyZ.ps.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\EarlyZ.vs.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\EarlyZAlphaClipped.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\EarlyZAlphaClipped.ps.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\EarlyZAlphaClipped.vs.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\EquirectToCubemap.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\EquirectToCubemap.ps.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\EquirectToCubemap.vs.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\GaussianBlur.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\GaussianBlur.ps.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\GaussianBlur.vs.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\Wireframe.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\Wireframe.ps.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\Wireframe.vs.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\Cubemap.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\Cubemap.ps.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\Cubemap.vs.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\DebugViewer.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\DebugViewer.ps.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\transparent\MeshTransparentComposite.h">
+      <Filter>include\shaders\core\transparent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\transparent\MeshTransparentComposite.ps.h">
+      <Filter>include\shaders\core\transparent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\transparent\MeshTransparentComposite.vs.h">
+      <Filter>include\shaders\core\transparent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\outline\Outline.h">
+      <Filter>include\shaders\core\outline</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\outline\Outline.ps.h">
+      <Filter>include\shaders\core\outline</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\outline\Outline.vs.h">
+      <Filter>include\shaders\core\outline</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\rendering\RenderOutline.h">
+      <Filter>include\engine\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\outline\Outline.gs.h">
+      <Filter>include\shaders\core\outline</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\MeshTools.h">
+      <Filter>include\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\entityx-master\entityx\config.h">
+      <Filter>external\entityx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\entityx-master\entityx\Entity.h">
+      <Filter>external\entityx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\entityx-master\entityx\entityx.h">
+      <Filter>external\entityx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\entityx-master\entityx\Event.h">
+      <Filter>external\entityx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\entityx-master\entityx\quick.h">
+      <Filter>external\entityx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\entityx-master\entityx\System.h">
+      <Filter>external\entityx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\entityx-master\entityx\help\NonCopyable.h">
+      <Filter>external\entityx\help</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\entityx-master\entityx\help\Pool.h">
+      <Filter>external\entityx\help</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\entityx-master\entityx\help\Timer.h">
+      <Filter>external\entityx\help</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\entityx-master\entityx\deps\Dependencies.h">
+      <Filter>external\entityx\deps</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\entityx-master\entityx\tags\TagsComponent.h">
+      <Filter>external\entityx\tags</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\entityx-master\entityx\3rdparty\catch.hpp">
+      <Filter>external\entityx\3rdparty</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\entityx-master\entityx\3rdparty\simplesignal.h">
+      <Filter>external\entityx\3rdparty</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\hash\Hash.h">
+      <Filter>include\tools\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\hash\SpookyHashV2.h">
+      <Filter>include\tools\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\RingBuffer.h">
+      <Filter>include\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\culling\Culling.cs.h">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\culling\Culling.h">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\winpixeventruntime\Include\WinPixEventRuntime\pix3.h">
+      <Filter>external\winpixeventruntime</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\winpixeventruntime\Include\WinPixEventRuntime\pix3_win.h">
+      <Filter>external\winpixeventruntime</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\winpixeventruntime\Include\WinPixEventRuntime\PIXEventsCommon.h">
+      <Filter>external\winpixeventruntime</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\external\winpixeventruntime\Include\WinPixEventRuntime\PIXEventsGenerated.h">
+      <Filter>external\winpixeventruntime</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\private-src\engine\graphics\dx12\DX12CommandList.cpp">
+      <Filter>private-src\engine\graphics\dx12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\dx12\DX12DescriptorHeap.cpp">
+      <Filter>private-src\engine\graphics\dx12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\dx12\DX12Device.cpp">
+      <Filter>private-src\engine\graphics\dx12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\dx12\DX12Fence.cpp">
+      <Filter>private-src\engine\graphics\dx12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\dx12\DX12SwapChain.cpp">
+      <Filter>private-src\engine\graphics\dx12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\dx12\DX12Barrier.cpp">
+      <Filter>private-src\engine\graphics\dx12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\dx12\DX12CommandAllocator.cpp">
+      <Filter>private-src\engine\graphics\dx12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\platform\window\WindowsWindow.cpp">
+      <Filter>private-src\platform\window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\platform\window\OsxWindow.cpp">
+      <Filter>private-src\platform\window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\Engine.cpp">
+      <Filter>src\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\CommandList.cpp">
+      <Filter>src\engine\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\Device.cpp">
+      <Filter>src\engine\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\Fence.cpp">
+      <Filter>src\engine\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\SwapChain.cpp">
+      <Filter>src\engine\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\Barrier.cpp">
+      <Filter>src\engine\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\platform\window\Window.cpp">
+      <Filter>src\platform\window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\RootSignature.cpp">
+      <Filter>src\engine\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\dx12\DX12RootSignature.cpp">
+      <Filter>private-src\engine\graphics\dx12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\RootParameter.cpp">
+      <Filter>src\engine\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\dx12\DX12RootParameter.cpp">
+      <Filter>private-src\engine\graphics\dx12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\Sampler.cpp">
+      <Filter>src\engine\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\dx12\DX12Sampler.cpp">
+      <Filter>private-src\engine\graphics\dx12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\dx12\DX12Conversions.cpp">
+      <Filter>private-src\engine\graphics\dx12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\dx12\DX12Debug.cpp">
+      <Filter>private-src\engine\graphics\dx12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\dx12\DX12FormatSetups.cpp">
+      <Filter>private-src\engine\graphics\dx12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\ShaderBinary.cpp">
+      <Filter>src\engine\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\dx12\DX12ShaderBinary.cpp">
+      <Filter>private-src\engine\graphics\dx12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\ShaderStorage.cpp">
+      <Filter>src\engine\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\rendering\Mesh.cpp">
+      <Filter>src\engine\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\Scene.cpp">
+      <Filter>src\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\rendering\SubMesh.cpp">
+      <Filter>src\engine\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tools\CompressedFileBzip2.cpp">
+      <Filter>src\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tools\CompressedFileZstd.cpp">
+      <Filter>src\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tools\CompressedFile.cpp">
+      <Filter>src\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tests\CompressionTest.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\vulkan\VulkanCommandAllocator.cpp">
+      <Filter>private-src\engine\graphics\vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\vulkan\VulkanCommandList.cpp">
+      <Filter>private-src\engine\graphics\vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\vulkan\VulkanConversions.cpp">
+      <Filter>private-src\engine\graphics\vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\vulkan\VulkanDescriptorHandle.cpp">
+      <Filter>private-src\engine\graphics\vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\vulkan\VulkanDescriptorHeap.cpp">
+      <Filter>private-src\engine\graphics\vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\vulkan\VulkanDevice.cpp">
+      <Filter>private-src\engine\graphics\vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\vulkan\VulkanFence.cpp">
+      <Filter>private-src\engine\graphics\vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\vulkan\VulkanFormatSetups.cpp">
+      <Filter>private-src\engine\graphics\vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\vulkan\VulkanRootParameter.cpp">
+      <Filter>private-src\engine\graphics\vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\vulkan\VulkanRootSignature.cpp">
+      <Filter>private-src\engine\graphics\vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\vulkan\VulkanSampler.cpp">
+      <Filter>private-src\engine\graphics\vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\vulkan\VulkanShaderBinary.cpp">
+      <Filter>private-src\engine\graphics\vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\vulkan\VulkanSwapChain.cpp">
+      <Filter>private-src\engine\graphics\vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\vulkan\VulkanBarrier.cpp">
+      <Filter>private-src\engine\graphics\vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\vulkan\VulkanInstance.cpp">
+      <Filter>private-src\engine\graphics\vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\vulkan\VulkanSemaphore.cpp">
+      <Filter>private-src\engine\graphics\vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\Semaphore.cpp">
+      <Filter>src\engine\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tools\image\Dds.cpp">
+      <Filter>src\tools\image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tools\image\Image.cpp">
+      <Filter>src\tools\image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\ComponentRegister.cpp">
+      <Filter>src\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\components\Camera.cpp">
+      <Filter>src\components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tools\AssetTools.cpp">
+      <Filter>src\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tools\Serialization.cpp">
+      <Filter>src\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\platform\Directory.cpp">
+      <Filter>src\platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\plugins\PluginManager.cpp">
+      <Filter>src\plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\plugins\PluginAbs.cpp">
+      <Filter>src\plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\plugins\TypeFactory.cpp">
+      <Filter>src\plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\EngineComponent.cpp">
+      <Filter>src\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tools\StringTools.cpp">
+      <Filter>src\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\vulkan\VulkanQueue.cpp">
+      <Filter>private-src\engine\graphics\vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\dx12\DX12Queue.cpp">
+      <Filter>private-src\engine\graphics\dx12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\Queue.cpp">
+      <Filter>src\engine\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\Pipeline.cpp">
+      <Filter>src\engine\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\vulkan\VulkanPipeline.cpp">
+      <Filter>private-src\engine\graphics\vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\dx12\DX12Pipeline.cpp">
+      <Filter>private-src\engine\graphics\dx12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\platform\Environment.cpp">
+      <Filter>src\platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\SPIRV-Cross\spirv_cfg.cpp">
+      <Filter>external\spirv-cross</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\SPIRV-Cross\spirv_cpp.cpp">
+      <Filter>external\spirv-cross</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\SPIRV-Cross\spirv_cross.cpp">
+      <Filter>external\spirv-cross</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\SPIRV-Cross\spirv_glsl.cpp">
+      <Filter>external\spirv-cross</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\SPIRV-Cross\spirv_hlsl.cpp">
+      <Filter>external\spirv-cross</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\SPIRV-Cross\spirv_msl.cpp">
+      <Filter>external\spirv-cross</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tools\codegen\ShaderLoadInterfaceTemplate.cpp">
+      <Filter>tools\codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tools\codegen\ShaderPipelineTemplate.cpp">
+      <Filter>tools\codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\dx12\DX12Semaphore.cpp">
+      <Filter>private-src\engine\graphics\dx12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\Format.cpp">
+      <Filter>src\engine\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\dx12\DX12Resources.cpp">
+      <Filter>private-src\engine\graphics\dx12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\RenderSetup.cpp">
+      <Filter>src\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\components\MeshRendererComponent.cpp">
+      <Filter>src\components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\rendering\ModelRenderer.cpp">
+      <Filter>src\engine\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shaders\ShaderTypes.cpp">
+      <Filter>shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\platform\FileWatcherWin.cpp">
+      <Filter>src\platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\platform\FileWatcher.cpp">
+      <Filter>src\platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tools\PathTools.cpp">
+      <Filter>src\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\ShaderSupport.cpp">
+      <Filter>src\engine\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\components\ImagePropertiesComponent.cpp">
+      <Filter>src\components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\components\ModelPropertiesComponent.cpp">
+      <Filter>src\components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tools\Settings.cpp">
+      <Filter>src\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\rendering\Material.cpp">
+      <Filter>src\engine\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\imgui\imgui.cpp">
+      <Filter>external\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\imgui\imgui_draw.cpp">
+      <Filter>external\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\rendering\ImguiRenderer.cpp">
+      <Filter>src\engine\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\imgui\imgui_demo.cpp">
+      <Filter>external\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tools\MemoryAllocator.cpp">
+      <Filter>src\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tools\Measure.cpp">
+      <Filter>src\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tools\ToolsCommon.cpp">
+      <Filter>src\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tools\LinearAllocator.cpp">
+      <Filter>src\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\Resources.cpp">
+      <Filter>src\engine\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\ResourceCache.cpp">
+      <Filter>src\engine\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\rendering\LightData.cpp">
+      <Filter>src\engine\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\rendering\LogWindow.cpp">
+      <Filter>src\engine\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\dx12\DX12Common.cpp">
+      <Filter>private-src\engine\graphics\dx12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\platform\File.cpp">
+      <Filter>src\platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\rendering\ShadowRenderer.cpp">
+      <Filter>src\engine\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\components\LightComponent.cpp">
+      <Filter>src\components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\rendering\DebugView.cpp">
+      <Filter>src\engine\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\rendering\SSAORenderer.cpp">
+      <Filter>src\engine\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\rendering\ModelTransparentRenderer.cpp">
+      <Filter>src\engine\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\rendering\RenderCubemap.cpp">
+      <Filter>src\engine\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\Common.cpp">
+      <Filter>src\engine\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\rendering\Postprocess.cpp">
+      <Filter>src\engine\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\components\PostprocessComponent.cpp">
+      <Filter>src\components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\vulkan\VulkanResources.cpp">
+      <Filter>private-src\engine\graphics\vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tools\Recompile.cpp">
+      <Filter>src\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\components\RigidBodyComponent.cpp">
+      <Filter>src\components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\components\CollisionShapeComponent.cpp">
+      <Filter>src\components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\ImGuizmo\ImGuizmo.cpp">
+      <Filter>external\imguizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\model\MeshRendererPbr.cpp">
+      <Filter>include\shaders\core\model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\model\MeshRendererPbr.ps.cpp">
+      <Filter>include\shaders\core\model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\model\MeshRendererPbr.vs.cpp">
+      <Filter>include\shaders\core\model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\forward\MeshRenderer.cpp">
+      <Filter>include\shaders\core\forward</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\forward\MeshRenderer.ps.cpp">
+      <Filter>include\shaders\core\forward</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\forward\MeshRenderer.vs.cpp">
+      <Filter>include\shaders\core\forward</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\forward\MeshRendererTransparent.cpp">
+      <Filter>include\shaders\core\forward</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\forward\MeshRendererTransparent.ps.cpp">
+      <Filter>include\shaders\core\forward</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\forward\MeshRendererTransparent.vs.cpp">
+      <Filter>include\shaders\core\forward</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\imgui\ImguiRender.cpp">
+      <Filter>include\shaders\core\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\imgui\ImguiRender.ps.cpp">
+      <Filter>include\shaders\core\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\imgui\ImguiRender.vs.cpp">
+      <Filter>include\shaders\core\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\lighting\Lighting.cpp">
+      <Filter>include\shaders\core\lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\lighting\Lighting.ps.cpp">
+      <Filter>include\shaders\core\lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\lighting\Lighting.vs.cpp">
+      <Filter>include\shaders\core\lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\ibl\BrdfConvolution.ps.cpp">
+      <Filter>include\shaders\core\ibl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\ibl\BrdfConvolution.vs.cpp">
+      <Filter>include\shaders\core\ibl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\ibl\Irradiance.cpp">
+      <Filter>include\shaders\core\ibl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\ibl\Irradiance.ps.cpp">
+      <Filter>include\shaders\core\ibl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\ibl\Irradiance.vs.cpp">
+      <Filter>include\shaders\core\ibl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\ibl\PrefilterConvolution.cpp">
+      <Filter>include\shaders\core\ibl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\ibl\PrefilterConvolution.ps.cpp">
+      <Filter>include\shaders\core\ibl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\ibl\PrefilterConvolution.vs.cpp">
+      <Filter>include\shaders\core\ibl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\ibl\BrdfConvolution.cpp">
+      <Filter>include\shaders\core\ibl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\postprocess\Bloom.cpp">
+      <Filter>include\shaders\core\postprocess</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\postprocess\Bloom.ps.cpp">
+      <Filter>include\shaders\core\postprocess</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\postprocess\Bloom.vs.cpp">
+      <Filter>include\shaders\core\postprocess</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\postprocess\BloomExtractBright.cpp">
+      <Filter>include\shaders\core\postprocess</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\postprocess\BloomExtractBright.ps.cpp">
+      <Filter>include\shaders\core\postprocess</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\postprocess\BloomExtractBright.vs.cpp">
+      <Filter>include\shaders\core\postprocess</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\postprocess\Tonemap.cpp">
+      <Filter>include\shaders\core\postprocess</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\postprocess\Tonemap.ps.cpp">
+      <Filter>include\shaders\core\postprocess</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\postprocess\Tonemap.vs.cpp">
+      <Filter>include\shaders\core\postprocess</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\shadows\ShadowRender.cpp">
+      <Filter>include\shaders\core\shadows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\shadows\ShadowRender.ps.cpp">
+      <Filter>include\shaders\core\shadows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\shadows\ShadowRender.vs.cpp">
+      <Filter>include\shaders\core\shadows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\shadows\ShadowRenderTransparent.cpp">
+      <Filter>include\shaders\core\shadows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\shadows\ShadowRenderTransparent.ps.cpp">
+      <Filter>include\shaders\core\shadows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\shadows\ShadowRenderTransparent.vs.cpp">
+      <Filter>include\shaders\core\shadows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\ssao\SSAO.cpp">
+      <Filter>include\shaders\core\ssao</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\ssao\SSAO.ps.cpp">
+      <Filter>include\shaders\core\ssao</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\ssao\SSAO.vs.cpp">
+      <Filter>include\shaders\core\ssao</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\ssao\SSAOBlur.cpp">
+      <Filter>include\shaders\core\ssao</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\ssao\SSAOBlur.ps.cpp">
+      <Filter>include\shaders\core\ssao</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\ssao\SSAOBlur.vs.cpp">
+      <Filter>include\shaders\core\ssao</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\temporal\TemporalResolve.cpp">
+      <Filter>include\shaders\core\temporal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\temporal\TemporalResolve.ps.cpp">
+      <Filter>include\shaders\core\temporal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\temporal\TemporalResolve.vs.cpp">
+      <Filter>include\shaders\core\temporal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tests\DrawWithConstants.vs.cpp">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tests\DrawWithoutBuffers.cpp">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tests\DrawWithoutBuffers.ps.cpp">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tests\DrawWithoutBuffers.vs.cpp">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tests\DrawWithPixelShaderResources.cpp">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tests\DrawWithPixelShaderResources.ps.cpp">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tests\DrawWithPixelShaderResources.vs.cpp">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tests\DrawWithTexture.cpp">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tests\DrawWithTexture.ps.cpp">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tests\DrawWithTexture.vs.cpp">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tests\HLSLTest.cpp">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tests\HLSLTest.ps.cpp">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tests\HLSLTest.vs.cpp">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tests\DrawWithConstants.cpp">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tests\DrawWithConstants.ps.cpp">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\DebugViewer.vs.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\Downsample.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\Downsample.ps.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\Downsample.vs.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\EarlyZ.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\EarlyZ.ps.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\EarlyZ.vs.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\EarlyZAlphaClipped.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\EarlyZAlphaClipped.ps.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\EarlyZAlphaClipped.vs.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\EquirectToCubemap.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\EquirectToCubemap.ps.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\EquirectToCubemap.vs.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\GaussianBlur.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\GaussianBlur.ps.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\GaussianBlur.vs.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\Wireframe.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\Wireframe.ps.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\Wireframe.vs.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\Cubemap.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\Cubemap.ps.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\Cubemap.vs.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\DebugViewer.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\DebugViewer.ps.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\transparent\MeshTransparentComposite.cpp">
+      <Filter>include\shaders\core\transparent</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\transparent\MeshTransparentComposite.ps.cpp">
+      <Filter>include\shaders\core\transparent</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\transparent\MeshTransparentComposite.vs.cpp">
+      <Filter>include\shaders\core\transparent</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\outline\Outline.cpp">
+      <Filter>include\shaders\core\outline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\outline\Outline.ps.cpp">
+      <Filter>include\shaders\core\outline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\outline\Outline.vs.cpp">
+      <Filter>include\shaders\core\outline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\rendering\RenderOutline.cpp">
+      <Filter>src\engine\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\outline\Outline.gs.cpp">
+      <Filter>include\shaders\core\outline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tools\MeshTools.cpp">
+      <Filter>src\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\entityx-master\entityx\Entity.cc">
+      <Filter>external\entityx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\entityx-master\entityx\Event.cc">
+      <Filter>external\entityx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\entityx-master\entityx\System.cc">
+      <Filter>external\entityx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\entityx-master\entityx\help\Pool.cc">
+      <Filter>external\entityx\help</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\entityx-master\entityx\help\Timer.cc">
+      <Filter>external\entityx\help</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tools\hash\Hash.cpp">
+      <Filter>src\tools\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tools\hash\SpookyHashV2.cpp">
+      <Filter>src\tools\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tools\RingBuffer.cpp">
+      <Filter>src\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\culling\Culling.cs.cpp">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\culling\Culling.cpp">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tools\Debug.cpp">
+      <Filter>src\tools</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\private-src\engine\graphics\metal\MetalDescriptorHandle.mm">
+      <Filter>private-src\engine\graphics\metal</Filter>
+    </None>
+    <None Include="..\..\private-src\engine\graphics\metal\MetalDescriptorHeap.mm">
+      <Filter>private-src\engine\graphics\metal</Filter>
+    </None>
+    <None Include="..\..\private-src\engine\graphics\metal\MetalDevice.mm">
+      <Filter>private-src\engine\graphics\metal</Filter>
+    </None>
+    <None Include="..\..\private-src\engine\graphics\metal\MetalFence.mm">
+      <Filter>private-src\engine\graphics\metal</Filter>
+    </None>
+    <None Include="..\..\private-src\engine\graphics\metal\MetalPipelineState.mm">
+      <Filter>private-src\engine\graphics\metal</Filter>
+    </None>
+    <None Include="..\..\private-src\engine\graphics\metal\MetalSwapChain.mm">
+      <Filter>private-src\engine\graphics\metal</Filter>
+    </None>
+    <None Include="..\..\private-src\engine\graphics\metal\MetalBarrier.mm">
+      <Filter>private-src\engine\graphics\metal</Filter>
+    </None>
+    <None Include="..\..\private-src\engine\graphics\metal\MetalBuffer.mm">
+      <Filter>private-src\engine\graphics\metal</Filter>
+    </None>
+    <None Include="..\..\private-src\engine\graphics\metal\MetalCommandAllocator.mm">
+      <Filter>private-src\engine\graphics\metal</Filter>
+    </None>
+    <None Include="..\..\private-src\engine\graphics\metal\MetalCommandList.mm">
+      <Filter>private-src\engine\graphics\metal</Filter>
+    </None>
+    <None Include="..\..\private-src\engine\graphics\metal\MetalQueue.mm">
+      <Filter>private-src\engine\graphics\metal</Filter>
+    </None>
+    <None Include="..\..\tools\codegen\HistoryIterator.py">
+      <Filter>tools\codegen</Filter>
+    </None>
+    <None Include="..\..\tools\codegen\LexicalAnalyzerHLSL.py">
+      <Filter>tools\codegen</Filter>
+    </None>
+    <None Include="..\..\tools\codegen\ShaderCodegen.py">
+      <Filter>tools\codegen</Filter>
+    </None>
+    <None Include="..\..\tools\codegen\ShaderCompiler.py">
+      <Filter>tools\codegen</Filter>
+    </None>
+    <None Include="..\..\tools\codegen\SyntaxAnalyzerHLSL.py">
+      <Filter>tools\codegen</Filter>
+    </None>
+    <None Include="..\..\tools\codegen\CodeGenerator.py">
+      <Filter>tools\codegen</Filter>
+    </None>
+    <None Include="..\..\tools\codegen\ShaderBuild.py">
+      <Filter>tools\codegen</Filter>
+    </None>
+    <None Include="..\..\tools\codegen\PreprocessorHLSL.py">
+      <Filter>tools\codegen</Filter>
+    </None>
+    <None Include="..\..\shaders\core\Common.hlsli">
+      <Filter>shaders\core</Filter>
+    </None>
+    <None Include="..\..\shaders\core\forward\MeshRenderer.ps.hlsl">
+      <Filter>shaders\core\forward</Filter>
+    </None>
+    <None Include="..\..\shaders\core\forward\MeshRenderer.vs.hlsl">
+      <Filter>shaders\core\forward</Filter>
+    </None>
+    <None Include="..\..\shaders\core\forward\MeshRendererTransparent.ps.hlsl">
+      <Filter>shaders\core\forward</Filter>
+    </None>
+    <None Include="..\..\shaders\core\forward\MeshRendererTransparent.vs.hlsl">
+      <Filter>shaders\core\forward</Filter>
+    </None>
+    <None Include="..\..\shaders\core\ibl\BrdfConvolution.ps.hlsl">
+      <Filter>shaders\core\ibl</Filter>
+    </None>
+    <None Include="..\..\shaders\core\ibl\BrdfConvolution.vs.hlsl">
+      <Filter>shaders\core\ibl</Filter>
+    </None>
+    <None Include="..\..\shaders\core\ibl\Irradiance.ps.hlsl">
+      <Filter>shaders\core\ibl</Filter>
+    </None>
+    <None Include="..\..\shaders\core\ibl\Irradiance.vs.hlsl">
+      <Filter>shaders\core\ibl</Filter>
+    </None>
+    <None Include="..\..\shaders\core\ibl\PrefilterConvolution.ps.hlsl">
+      <Filter>shaders\core\ibl</Filter>
+    </None>
+    <None Include="..\..\shaders\core\ibl\PrefilterConvolution.vs.hlsl">
+      <Filter>shaders\core\ibl</Filter>
+    </None>
+    <None Include="..\..\shaders\core\imgui\ImguiRender.ps.hlsl">
+      <Filter>shaders\core\imgui</Filter>
+    </None>
+    <None Include="..\..\shaders\core\imgui\ImguiRender.vs.hlsl">
+      <Filter>shaders\core\imgui</Filter>
+    </None>
+    <None Include="..\..\shaders\core\lighting\Lighting.ps.hlsl">
+      <Filter>shaders\core\lighting</Filter>
+    </None>
+    <None Include="..\..\shaders\core\lighting\Lighting.vs.hlsl">
+      <Filter>shaders\core\lighting</Filter>
+    </None>
+    <None Include="..\..\shaders\core\model\MeshRendererPbr.ps.hlsl">
+      <Filter>shaders\core\model</Filter>
+    </None>
+    <None Include="..\..\shaders\core\model\MeshRendererPbr.vs.hlsl">
+      <Filter>shaders\core\model</Filter>
+    </None>
+    <None Include="..\..\shaders\core\outline\Outline.gs.hlsl">
+      <Filter>shaders\core\outline</Filter>
+    </None>
+    <None Include="..\..\shaders\core\outline\Outline.ps.hlsl">
+      <Filter>shaders\core\outline</Filter>
+    </None>
+    <None Include="..\..\shaders\core\outline\Outline.vs.hlsl">
+      <Filter>shaders\core\outline</Filter>
+    </None>
+    <None Include="..\..\shaders\core\postprocess\Bloom.ps.hlsl">
+      <Filter>shaders\core\postprocess</Filter>
+    </None>
+    <None Include="..\..\shaders\core\postprocess\Bloom.vs.hlsl">
+      <Filter>shaders\core\postprocess</Filter>
+    </None>
+    <None Include="..\..\shaders\core\postprocess\BloomExtractBright.ps.hlsl">
+      <Filter>shaders\core\postprocess</Filter>
+    </None>
+    <None Include="..\..\shaders\core\postprocess\BloomExtractBright.vs.hlsl">
+      <Filter>shaders\core\postprocess</Filter>
+    </None>
+    <None Include="..\..\shaders\core\postprocess\Tonemap.ps.hlsl">
+      <Filter>shaders\core\postprocess</Filter>
+    </None>
+    <None Include="..\..\shaders\core\postprocess\Tonemap.vs.hlsl">
+      <Filter>shaders\core\postprocess</Filter>
+    </None>
+    <None Include="..\..\shaders\core\shadows\ShadowRender.ps.hlsl">
+      <Filter>shaders\core\shadows</Filter>
+    </None>
+    <None Include="..\..\shaders\core\shadows\ShadowRender.vs.hlsl">
+      <Filter>shaders\core\shadows</Filter>
+    </None>
+    <None Include="..\..\shaders\core\shadows\ShadowRenderTransparent.ps.hlsl">
+      <Filter>shaders\core\shadows</Filter>
+    </None>
+    <None Include="..\..\shaders\core\shadows\ShadowRenderTransparent.vs.hlsl">
+      <Filter>shaders\core\shadows</Filter>
+    </None>
+    <None Include="..\..\shaders\core\ssao\SSAO.ps.hlsl">
+      <Filter>shaders\core\ssao</Filter>
+    </None>
+    <None Include="..\..\shaders\core\ssao\SSAO.vs.hlsl">
+      <Filter>shaders\core\ssao</Filter>
+    </None>
+    <None Include="..\..\shaders\core\ssao\SSAOBlur.ps.hlsl">
+      <Filter>shaders\core\ssao</Filter>
+    </None>
+    <None Include="..\..\shaders\core\ssao\SSAOBlur.vs.hlsl">
+      <Filter>shaders\core\ssao</Filter>
+    </None>
+    <None Include="..\..\shaders\core\temporal\TemporalResolve.ps.hlsl">
+      <Filter>shaders\core\temporal</Filter>
+    </None>
+    <None Include="..\..\shaders\core\temporal\TemporalResolve.vs.hlsl">
+      <Filter>shaders\core\temporal</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tests\DrawWithConstants.ps.hlsl">
+      <Filter>shaders\core\tests</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tests\DrawWithConstants.vs.hlsl">
+      <Filter>shaders\core\tests</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tests\DrawWithoutBuffers.ps.hlsl">
+      <Filter>shaders\core\tests</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tests\DrawWithoutBuffers.vs.hlsl">
+      <Filter>shaders\core\tests</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tests\DrawWithPixelShaderResources.ps.hlsl">
+      <Filter>shaders\core\tests</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tests\DrawWithPixelShaderResources.vs.hlsl">
+      <Filter>shaders\core\tests</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tests\DrawWithTexture.ps.hlsl">
+      <Filter>shaders\core\tests</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tests\DrawWithTexture.vs.hlsl">
+      <Filter>shaders\core\tests</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tests\HLSLTest.ps.hlsl">
+      <Filter>shaders\core\tests</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tests\HLSLTest.vs.hlsl">
+      <Filter>shaders\core\tests</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tests\IncludeTest.h">
+      <Filter>shaders\core\tests</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tests\PreprocessorTest.h">
+      <Filter>shaders\core\tests</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tools\Wireframe.vs.hlsl">
+      <Filter>shaders\core\tools</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tools\Cubemap.ps.hlsl">
+      <Filter>shaders\core\tools</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tools\Cubemap.vs.hlsl">
+      <Filter>shaders\core\tools</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tools\DebugViewer.ps.hlsl">
+      <Filter>shaders\core\tools</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tools\DebugViewer.vs.hlsl">
+      <Filter>shaders\core\tools</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tools\Downsample.ps.hlsl">
+      <Filter>shaders\core\tools</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tools\Downsample.vs.hlsl">
+      <Filter>shaders\core\tools</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tools\EarlyZ.ps.hlsl">
+      <Filter>shaders\core\tools</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tools\EarlyZ.vs.hlsl">
+      <Filter>shaders\core\tools</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tools\EarlyZAlphaClipped.ps.hlsl">
+      <Filter>shaders\core\tools</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tools\EarlyZAlphaClipped.vs.hlsl">
+      <Filter>shaders\core\tools</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tools\EquirectToCubemap.ps.hlsl">
+      <Filter>shaders\core\tools</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tools\EquirectToCubemap.vs.hlsl">
+      <Filter>shaders\core\tools</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tools\GaussianBlur.ps.hlsl">
+      <Filter>shaders\core\tools</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tools\GaussianBlur.vs.hlsl">
+      <Filter>shaders\core\tools</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tools\Wireframe.ps.hlsl">
+      <Filter>shaders\core\tools</Filter>
+    </None>
+    <None Include="..\..\shaders\core\transparent\MeshTransparentComposite.ps.hlsl">
+      <Filter>shaders\core\transparent</Filter>
+    </None>
+    <None Include="..\..\shaders\core\transparent\MeshTransparentComposite.vs.hlsl">
+      <Filter>shaders\core\transparent</Filter>
+    </None>
+    <None Include="..\..\shaders\core\culling\Culling.cs.hlsl">
+      <Filter>shaders\core\culling</Filter>
+    </None>
+  </ItemGroup>
+</Project>

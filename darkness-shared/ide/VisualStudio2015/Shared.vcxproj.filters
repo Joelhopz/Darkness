@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\engine">
+      <UniqueIdentifier>{ff2b507a-bade-4c3a-9583-521af9cc9583}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\engine\primitives">
+      <UniqueIdentifier>{8f7e69ae-55da-41f7-ac8b-32e168b6cca3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\engine">
+      <UniqueIdentifier>{03b9f213-4541-473e-9f76-3d276004de85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\engine\primitives">
+      <UniqueIdentifier>{3ca4ecf4-f484-470c-91c4-d73e925aec83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\tools">
+      <UniqueIdentifier>{104263e7-a9aa-4ab9-8b71-594b77f87701}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\Common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Drawer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\DrawerCallbacks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\main.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Property.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Serialization.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Stream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Type.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\TypeRegistry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\primitives\Matrix4.h">
+      <Filter>Header Files\engine\primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\primitives\Quaternion.h">
+      <Filter>Header Files\engine\primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\primitives\Span.h">
+      <Filter>Header Files\engine\primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\primitives\Vector2.h">
+      <Filter>Header Files\engine\primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\primitives\Vector3.h">
+      <Filter>Header Files\engine\primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\primitives\Vector4.h">
+      <Filter>Header Files\engine\primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\primitives\Color.h">
+      <Filter>Header Files\engine\primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\primitives\Edge.h">
+      <Filter>Header Files\engine\primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\primitives\Math.h">
+      <Filter>Header Files\engine\primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\primitives\Matrix3.h">
+      <Filter>Header Files\engine\primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\primitives\Rect.h">
+      <Filter>Header Files\engine\primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\Debug.h">
+      <Filter>Header Files\tools</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\Drawer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Serialization.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Stream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Type.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TypeRegistry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\primitives\Edge.cpp">
+      <Filter>Source Files\engine\primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\primitives\PrimitiveSerialization.cpp">
+      <Filter>Source Files\engine\primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\primitives\Color.cpp">
+      <Filter>Source Files\engine\primitives</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

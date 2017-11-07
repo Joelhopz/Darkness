@@ -1,0 +1,345 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="compilation">
+      <UniqueIdentifier>{fe9c2d5a-7abf-4196-9bc5-77237134f3ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mocs">
+      <UniqueIdentifier>{4da9e8df-83a8-494f-8f32-5d447f7b14b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\settings">
+      <UniqueIdentifier>{ac24f51d-c2e0-457f-8cbc-0e2d8909d0de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\assets">
+      <UniqueIdentifier>{e6e3e0e5-ce3d-4bb7-9dcb-854c2d281ceb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\toolbars">
+      <UniqueIdentifier>{23754795-e971-4c6f-b0d1-63d263838eb1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\widgets">
+      <UniqueIdentifier>{0c3b7167-76e0-44d2-80e7-06a4fa9a7245}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\engine">
+      <UniqueIdentifier>{d069d99e-d0eb-4769-987f-2d64e71bec46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\drawers">
+      <UniqueIdentifier>{0c6096cc-344f-4529-bd88-6b20f825f479}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\MainWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ToolBar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ColorSwatch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ColorDock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\settings\Settings.cpp">
+      <Filter>Source Files\settings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\settings\ProjectSettings.cpp">
+      <Filter>Source Files\settings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\assets\AssetImporter.cpp">
+      <Filter>Source Files\assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\toolbars\TransformToolbar.cpp">
+      <Filter>Source Files\toolbars</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\widgets\Browser.cpp">
+      <Filter>Source Files\widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\EngineWrap.cpp">
+      <Filter>Source Files\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\EngineWindow.cpp">
+      <Filter>Source Files\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\moc\MainWindow_moc.cpp">
+      <Filter>mocs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\moc\ToolBar_moc.cpp">
+      <Filter>mocs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\moc\ColorDock_moc.cpp">
+      <Filter>mocs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\moc\ColorSwatch_moc.cpp">
+      <Filter>mocs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\moc\assets\AssetImporter_moc.cpp">
+      <Filter>mocs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\moc\engine\EngineWindow_moc.cpp">
+      <Filter>mocs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\moc\toolbars\TransformToolbar_moc.cpp">
+      <Filter>mocs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\moc\widgets\Browser_moc.cpp">
+      <Filter>mocs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\widgets\Hierarchy.cpp">
+      <Filter>Source Files\widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\widgets\Inspector.cpp">
+      <Filter>Source Files\widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\widgets\HierarchyTreeModel.cpp">
+      <Filter>Source Files\widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\moc\widgets\HierarchyTreeModel_moc.cpp">
+      <Filter>mocs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\settings\BrowserSettings.cpp">
+      <Filter>Source Files\settings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\assets\AssetDecodePopup.cpp">
+      <Filter>Source Files\assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\moc\assets\AssetDecodePopup_moc.cpp">
+      <Filter>mocs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\assets\AssetTools.cpp">
+      <Filter>Source Files\assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\drawers\Vector3fDrawer.cpp">
+      <Filter>Source Files\drawers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\drawers\Matrix4fDrawer.cpp">
+      <Filter>Source Files\drawers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\moc\drawers\Vector3fDrawer_moc.cpp">
+      <Filter>mocs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\moc\drawers\Matrix4fDrawer_moc.cpp">
+      <Filter>mocs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\drawers\DragableLabel.cpp">
+      <Filter>Source Files\drawers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\moc\drawers\DragableLabel_moc.cpp">
+      <Filter>mocs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\drawers\FloatDrawer.cpp">
+      <Filter>Source Files\drawers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\drawers\IntDrawer.cpp">
+      <Filter>Source Files\drawers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\moc\drawers\IntDrawer_moc.cpp">
+      <Filter>mocs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\moc\drawers\FloatDrawer_moc.cpp">
+      <Filter>mocs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\drawers\ProjectionDrawer.cpp">
+      <Filter>Source Files\drawers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\moc\drawers\ProjectionDrawer_moc.cpp">
+      <Filter>mocs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\drawers\StringDrawer.cpp">
+      <Filter>Source Files\drawers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\moc\drawers\StringDrawer_moc.cpp">
+      <Filter>mocs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\moc\widgets\Hierarchy_moc.cpp">
+      <Filter>mocs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\moc\widgets\Inspector_moc.cpp">
+      <Filter>mocs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\drawers\TextureTypeDrawer.cpp">
+      <Filter>Source Files\drawers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\moc\drawers\TextureTypeDrawer_moc.cpp">
+      <Filter>mocs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\drawers\ButtonDrawers.cpp">
+      <Filter>Source Files\drawers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\moc\drawers\ButtonDrawers_moc.cpp">
+      <Filter>mocs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\drawers\LightTypeDrawer.cpp">
+      <Filter>Source Files\drawers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\moc\drawers\LightTypeDrawer_moc.cpp">
+      <Filter>mocs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\drawers\PlaceholderDrawers.cpp">
+      <Filter>Source Files\drawers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\drawers\CollisionShapeDrawer.cpp">
+      <Filter>Source Files\drawers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\moc\drawers\CollisionShapeDrawer_moc.cpp">
+      <Filter>mocs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\toolbars\PhysicsToolbar.cpp">
+      <Filter>Source Files\toolbars</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\moc\toolbars\PhysicsToolbar_moc.cpp">
+      <Filter>mocs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\widgets\ImportSettings.cpp">
+      <Filter>Source Files\widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\moc\widgets\ImportSettings_moc.cpp">
+      <Filter>mocs</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\MainWindow.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ToolBar.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ColorSwatch.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ColorDock.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\settings\Settings.h">
+      <Filter>Source Files\settings</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\settings\ProjectSettings.h">
+      <Filter>Source Files\settings</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\assets\AssetImporter.h">
+      <Filter>Source Files\assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\toolbars\TransformToolbar.h">
+      <Filter>Source Files\toolbars</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\widgets\Browser.h">
+      <Filter>Source Files\widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\EngineWindow.h">
+      <Filter>Source Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\EngineWrap.h">
+      <Filter>Source Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\widgets\Hierarchy.h">
+      <Filter>Source Files\widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\widgets\Inspector.h">
+      <Filter>Source Files\widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\widgets\HierarchyTreeModel.h">
+      <Filter>Source Files\widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\widgets\AssetProgress.h">
+      <Filter>Source Files\widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\settings\BrowserSettings.h">
+      <Filter>Source Files\settings</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\assets\AssetDecodePopup.h">
+      <Filter>Source Files\assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\assets\AssetTools.h">
+      <Filter>Source Files\assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\drawers\Vector3fDrawer.h">
+      <Filter>Source Files\drawers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\drawers\Matrix4fDrawer.h">
+      <Filter>Source Files\drawers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\drawers\DragableLabel.h">
+      <Filter>Source Files\drawers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\drawers\FloatDrawer.h">
+      <Filter>Source Files\drawers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\drawers\IntDrawer.h">
+      <Filter>Source Files\drawers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\drawers\ProjectionDrawer.h">
+      <Filter>Source Files\drawers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\drawers\StringDrawer.h">
+      <Filter>Source Files\drawers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\drawers\TextureTypeDrawer.h">
+      <Filter>Source Files\drawers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\drawers\ButtonDrawers.h">
+      <Filter>Source Files\drawers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\drawers\LightTypeDrawer.h">
+      <Filter>Source Files\drawers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\drawers\PlaceholderDrawers.h">
+      <Filter>Source Files\drawers</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\drawers\CollisionShapeDrawer.h">
+      <Filter>Source Files\drawers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\toolbars\PhysicsToolbar.h">
+      <Filter>Source Files\toolbars</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\widgets\ImportSettings.h">
+      <Filter>Source Files\widgets</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\compilation\MocCompile.py">
+      <Filter>compilation</Filter>
+    </None>
+    <None Include="..\..\data\DarknessEditor.qss">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\compilation\RccCompile.py">
+      <Filter>compilation</Filter>
+    </None>
+    <None Include="..\..\data\DarknessEditor.qrc">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DarknessEditor.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="DarknessEditor1.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\data\editor.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

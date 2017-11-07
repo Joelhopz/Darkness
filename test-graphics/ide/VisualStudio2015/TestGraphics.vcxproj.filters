@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\platform">
+      <UniqueIdentifier>{fb40d880-d6df-4aa2-91a3-b1c0721f3d85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\platform\window">
+      <UniqueIdentifier>{b18a37f9-53c7-4dc4-9e57-d6425b0cd6ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\tools">
+      <UniqueIdentifier>{4910ad06-4973-4027-8dc5-c86b7a5040d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\tools\image">
+      <UniqueIdentifier>{8952364b-62ae-4c5f-a019-2fa2e58a80ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\engine">
+      <UniqueIdentifier>{a747e323-10b7-4686-be1b-dd4572e2fda9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\engine\graphics">
+      <UniqueIdentifier>{e6fc33d4-a284-4fc3-a07a-ebf449811004}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\engine\graphics\shaders">
+      <UniqueIdentifier>{fb5085f6-b477-487b-bbe2-20b6cb3b3df4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\tools\TestCompressedFile.cpp">
+      <Filter>Source Files\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\platform\window\TestWindow.cpp">
+      <Filter>Source Files\platform\window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tools\image\TestImage.cpp">
+      <Filter>Source Files\tools\image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Tools.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\TestDevice.cpp">
+      <Filter>Source Files\engine\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\TestSemaphore.cpp">
+      <Filter>Source Files\engine\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\TestBuffer.cpp">
+      <Filter>Source Files\engine\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\TestTexture.cpp">
+      <Filter>Source Files\engine\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\TestDraw.cpp">
+      <Filter>Source Files\engine\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\GlobalTestFixture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tools\TestPathTools.cpp">
+      <Filter>Source Files\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tools\TestSettings.cpp">
+      <Filter>Source Files\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tools\TestMemoryAllocator.cpp">
+      <Filter>Source Files\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tools\TestRefCounted.cpp">
+      <Filter>Source Files\tools</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\Tools.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\GlobalTestFixture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\src\engine\graphics\shaders\TriangleColor.frag">
+      <Filter>Source Files\engine\graphics\shaders</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\src\engine\graphics\shaders\TriangleColor.vert">
+      <Filter>Source Files\engine\graphics\shaders</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>

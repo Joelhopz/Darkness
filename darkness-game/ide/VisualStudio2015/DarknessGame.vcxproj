@@ -1,0 +1,336 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug Vulkan|Win32">
+      <Configuration>Debug Vulkan</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug Vulkan|x64">
+      <Configuration>Debug Vulkan</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug DX12|Win32">
+      <Configuration>Debug DX12</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release Vulkan|Win32">
+      <Configuration>Release Vulkan</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release Vulkan|x64">
+      <Configuration>Release Vulkan</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release DX12|Win32">
+      <Configuration>Release DX12</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug DX12|x64">
+      <Configuration>Debug DX12</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release DX12|x64">
+      <Configuration>Release DX12</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{B4FADEE8-72F8-47A6-A433-D4FFB43AC569}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>DarknessGame</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\src</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\darkness-engine\bin\Win32\Debug;C:\Program Files (x86)\Windows Kits\10\Lib\10.0.15063.0\um\x86;$(ProjectDir)..\..\..\darkness-shared\bin\Win32\Debug;$(ProjectDir)..\..\..\darkness-engine\external\zstd\bin\Win32\Debug;$(ProjectDir)..\..\..\darkness-engine\external\bzip2-1.0.6\bin\Win32\Debug;$(ProjectDir)..\..\..\darkness-engine\external\amd-tootle\lib;$(ProjectDir)..\..\..\darkness-engine\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\Win32\Debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>DarknessShared.lib;DarknessEngine.lib;bzip2.lib;zstdlib_x64.lib;d3d12.lib;d3dcompiler.lib;dxgi.lib;dxguid.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\..\darkness-engine\external\glm;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\src</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\darkness-engine\bin\Win32\Debug;C:\Program Files (x86)\Windows Kits\10\Lib\10.0.10586.0\um\x86;C:\VulkanSDK\1.0.61.1\Bin32;$(ProjectDir)..\..\..\darkness-shared\bin\Win32\Debug;$(ProjectDir)..\..\..\darkness-engine\external\amd-tootle\lib;$(ProjectDir)..\..\..\darkness-engine\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\Win32\Debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>DarknessShared.lib;vulkan-1.lib;DarknessEngine.lib;d3d12.lib;dxgi.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\src</AdditionalIncludeDirectories>
+      <BrowseInformation>false</BrowseInformation>
+      <TreatWarningAsError>true</TreatWarningAsError>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\darkness-engine\bin\$(Platform)\$(Configuration);C:\Program Files (x86)\Windows Kits\10\Lib\10.0.15063.0\um\x64;$(ProjectDir)..\..\..\darkness-shared\bin\$(Platform)\$(Configuration);$(ProjectDir)..\..\..\darkness-engine\external\zstd\bin\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\bzip2-1.0.6\bin\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\bin;$(ProjectDir)..\..\..\darkness-engine\external\amd-tootle\lib;$(ProjectDir)..\..\..\darkness-engine\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\x64\Debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>DarknessShared.lib;DarknessEngine.lib;bzip2.lib;zstdlib_x64.lib;d3d12.lib;d3dcompiler.lib;dxgi.lib;dxguid.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;BulletDynamics_vs2010_x64_debug.lib;BulletCollision_vs2010_x64_debug.lib;LinearMath_vs2010_x64_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <Bscmake>
+      <PreserveSbr>false</PreserveSbr>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\..\darkness-engine\external\glm;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\src</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\darkness-engine\bin\$(Platform)\$(Configuration);C:\Program Files (x86)\Windows Kits\10\Lib\10.0.10586.0\um\x64;C:\VulkanSDK\1.0.61.1\Bin;$(ProjectDir)..\..\..\darkness-engine\external\zstd\bin\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\bzip2-1.0.6\bin\x64\Debug;$(ProjectDir)..\..\..\darkness-shared\bin\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\bin;$(ProjectDir)..\..\..\darkness-engine\external\amd-tootle\lib;$(ProjectDir)..\..\..\darkness-engine\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\x64\Debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>DarknessShared.lib;vulkan-1.lib;DarknessEngine.lib;bzip2.lib;zstdlib_x64.lib;d3d12.lib;dxgi.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;BulletDynamics_vs2010_x64_debug.lib;BulletCollision_vs2010_x64_debug.lib;LinearMath_vs2010_x64_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\src</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\darkness-engine\bin\Win32\Release;C:\Program Files (x86)\Windows Kits\10\Lib\10.0.15063.0\um\x86;$(ProjectDir)..\..\..\darkness-shared\bin\Win32\Release;$(ProjectDir)..\..\..\darkness-engine\external\zstd\bin\Win32\Debug;$(ProjectDir)..\..\..\darkness-engine\external\bzip2-1.0.6\bin\Win32\Debug;$(ProjectDir)..\..\..\darkness-engine\external\amd-tootle\lib;$(ProjectDir)..\..\..\darkness-engine\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\Win32\Release</AdditionalLibraryDirectories>
+      <AdditionalDependencies>DarknessShared.lib;DarknessEngine.lib;bzip2.lib;zstdlib_x64.lib;d3d12.lib;d3dcompiler.lib;dxgi.lib;dxguid.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\..\darkness-engine\external\glm;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\src</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\darkness-engine\bin\Win32\Release;C:\Program Files (x86)\Windows Kits\10\Lib\10.0.10586.0\um\x86;C:\VulkanSDK\1.0.61.1\Bin32;$(ProjectDir)..\..\..\darkness-shared\bin\Win32\Release;$(ProjectDir)..\..\..\darkness-engine\external\amd-tootle\lib;$(ProjectDir)..\..\..\darkness-engine\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\Win32\Release</AdditionalLibraryDirectories>
+      <AdditionalDependencies>DarknessShared.lib;vulkan-1.lib;DarknessEngine.lib;d3d12.lib;dxgi.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\src</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\darkness-engine\bin\$(Platform)\$(Configuration);C:\Program Files (x86)\Windows Kits\10\Lib\10.0.15063.0\um\x64;$(ProjectDir)..\..\..\darkness-shared\bin\x64\Release DX12;$(ProjectDir)..\..\..\darkness-engine\external\zstd\bin\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\bzip2-1.0.6\bin\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\bin;$(ProjectDir)..\..\..\darkness-engine\external\amd-tootle\lib;$(ProjectDir)..\..\..\darkness-engine\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\x64\Release</AdditionalLibraryDirectories>
+      <AdditionalDependencies>DarknessShared.lib;DarknessEngine.lib;bzip2.lib;zstdlib_x64.lib;d3d12.lib;d3dcompiler.lib;dxgi.lib;dxguid.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;BulletDynamics_vs2010_x64_release.lib;BulletCollision_vs2010_x64_release.lib;LinearMath_vs2010_x64_release.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\..\darkness-engine\external\glm;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\src</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\darkness-engine\bin\$(Platform)\$(Configuration);C:\Program Files (x86)\Windows Kits\10\Lib\10.0.10586.0\um\x64;C:\VulkanSDK\1.0.61.1\Bin;$(ProjectDir)..\..\..\darkness-engine\external\zstd\bin\x64\Release;$(ProjectDir)..\..\..\darkness-engine\external\bzip2-1.0.6\bin\x64\Release;$(ProjectDir)..\..\..\darkness-shared\bin\x64\Release;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\bin;$(ProjectDir)..\..\..\darkness-engine\external\amd-tootle\lib;$(ProjectDir)..\..\..\darkness-engine\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\x64\Release</AdditionalLibraryDirectories>
+      <AdditionalDependencies>DarknessShared.lib;vulkan-1.lib;DarknessEngine.lib;bzip2.lib;zstdlib_x64.lib;d3d12.lib;dxgi.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;BulletDynamics_vs2010_x64_release.lib;BulletCollision_vs2010_x64_release.lib;LinearMath_vs2010_x64_release.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\application\Application.cpp" />
+    <ClCompile Include="..\..\src\drawers\Drawers.cpp" />
+    <ClCompile Include="..\..\src\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\application\Application.h" />
+    <ClInclude Include="..\..\src\drawers\Drawers.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="resource1.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DarknessGame.rc" />
+    <ResourceCompile Include="DarknessGame1.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\data\game.ico" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
