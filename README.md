@@ -13,6 +13,8 @@ GPU based frustum and occlusion culling using cluster culling. (roughly the same
 
 Physically based lighting model (PBR) supporting the most common light types (directional, spot, point).
 Also supporting image based lighting.
+![alt text](https://github.com/Karmiska/Darkness/blob/master/substance.png "Substance painter materials")
+![alt text](https://github.com/Karmiska/Darkness/blob/master/substance_metal.png "Substance painter materials 2")
 
 Temporal Antialiasing.
 PCF Shadows.
