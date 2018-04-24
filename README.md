@@ -4,7 +4,7 @@ Rendering engine and editor
 
 Editor UI uses Qt.
 
-![](https://github.com/Karmiska/Darkness/blob/master/editor.png "Editor screenshot")
+![Editor](https://github.com/Karmiska/Darkness/blob/master/editor.png "Editor screenshot")
 
 <p>Engine description</p>
 
@@ -14,17 +14,15 @@ GPU based frustum and occlusion culling using cluster culling. (roughly the same
 <p>Physically based lighting model (PBR) supporting the most common light types (directional, spot, point).
 Also supporting image based lighting.</p>
 
-<p>
-![](https://github.com/Karmiska/Darkness/blob/master/substance.png "Substance painter materials")
-![](https://github.com/Karmiska/Darkness/blob/master/substance_metal.png "Substance painter materials 2")
-</p>
+![Substance](https://github.com/Karmiska/Darkness/blob/master/substance.png "Substance painter materials")
+![Substance2](https://github.com/Karmiska/Darkness/blob/master/substance_metal.png "Substance painter materials 2")
 
 <p>Temporal Antialiasing.
 PCF Shadows.
 Screen space ambient occlusion.</p>
 
 <p>Light probes.</p>
-![](https://github.com/Karmiska/Darkness/blob/master/light_probe.png "Light probe")
+![Probes](https://github.com/Karmiska/Darkness/blob/master/light_probe.png "Light probe")
 
 <p>Supports both DX12 and Vulkan backends.</p>
 
