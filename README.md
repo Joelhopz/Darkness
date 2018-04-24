@@ -18,6 +18,9 @@ Temporal Antialiasing.
 PCF Shadows.
 Screen space ambient occlusion.
 
+Light probes.
+![alt text](https://github.com/Karmiska/Darkness/blob/master/light_probe.png "Light probe")
+
 Supports both DX12 and Vulkan backends.
 
 Shader hotreload (both in editor/in game).
