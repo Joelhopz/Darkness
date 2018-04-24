@@ -22,6 +22,7 @@ PCF Shadows.
 Screen space ambient occlusion.</p>
 
 <p>Light probes.</p>
+
 ![Probes](https://github.com/Karmiska/Darkness/blob/master/light_probe.png "Light probe")
 
 <p>Supports both DX12 and Vulkan backends.</p>
