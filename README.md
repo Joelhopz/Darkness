@@ -8,17 +8,20 @@ Editor UI uses Qt.
 
 <p>Engine description</p>
 
-<ul>
-<li>DX12</li>
-<li>Vulkan</li>
-<li>PBR</li>
-<li>IBL</li>
-<li>SSAO</li>
-<li>PCF shadows</li>
-<li>Basic light types directional/spot/point</li>
-<li>Temporal AA</li>
-<li>Shader hotreload</li>
-</ul>
+Fully GPU driven graphics architecture.
+GPU based frustum and occlusion culling using cluster culling. (roughly the same as the one presented here http://advances.realtimerendering.com/s2015/aaltonenhaar_siggraph2015_combined_final_footer_220dpi.pdf)
+
+Physically based lighting model (PBR) supporting the most common light types (directional, spot, point).
+Also supporting image based lighting.
+
+Temporal Antialiasing.
+PCF Shadows.
+Screen space ambient occlusion.
+
+Supports both DX12 and Vulkan backends.
+
+Shader hotreload (both in editor/in game).
+Distributed asset processing.
 
 This project is likely never going to be finished nor production quality. It is only a tool for me to study the subject.
 
