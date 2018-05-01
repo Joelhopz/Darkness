@@ -49,37 +49,37 @@ namespace engine
     {
         switch (type)
         {
-        case TextureType::Normal: return { Format::Format_BC5_UNORM, Format::Format_BC1_UNORM };
-        case TextureType::Albedo: return { Format::Format_BC7_UNORM, Format::Format_BC3_UNORM, Format::Format_BC1_UNORM };
-        case TextureType::Shininess: return { Format::Format_BC4_UNORM };
-        case TextureType::Ambient: return { Format::Format_BC4_UNORM };
-        case TextureType::Displacement: return { Format::Format_BC6H_UF16, Format::Format_BC4_UNORM };
-        case TextureType::Emissive: return { Format::Format_BC4_UNORM };
-        case TextureType::Hdr: return { Format::Format_BC6H_UF16 };
-        case TextureType::Height: return { Format::Format_BC4_UNORM };
-        case TextureType::Lightmap: return { Format::Format_BC6H_UF16 };
-        case TextureType::Opacity: return { Format::Format_BC4_UNORM };
-        case TextureType::Reflection: return { Format::Format_BC6H_UF16, Format::Format_BC4_UNORM };
-        case TextureType::Roughness: return { Format::Format_BC6H_UF16, Format::Format_BC4_UNORM };
-        case TextureType::Occlusion: return { Format::Format_BC6H_UF16, Format::Format_BC4_UNORM };
+        case TextureType::Normal: return { Format::BC5_UNORM, Format::BC1_UNORM };
+        case TextureType::Albedo: return { Format::BC7_UNORM, Format::BC3_UNORM, Format::BC1_UNORM };
+        case TextureType::Shininess: return { Format::BC4_UNORM };
+        case TextureType::Ambient: return { Format::BC4_UNORM };
+        case TextureType::Displacement: return { Format::BC6H_UF16, Format::BC4_UNORM };
+        case TextureType::Emissive: return { Format::BC6H_UF16, Format::BC4_UNORM };
+        case TextureType::Hdr: return { Format::BC6H_UF16 };
+        case TextureType::Height: return { Format::BC4_UNORM };
+        case TextureType::Lightmap: return { Format::BC4_UNORM };
+        case TextureType::Opacity: return { Format::BC4_UNORM };
+        case TextureType::Reflection: return { Format::BC4_UNORM };
+        case TextureType::Roughness: return { Format::BC4_UNORM };
+        case TextureType::Occlusion: return { Format::BC4_UNORM };
         }
-        return { Format::Format_BC1_UNORM };
+        return { Format::BC1_UNORM };
     }
 
     TextureType possibleTextureTypeFromFormat(Format format)
     {
         switch (format)
         {
-        case Format::Format_BC1_UNORM: return TextureType::Albedo;
-        case Format::Format_BC3_UNORM: return TextureType::Albedo;
-        case Format::Format_BC4_UNORM: return TextureType::Roughness;
-        case Format::Format_BC5_UNORM: return TextureType::Normal;
-        case Format::Format_BC6H_UF16: return TextureType::Hdr;
-        case Format::Format_BC7_UNORM: return TextureType::Albedo;
+        case Format::BC1_UNORM: return TextureType::Albedo;
+        case Format::BC3_UNORM: return TextureType::Albedo;
+        case Format::BC4_UNORM: return TextureType::Roughness;
+        case Format::BC5_UNORM: return TextureType::Normal;
+        case Format::BC6H_UF16: return TextureType::Hdr;
+        case Format::BC7_UNORM: return TextureType::Albedo;
 
-        case Format::Format_BC1_UNORM_SRGB: return TextureType::Albedo;
-        case Format::Format_BC3_UNORM_SRGB: return TextureType::Albedo;
-        case Format::Format_BC7_UNORM_SRGB: return TextureType::Albedo;
+        case Format::BC1_UNORM_SRGB: return TextureType::Albedo;
+        case Format::BC3_UNORM_SRGB: return TextureType::Albedo;
+        case Format::BC7_UNORM_SRGB: return TextureType::Albedo;
 
         default: return TextureType::Albedo;
         }
@@ -102,23 +102,23 @@ namespace engine
     {
         switch (type)
         {
-        case TextureType::Albedo: return { Format::Format_BC7_UNORM_SRGB, Format::Format_BC3_UNORM_SRGB, Format::Format_BC1_UNORM_SRGB };
+        case TextureType::Albedo: return { Format::BC7_UNORM_SRGB, Format::BC3_UNORM_SRGB, Format::BC1_UNORM_SRGB };
 
                                   // really makes no sense for these
-        case TextureType::Normal: return { Format::Format_BC1_UNORM_SRGB };
-        case TextureType::Shininess: return { Format::Format_BC6H_UF16, Format::Format_BC4_UNORM };
-        case TextureType::Ambient: return { Format::Format_BC4_UNORM };
-        case TextureType::Displacement: return { Format::Format_BC6H_UF16, Format::Format_BC4_UNORM };
-        case TextureType::Emissive: return { Format::Format_BC6H_UF16, Format::Format_BC4_UNORM };
-        case TextureType::Hdr: return { Format::Format_BC6H_UF16 };
-        case TextureType::Height: return { Format::Format_BC4_UNORM };
-        case TextureType::Lightmap: return { Format::Format_BC6H_UF16 };
-        case TextureType::Opacity: return { Format::Format_BC4_UNORM };
-        case TextureType::Reflection: return { Format::Format_BC6H_UF16, Format::Format_BC4_UNORM };
-        case TextureType::Roughness: return { Format::Format_BC6H_UF16, Format::Format_BC4_UNORM };
-        case TextureType::Occlusion: return { Format::Format_BC6H_UF16, Format::Format_BC4_UNORM };
+        case TextureType::Normal: return { Format::BC1_UNORM_SRGB };
+        case TextureType::Shininess: return { Format::BC6H_UF16, Format::BC4_UNORM };
+        case TextureType::Ambient: return { Format::BC4_UNORM };
+        case TextureType::Displacement: return { Format::BC6H_UF16, Format::BC4_UNORM };
+        case TextureType::Emissive: return { Format::BC6H_UF16, Format::BC4_UNORM };
+        case TextureType::Hdr: return { Format::BC6H_UF16 };
+        case TextureType::Height: return { Format::BC4_UNORM };
+        case TextureType::Lightmap: return { Format::BC4_UNORM };
+        case TextureType::Opacity: return { Format::BC4_UNORM };
+        case TextureType::Reflection: return { Format::BC4_UNORM };
+        case TextureType::Roughness: return { Format::BC4_UNORM };
+        case TextureType::Occlusion: return { Format::BC4_UNORM };
         }
-        return { Format::Format_BC1_UNORM_SRGB };
+        return { Format::BC1_UNORM_SRGB };
     }
 
     std::vector<Format> possibleEncodingFormatSRGB(std::vector<TextureType> types)
@@ -136,7 +136,13 @@ namespace engine
 
     size_t MaterialTexture::size() const
     {
-        return sizeof(uint32_t) + filePath.size() + sizeof(TextureMapping) + sizeof(TextureMapMode) + sizeof(TextureType) + sizeof(TextureOp);
+        return 
+            sizeof(uint32_t) + filePath.size() + // path
+            sizeof(TextureMapping) + 
+            sizeof(TextureMapMode) + 
+            sizeof(TextureType) + 
+            sizeof(TextureOp) +
+            sizeof(unsigned int); // uv index
     }
 
     std::vector<uint8_t> MaterialTexture::data() const
@@ -150,6 +156,7 @@ namespace engine
         memcpy(&data[pos], &mode, sizeof(TextureMapMode)); pos += sizeof(TextureMapMode);
         memcpy(&data[pos], &type, sizeof(TextureType)); pos += sizeof(TextureType);
         memcpy(&data[pos], &op, sizeof(TextureOp)); pos += sizeof(TextureOp);
+        memcpy(&data[pos], &uvIndex, sizeof(unsigned int)); pos += sizeof(unsigned int);
         return data;
     }
 
@@ -165,6 +172,7 @@ namespace engine
         memcpy(&mode, copy, sizeof(TextureMapMode)); copy += sizeof(TextureMapMode);
         memcpy(&type, copy, sizeof(TextureType)); copy += sizeof(TextureType);
         memcpy(&op, copy, sizeof(TextureOp)); copy += sizeof(TextureOp);
+        memcpy(&uvIndex, copy, sizeof(unsigned int)); copy += sizeof(unsigned int);
         return size();
     }
 

@@ -9,6 +9,7 @@
 #include "tools/image/Image.h"
 #include "tools/Property.h"
 #include "components/Transform.h"
+#include "components/PostprocessComponent.h"
 #include "tools/hash/Hash.h"
 #include <memory>
 
@@ -157,13 +158,12 @@ namespace engine
             {
                 m_gpuDirty = false;
                 auto path = m_environmentMap.value<std::string>();
-                if (path != "")
+                if (path != "" && m_environmentMapImage)
                 {
                     m_environmentMapSRV = std::make_unique<TextureSRV>(device.createTextureSRV(
                         tools::hash(path),
                         TextureDescription()
-                        .usage(ResourceUsage::CpuToGpu)
-                        .name("environment irradiance map")
+                        .name("Environment Cubemap")
                         .width(static_cast<uint32_t>(m_environmentMapImage->width()))
                         .height(static_cast<uint32_t>(m_environmentMapImage->height()))
                         .format(m_environmentMapImage->format())
@@ -200,6 +200,18 @@ namespace engine
 
         float fieldOfView() const;
         void fieldOfView(float _fov);
+
+        bool bloomEnabled()
+        {
+            auto post = getComponent<PostprocessComponent>();
+            return post->bloomEnabled();
+        }
+
+        void bloomEnabled(bool value)
+        {
+            auto post = getComponent<PostprocessComponent>();
+            post->bloomEnabled(value);
+        }
 
         Projection projection() const;
         void projection(Projection _projection);
@@ -247,7 +259,7 @@ namespace engine
             return *m_environmentMapSRV;
         }
 
-        void environmentMap(TextureSRV& srv)
+        void environmentMap(const TextureSRV& srv)
         {
             m_environmentMapSRV = std::make_unique<TextureSRV>(srv);
         }

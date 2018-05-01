@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2036
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DarknessResourceHost", "DarknessResourceHost.vcxproj", "{C3203F4F-E4E9-4AF9-A786-BE06EB4EC82A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug DX12|x64 = Debug DX12|x64
+		Debug DX12|x86 = Debug DX12|x86
+		Debug Vulkan|x64 = Debug Vulkan|x64
+		Debug Vulkan|x86 = Debug Vulkan|x86
+		Release DX12|x64 = Release DX12|x64
+		Release DX12|x86 = Release DX12|x86
+		Release Vulkan|x64 = Release Vulkan|x64
+		Release Vulkan|x86 = Release Vulkan|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C3203F4F-E4E9-4AF9-A786-BE06EB4EC82A}.Debug DX12|x64.ActiveCfg = Debug DX12|x64
+		{C3203F4F-E4E9-4AF9-A786-BE06EB4EC82A}.Debug DX12|x64.Build.0 = Debug DX12|x64
+		{C3203F4F-E4E9-4AF9-A786-BE06EB4EC82A}.Debug DX12|x86.ActiveCfg = Debug DX12|Win32
+		{C3203F4F-E4E9-4AF9-A786-BE06EB4EC82A}.Debug DX12|x86.Build.0 = Debug DX12|Win32
+		{C3203F4F-E4E9-4AF9-A786-BE06EB4EC82A}.Debug Vulkan|x64.ActiveCfg = Debug Vulkan|x64
+		{C3203F4F-E4E9-4AF9-A786-BE06EB4EC82A}.Debug Vulkan|x64.Build.0 = Debug Vulkan|x64
+		{C3203F4F-E4E9-4AF9-A786-BE06EB4EC82A}.Debug Vulkan|x86.ActiveCfg = Debug Vulkan|Win32
+		{C3203F4F-E4E9-4AF9-A786-BE06EB4EC82A}.Debug Vulkan|x86.Build.0 = Debug Vulkan|Win32
+		{C3203F4F-E4E9-4AF9-A786-BE06EB4EC82A}.Release DX12|x64.ActiveCfg = Release DX12|x64
+		{C3203F4F-E4E9-4AF9-A786-BE06EB4EC82A}.Release DX12|x64.Build.0 = Release DX12|x64
+		{C3203F4F-E4E9-4AF9-A786-BE06EB4EC82A}.Release DX12|x86.ActiveCfg = Release DX12|Win32
+		{C3203F4F-E4E9-4AF9-A786-BE06EB4EC82A}.Release DX12|x86.Build.0 = Release DX12|Win32
+		{C3203F4F-E4E9-4AF9-A786-BE06EB4EC82A}.Release Vulkan|x64.ActiveCfg = Release Vulkan|x64
+		{C3203F4F-E4E9-4AF9-A786-BE06EB4EC82A}.Release Vulkan|x64.Build.0 = Release Vulkan|x64
+		{C3203F4F-E4E9-4AF9-A786-BE06EB4EC82A}.Release Vulkan|x86.ActiveCfg = Release Vulkan|Win32
+		{C3203F4F-E4E9-4AF9-A786-BE06EB4EC82A}.Release Vulkan|x86.Build.0 = Release Vulkan|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0B861022-F8F3-4778-B707-A35D807621CE}
+	EndGlobalSection
+EndGlobal

@@ -51,21 +51,18 @@ static VkBool32 debugCallback(
         (flags & VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT) ||
         (flags & VK_DEBUG_REPORT_DEBUG_BIT_EXT))
     {
-        OutputDebugStringA(msg);
-        OutputDebugStringA("\n");
+        LOG("%s", msg);
         return VK_TRUE;
     }
     else if (flags & VK_DEBUG_REPORT_ERROR_BIT_EXT)
     {
-        OutputDebugStringA(msg);
-        OutputDebugStringA("\n");
+        LOG("%s", msg);
         ASSERT(false);
         return VK_TRUE;
     }
     else
     {
-        OutputDebugStringA(msg);
-        OutputDebugStringA("\n");
+        LOG("%s", msg);
         return VK_TRUE;
     }
     return VK_FALSE;
@@ -160,8 +157,7 @@ std::vector<VkExtensionProperties> VulkanInstance::extensionProperties()
 
     for (auto& ext : properties)
     {
-        OutputDebugStringA(ext.extensionName);
-        OutputDebugStringA("\n");
+        LOG("Extension poperty: %s\n", ext.extensionName);
     }
 
     return properties;

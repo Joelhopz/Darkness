@@ -14,6 +14,8 @@
 
 namespace engine
 {
+    class Mesh;
+    class ModelResources;
     using ResourceCreateTextureSRV = std::function<TextureSRV()>;
     using ResourceCreateBufferSRV = std::function<BufferSRV()>;
     using ResourceCreateBufferIBV = std::function<BufferIBV()>;
@@ -27,20 +29,24 @@ namespace engine
         std::shared_ptr<image::ImageIf> createImage(
             ResourceKey key, 
             const std::string& filename,
-            Format type = Format::Format_BC7_UNORM,
+            Format type = Format::BC7_UNORM,
             int width = -1,
             int height = -1,
             int slices = -1,
             int mips = -1);
 
-        std::shared_ptr<Mesh> createMesh(
+        std::shared_ptr<SubMeshInstance> createMesh(
+            ModelResources& modelResources,
             ResourceKey key,
-            const std::string& filename);
+            const std::string& filename,
+            uint32_t meshIndex);
 
         template<typename T>
         bool cachedDataExists(ResourceKey key) const;
 
         void clear();
+
+        const std::unordered_map<ResourceKey, std::shared_ptr<Mesh>>& meshes() const;
     private:
         std::unordered_map<ResourceKey, TextureSRV> m_textureSRV;
         std::unordered_map<ResourceKey, BufferSRV> m_bufferSRV;

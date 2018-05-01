@@ -82,8 +82,6 @@ namespace engine
             void setTextureSRV(const TextureSRV& srv);
             void setSampler(const Sampler& sampler);
 
-            void setRenderTarget(TextureRTV rtv);
-
             void configure(CommandListImpl& commandList, shaders::PipelineConfiguration* configuration);
 
             void finalize();

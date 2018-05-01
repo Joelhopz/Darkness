@@ -2,6 +2,7 @@
 
 #include <string>
 #include <fstream>
+#include <vector>
 
 static const int CompressionBufferSize = 16384;
 
@@ -11,6 +12,7 @@ public:
     virtual ~CompressedFileIf() {};
 
     virtual void open(const std::string& filename, int mode) = 0;
+    virtual void open(std::vector<char>& memory, int mode) = 0;
     virtual bool is_open() const = 0;
 
     virtual void read(char* buffer, std::streamsize count) = 0;

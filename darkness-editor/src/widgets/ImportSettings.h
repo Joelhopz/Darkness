@@ -41,7 +41,7 @@ public:
 
     std::string preferredEncoding() const
     {
-        return m_preferredEncodingProperty.value<std::string>();
+        return textureTypeToString(m_preferredEncodingProperty.value<engine::TextureType>());
     }
 private:
     std::unique_ptr<QVBoxLayout> m_layout;

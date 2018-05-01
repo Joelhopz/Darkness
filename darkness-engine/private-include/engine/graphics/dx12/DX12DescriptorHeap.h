@@ -44,9 +44,12 @@ namespace engine
 
             DescriptorHandle getDescriptor(size_t count = 1);
 
+            D3D12_CPU_DESCRIPTOR_HANDLE getCpuHeapStart();
+
             void reset();
             ID3D12DescriptorHeap* native();
         private:
+            //std::shared_ptr<tools::MemoryAllocator> m_allocator;
             std::shared_ptr<tools::MemoryAllocator> m_allocator;
             tools::ComPtr<ID3D12DescriptorHeap> m_heap;
             std::shared_ptr<D3D12_DESCRIPTOR_HEAP_DESC> m_desc;

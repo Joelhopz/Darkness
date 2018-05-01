@@ -16,8 +16,7 @@ namespace engine
             auto res = device.device()->CreateFence(
                 m_fenceValue,
                 D3D12_FENCE_FLAG_NONE,
-                __uuidof(ID3D12Fence),
-                (void**)&m_fence);
+                DARKNESS_IID_PPV_ARGS(&m_fence));
             ASSERT(SUCCEEDED(res));
 
             m_fenceEvent = CreateEventEx(NULL, FALSE, FALSE, EVENT_ALL_ACCESS);

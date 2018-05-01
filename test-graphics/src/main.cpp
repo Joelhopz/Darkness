@@ -21,10 +21,10 @@ int CALLBACK WinMain(
 
 int main(int argc, char* argv[])
 {
-	
+    
     ::testing::InitGoogleTest(&argc, argv);
-	envPtr = new GlobalEnvironment();
-	::testing::AddGlobalTestEnvironment(envPtr);
+    envPtr = new GlobalEnvironment();
+    ::testing::AddGlobalTestEnvironment(envPtr);
 
     return RUN_ALL_TESTS();
 }

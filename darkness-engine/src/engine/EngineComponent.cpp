@@ -15,12 +15,12 @@ namespace engine
         m_name = name;
     }
 
-    void EngineComponent::parentNode(std::shared_ptr<SceneNode> node)
+    void EngineComponent::parentNode(SceneNode* node)
     {
         m_parentNode = node;
     }
 
-    std::shared_ptr<SceneNode> EngineComponent::parentNode() const
+    SceneNode* EngineComponent::parentNode() const
     {
         return m_parentNode;
     }

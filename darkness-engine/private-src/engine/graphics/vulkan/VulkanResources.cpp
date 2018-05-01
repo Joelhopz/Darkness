@@ -579,7 +579,10 @@ namespace engine
             imageInfo.usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
             imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
             imageInfo.samples = vulkanSamples(m_description.samples);
-            imageInfo.flags = 0; // Optional
+            imageInfo.flags = (desc.descriptor.dimension == ResourceDimension::TextureCubemap) ? VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT : 0;
+
+            VkImageFormatProperties imageFormatProperties = {};
+            vkGetPhysicalDeviceImageFormatProperties(device.physicalDevice(), imageInfo.format, imageInfo.imageType, imageInfo.tiling, imageInfo.usage, imageInfo.flags, &imageFormatProperties);
 
             auto result = vkCreateImage(device.device(), &imageInfo, nullptr, m_image.get());
             ASSERT(result == VK_SUCCESS);
@@ -623,6 +626,7 @@ namespace engine
             : m_description(desc.descriptor)
             , m_image{ image }
             , m_memory{ nullptr }
+            , m_state{ ResourceState::RenderTarget }
         {
         }
 
@@ -701,6 +705,21 @@ namespace engine
         const Texture& TextureSRVImpl::texture() const
         {
             return m_texture;
+        }
+
+        Format TextureSRVImpl::format() const
+        {
+            return m_description.format;
+        }
+
+        uint32_t TextureSRVImpl::width() const
+        {
+            return m_description.width;
+        }
+
+        uint32_t TextureSRVImpl::height() const
+        {
+            return m_description.height;
         }
 
         VkImageView& TextureSRVImpl::native()
@@ -799,6 +818,21 @@ namespace engine
             return m_texture;
         }
 
+        Format TextureDSVImpl::format() const
+        {
+            return m_description.format;
+        }
+
+        uint32_t TextureDSVImpl::width() const
+        {
+            return m_description.width;
+        }
+
+        uint32_t TextureDSVImpl::height() const
+        {
+            return m_description.height;
+        }
+
         VkImageView& TextureDSVImpl::native()
         {
             return *m_view;
@@ -845,6 +879,21 @@ namespace engine
         const Texture& TextureRTVImpl::texture() const
         {
             return m_texture;
+        }
+
+        Format TextureRTVImpl::format() const
+        {
+            return m_description.format;
+        }
+
+        uint32_t TextureRTVImpl::width() const
+        {
+            return m_description.width;
+        }
+
+        uint32_t TextureRTVImpl::height() const
+        {
+            return m_description.height;
         }
 
         VkImageView& TextureRTVImpl::native()

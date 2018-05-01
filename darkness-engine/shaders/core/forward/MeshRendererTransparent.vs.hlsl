@@ -1,7 +1,9 @@
+#include "../GBuffer.hlsli"
+#include "../VertexPacking.hlsli"
 
-Buffer<float3> vertices;
-Buffer<float3> normals;
-Buffer<float3> tangents;
+Buffer<uint2> vertices;
+Buffer<float2> normals;
+Buffer<float2> tangents;
 Buffer<float2> uv;
 
 cbuffer ConstData
@@ -27,11 +29,13 @@ VSOutput main(uint id : SV_VertexID)
 {
     VSOutput output;
 
-    output.position = mul(modelViewProjectionMatrix, float4(vertices[id], 1.0f));
-    output.shadowPosition = mul(shadowModelViewProjectionMatrix, float4(vertices[id], 1.0f));
-    output.pos = mul(modelMatrix, float4(vertices[id], 1.0f));
-    output.normal = mul(modelMatrix, float4(normals[id], 0.0f));
-    output.tangent = mul(modelMatrix, float4(tangents[id], 0.0f));
+    float3 vertex = unpackVertex(vertices[id]);
+
+    output.position = mul(modelViewProjectionMatrix, float4(vertex, 1.0f));
+    output.shadowPosition = mul(shadowModelViewProjectionMatrix, float4(vertex, 1.0f));
+    output.pos = mul(modelMatrix, float4(vertex, 1.0f));
+    output.normal = mul(modelMatrix, float4(unpackNormalOctahedron(normals[id]), 0.0f));
+    output.tangent = mul(modelMatrix, float4(unpackNormalOctahedron(tangents[id]), 0.0f));
     output.viewpos = mul(viewMatrix, output.pos);
 
     output.uv = float4(uv[id], 0, 0);

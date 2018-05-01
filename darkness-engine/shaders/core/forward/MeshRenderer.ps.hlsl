@@ -1,4 +1,6 @@
 
+#include "../Common.hlsli"
+
 struct PSInput
 {
     float4 position         : SV_Position0;
@@ -44,22 +46,6 @@ cbuffer ConstData
 sampler tex_sampler;
 SamplerComparisonState shadow_sampler;
 
-static const float PI =         3.14159265359f;
-static const float TWO_PI =     6.28318530718f;
-static const float ONE_DIV_PI = 0.3183098861837697f;
-
-float2 envMapEquirect(float3 normal, float flipEnvMap)
-{
-    float phi = acos(normal.y);
-    float theta = atan2(flipEnvMap * normal.x, normal.z) + PI;
-    return float2(theta / TWO_PI, phi / PI);
-}
-
-float2 envMapEquirect(float3 normal)
-{
-    return envMapEquirect(normal, 1.0f);
-}
-
 float3x3 tangentFrame(float3 normal, float3 pos, float2 uv)
 {
     // get edge vectors of the pixel triangle
@@ -95,61 +81,6 @@ float2 texOffset(int u, int v)
     return float2(u * 1.0f / 1024, v * 1.0f / 1024);
 }
 
-
-// Lys constants
-static const float k0 = 0.00098, k1 = 0.9921, fUserMaxSPow = 0.2425;
-static const float g_fMaxT = (exp2(-10.0 / sqrt(fUserMaxSPow)) - k0) / k1;
-static const int nMipOffset = 0;
-
-float specPowerToMip(float specPower, int mips)
-{
-    float smulMax = (exp2(-10.0 / sqrt(specPower)) - k0) / k1;
-    return (mips - 1 - nMipOffset) * (1.0f - clamp(smulMax / g_fMaxT, 0.0, 1.0));
-}
-
-float4 sRGBtoLinear(float4 sRGB)
-{
-    float3 sr = sRGB.xyz;
-    //return float4(sr * (sr * (sr * 0.305306011 + 0.682171111) + 0.012522878), sRGB.w);
-
-    // from nvidia HDR sdk
-    return float4((sr <= 0.04045f) ? (sr / 12.92f) : (pow(sr + 0.055f, 2.4f) / 1.055f), sRGB.w);
-}
-
-float4 linearTosRGB(float4 RGB)
-{
-    /*float3 S1 = sqrt(RGB.xyz);
-    float3 S2 = sqrt(S1);
-    float3 S3 = sqrt(S2);
-    return float4(0.662002687 * S1 + 0.684122060 * S2 - 0.323583601 * S3 - 0.0225411470 * RGB.xyz, RGB.w);*/
-
-    float3 rg = RGB.xyz;
-    return float4((rg <= 0.0031308f) ? (rg*12.92f) : (1.055f * pow(rg, 1.0f / 2.4f) - 0.055f), RGB.w);
-}
-
-float3 sRGBtoLinear(float3 sRGB)
-{
-    return (sRGB <= 0.04045f) ? (sRGB / 12.92f) : (pow(sRGB + 0.055f, 2.4f) / 1.055f);
-}
-
-float3 linearTosRGB(float3 RGB)
-{
-    return (RGB <= 0.0031308f) ? (RGB*12.92f) : (1.055f * pow(RGB, 1.0f / 2.4f) - 0.055f);
-}
-
-static const float A = 0.15;
-static const float B = 0.50;
-static const float C = 0.10;
-static const float D = 0.20;
-static const float E = 0.02;
-static const float F = 0.30;
-static const float W = 11.2;
-
-float3 Uncharted2Tonemap(float3 x)
-{
-    return ((x*(A*x + C*B) + D*E) / (x*(A*x + B) + D*F)) - E / F;
-}
-
 float4 main(PSInput input) : SV_Target
 {
     float2 uv = float2(input.uv.x * materialParameters.z, (input.uv.y * materialParameters.w));
@@ -167,10 +98,6 @@ float4 main(PSInput input) : SV_Target
     float4 specularColor = float4(lerp(0.04f.rrr, albedoColor.rgb, metalnessColor), 1.0f);
     albedoColor.rgb = lerp(albedoColor.rgb, 0.0f.rrr, metalnessColor);
 
-    // Gamma correct textures
-    albedoColor = sRGBtoLinear(albedoColor);
-    roughnessColor = sRGBtoLinear(roughnessColor);
-
     // load normal map value and rescale to proper range
     float4 normalTex = normal.Sample(tex_sampler, float2(uv.x, uv.y));
     float3 remapped = (normalTex.xyz * 2.0f) - 1.0f;
@@ -187,8 +114,6 @@ float4 main(PSInput input) : SV_Target
     float exposure = materialParameters2.y;
     float4 environmentIrr = environmentIrradiance.SampleLevel(tex_sampler, envMapEquirect(reflectionWorld), 0.0f);
     float4 environmentSpec = environmentSpecular.SampleLevel(tex_sampler, envMapEquirect(reflectionWorld), 0.0f);
-    environmentIrr = sRGBtoLinear(environmentIrr);
-    environmentSpec = sRGBtoLinear(environmentSpec);
 
     // occlusion
     float occlusion = 1 - (1 - occlusionColor) * 0.75f;

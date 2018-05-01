@@ -129,6 +129,7 @@ namespace engine
 
             //void transitionTexture(const Texture& image, ImageLayout from, ImageLayout to);
             void copyTexture(const Texture& src, Texture& dst);
+            void copyTexture(const Texture& src, Buffer& dst);
 
             VkCommandBuffer& native();
             const VkCommandBuffer& native() const;

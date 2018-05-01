@@ -7,10 +7,11 @@ using namespace std;
 
 namespace engine
 {
-    RenderSetup::RenderSetup(shared_ptr<platform::Window> window)
+    RenderSetup::RenderSetup(shared_ptr<platform::Window> window, MessageCallback messageCallback)
         : m_window{ window }
-        , m_device{ Device(m_window) }
-        , m_swapChain{ m_device.createSwapChain() }
+        , m_messageCallback{ messageCallback }
+        , m_device{ Device(m_window, m_shaderStorage) }
+        , m_swapChain{ m_device.createSwapChain(false, false) }
         , m_submitFence{ m_device.createFence() }
         , m_renderSemaphore{ m_device.createSemaphore() }
         , m_presentSemaphore{ m_device.createSemaphore() }
@@ -32,7 +33,7 @@ namespace engine
 
     RenderSetup::RenderSetup()
         : m_window{ make_shared<platform::Window>("Device test window", 1024, 768) }
-        , m_device{ Device(m_window) }
+        , m_device{ Device(m_window, m_shaderStorage) }
         , m_swapChain{ m_device.createSwapChain() }
         , m_submitFence{ m_device.createFence() }
         , m_renderSemaphore{ m_device.createSemaphore() }
@@ -48,6 +49,9 @@ namespace engine
     platform::Window& RenderSetup::window() { return *m_window; }
     void RenderSetup::submit(CommandList&& commandList)
     {
+        CPU_MARKER("RenderSetup submit");
+
+        std::lock_guard<std::mutex> lock(m_mutex);
         m_lists.emplace_back(CommandListExec( std::move(commandList), m_submitFence.value()+1 ));
         m_device.queue().submit(m_lists.back().list, m_submitFence);
         
@@ -60,22 +64,40 @@ namespace engine
     }
     void RenderSetup::present()
     {
-        m_device.queue().present(m_renderSemaphore, *m_swapChain, m_swapChain->currentBackBufferIndex(m_submitFence));
+        CPU_MARKER("RenderSetup present");
+        std::lock_guard<std::mutex> lock(m_mutex);
+        m_device.queue().present(m_renderSemaphore, *m_swapChain, currentBackBufferIndex());
         m_device.recycleUploadBuffers(static_cast<uint32_t>(m_frameNumber));
         ++m_frameNumber;
         m_device.frameNumber(m_frameNumber);
+
+        processShaderHotreload();
     }
     //Semaphore& RenderSetup::renderSemaphore() { return m_renderSemaphore; }
     //Semaphore& RenderSetup::presentSemaphore() { return m_presentSemaphore; }
-    unsigned int RenderSetup::currentBackBufferIndex() { return m_swapChain->currentBackBufferIndex(m_submitFence); }
+    unsigned int RenderSetup::currentBackBufferIndex()
+    { 
+        //return m_frameNumber % 2; 
+        return m_swapChain->currentBackBufferIndex(m_submitFence);
+    }
+
     TextureRTV& RenderSetup::currentRTV()
     {
-        return m_swapChain->renderTarget(m_swapChain->currentBackBufferIndex(m_submitFence));
+        return m_swapChain->renderTarget(currentBackBufferIndex());
     }
     
     TextureSRV& RenderSetup::currentSRV()
     {
-        return m_swapChainSRVs[m_swapChain->currentBackBufferIndex(m_submitFence)];
+        return m_swapChainSRVs[currentBackBufferIndex()];
+    }
+
+    TextureRTV& RenderSetup::previousRTV()
+    {
+        auto currentRTV = currentBackBufferIndex();
+        if(currentRTV == 0)
+            return m_swapChain->renderTarget(BackBufferCount-1);
+        else
+            return m_swapChain->renderTarget(currentRTV - 1);
     }
 
     void RenderSetup::shutdown()
@@ -88,5 +110,23 @@ namespace engine
         // to perform a debug layer check if all resources
         // have been released.
         m_shaderStorage.clear();
+    }
+
+    void RenderSetup::processShaderHotreload()
+    {
+        CPU_MARKER("Process shader hotreload");
+        if (shaderStorage().fileWatcher().hasChanges())
+        {
+            device().waitForIdle();
+            m_lists.clear();
+            if (shaderStorage().fileWatcher().processChanges())
+            {
+                // we had changes, pump the compilation messages to logging
+                std::vector<std::string>& lastMessages = shaderStorage().fileWatcher().lastMessages();
+                if(m_messageCallback)
+                    m_messageCallback(lastMessages);
+                lastMessages.clear();
+            }
+        }
     }
 }

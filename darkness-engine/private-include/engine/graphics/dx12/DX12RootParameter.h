@@ -2,7 +2,7 @@
 
 #include "engine/graphics/CommonNoDep.h"
 
-struct D3D12_ROOT_PARAMETER;
+struct D3D12_ROOT_PARAMETER1;
 
 namespace engine
 {
@@ -30,9 +30,9 @@ namespace engine
             void initAsDescriptorTable(unsigned int rangeCount, ShaderVisibility visibility);
             void setTableRange(unsigned int rangeIndex, DescriptorRangeType type, unsigned int reg, unsigned int count, unsigned int space = 0);
 
-            D3D12_ROOT_PARAMETER& native();
+            D3D12_ROOT_PARAMETER1& native();
         private:
-            D3D12_ROOT_PARAMETER* m_parameter;
+            D3D12_ROOT_PARAMETER1* m_parameter;
         };
     }
 }

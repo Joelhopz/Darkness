@@ -15,7 +15,7 @@ class TestSemaphore : public ::testing::Test
 
 TEST(TestSemaphore, CreateSemaphore)
 {
-	GlobalEnvironment& env = *envPtr;
+    GlobalEnvironment& env = *envPtr;
     Semaphore semaphore = env.device().createSemaphore();
     Semaphore copy = std::move(semaphore);
 }

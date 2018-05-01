@@ -12,6 +12,7 @@ namespace engine
     class Fence;
     class Semaphore;
     class SwapChain;
+    class Buffer;
     enum class CommandListType;
 
     class Queue
@@ -38,5 +39,11 @@ namespace engine
     private:
         Device& m_device;
         PIMPL_FRIEND_ACCESS(QueueImpl)
+
+    private:
+        void handleShaderDebug(CommandList& commandList);
+        std::shared_ptr<Buffer> m_debugOutputCpu;
+        std::shared_ptr<Buffer> m_debugOutputCpuCount;
+
     };
 }

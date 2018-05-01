@@ -10,11 +10,13 @@ namespace engine
     bool pathIsFile(const std::string& path);
     bool pathStartsWithDelimiter(const std::string& path);
     bool pathEndsWithDelimiter(const std::string& path);
+    std::string pathRemoveTrailingDelimiter(const std::string& path);
 
     std::vector<char> pathDelimiters();
     char pathPreferredDelim();
     char pathPreferredDelim(const std::string& path);
     std::string pathExtractFolder(const std::string& filepath, bool withLastDelimiter = false);
+    std::string pathExtractFolderName(const std::string& filepath);
     std::string pathExtractFilename(const std::string& filepath);
     std::string pathExtractFilenameWithoutExtension(const std::string& filepath);
     std::string pathExtractExtension(const std::string& filepath);
@@ -23,5 +25,10 @@ namespace engine
     std::string pathJoin(std::vector<std::string> parts, char delimiter = pathDelimiters()[0], bool withLastDelimiter = false);
     std::vector<std::string> pathSplit(const std::string& path);
     std::string pathReplaceExtension(const std::string& path, const std::string& newExtension);
+    std::string pathCommonAncestor(const std::string& pathA, const std::string& pathB, bool withLastDelimiter = false);
+    std::string pathSubtractCommon(const std::string& pathA, const std::string& pathB);
+    std::string pathClean(const std::string& path);
+
+    std::string getWorkingDirectory(bool withLastDelimiter = false);
 }
 

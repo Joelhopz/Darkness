@@ -14,16 +14,18 @@ public:
     void update();
     void refresh();
 
-	void onMouseMove(int x, int y);
-	void onMouseDown(engine::MouseButton button, int x, int y);
-	void onMouseUp(engine::MouseButton button, int x, int y);
-	void onMouseDoubleClick(engine::MouseButton button, int x, int y);
+    void onMouseMove(int x, int y);
+    void onMouseDown(engine::MouseButton button, int x, int y);
+    void onMouseUp(engine::MouseButton button, int x, int y);
+    void onMouseDoubleClick(engine::MouseButton button, int x, int y);
 
-	void onKeyDown(engine::Key key, const engine::ModifierState& modifierState);
-	void onKeyUp(engine::Key key, const engine::ModifierState& modifierState);
+    void onKeyDown(engine::Key key, const engine::ModifierState& modifierState);
+    void onKeyUp(engine::Key key, const engine::ModifierState& modifierState);
 
     void resetCameraSize();
     void playClicked(bool value);
+
+    std::shared_ptr<engine::SceneNode> grabNode();
 
     Engine& engine();
     ~EngineWrap();

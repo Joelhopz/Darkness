@@ -199,7 +199,44 @@ namespace engine
             color, thickness);
     }
 
-    
+    void drawCube3d(
+        Camera& camera,
+        const std::vector<Vector4f>& frustumPlanes,
+        const Matrix4f& mvp,
+        ImDrawList* drawList,
+
+        const BoundingBox& box,
+        ImU32 color,
+        float thickness)
+    {
+        std::vector<Vector3f> corners = 
+        {
+            box.min,
+            box.min + Vector3f{ box.width(), 0.0f, 0.0f },
+            box.min + Vector3f{ box.width(), 0.0f, box.depth() },
+            box.min + Vector3f{ 0.0f, 0.0f, box.depth() },
+
+            box.min + Vector3f{ 0.0f, box.height(), 0.0f },
+            box.min + Vector3f{ box.width(), box.height(), 0.0f },
+            box.min + Vector3f{ box.width(), box.height(), box.depth() },
+            box.min + Vector3f{ 0.0f, box.height(), box.depth() },
+        };
+
+        drawLine3d(camera, frustumPlanes, mvp, drawList, corners[0], corners[1], color, thickness);
+        drawLine3d(camera, frustumPlanes, mvp, drawList, corners[1], corners[2], color, thickness);
+        drawLine3d(camera, frustumPlanes, mvp, drawList, corners[2], corners[3], color, thickness);
+        drawLine3d(camera, frustumPlanes, mvp, drawList, corners[3], corners[0], color, thickness);
+
+        drawLine3d(camera, frustumPlanes, mvp, drawList, corners[4], corners[5], color, thickness);
+        drawLine3d(camera, frustumPlanes, mvp, drawList, corners[5], corners[6], color, thickness);
+        drawLine3d(camera, frustumPlanes, mvp, drawList, corners[6], corners[7], color, thickness);
+        drawLine3d(camera, frustumPlanes, mvp, drawList, corners[7], corners[4], color, thickness);
+
+        drawLine3d(camera, frustumPlanes, mvp, drawList, corners[0], corners[4], color, thickness);
+        drawLine3d(camera, frustumPlanes, mvp, drawList, corners[1], corners[5], color, thickness);
+        drawLine3d(camera, frustumPlanes, mvp, drawList, corners[2], corners[6], color, thickness);
+        drawLine3d(camera, frustumPlanes, mvp, drawList, corners[3], corners[7], color, thickness);
+    }
 
     void drawCircle3d(
         Camera& camera,

@@ -53,7 +53,7 @@ struct VSOutput
 VSOutput main(uint id : SV_VertexID)
 {
     VSOutput output;
-    output.position = mul(viewProjectionMatrix, vertices[id]).xyzw;
+    output.position = mul(viewProjectionMatrix, vertices[id]);
     output.pos = normalize(vertices[id]);
     return output;
 }

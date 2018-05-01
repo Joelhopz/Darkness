@@ -30,11 +30,12 @@ namespace engine
         {
             D3D_FEATURE_LEVEL featureLevel{ D3D_FEATURE_LEVEL_12_1 };
 
-            IDXGIFactory * pFactory;
-            HRESULT hr = CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)(&pFactory));
+            IDXGIFactory* pFactory;
+            HRESULT hr = CreateDXGIFactory(DARKNESS_IID_PPV_ARGS(&pFactory));
+            ASSERT(hr == S_OK, "Could not create DXGI Factory");
 
             UINT i = 0;
-            IDXGIAdapter * pAdapter;
+            IDXGIAdapter* pAdapter;
             std::vector <IDXGIAdapter*> vAdapters;
             while (pFactory->EnumAdapters(i, &pAdapter) != DXGI_ERROR_NOT_FOUND)
             {
@@ -45,11 +46,11 @@ namespace engine
                 ++i;
             }
 
-            ASSERT(SUCCEEDED(D3D12CreateDevice(
+            auto createResult = D3D12CreateDevice(
                 vAdapters[0],
                 featureLevel,
-                __uuidof(ID3D12Device),
-                (void**)&m_device)));
+                DARKNESS_IID_PPV_ARGS(m_device.GetAddressOf()));
+            ASSERT(SUCCEEDED(createResult));
 
             GraphicsDebug::addDevice(m_device.Get());
 
@@ -81,7 +82,7 @@ namespace engine
                 *this,
                 D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
                 D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE,
-                100000);
+                10000);
 
             m_descriptorHeaps.shaderVisible_sampler = std::make_shared<DescriptorHeapImpl>(
                 *this,
@@ -92,6 +93,7 @@ namespace engine
             m_uploadBuffer = std::make_shared<Buffer>(std::make_shared<BufferImpl>(
                 *this,
                 BufferDescription()
+                .usage(ResourceUsage::Upload)
                 .elementSize(1)
                 .elements(UploadBufferSizeBytes)
                 .name("UploadBuffer")));
@@ -109,6 +111,54 @@ namespace engine
                     static_cast<uint8_t*>(ptr) + UploadBufferSizeBytes });
 #endif
 
+            {
+                // create drawIndirect signature
+                D3D12_INDIRECT_ARGUMENT_DESC indirectArgumentDesc;
+                indirectArgumentDesc.Type = D3D12_INDIRECT_ARGUMENT_TYPE_DRAW;
+                D3D12_COMMAND_SIGNATURE_DESC signatureDesc;
+                signatureDesc.ByteStride = sizeof(D3D12_DRAW_ARGUMENTS);
+                signatureDesc.NodeMask = 0;
+                signatureDesc.NumArgumentDescs = 1;
+                signatureDesc.pArgumentDescs = &indirectArgumentDesc;
+                m_device->CreateCommandSignature(&signatureDesc, nullptr, DARKNESS_IID_PPV_ARGS(m_drawSignature.GetAddressOf()));
+            }
+            {
+                // create drawIndexedIndirect signature
+                D3D12_INDIRECT_ARGUMENT_DESC indirectArgumentDesc;
+                indirectArgumentDesc.Type = D3D12_INDIRECT_ARGUMENT_TYPE_DRAW_INDEXED;
+                D3D12_COMMAND_SIGNATURE_DESC signatureDesc;
+                signatureDesc.ByteStride = sizeof(D3D12_DRAW_INDEXED_ARGUMENTS);
+                signatureDesc.NodeMask = 0;
+                signatureDesc.NumArgumentDescs = 1;
+                signatureDesc.pArgumentDescs = &indirectArgumentDesc;
+                m_device->CreateCommandSignature(&signatureDesc, nullptr, DARKNESS_IID_PPV_ARGS(m_drawIndexedSignature.GetAddressOf()));
+            }
+            {
+                // create dispatchIndirect signature
+                D3D12_INDIRECT_ARGUMENT_DESC indirectArgumentDesc;
+                indirectArgumentDesc.Type = D3D12_INDIRECT_ARGUMENT_TYPE_DISPATCH;
+                D3D12_COMMAND_SIGNATURE_DESC signatureDesc;
+                signatureDesc.ByteStride = sizeof(D3D12_DISPATCH_ARGUMENTS);
+                signatureDesc.NodeMask = 0;
+                signatureDesc.NumArgumentDescs = 1;
+                signatureDesc.pArgumentDescs = &indirectArgumentDesc;
+                m_device->CreateCommandSignature(&signatureDesc, nullptr, DARKNESS_IID_PPV_ARGS(m_dispatchSignature.GetAddressOf()));
+            }
+        }
+
+        ID3D12CommandSignature* DeviceImpl::drawIndirectSignature()
+        {
+            return m_drawSignature.Get();
+        }
+
+        ID3D12CommandSignature* DeviceImpl::drawIndexedIndirectSignature()
+        {
+            return m_drawIndexedSignature.Get();
+        }
+
+        ID3D12CommandSignature* DeviceImpl::dispatchIndirectSignature()
+        {
+            return m_dispatchSignature.Get();
         }
 
         ID3D12Device* DeviceImpl::device() const
@@ -116,24 +166,29 @@ namespace engine
             return m_device.Get();
         }
 
-        std::shared_ptr<CommandAllocatorImpl> DeviceImpl::createCommandAllocator()
+        std::shared_ptr<CommandAllocatorImpl> DeviceImpl::createCommandAllocator(CommandListType type)
         {
-            if (m_commandAllocators.size() > 0)
+            std::queue<std::shared_ptr<CommandAllocatorImpl>>& allocatorQueue = m_commandAllocators[static_cast<int>(type)];
+            std::vector<std::shared_ptr<CommandAllocatorImpl>>& inUseAllocatorQueue = m_inUseCommandAllocators[static_cast<int>(type)];
+
+            if (allocatorQueue.size() > 0)
             {
-                auto res = m_commandAllocators.front();
-                m_commandAllocators.pop();
-                m_inUseCommandAllocators.emplace_back(res);
+                auto res = allocatorQueue.front();
+                allocatorQueue.pop();
+                inUseAllocatorQueue.emplace_back(res);
                 return res;
             }
 
-            m_inUseCommandAllocators.emplace_back(std::make_shared<CommandAllocatorImpl>(*this));
-            return m_inUseCommandAllocators.back();
+            inUseAllocatorQueue.emplace_back(std::make_shared<CommandAllocatorImpl>(*this, type));
+            return inUseAllocatorQueue.back();
         }
 
         void DeviceImpl::freeCommandAllocator(std::shared_ptr<CommandAllocatorImpl> allocator)
         {
-            m_inUseCommandAllocators.erase(std::find(m_inUseCommandAllocators.begin(), m_inUseCommandAllocators.end(), allocator));
-            m_returnedCommandAllocators.emplace_back(allocator);
+            std::vector<std::shared_ptr<CommandAllocatorImpl>>& inUseAllocatorQueue = m_inUseCommandAllocators[static_cast<int>(allocator->type())];
+            std::vector<std::shared_ptr<CommandAllocatorImpl>>& returnedAllocators = m_returnedCommandAllocators[static_cast<int>(allocator->type())];
+            inUseAllocatorQueue.erase(std::find(inUseAllocatorQueue.begin(), inUseAllocatorQueue.end(), allocator));
+            returnedAllocators.emplace_back(allocator);
         }
 
         const platform::Window& DeviceImpl::window() const
@@ -171,21 +226,34 @@ namespace engine
             m_uploadBuffers.push(m_currentUploadBufferList);
             m_currentUploadBufferList.clear();
 #endif
-
-            // handle command allocators
-            if (m_inFlightCommandAllocators.size() > BackBufferCount)
+            for (int i = 0; i < 4; ++i)
             {
-                std::vector<std::shared_ptr<CommandAllocatorImpl>>& toBeFreed = m_inFlightCommandAllocators.front();
-                for (auto&& free : toBeFreed)
+                // handle command allocators
+                if (m_inFlightCommandAllocators[i].size() > BackBufferCount)
                 {
-                    free->reset();
-                    m_commandAllocators.push(free);
+                    std::vector<std::shared_ptr<CommandAllocatorImpl>>& toBeFreed = m_inFlightCommandAllocators[i].front();
+                    for (auto&& free : toBeFreed)
+                    {
+                        free->reset();
+                        m_commandAllocators[i].push(free);
+                    }
+                    m_inFlightCommandAllocators[i].pop();
                 }
-                m_inFlightCommandAllocators.pop();
+                m_inFlightCommandAllocators[i].push(m_returnedCommandAllocators[i]);
+                m_returnedCommandAllocators[i].clear();
             }
-            m_inFlightCommandAllocators.push(m_returnedCommandAllocators);
-            m_returnedCommandAllocators.clear();
+
+            m_frameDescriptorQueue.push(std::move(m_frameDescriptors));
+            while (m_frameDescriptorQueue.size() > BackBufferCount)
+            {
+                m_frameDescriptorQueue.pop();
+            }
         }
+
+        /*void DeviceImpl::keepConstantUpdatesAlive(std::vector<ConstantBufferUpdates>&& constantBufferUpdates)
+        {
+            m_currentConstantBufferUpdates.emplace_back(std::move(constantBufferUpdates));
+        }*/
 
         void DeviceImpl::nullResources(std::shared_ptr<NullResources> nullResources)
         {
@@ -202,10 +270,10 @@ namespace engine
             uploadBuffer(CommandListImplGet::impl(commandList), buffer, data, startElement);
         }
 
-        void DeviceImpl::uploadBuffer(CommandListImpl& commandList, BufferSRV& buffer, const ByteRange& data, uint32_t startElement)
+        void DeviceImpl::uploadRawBuffer(CommandListImpl& commandList, Buffer& buffer, const ByteRange& data, uint32_t startBytes)
         {
-            auto allocator = &m_allocator;
 #ifdef UPLOADBUFFER_MEMORYALLOCATOR_ALIGNEDCHUNKS
+            auto allocator = &m_allocator;
             std::shared_ptr<void> uploadData = std::shared_ptr<void>(
                 m_allocator.allocate(data.size(), D3D12_TEXTURE_DATA_PLACEMENT_ALIGNMENT),
                 [allocator](void* ptr) { allocator->free(ptr); });
@@ -220,14 +288,77 @@ namespace engine
 #endif
 
 #ifdef UPLOADBUFFER_MEMORYALLOCATOR_RINGBUFFER
-            auto uploadData = m_allocator.allocate(data.size(), D3D12_TEXTURE_DATA_PLACEMENT_ALIGNMENT);
-            memcpy(uploadData, data.start, data.size());
+            auto uploadData = m_allocator.allocate(data.sizeBytes(), D3D12_TEXTURE_DATA_PLACEMENT_ALIGNMENT);
+            memcpy(uploadData, reinterpret_cast<uint8_t*>(data.start), data.sizeBytes());
+            commandList.transition(buffer, ResourceState::CopyDest);
+            commandList.native()->CopyBufferRegion(
+                BufferImplGet::impl(buffer)->native(),
+                startBytes,
+                BufferImplGet::impl(*m_uploadBuffer)->native(),
+                m_allocator.offset(uploadData), data.sizeBytes());
+#endif
+        }
+
+        void DeviceImpl::uploadBuffer(CommandListImpl& commandList, BufferSRV& buffer, const ByteRange& data, uint32_t startElement)
+        {
+#ifdef UPLOADBUFFER_MEMORYALLOCATOR_ALIGNEDCHUNKS
+            auto allocator = &m_allocator;
+            std::shared_ptr<void> uploadData = std::shared_ptr<void>(
+                m_allocator.allocate(data.size(), D3D12_TEXTURE_DATA_PLACEMENT_ALIGNMENT),
+                [allocator](void* ptr) { allocator->free(ptr); });
+            m_currentUploadBufferList.emplace_back(uploadData);
+            memcpy(uploadData.get(), data.start, data.size());
+
+            commandList.native()->CopyBufferRegion(
+                BufferImplGet::impl(BufferSRVImplGet::impl(buffer)->buffer())->native(),
+                startElement * BufferSRVImplGet::impl(buffer)->description().elementSize,
+                BufferImplGet::impl(*m_uploadBuffer)->native(),
+                m_allocator.offset(uploadData.get()), data.size());
+#endif
+
+#ifdef UPLOADBUFFER_MEMORYALLOCATOR_RINGBUFFER
+            auto uploadData = m_allocator.allocate(data.sizeBytes(), D3D12_TEXTURE_DATA_PLACEMENT_ALIGNMENT);
+            memcpy(uploadData, reinterpret_cast<uint8_t*>(data.start), data.sizeBytes());
             commandList.transition(buffer.buffer(), ResourceState::CopyDest);
             commandList.native()->CopyBufferRegion(
                 BufferImplGet::impl(BufferSRVImplGet::impl(buffer)->buffer())->native(),
                 startElement * BufferSRVImplGet::impl(buffer)->description().elementSize,
                 BufferImplGet::impl(*m_uploadBuffer)->native(),
-                m_allocator.offset(uploadData), data.size());
+                m_allocator.offset(uploadData), data.sizeBytes());
+#endif
+        }
+
+        void DeviceImpl::uploadBuffer(CommandList& commandList, BufferUAV& buffer, const ByteRange& data, uint32_t startElement)
+        {
+            uploadBuffer(CommandListImplGet::impl(commandList), buffer, data, startElement);
+        }
+
+        void DeviceImpl::uploadBuffer(CommandListImpl& commandList, BufferUAV& buffer, const ByteRange& data, uint32_t startElement)
+        {
+#ifdef UPLOADBUFFER_MEMORYALLOCATOR_ALIGNEDCHUNKS
+            auto allocator = &m_allocator;
+            std::shared_ptr<void> uploadData = std::shared_ptr<void>(
+                m_allocator.allocate(data.size(), D3D12_TEXTURE_DATA_PLACEMENT_ALIGNMENT),
+                [allocator](void* ptr) { allocator->free(ptr); });
+            m_currentUploadBufferList.emplace_back(uploadData);
+            memcpy(uploadData.get(), data.start, data.size());
+
+            commandList.native()->CopyBufferRegion(
+                BufferImplGet::impl(BufferUAVImplGet::impl(buffer)->buffer())->native(),
+                startElement * BufferUAVImplGet::impl(buffer)->description().elementSize,
+                BufferImplGet::impl(*m_uploadBuffer)->native(),
+                m_allocator.offset(uploadData.get()), data.size());
+#endif
+
+#ifdef UPLOADBUFFER_MEMORYALLOCATOR_RINGBUFFER
+            auto uploadData = m_allocator.allocate(data.sizeBytes(), D3D12_TEXTURE_DATA_PLACEMENT_ALIGNMENT);
+            memcpy(uploadData, reinterpret_cast<uint8_t*>(data.start), data.sizeBytes());
+            commandList.transition(buffer.buffer(), ResourceState::CopyDest);
+            commandList.native()->CopyBufferRegion(
+                BufferImplGet::impl(BufferUAVImplGet::impl(buffer)->buffer())->native(),
+                startElement * BufferUAVImplGet::impl(buffer)->description().elementSize,
+                BufferImplGet::impl(*m_uploadBuffer)->native(),
+                m_allocator.offset(uploadData), data.sizeBytes());
 #endif
         }
 
@@ -238,8 +369,8 @@ namespace engine
 
         void DeviceImpl::uploadBuffer(CommandListImpl& commandList, BufferCBV& buffer, const ByteRange& data, uint32_t startElement)
         {
-            auto allocator = &m_allocator;
 #ifdef UPLOADBUFFER_MEMORYALLOCATOR_ALIGNEDCHUNKS
+            auto allocator = &m_allocator;
             std::shared_ptr<void> uploadData = std::shared_ptr<void>(
                 m_allocator.allocate(data.size(), D3D12_TEXTURE_DATA_PLACEMENT_ALIGNMENT),
                 [allocator](void* ptr) { allocator->free(ptr); });
@@ -254,14 +385,14 @@ namespace engine
 #endif
 
 #ifdef UPLOADBUFFER_MEMORYALLOCATOR_RINGBUFFER
-            auto uploadData = m_allocator.allocate(data.size(), D3D12_TEXTURE_DATA_PLACEMENT_ALIGNMENT);
-            memcpy(uploadData, data.start, data.size());
+            auto uploadData = m_allocator.allocate(data.sizeBytes(), D3D12_TEXTURE_DATA_PLACEMENT_ALIGNMENT);
+            memcpy(uploadData, reinterpret_cast<uint8_t*>(data.start), data.sizeBytes());
             commandList.transition(buffer.buffer(), ResourceState::CopyDest);
             commandList.native()->CopyBufferRegion(
                 BufferImplGet::impl(BufferCBVImplGet::impl(buffer)->buffer())->native(),
                 startElement * BufferCBVImplGet::impl(buffer)->description().elementSize,
                 BufferImplGet::impl(*m_uploadBuffer)->native(),
-                m_allocator.offset(uploadData), data.size());
+                m_allocator.offset(uploadData), data.sizeBytes());
 #endif
             
         }
@@ -273,8 +404,8 @@ namespace engine
 
         void DeviceImpl::uploadBuffer(CommandListImpl& commandList, BufferIBV& buffer, const ByteRange& data, uint32_t startElement)
         {
-            auto allocator = &m_allocator;
 #ifdef UPLOADBUFFER_MEMORYALLOCATOR_ALIGNEDCHUNKS
+            auto allocator = &m_allocator;
             std::shared_ptr<void> uploadData = std::shared_ptr<void>(
                 m_allocator.allocate(data.size(), D3D12_TEXTURE_DATA_PLACEMENT_ALIGNMENT),
                 [allocator](void* ptr) { allocator->free(ptr); });
@@ -289,14 +420,14 @@ namespace engine
 #endif
 
 #ifdef UPLOADBUFFER_MEMORYALLOCATOR_RINGBUFFER
-            auto uploadData = m_allocator.allocate(data.size(), D3D12_TEXTURE_DATA_PLACEMENT_ALIGNMENT);
-            memcpy(uploadData, data.start, data.size());
+            auto uploadData = m_allocator.allocate(data.sizeBytes(), D3D12_TEXTURE_DATA_PLACEMENT_ALIGNMENT);
+            memcpy(uploadData, reinterpret_cast<uint8_t*>(data.start), data.sizeBytes());
             commandList.transition(buffer.buffer(), ResourceState::CopyDest);
             commandList.native()->CopyBufferRegion(
                 BufferImplGet::impl(BufferIBVImplGet::impl(buffer)->buffer())->native(),
                 startElement * BufferIBVImplGet::impl(buffer)->description().elementSize,
                 BufferImplGet::impl(*m_uploadBuffer)->native(),
-                m_allocator.offset(uploadData), data.size());
+                m_allocator.offset(uploadData), data.sizeBytes());
 #endif
         }
 
@@ -307,8 +438,8 @@ namespace engine
 
         void DeviceImpl::uploadBuffer(CommandListImpl& commandList, BufferVBV& buffer, const ByteRange& data, uint32_t startElement)
         {
-            auto allocator = &m_allocator;
 #ifdef UPLOADBUFFER_MEMORYALLOCATOR_ALIGNEDCHUNKS
+            auto allocator = &m_allocator;
             std::shared_ptr<void> uploadData = std::shared_ptr<void>(
                 m_allocator.allocate(data.size(), D3D12_TEXTURE_DATA_PLACEMENT_ALIGNMENT),
                 [allocator](void* ptr) { allocator->free(ptr); });
@@ -323,15 +454,31 @@ namespace engine
 #endif
 
 #ifdef UPLOADBUFFER_MEMORYALLOCATOR_RINGBUFFER
-            auto uploadData = m_allocator.allocate(data.size(), D3D12_TEXTURE_DATA_PLACEMENT_ALIGNMENT);
-            memcpy(uploadData, data.start, data.size());
+            auto uploadData = m_allocator.allocate(data.sizeBytes(), D3D12_TEXTURE_DATA_PLACEMENT_ALIGNMENT);
+            memcpy(uploadData, reinterpret_cast<uint8_t*>(data.start), data.sizeBytes());
             commandList.transition(buffer.buffer(), ResourceState::CopyDest);
             commandList.native()->CopyBufferRegion(
                 BufferImplGet::impl(BufferVBVImplGet::impl(buffer)->buffer())->native(),
                 startElement * BufferVBVImplGet::impl(buffer)->description().elementSize,
                 BufferImplGet::impl(*m_uploadBuffer)->native(),
-                m_allocator.offset(uploadData), data.size());
+                m_allocator.offset(uploadData), data.sizeBytes());
 #endif
+        }
+
+        void transitionCommon(CommandList& cmd, Texture& tex, ResourceState state)
+        {
+            uint32_t sliceCount = tex.arraySlices();
+            uint32_t mipCount = tex.mipLevels();
+
+            for (uint32_t slice = 0; slice < sliceCount; ++slice)
+            {
+                for (uint32_t mip = 0; mip < mipCount; ++mip)
+                {
+                    if (tex.state(slice, mip) != ResourceState::Common)
+                        cmd.transition(tex, state, SubResource{ mip, 1, slice, 1 });
+                    tex.state(slice, mip, state);
+                }
+            }
         }
 
         Texture DeviceImpl::createTexture(const Device& device, Queue& queue, const TextureDescription& desc)
@@ -345,7 +492,7 @@ namespace engine
                     descmod.descriptor.height = 4;
             }
 
-            if (descmod.descriptor.usage == ResourceUsage::CpuToGpu)
+            if (descmod.initialData.data.size() > 0)
             {
                 auto gpuDesc = descmod;
                 auto gpuTexture = createTexture(device, queue, gpuDesc
@@ -354,7 +501,6 @@ namespace engine
 
                 if (descmod.initialData.data.size() > 0)
                 {
-                    unsigned int subResourceIndex = 0;
                     uint32_t dataIndex = 0;
                     for (int slice = 0; slice < static_cast<int>(descmod.descriptor.arraySlices); ++slice)
                     {
@@ -375,7 +521,6 @@ namespace engine
                                 info.rowBytes,
                                 static_cast<size_t>(D3D12_TEXTURE_DATA_PITCH_ALIGNMENT)));
 
-                            auto allocator = &m_allocator;
 #ifdef UPLOADBUFFER_MEMORYALLOCATOR_ALIGNEDCHUNKS
                             std::shared_ptr<void> uploadData = std::shared_ptr<void>(
                                 m_allocator.allocate(info.numBytes, D3D12_TEXTURE_DATA_PLACEMENT_ALIGNMENT),
@@ -410,6 +555,11 @@ namespace engine
                             }
                             dataIndex += info.numBytes;
 
+                            unsigned int mipSlice = mip;
+                            unsigned int arraySlice = slice;
+                            unsigned int mipLevels = descmod.descriptor.mipLevels;
+                            unsigned int subResourceIndex = mipSlice + (arraySlice * mipLevels);
+
                             // copy to GPU memory
                             D3D12_TEXTURE_COPY_LOCATION dst;
                             dst.pResource = TextureImplGet::impl(gpuTexture)->native();
@@ -431,9 +581,10 @@ namespace engine
 
                             CommandList texcmdb = CommandList(device);
 
-                            if (gpuTexture.state() != ResourceState::Common)
+                            /*if (gpuTexture.state() != ResourceState::Common)
                                 texcmdb.transition(gpuTexture, ResourceState::CopyDest);
-                            gpuTexture.state(ResourceState::CopyDest);
+                            gpuTexture.state(ResourceState::CopyDest);*/
+                            transitionCommon(texcmdb, gpuTexture, ResourceState::CopyDest);
 
                             CommandListImplGet::impl(texcmdb).native()->CopyTextureRegion(
                                 &dst,
@@ -460,7 +611,6 @@ namespace engine
                                 if (height < 1)
                                     height = 1;
                             }
-                            ++subResourceIndex;
                         }
                     }
                 }

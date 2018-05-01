@@ -8,9 +8,22 @@
 #include <cstdint>
 #include <memory>
 #include <vector>
+#include <string>
 
 namespace engine
 {
+    enum class ResourceDimension
+    {
+        Unknown,
+        Texture1D,
+        Texture2D,
+        Texture3D,
+        Texture1DArray,
+        Texture2DArray,
+        TextureCubemap,
+        TextureCubemapArray
+    };
+
     namespace implementation
     {
         class PipelineImpl;
@@ -35,6 +48,13 @@ namespace engine
 
     namespace shaders
     {
+        struct ShaderInputParameter
+        {
+            std::string name;
+            std::string semanticName;
+            std::string type;
+        };
+
         class Shader
         {
         protected:
@@ -49,11 +69,27 @@ namespace engine
             virtual const BufferUAV& bufferUav(const std::string& name) const = 0;
             virtual const Sampler& sampler(const std::string& name) const = 0;
 
+            virtual std::vector<std::string> textureSrvNames() const = 0;
+            virtual std::vector<std::string> textureUavNames() const = 0;
+            virtual std::vector<std::string> bufferSrvNames() const = 0;
+            virtual std::vector<std::string> bufferUavNames() const = 0;
+            virtual std::vector<std::string> samplerNames() const = 0;
+
+            virtual std::vector<std::string> srvNames() const = 0;
+            virtual std::vector<std::string> uavNames() const = 0;
+
+            virtual engine::ResourceDimension textureDimension(const std::string& name) const = 0;
+
             virtual const TextureBindlessSRV& bindlessTextureSrv(const std::string& name) const = 0;
             virtual const TextureBindlessUAV& bindlessTextureUav(const std::string& name) const = 0;
             virtual const BufferBindlessSRV& bindlessBufferSrv(const std::string& name) const = 0;
             virtual const BufferBindlessUAV& bindlessBufferUav(const std::string& name) const = 0;
             
+            virtual void textureSrv(const std::string& name, TextureSRV& texture) = 0;
+            virtual void textureUav(const std::string& name, TextureUAV& texture) = 0;
+            virtual void bufferSrv(const std::string& name, BufferSRV& buffer) = 0;
+            virtual void bufferUav(const std::string& name, BufferUAV& buffer) = 0;
+
             virtual std::shared_ptr<const ShaderBinary> load(const Device& device, ShaderStorage& storage) const = 0;
             virtual std::vector<TextureSRV> texture_srvs() const = 0;
             virtual std::vector<TextureUAV> texture_uavs() const = 0;
@@ -83,6 +119,7 @@ namespace engine
             };
             virtual std::vector<ConstantRange>& constants() = 0;
             virtual std::vector<Sampler> samplers() const = 0;
+            virtual const std::vector<ShaderInputParameter>& inputParameters() const = 0;
         };
 
         class VertexShader : public Shader

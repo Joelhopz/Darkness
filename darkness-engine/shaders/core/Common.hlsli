@@ -5,24 +5,39 @@ static const float TWO_PI       = 6.2831853071795864769252867665590057683942;
 static const float ONE_DIV_PI   = 0.3183098861837906715377675267450287240689;
 static const float FLT_EPS      = 1e-10;
 
-float3 createNormal(float3x3 TBN, float4 normalMapSample)
+float3 createNormal(float3x3 TBN, float3 normalMapSample)
 {
     //return mul(TBN, normalMapSample.xyz);
-    float3 remappedNormal = (normalMapSample.xyz * 2.0f) - 1.0f;
-    float3 normalMapNormal = normalize(float3(remappedNormal.x, -remappedNormal.y, remappedNormal.z));
+    float3 remappedNormal = (normalMapSample * 2.0f) - 1.0f;
+    float3 normalMapNormal = normalize(float3(remappedNormal.x, remappedNormal.y, remappedNormal.z));
     return mul(TBN, normalMapNormal);
 }
 
-float2 envMapEquirect(float3 normal, float flipEnvMap)
+// Lys constants
+static const float k0 = 0.00098, k1 = 0.9921, fUserMaxSPow = 0.2425;
+static const float g_fMaxT = (exp2(-10.0 / sqrt(fUserMaxSPow)) - k0) / k1;
+static const int nMipOffset = 0;
+
+
+float specPowerToMip(float specPower, int mips)
 {
-    float phi = acos(normal.y);
-    float theta = atan2(flipEnvMap * normal.x, normal.z) + PI;
-    return float2(theta / TWO_PI, phi / PI);
+    float smulMax = (exp2(-10.0 / sqrt(specPower)) - k0) / k1;
+    return (mips - 1 - nMipOffset) * (1.0f - clamp(smulMax / g_fMaxT, 0.0, 1.0));
 }
 
 float2 envMapEquirect(float3 normal)
 {
-    return envMapEquirect(normal, 1.0f);
+    float phi = acos(normal.y);
+    float theta = atan2(normal.x, normal.z) + PI;
+    return float2(theta / TWO_PI, phi / PI);
+    
+    /*float2 res;
+    res.y = normal.y;
+    res.x = normalize(normal.xz).x * 0.5;
+    float s = sign(normal.z) * 0.5;
+    res.x = 0.75 - s * (0.5 - res.x);
+    res.y = 0.5 + 0.5 * res.y;
+    return res;*/
 }
 
 float4 sRGBtoLinear(float4 sRGB)
@@ -54,8 +69,91 @@ float3 linearTosRGB(float3 RGB)
 
 float linearDepth(float depth, float2 nearFar)
 {
-    return 1.0 / (((nearFar.y - nearFar.x) - nearFar.x) * depth + 1.0);
+    //return 1.0 / (((nearFar.y - nearFar.x) - nearFar.x) * depth + 1.0);
+	return ((nearFar.y - nearFar.x) - nearFar.x) * depth;
 }
+
+float3 boxLineIntersect(float3 bbMin, float3 bbMax, float3 origin, float3 direction, float3 cubemapPosition)
+{
+    float3 firstPlaneIntersect = (bbMax - origin) / direction;
+    float3 secondPlaneIntersect = (bbMin - origin) / direction;
+    float3 furthest = max(firstPlaneIntersect, secondPlaneIntersect);
+    float distance = min(min(furthest.x, furthest.y), furthest.z);
+    float3 intersectionPoint = origin + direction * distance;
+    return intersectionPoint - cubemapPosition;
+}
+
+float rgbToLuminance(float3 rgb)
+{
+    return dot(rgb, float3(0.212671, 0.715160, 0.072169));
+}
+
+/*bool linePlaneIntersect(float3 origin, float3 direction, float3 planePos, float3 planeNormal, out float3 intersectionPoint)
+{
+    intersectionPoint = float3(0.0f, 0.0f, 0.0f);
+    float rdot = dot(direction, planeNormal);
+    if (rdot < FLT_EPS)
+    {
+        return false;
+    }
+    intersectionPoint = origin + ((dot(planeNormal, (origin - planePos)) / rdot) * direction);
+    return true;
+};
+
+bool boxLineIntersect(float3 bbMin, float3 bbMax, float3 origin, float3 direction, out float3 boxIntersectPoint)
+{
+    float3 intersect = float3(0.0f, 0.0f, 0.0f);
+
+    float3 posx_norm = float3(-1.0f, 0.0f, 0.0f);
+    float3 posx_pos = float3(bbMax.x, 0.0f, 0.0f);
+    if (linePlaneIntersect(origin, direction, posx_pos, posx_norm, intersect))
+    {
+        boxIntersectPoint = intersect;
+        return true;
+    }
+
+    float3 negx_norm = float3(1.0f, 0.0f, 0.0f);
+    float3 negx_pos = float3(bbMin.x, 0.0f, 0.0f);
+    if (linePlaneIntersect(origin, direction, negx_pos, negx_norm, intersect))
+    {
+        boxIntersectPoint = intersect;
+        return true;
+    }
+
+    float3 posy_norm = float3(0.0f, -1.0f, 0.0f);
+    float3 posy_pos = float3(0.0f, bbMax.y, 0.0f);
+    if (linePlaneIntersect(origin, direction, posy_pos, posy_norm, intersect))
+    {
+        boxIntersectPoint = intersect;
+        return true;
+    }
+
+    float3 negy_norm = float3(0.0f, 1.0f, 0.0f);
+    float3 negy_pos = float3(0.0f, bbMin.y, 0.0f);
+    if (linePlaneIntersect(origin, direction, negy_pos, negy_norm, intersect))
+    {
+        boxIntersectPoint = intersect;
+        return true;
+    }
+
+    float3 posz_norm = float3(0.0f, 0.0f, -1.0f);
+    float3 posz_pos = float3(0.0f, 0.0f, bbMax.z);
+    if (linePlaneIntersect(origin, direction, posz_pos, posz_norm, intersect))
+    {
+        boxIntersectPoint = intersect;
+        return true;
+    }
+
+    float3 negz_norm = float3(0.0f, 0.0f, 1.0f);
+    float3 negz_pos = float3(0.0f, 0.0f, bbMin.z);
+    if (linePlaneIntersect(origin, direction, negz_pos, negz_norm, intersect))
+    {
+        boxIntersectPoint = intersect;
+        return true;
+    }
+
+    return false;
+};*/
 
 /*float3x3 orthoNormalBase(float3 n)
 {

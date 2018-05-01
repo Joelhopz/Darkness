@@ -38,8 +38,7 @@ namespace engine
             // Create the command queue.
             auto res = DeviceImplGet::impl(device).device()->CreateCommandQueue(
                 &commandQueueDesc, 
-                __uuidof(ID3D12CommandQueue), 
-                (void**)&m_queue);
+                DARKNESS_IID_PPV_ARGS(&m_queue));
             ASSERT(SUCCEEDED(res));
         }
 

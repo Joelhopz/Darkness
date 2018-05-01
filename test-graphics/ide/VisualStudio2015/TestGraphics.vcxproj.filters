@@ -31,9 +31,6 @@
     <Filter Include="Source Files\engine\graphics">
       <UniqueIdentifier>{e6fc33d4-a284-4fc3-a07a-ebf449811004}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\engine\graphics\shaders">
-      <UniqueIdentifier>{fb5085f6-b477-487b-bbe2-20b6cb3b3df4}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\tools\TestCompressedFile.cpp">
@@ -81,6 +78,18 @@
     <ClCompile Include="..\..\src\tools\TestRefCounted.cpp">
       <Filter>Source Files\tools</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\TestCommandList.cpp">
+      <Filter>Source Files\engine\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\TestResources.cpp">
+      <Filter>Source Files\engine\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\TestDispatch.cpp">
+      <Filter>Source Files\engine\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tools\TestOctree.cpp">
+      <Filter>Source Files\tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Tools.h">
@@ -89,13 +98,5 @@
     <ClInclude Include="..\..\src\GlobalTestFixture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <CustomBuild Include="..\..\src\engine\graphics\shaders\TriangleColor.frag">
-      <Filter>Source Files\engine\graphics\shaders</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\src\engine\graphics\shaders\TriangleColor.vert">
-      <Filter>Source Files\engine\graphics\shaders</Filter>
-    </CustomBuild>
   </ItemGroup>
 </Project>

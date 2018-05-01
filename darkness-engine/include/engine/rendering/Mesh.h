@@ -14,12 +14,13 @@ namespace engine
     {
     public:
         Mesh();
-        Mesh(const std::string& filename);
+        Mesh(ModelResources& modelResources, const std::string& filename);
         static const MeshVersion SupportedMeshVersion{ 1 };
 
         void setFilename(const std::string& filename);
         void save();
-        void load();
+        void saveToMemory(std::vector<char>& mem);
+        void load(ModelResources& modelResources);
         std::vector<SubMesh>& subMeshes();
         const std::vector<SubMesh>& subMeshes() const;
     private:

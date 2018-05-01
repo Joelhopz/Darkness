@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug DX12|Win32">
+      <Configuration>Debug DX12</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug Vulkan|Win32">
+      <Configuration>Debug Vulkan</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug Vulkan|x64">
+      <Configuration>Debug Vulkan</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release DX12|Win32">
+      <Configuration>Release DX12</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug DX12|x64">
+      <Configuration>Debug DX12</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release DX12|x64">
+      <Configuration>Release DX12</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release Vulkan|Win32">
+      <Configuration>Release Vulkan</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release Vulkan|x64">
+      <Configuration>Release Vulkan</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{39CA29F1-5F76-4C01-9E69-E9EE4CB0242B}</ProjectGuid>
+    <RootNamespace>DarknessResourceTask</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">
+    <OutDir>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">
+    <OutDir>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">
+    <OutDir>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">
+    <OutDir>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">
+    <OutDir>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">
+    <OutDir>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">
+    <OutDir>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">
+    <OutDir>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)intermediate\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\darkness-editor\external\assimp-3.3.1\include;$(ProjectDir)..\..\..\darkness-editor\external\amd-tootle\src\TootleLib\include;$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine\external\protobuf-3.5.1\src;$(ProjectDir)..\..\..\darkness-engine\external\libzmq\include;</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4018;4146;4244;4251;4267;4305;4355;4800;4996;4505</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>libzmq.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\darkness-editor\external\assimp-3.3.1\include;$(ProjectDir)..\..\..\darkness-editor\external\amd-tootle\src\TootleLib\include;$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine\external\protobuf-3.5.1\src;$(ProjectDir)..\..\..\darkness-engine\external\libzmq\include;</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4018;4146;4244;4251;4267;4305;4355;4800;4996;4505</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>libzmq.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\darkness-editor\external\assimp-3.3.1\include;$(ProjectDir)..\..\..\darkness-editor\external\amd-tootle\src\TootleLib\include;$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine\external\protobuf-3.5.1\src;$(ProjectDir)..\..\..\darkness-engine\external\libzmq\include;$(ProjectDir)..\..\..\darkness-editor\external\Compressonator;$(ProjectDir)..\..\..\darkness-engine\external\libzmq\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;ZMQ_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4018;4146;4244;4251;4267;4305;4355;4800;4996;4505</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\darkness-engine\bin\$(Platform)\$(Configuration);C:\Program Files (x86)\Windows Kits\10\Lib\10.0.15063.0\um\x64;$(ProjectDir)..\..\..\darkness-shared\bin\$(Platform)\$(Configuration);$(ProjectDir)..\..\..\darkness-engine\external\zstd\bin\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\bzip2-1.0.6\bin\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\bin;$(ProjectDir)..\..\..\darkness-engine\external\amd-tootle\lib;$(ProjectDir)..\..\..\darkness-engine\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\winpixeventruntime\bin;$(ProjectDir)..\..\..\darkness-editor\external\Compressonator\Compressonator\Build\VS2015\Debug_MD\x64;$(ProjectDir)..\..\..\darkness-engine\external\libzmq\bin\x64\Debug\v141\static;$(ProjectDir)..\..\..\darkness-engine\external\protobuf-3.5.1\cmake\build\debug;$(ProjectDir)..\..\..\darkness-editor\external\assimp-3.3.1\build\code\Debug;$(ProjectDir)..\..\..\darkness-editor\external\assimp-3.3.1\build\contrib\zlib\Debug;$(ProjectDir)..\..\..\darkness-editor\external\amd-tootle\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>bzip2.lib;zlibstaticd.lib;zstdlib_x64.lib;BulletDynamics_vs2010_x64_debug.lib;BulletCollision_vs2010_x64_debug.lib;LinearMath_vs2010_x64_debug.lib;assimp-vc140-mt.lib;TootleStatic_2015_DX11_1_MTDLL_d64.lib;Iphlpapi.lib;libzmq.lib;libprotobufd.lib;Compressonator_MDd.lib;Ws2_32.lib;WinPixEventRuntime.lib;DarknessShared.lib;DarknessEngine.lib;d3d12.lib;d3dcompiler.lib;dxgi.lib;dxguid.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\darkness-editor\external\assimp-3.3.1\include;$(ProjectDir)..\..\..\darkness-editor\external\amd-tootle\src\TootleLib\include;$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine\external\protobuf-3.5.1\src;$(ProjectDir)..\..\..\darkness-engine\external\libzmq\include;$(ProjectDir)..\..\..\darkness-engine\external\libzmq\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;ZMQ_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4018;4146;4244;4251;4267;4305;4355;4800;4996;4505</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>bzip2.lib;zlibstaticd.lib;zstdlib_x64.lib;BulletDynamics_vs2010_x64_debug.lib;BulletCollision_vs2010_x64_debug.lib;LinearMath_vs2010_x64_debug.lib;assimp-vc140-mt.lib;TootleStatic_2015_DX11_1_MTDLL_d64.lib;libprotobufd.lib;Iphlpapi.lib;libzmq.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\darkness-engine\bin\$(Platform)\$(Configuration);C:\Program Files (x86)\Windows Kits\10\Lib\10.0.15063.0\um\x64;$(ProjectDir)..\..\..\darkness-shared\bin\$(Platform)\$(Configuration);$(ProjectDir)..\..\..\darkness-engine\external\zstd\bin\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\bzip2-1.0.6\bin\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\bin;$(ProjectDir)..\..\..\darkness-engine\external\amd-tootle\lib;$(ProjectDir)..\..\..\darkness-engine\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\winpixeventruntime\bin;$(ProjectDir)..\..\..\darkness-editor\external\Compressonator\Compressonator\Build\VS2015\Debug_MD\x64;$(ProjectDir)..\..\..\darkness-engine\external\libzmq\bin\x64\Debug\v141\static;$(ProjectDir)..\..\..\darkness-engine\external\protobuf-3.5.1\cmake\build\debug;$(ProjectDir)..\..\..\darkness-editor\external\assimp-3.3.1\build\code\Debug;$(ProjectDir)..\..\..\darkness-editor\external\assimp-3.3.1\build\contrib\zlib\Debug;$(ProjectDir)..\..\..\darkness-editor\external\amd-tootle\lib</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\darkness-editor\external\assimp-3.3.1\include;$(ProjectDir)..\..\..\darkness-editor\external\amd-tootle\src\TootleLib\include;$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine\external\protobuf-3.5.1\src;$(ProjectDir)..\..\..\darkness-engine\external\libzmq\include;</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4018;4146;4244;4251;4267;4305;4355;4800;4996;4505</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>libzmq.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\darkness-editor\external\assimp-3.3.1\include;$(ProjectDir)..\..\..\darkness-editor\external\amd-tootle\src\TootleLib\include;$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine\external\protobuf-3.5.1\src;$(ProjectDir)..\..\..\darkness-engine\external\libzmq\include;</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4018;4146;4244;4251;4267;4305;4355;4800;4996;4505</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>libzmq.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\darkness-editor\external\assimp-3.3.1\include;$(ProjectDir)..\..\..\darkness-editor\external\amd-tootle\src\TootleLib\include;$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine\external\protobuf-3.5.1\src;$(ProjectDir)..\..\..\darkness-engine\external\libzmq\include;$(ProjectDir)..\..\..\darkness-editor\external\Compressonator;$(ProjectDir)..\..\..\darkness-engine\external\libzmq\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;ZMQ_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4018;4146;4244;4251;4267;4305;4355;4800;4996;4505</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\darkness-engine\bin\$(Platform)\$(Configuration);C:\Program Files (x86)\Windows Kits\10\Lib\10.0.15063.0\um\x64;$(ProjectDir)..\..\..\darkness-shared\bin\x64\Release DX12;$(ProjectDir)..\..\..\darkness-engine\external\zstd\bin\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\bzip2-1.0.6\bin\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\bin;$(ProjectDir)..\..\..\darkness-engine\external\amd-tootle\lib;$(ProjectDir)..\..\..\darkness-engine\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\x64\Release;$(ProjectDir)..\..\..\darkness-engine\external\winpixeventruntime\bin;$(ProjectDir)..\..\..\darkness-editor\external\Compressonator\Compressonator\Build\VS2015\Release_MD\x64;$(ProjectDir)..\..\..\darkness-engine\external\libzmq\bin\x64\Release\v141\static;$(ProjectDir)..\..\..\darkness-engine\external\protobuf-3.5.1\cmake\build\release;$(ProjectDir)..\..\..\darkness-editor\external\assimp-3.3.1\build\code\Release;$(ProjectDir)..\..\..\darkness-editor\external\assimp-3.3.1\build\contrib\zlib\Release;$(ProjectDir)..\..\..\darkness-editor\external\amd-tootle\lib;$(ProjectDir)..\..\..\darkness-engine\external\bzip2-1.0.6\bin\x64\Release;$(ProjectDir)..\..\..\darkness-engine\external\zstd\bin\x64\Release</AdditionalLibraryDirectories>
+      <AdditionalDependencies>bzip2.lib;zlibstatic.lib;zstdlib_x64.lib;BulletDynamics_vs2010_x64_release.lib;BulletCollision_vs2010_x64_release.lib;LinearMath_vs2010_x64_release.lib;assimp-vc140-mt.lib;TootleStatic_2015_DX11_1_MTDLL_64.lib;Iphlpapi.lib;libzmq.lib;libprotobuf.lib;Compressonator_MD.lib;Ws2_32.lib;WinPixEventRuntime.lib;DarknessShared.lib;DarknessEngine.lib;d3d12.lib;d3dcompiler.lib;dxgi.lib;dxguid.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\darkness-editor\external\assimp-3.3.1\include;$(ProjectDir)..\..\..\darkness-editor\external\amd-tootle\src\TootleLib\include;$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine\external\protobuf-3.5.1\src;$(ProjectDir)..\..\..\darkness-engine\external\libzmq\include;$(ProjectDir)..\..\..\darkness-engine\external\libzmq\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;ZMQ_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4018;4146;4244;4251;4267;4305;4355;4800;4996;4505</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>bzip2.lib;zlibstatic.lib;zstdlib_x64.lib;BulletDynamics_vs2010_x64_release.lib;BulletCollision_vs2010_x64_release.lib;LinearMath_vs2010_x64_release.lib;assimp-vc140-mt.lib;TootleStatic_2015_DX11_1_MTDLL_64.lib;Iphlpapi.lib;libzmq.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\darkness-engine\bin\$(Platform)\$(Configuration);C:\Program Files (x86)\Windows Kits\10\Lib\10.0.15063.0\um\x64;$(ProjectDir)..\..\..\darkness-shared\bin\x64\Release DX12;$(ProjectDir)..\..\..\darkness-engine\external\zstd\bin\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\bzip2-1.0.6\bin\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\bin;$(ProjectDir)..\..\..\darkness-engine\external\amd-tootle\lib;$(ProjectDir)..\..\..\darkness-engine\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\x64\Release;$(ProjectDir)..\..\..\darkness-engine\external\winpixeventruntime\bin;$(ProjectDir)..\..\..\darkness-editor\external\Compressonator\Compressonator\Build\VS2015\Release_MD\x64;$(ProjectDir)..\..\..\darkness-engine\external\libzmq\bin\x64\Release\v141\static;$(ProjectDir)..\..\..\darkness-engine\external\protobuf-3.5.1\cmake\build\release;$(ProjectDir)..\..\..\darkness-editor\external\assimp-3.3.1\build\code\Release;$(ProjectDir)..\..\..\darkness-editor\external\assimp-3.3.1\build\contrib\zlib\Release;$(ProjectDir)..\..\..\darkness-editor\external\amd-tootle\lib;$(ProjectDir)..\..\..\darkness-engine\external\bzip2-1.0.6\bin\x64\Release;$(ProjectDir)..\..\..\darkness-engine\external\zstd\bin\x64\Release</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\DummyDefinitions.cpp" />
+    <ClCompile Include="..\..\src\ImageTask.cpp" />
+    <ClCompile Include="..\..\src\main.cpp" />
+    <ClCompile Include="..\..\src\ModelTask.cpp" />
+    <ClCompile Include="..\..\src\ResourceTask.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\DummyDeclarations.h" />
+    <ClInclude Include="..\..\src\ImageTask.h" />
+    <ClInclude Include="..\..\src\ModelTask.h" />
+    <ClInclude Include="..\..\src\ResourceTask.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

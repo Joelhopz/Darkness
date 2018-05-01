@@ -1,6 +1,8 @@
+#include "../GBuffer.hlsli"
+#include "../VertexPacking.hlsli"
 
-Buffer<float3> vertices;
-Buffer<float3> normals;
+Buffer<uint2> vertices;
+Buffer<float2> normals;
 
 struct VSOutput
 {
@@ -11,7 +13,7 @@ struct VSOutput
 VSOutput main(uint id : SV_VertexID)
 {
     VSOutput output;
-    output.position = vertices[id];
-    output.normal = normals[id];
+    output.position = unpackVertex(vertices[id]);
+    output.normal = unpackNormalOctahedron(normals[id]);
     return output;
 }

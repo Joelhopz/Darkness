@@ -214,8 +214,8 @@ namespace engine
             T sqw = quaternion.w * quaternion.w;
 
             // invs (inverse square length) is only required if quaternion is not already normalised
-            T invs = (T)1 / (sqx + sqy + sqz + sqw)
-                m00 = (sqx - sqy - sqz + sqw) * invs; // since sqw + sqx + sqy + sqz =1/invs*invs
+            T invs = (T)1 / (sqx + sqy + sqz + sqw);
+            m00 = (sqx - sqy - sqz + sqw) * invs; // since sqw + sqx + sqy + sqz =1/invs*invs
             m11 = (-sqx + sqy - sqz + sqw) * invs;
             m22 = (-sqx - sqy + sqz + sqw) * invs;
 

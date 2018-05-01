@@ -1,4 +1,5 @@
 #include "engine/graphics/ResourceCache.h"
+#include "engine/rendering/Mesh.h"
 
 namespace engine
 {
@@ -120,7 +121,7 @@ namespace engine
         }
 
         std::shared_ptr<image::ImageIf> result = image::Image::createImage(
-            filename, type, width, height, slices, mips);
+            filename, image::ImageType::DDS, type, width, height, slices, mips);
         m_images[key] = result;
         return result;
 #else
@@ -129,20 +130,27 @@ namespace engine
 #endif
     }
 
-    std::shared_ptr<Mesh> ResourceCache::createMesh(
+    const std::unordered_map<ResourceKey, std::shared_ptr<Mesh>>& ResourceCache::meshes() const
+    {
+        return m_meshes;
+    }
+
+    std::shared_ptr<SubMeshInstance> ResourceCache::createMesh(
+        ModelResources& modelResources,
         ResourceKey key,
-        const std::string& filename)
+        const std::string& filename,
+        uint32_t meshIndex)
     {
 #ifdef RESOURCE_CACHE_MESH
         auto existing = m_meshes.find(key);
         if (existing != m_meshes.end())
         {
-            return existing->second;
+            return existing->second->subMeshes()[meshIndex].createInstance(modelResources);
         }
 
-        std::shared_ptr<Mesh> result = std::make_shared<Mesh>(filename);
+        std::shared_ptr<Mesh> result = std::make_shared<Mesh>(modelResources, filename);
         m_meshes[key] = result;
-        return result;
+        return result->subMeshes()[meshIndex].createInstance(modelResources);
 #else
         return std::make_shared<Mesh>(filename);
 #endif

@@ -121,9 +121,9 @@ Browser::Browser(
         m_directoryView.get(), SIGNAL(clicked(QModelIndex)),
         this, SLOT(treeDirClicked(QModelIndex)));
 
-	QObject::connect(
-		m_fileView.get(), SIGNAL(clicked(QModelIndex)),
-		this, SLOT(fileClicked(QModelIndex)));
+    QObject::connect(
+        m_fileView.get(), SIGNAL(clicked(QModelIndex)),
+        this, SLOT(fileClicked(QModelIndex)));
 
     /*QObject::connect(
         m_fileView.get(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
@@ -231,9 +231,9 @@ void Browser::removeFiles(QList<QString> files)
                 if (QFileInfo(filePathUnderProcessed).exists())
                     QFile::remove(filePathUnderProcessed);
 
-				QString settingsFilePathUnderProcessed = QString::fromStdString(engine::pathReplaceExtension(filePathUnderProcessed.toStdString(), "json"));
-				if (QFileInfo(settingsFilePathUnderProcessed).exists())
-					QFile::remove(settingsFilePathUnderProcessed);
+                QString settingsFilePathUnderProcessed = QString::fromStdString(engine::pathReplaceExtension(filePathUnderProcessed.toStdString(), "json"));
+                if (QFileInfo(settingsFilePathUnderProcessed).exists())
+                    QFile::remove(settingsFilePathUnderProcessed);
             }
         }
     }
@@ -348,25 +348,33 @@ void Browser::dropEventDirectory(QDropEvent* dropEvent)
         preferredEncoding = importOptions->preferredEncoding();
     }
 
+    QList<QString> sources;
+    QString destination = m_fileSystemDirModel->filePath(index);
+
     for (auto image : images)
     {
-        emit processDroppedItem(
+        sources.append(image.first);
+        /*emit processDroppedItems(
             image.first,
             image.second,
             scale,
             rotation,
-            preferredEncoding);
+            preferredEncoding);*/
     }
 
     for (auto model : models)
     {
-        emit processDroppedItem(
+        sources.append(model.first);
+        /*emit processDroppedItem(
             model.first,
             model.second,
             scale,
             rotation,
-            preferredEncoding);
+            preferredEncoding);*/
     }
+
+    emit processDroppedItems(sources, destination, scale, rotation, preferredEncoding);
+
 }
 
 void Browser::dropEventFiles(QDropEvent* dropEvent)
@@ -375,70 +383,31 @@ void Browser::dropEventFiles(QDropEvent* dropEvent)
     QList<QPair<QString, QString>> images;
     QList<QPair<QString, QString>> models;
 
+    QList<QString> sources;
+    QString destination = m_fileSystemDirModel->filePath(index);
+
     if (dropEvent->mimeData()->hasUrls())
     {
         for each (QUrl url in dropEvent->mimeData()->urls())
         {
-            QString targetFilePath = m_fileSystemDirModel->filePath(index) + QDir::separator() + QFileInfo(url.toLocalFile()).fileName();
-            QString nativeSourceFilePath = QDir::toNativeSeparators(url.toLocalFile());
-            QString nativeDestinationFilePath = QDir::toNativeSeparators(targetFilePath);
-            if (nativeSourceFilePath != nativeDestinationFilePath)
-            {
-                if (engine::isImageFormat(url.toLocalFile().toStdString()))
-                {
-                    images.append({ url.toLocalFile(), m_fileSystemDirModel->filePath(index) });
-                }
-
-                if (engine::isModelFormat(url.toLocalFile().toStdString()))
-                {
-                    models.append({ url.toLocalFile(), m_fileSystemDirModel->filePath(index) });
-                }
-            }
-            else
-            {
-                QMimeDatabase db;
-                auto mimeType = db.mimeTypeForFile(QFileInfo(nativeSourceFilePath));
-                qDebug() << mimeType.name();
-                for (auto ptypes : mimeType.parentMimeTypes())
-                {
-                    qDebug() << ptypes;
-                }
-            }
+            sources.append(url.toLocalFile());
         }
     }
 
     engine::Vector3f scale;
     engine::Quaternionf rotation;
     std::string preferredEncoding;
-    if (images.size() > 0 || models.size() > 0)
+    //if (images.size() > 0 || models.size() > 0)
     {
         // show import options
         auto importOptions = std::make_unique<ImportSettings>(images, models, m_mainWindow);
         importOptions->exec();
         scale = importOptions->scale();
         rotation = importOptions->rotation();
-        //preferredEncoding = importOptions->preferredEncoding();
+        preferredEncoding = importOptions->preferredEncoding();
     }
 
-    for (auto image : images)
-    {
-        emit processDroppedItem(
-            image.first,
-            image.second,
-            scale,
-            rotation,
-            preferredEncoding);
-    }
-
-    for (auto model : models)
-    {
-        emit processDroppedItem(
-            model.first,
-            model.second,
-            scale,
-            rotation,
-            preferredEncoding);
-    }
+    emit processDroppedItems(sources, destination, scale, rotation, preferredEncoding);
 }
 
 void Browser::ShowContextMenu(const QPoint& point)

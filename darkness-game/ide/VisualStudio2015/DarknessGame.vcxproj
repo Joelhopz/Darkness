@@ -38,7 +38,7 @@
     <ProjectGuid>{B4FADEE8-72F8-47A6-A433-D4FFB43AC569}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>DarknessGame</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'" Label="Configuration">
@@ -170,13 +170,14 @@
       <WarningLevel>EnableAllWarnings</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\..\darkness-engine\external\protobuf-3.5.1\src;$(ProjectDir)..\..\..\darkness-engine\external\libzmq\include;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\src</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4018;4146;4244;4251;4267;4305;4355;4800;4996;4505</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\darkness-engine\bin\Win32\Debug;C:\Program Files (x86)\Windows Kits\10\Lib\10.0.15063.0\um\x86;$(ProjectDir)..\..\..\darkness-shared\bin\Win32\Debug;$(ProjectDir)..\..\..\darkness-engine\external\zstd\bin\Win32\Debug;$(ProjectDir)..\..\..\darkness-engine\external\bzip2-1.0.6\bin\Win32\Debug;$(ProjectDir)..\..\..\darkness-engine\external\amd-tootle\lib;$(ProjectDir)..\..\..\darkness-engine\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\Win32\Debug</AdditionalLibraryDirectories>
-      <AdditionalDependencies>DarknessShared.lib;DarknessEngine.lib;bzip2.lib;zstdlib_x64.lib;d3d12.lib;d3dcompiler.lib;dxgi.lib;dxguid.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libzmq.lib;Ws2_32.lib;Xinput.lib;gainputstatic-d.lib;Ws2_32.lib;DarknessShared.lib;DarknessEngine.lib;bzip2.lib;zstdlib_x64.lib;d3d12.lib;d3dcompiler.lib;dxgi.lib;dxguid.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">
@@ -186,13 +187,14 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\..\darkness-engine\external\glm;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\..\darkness-engine\external\protobuf-3.5.1\src;$(ProjectDir)..\..\..\darkness-engine\external\libzmq\include;$(ProjectDir)..\..\..\darkness-engine\external\glm;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\src</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4018;4146;4244;4251;4267;4305;4355;4800;4996;4505</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\darkness-engine\bin\Win32\Debug;C:\Program Files (x86)\Windows Kits\10\Lib\10.0.10586.0\um\x86;C:\VulkanSDK\1.0.61.1\Bin32;$(ProjectDir)..\..\..\darkness-shared\bin\Win32\Debug;$(ProjectDir)..\..\..\darkness-engine\external\amd-tootle\lib;$(ProjectDir)..\..\..\darkness-engine\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\Win32\Debug</AdditionalLibraryDirectories>
-      <AdditionalDependencies>DarknessShared.lib;vulkan-1.lib;DarknessEngine.lib;d3d12.lib;dxgi.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\darkness-engine\bin\Win32\Debug;C:\Program Files (x86)\Windows Kits\10\Lib\10.0.10586.0\um\x86;C:\VulkanSDK\1.0.61.1\Lib32;$(ProjectDir)..\..\..\darkness-shared\bin\Win32\Debug;$(ProjectDir)..\..\..\darkness-engine\external\amd-tootle\lib;$(ProjectDir)..\..\..\darkness-engine\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\Win32\Debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libzmq.lib;Ws2_32.lib;Xinput.lib;gainputstatic-d.lib;Ws2_32.lib;DarknessShared.lib;vulkan-1.lib;DarknessEngine.lib;d3d12.lib;dxgi.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">
@@ -201,16 +203,17 @@
       </PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\src</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>ZMQ_STATIC;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\..\darkness-engine\external\protobuf-3.5.1\src;$(ProjectDir)..\..\..\darkness-engine\external\libzmq\include;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\src</AdditionalIncludeDirectories>
       <BrowseInformation>false</BrowseInformation>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <DisableSpecificWarnings>4018;4146;4244;4251;4267;4305;4355;4800;4996;4505</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\darkness-engine\bin\$(Platform)\$(Configuration);C:\Program Files (x86)\Windows Kits\10\Lib\10.0.15063.0\um\x64;$(ProjectDir)..\..\..\darkness-shared\bin\$(Platform)\$(Configuration);$(ProjectDir)..\..\..\darkness-engine\external\zstd\bin\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\bzip2-1.0.6\bin\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\bin;$(ProjectDir)..\..\..\darkness-engine\external\amd-tootle\lib;$(ProjectDir)..\..\..\darkness-engine\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\x64\Debug</AdditionalLibraryDirectories>
-      <AdditionalDependencies>DarknessShared.lib;DarknessEngine.lib;bzip2.lib;zstdlib_x64.lib;d3d12.lib;d3dcompiler.lib;dxgi.lib;dxguid.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;BulletDynamics_vs2010_x64_debug.lib;BulletCollision_vs2010_x64_debug.lib;LinearMath_vs2010_x64_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\darkness-engine\bin\$(Platform)\$(Configuration);C:\Program Files (x86)\Windows Kits\10\Lib\10.0.15063.0\um\x64;$(ProjectDir)..\..\..\darkness-shared\bin\$(Platform)\$(Configuration);$(ProjectDir)..\..\..\darkness-engine\external\zstd\bin\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\bzip2-1.0.6\bin\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\bin;$(ProjectDir)..\..\..\darkness-engine\external\amd-tootle\lib;$(ProjectDir)..\..\..\darkness-engine\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\winpixeventruntime\bin;$(ProjectDir)..\..\..\darkness-engine\external\gainput-master\build\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\libzmq\bin\x64\Debug\v141\static;$(ProjectDir)..\..\..\darkness-engine\external\protobuf-3.5.1\cmake\build\debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Iphlpapi.lib;libzmq.lib;libprotobufd.lib;Ws2_32.lib;Xinput.lib;gainputstatic-d.lib;Ws2_32.lib;WinPixEventRuntime.lib;DarknessShared.lib;DarknessEngine.lib;bzip2.lib;zstdlib_x64.lib;d3d12.lib;d3dcompiler.lib;dxgi.lib;dxguid.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;BulletDynamics_vs2010_x64_debug.lib;BulletCollision_vs2010_x64_debug.lib;LinearMath_vs2010_x64_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Bscmake>
       <PreserveSbr>false</PreserveSbr>
@@ -222,14 +225,15 @@
       </PrecompiledHeader>
       <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\..\darkness-engine\external\glm;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\src</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>ZMQ_STATIC;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\..\darkness-engine\external\protobuf-3.5.1\src;$(ProjectDir)..\..\..\darkness-engine\external\libzmq\include;$(ProjectDir)..\..\..\darkness-engine\external\glm;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\src</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4018;4146;4244;4251;4267;4305;4355;4800;4996;4505</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\darkness-engine\bin\$(Platform)\$(Configuration);C:\Program Files (x86)\Windows Kits\10\Lib\10.0.10586.0\um\x64;C:\VulkanSDK\1.0.61.1\Bin;$(ProjectDir)..\..\..\darkness-engine\external\zstd\bin\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\bzip2-1.0.6\bin\x64\Debug;$(ProjectDir)..\..\..\darkness-shared\bin\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\bin;$(ProjectDir)..\..\..\darkness-engine\external\amd-tootle\lib;$(ProjectDir)..\..\..\darkness-engine\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\x64\Debug</AdditionalLibraryDirectories>
-      <AdditionalDependencies>DarknessShared.lib;vulkan-1.lib;DarknessEngine.lib;bzip2.lib;zstdlib_x64.lib;d3d12.lib;dxgi.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;BulletDynamics_vs2010_x64_debug.lib;BulletCollision_vs2010_x64_debug.lib;LinearMath_vs2010_x64_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\darkness-engine\bin\$(Platform)\$(Configuration);C:\Program Files (x86)\Windows Kits\10\Lib\10.0.10586.0\um\x64;C:\VulkanSDK\1.0.61.1\Lib;$(ProjectDir)..\..\..\darkness-engine\external\zstd\bin\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\bzip2-1.0.6\bin\x64\Debug;$(ProjectDir)..\..\..\darkness-shared\bin\$(Platform)\$(Configuration);$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\bin;$(ProjectDir)..\..\..\darkness-engine\external\amd-tootle\lib;$(ProjectDir)..\..\..\darkness-engine\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\gainput-master\build\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\libzmq\bin\x64\Debug\v141\static;$(ProjectDir)..\..\..\darkness-engine\external\protobuf-3.5.1\cmake\build\debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Iphlpapi.lib;libzmq.lib;libprotobufd.lib;Ws2_32.lib;Xinput.lib;gainputstatic-d.lib;Ws2_32.lib;DarknessShared.lib;vulkan-1.lib;DarknessEngine.lib;bzip2.lib;zstdlib_x64.lib;d3d12.lib;dxgi.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;BulletDynamics_vs2010_x64_debug.lib;BulletCollision_vs2010_x64_debug.lib;LinearMath_vs2010_x64_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">
@@ -241,7 +245,8 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\..\darkness-engine\external\protobuf-3.5.1\src;$(ProjectDir)..\..\..\darkness-engine\external\libzmq\include;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\src</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4018;4146;4244;4251;4267;4305;4355;4800;4996;4505</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -249,7 +254,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\darkness-engine\bin\Win32\Release;C:\Program Files (x86)\Windows Kits\10\Lib\10.0.15063.0\um\x86;$(ProjectDir)..\..\..\darkness-shared\bin\Win32\Release;$(ProjectDir)..\..\..\darkness-engine\external\zstd\bin\Win32\Debug;$(ProjectDir)..\..\..\darkness-engine\external\bzip2-1.0.6\bin\Win32\Debug;$(ProjectDir)..\..\..\darkness-engine\external\amd-tootle\lib;$(ProjectDir)..\..\..\darkness-engine\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\Win32\Release</AdditionalLibraryDirectories>
-      <AdditionalDependencies>DarknessShared.lib;DarknessEngine.lib;bzip2.lib;zstdlib_x64.lib;d3d12.lib;d3dcompiler.lib;dxgi.lib;dxguid.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libzmq.lib;Ws2_32.lib;Xinput.lib;gainputstatic.lib;Ws2_32.lib;DarknessShared.lib;DarknessEngine.lib;bzip2.lib;zstdlib_x64.lib;d3d12.lib;d3dcompiler.lib;dxgi.lib;dxguid.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">
@@ -261,15 +266,16 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\..\darkness-engine\external\glm;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\..\darkness-engine\external\protobuf-3.5.1\src;$(ProjectDir)..\..\..\darkness-engine\external\libzmq\include;$(ProjectDir)..\..\..\darkness-engine\external\glm;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\src</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4018;4146;4244;4251;4267;4305;4355;4800;4996;4505</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\darkness-engine\bin\Win32\Release;C:\Program Files (x86)\Windows Kits\10\Lib\10.0.10586.0\um\x86;C:\VulkanSDK\1.0.61.1\Bin32;$(ProjectDir)..\..\..\darkness-shared\bin\Win32\Release;$(ProjectDir)..\..\..\darkness-engine\external\amd-tootle\lib;$(ProjectDir)..\..\..\darkness-engine\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\Win32\Release</AdditionalLibraryDirectories>
-      <AdditionalDependencies>DarknessShared.lib;vulkan-1.lib;DarknessEngine.lib;d3d12.lib;dxgi.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\darkness-engine\bin\Win32\Release;C:\Program Files (x86)\Windows Kits\10\Lib\10.0.10586.0\um\x86;C:\VulkanSDK\1.0.61.1\Lib32;$(ProjectDir)..\..\..\darkness-shared\bin\Win32\Release;$(ProjectDir)..\..\..\darkness-engine\external\amd-tootle\lib;$(ProjectDir)..\..\..\darkness-engine\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\Win32\Release</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libzmq.lib;Ws2_32.lib;Xinput.lib;gainputstatic.lib;Ws2_32.lib;DarknessShared.lib;vulkan-1.lib;DarknessEngine.lib;d3d12.lib;dxgi.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">
@@ -280,16 +286,17 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\src</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>ZMQ_STATIC;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\..\darkness-engine\external\protobuf-3.5.1\src;$(ProjectDir)..\..\..\darkness-engine\external\libzmq\include;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\src</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4018;4146;4244;4251;4267;4305;4355;4800;4996;4505</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\darkness-engine\bin\$(Platform)\$(Configuration);C:\Program Files (x86)\Windows Kits\10\Lib\10.0.15063.0\um\x64;$(ProjectDir)..\..\..\darkness-shared\bin\x64\Release DX12;$(ProjectDir)..\..\..\darkness-engine\external\zstd\bin\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\bzip2-1.0.6\bin\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\bin;$(ProjectDir)..\..\..\darkness-engine\external\amd-tootle\lib;$(ProjectDir)..\..\..\darkness-engine\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\x64\Release</AdditionalLibraryDirectories>
-      <AdditionalDependencies>DarknessShared.lib;DarknessEngine.lib;bzip2.lib;zstdlib_x64.lib;d3d12.lib;d3dcompiler.lib;dxgi.lib;dxguid.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;BulletDynamics_vs2010_x64_release.lib;BulletCollision_vs2010_x64_release.lib;LinearMath_vs2010_x64_release.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\darkness-engine\bin\$(Platform)\$(Configuration);C:\Program Files (x86)\Windows Kits\10\Lib\10.0.15063.0\um\x64;$(ProjectDir)..\..\..\darkness-shared\bin\x64\Release DX12;$(ProjectDir)..\..\..\darkness-engine\external\zstd\bin\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\bzip2-1.0.6\bin\x64\Debug;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\bin;$(ProjectDir)..\..\..\darkness-engine\external\amd-tootle\lib;$(ProjectDir)..\..\..\darkness-engine\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\x64\Release;$(ProjectDir)..\..\..\darkness-engine\external\winpixeventruntime\bin;$(ProjectDir)..\..\..\darkness-engine\external\gainput-master\build\x64\Release;$(ProjectDir)..\..\..\darkness-engine\external\libzmq\bin\x64\Release\v141\static;$(ProjectDir)..\..\..\darkness-engine\external\protobuf-3.5.1\cmake\build\release</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Iphlpapi.lib;libzmq.lib;libprotobuf.lib;Ws2_32.lib;Xinput.lib;gainputstatic.lib;Ws2_32.lib;WinPixEventRuntime.lib;DarknessShared.lib;DarknessEngine.lib;bzip2.lib;zstdlib_x64.lib;d3d12.lib;d3dcompiler.lib;dxgi.lib;dxguid.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;BulletDynamics_vs2010_x64_release.lib;BulletCollision_vs2010_x64_release.lib;LinearMath_vs2010_x64_release.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">
@@ -300,16 +307,17 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\..\darkness-engine\external\glm;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\src</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>ZMQ_STATIC;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\darkness-engine;$(ProjectDir)..\..\..\darkness-engine\include;$(ProjectDir)..\..\..\darkness-engine\external\protobuf-3.5.1\src;$(ProjectDir)..\..\..\darkness-engine\external\libzmq\include;$(ProjectDir)..\..\..\darkness-engine\external\glm;$(ProjectDir)..\..\..\darkness-engine\external\rapidjson\include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\src</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4018;4146;4244;4251;4267;4305;4355;4800;4996;4505</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\darkness-engine\bin\$(Platform)\$(Configuration);C:\Program Files (x86)\Windows Kits\10\Lib\10.0.10586.0\um\x64;C:\VulkanSDK\1.0.61.1\Bin;$(ProjectDir)..\..\..\darkness-engine\external\zstd\bin\x64\Release;$(ProjectDir)..\..\..\darkness-engine\external\bzip2-1.0.6\bin\x64\Release;$(ProjectDir)..\..\..\darkness-shared\bin\x64\Release;$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\bin;$(ProjectDir)..\..\..\darkness-engine\external\amd-tootle\lib;$(ProjectDir)..\..\..\darkness-engine\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\x64\Release</AdditionalLibraryDirectories>
-      <AdditionalDependencies>DarknessShared.lib;vulkan-1.lib;DarknessEngine.lib;bzip2.lib;zstdlib_x64.lib;d3d12.lib;dxgi.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;BulletDynamics_vs2010_x64_release.lib;BulletCollision_vs2010_x64_release.lib;LinearMath_vs2010_x64_release.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\darkness-engine\bin\$(Platform)\$(Configuration);C:\Program Files (x86)\Windows Kits\10\Lib\10.0.10586.0\um\x64;C:\VulkanSDK\1.0.61.1\Lib;$(ProjectDir)..\..\..\darkness-engine\external\zstd\bin\x64\Release;$(ProjectDir)..\..\..\darkness-engine\external\bzip2-1.0.6\bin\x64\Release;$(ProjectDir)..\..\..\darkness-shared\bin\$(Platform)\$(Configuration);$(ProjectDir)..\..\..\darkness-engine\external\bullet3-2.86.1\bin;$(ProjectDir)..\..\..\darkness-engine\external\amd-tootle\lib;$(ProjectDir)..\..\..\darkness-engine\external\DirectXMesh\DirectXMesh\Bin\Desktop_2015_Win10\x64\Release;$(ProjectDir)..\..\..\darkness-engine\external\gainput-master\build\x64\Release;$(ProjectDir)..\..\..\darkness-engine\external\libzmq\bin\x64\Release\v141\static;$(ProjectDir)..\..\..\darkness-engine\external\protobuf-3.5.1\cmake\build\release</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Iphlpapi.lib;libzmq.lib;libprotobuf.lib;Ws2_32.lib;Xinput.lib;gainputstatic.lib;Ws2_32.lib;DarknessShared.lib;vulkan-1.lib;DarknessEngine.lib;bzip2.lib;zstdlib_x64.lib;d3d12.lib;dxgi.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;BulletDynamics_vs2010_x64_release.lib;BulletCollision_vs2010_x64_release.lib;LinearMath_vs2010_x64_release.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

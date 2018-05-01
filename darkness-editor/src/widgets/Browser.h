@@ -150,8 +150,8 @@ private slots:
     void onDirectoryLoaded(const QString &path);
     
 signals:
-    void processDroppedItem(
-        const QString& sourceFilePath, 
+    void processDroppedItems(
+        const QList<QString>& sourceFilePath, 
         const QString& targetPath,
         const engine::Vector3f& scale,
         const engine::Quaternionf& rotation,

@@ -6,6 +6,8 @@
 
 #include "tools/Debug.h"
 
+#include <inttypes.h>
+
 using namespace tools;
 
 namespace engine
@@ -15,7 +17,7 @@ namespace engine
         D3D12_HEAP_PROPERTIES getHeapPropertiesFromUsage(ResourceUsage usage)
         {
             D3D12_HEAP_PROPERTIES heapProperties{ D3D12_HEAP_TYPE_DEFAULT };
-            if (usage == ResourceUsage::CpuToGpu)
+            if (usage == ResourceUsage::Upload)
             {
                 heapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;
             }
@@ -33,7 +35,7 @@ namespace engine
         ResourceState getResourceStateFromUsage(ResourceUsage usage)
         {
             ResourceState resState;
-            if (usage == ResourceUsage::CpuToGpu)
+            if (usage == ResourceUsage::Upload)
             {
                 resState = ResourceState::GenericRead;
             }
@@ -68,7 +70,7 @@ namespace engine
         {
             switch (usage)
             {
-            case ResourceUsage::CpuToGpu: return D3D12_RESOURCE_FLAG_NONE;
+            case ResourceUsage::Upload: return D3D12_RESOURCE_FLAG_NONE;
             case ResourceUsage::DepthStencil: return D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
             case ResourceUsage::GpuRead: return D3D12_RESOURCE_FLAG_NONE;
             case ResourceUsage::GpuReadWrite: return D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
@@ -79,12 +81,53 @@ namespace engine
             return D3D12_RESOURCE_FLAG_NONE;
         }
 
+        static uint64_t debugResourceAllocation = 0;
+        static uint64_t debugBufferAllocation = 0;
+        static uint64_t debugTextureAllocation = 0;
+        uint64_t bytesToMB(uint64_t bytes) { return bytes / 1024u / 1024u; }
+        uint64_t bytesToKB(uint64_t bytes) { return bytes / 1024u; }
+
+        void debugMemory(const char* name, uint64_t newBytes, bool buffer)
+        {
+            debugResourceAllocation += newBytes;
+            if (buffer)
+                debugBufferAllocation += newBytes;
+            else
+                debugTextureAllocation += newBytes;
+
+            if(newBytes > 1024u * 1024u)
+                LOG_WARNING("[RESOURCES: %" PRIu64 " MB, BUFFERS: %" PRIu64 " MB, TEXTURES: %" PRIu64 " MB] new allocation: %" PRIu64 " MB, %s",
+                    bytesToMB(debugResourceAllocation),
+                    bytesToMB(debugBufferAllocation),
+                    bytesToMB(debugTextureAllocation),
+                    bytesToMB(newBytes),
+                    name);
+            else if(newBytes > 1024u)
+                LOG_WARNING("[RESOURCES: %" PRIu64 " MB, BUFFERS: %" PRIu64 " MB, TEXTURES: %" PRIu64 " MB] new allocation: %" PRIu64 " KB, %s",
+                    bytesToMB(debugResourceAllocation),
+                    bytesToMB(debugBufferAllocation),
+                    bytesToMB(debugTextureAllocation),
+                    bytesToKB(newBytes),
+                    name);
+            else
+                LOG_WARNING("[RESOURCES: %" PRIu64 " MB, BUFFERS: %" PRIu64 " MB, TEXTURES: %" PRIu64 " MB] new allocation: %" PRIu64 " Bytes, %s",
+                    bytesToMB(debugResourceAllocation),
+                    bytesToMB(debugBufferAllocation),
+                    bytesToMB(debugTextureAllocation),
+                    newBytes,
+                    name);
+        }
+
         BufferImpl::BufferImpl(const DeviceImpl& device, const BufferDescription& desc)
             : m_description(desc.descriptor)
-            , m_bufferSize{ static_cast<size_t>(m_description.elements * m_description.elementSize) }
             , m_state{ ResourceState::Common }
             //, m_state{ getResourceStateFromUsage(m_description.usage) }
         {
+            auto elementSize = m_description.elementSize == -1 ? formatBytes(m_description.format) : m_description.elementSize;
+            m_bufferSize = m_description.elements * elementSize;
+
+            debugMemory(m_description.name, m_bufferSize, true);
+
             ASSERT(m_description.name);
             D3D12_RESOURCE_DESC res = {};
             res.Alignment = D3D12_DEFAULT_RESOURCE_PLACEMENT_ALIGNMENT;
@@ -98,9 +141,9 @@ namespace engine
             res.SampleDesc.Count = 1;
             res.SampleDesc.Quality = 0;
             if(m_description.append)
-                res.Width = roundUpToMultiple(m_description.elements * m_description.elementSize, D3D12_UAV_COUNTER_PLACEMENT_ALIGNMENT) + sizeof(uint32_t);
+                res.Width = roundUpToMultiple(m_bufferSize, D3D12_UAV_COUNTER_PLACEMENT_ALIGNMENT) + sizeof(uint32_t);
             else
-                res.Width = m_description.elements * m_description.elementSize;
+                res.Width = m_bufferSize;
 
             D3D12_HEAP_PROPERTIES heapProperties = getHeapPropertiesFromUsage(m_description.usage);
             
@@ -114,8 +157,6 @@ namespace engine
             }
             
             D3D12_RESOURCE_STATES resState = dxResourceStates(m_state);
-
-            
 
             auto success = device.device()->CreateCommittedResource(
                 &heapProperties, 
@@ -143,19 +184,19 @@ namespace engine
             m_buffer->SetName(resourceName);
 #endif
 
-            if (desc.initialData)
+            /*if (desc.initialData)
             {
                 void* data;
                 auto mapres = m_buffer->Map(0, nullptr, &data);
                 ASSERT(SUCCEEDED(mapres));
                 memcpy(data, desc.initialData.data.data(), desc.initialData.data.size());
                 m_buffer->Unmap(0, nullptr);
-            }
+            }*/
         }
 
         void* BufferImpl::map(const DeviceImpl& /*device*/)
         {
-            void* data;
+            void* data = nullptr;
             D3D12_RANGE range;
             range.Begin = 0;
             range.End = m_bufferSize;
@@ -243,6 +284,11 @@ namespace engine
             return m_buffer;
         }
 
+        uint32_t BufferUAVImpl::structureCounterOffsetBytes() const
+        {
+            return roundUpToMultiple(m_description.elements * m_description.elementSize, D3D12_UAV_COUNTER_PLACEMENT_ALIGNMENT);
+        }
+
         BufferUAVImpl::BufferUAVImpl(
             const DeviceImpl& device,
             const Buffer& buffer,
@@ -251,8 +297,12 @@ namespace engine
             , m_viewHandle{ device.heaps().cbv_srv_uav->getDescriptor() }
             , m_buffer{ buffer }
         {
-            auto elements = m_description.elements != -1 ? m_description.elements : buffer.description().descriptor.elements;
-            auto elementSize = m_description.elementSize != -1 ? m_description.elementSize : buffer.description().descriptor.elementSize;
+            m_description.elements = m_description.elements != -1 ? m_description.elements : buffer.description().descriptor.elements;
+            m_description.elementSize = m_description.elementSize != -1 ? m_description.elementSize : static_cast<int32_t>(formatBytes(m_description.format));
+            if (m_description.elementSize == -1)
+                m_description.elementSize = buffer.description().descriptor.elementSize;
+            if (m_description.elementSize == -1)
+                m_description.elementSize = static_cast<int32_t>(formatBytes(buffer.description().descriptor.format));
 
             /*if (m_description.append)
             {
@@ -287,10 +337,13 @@ namespace engine
             viewdesc.Format = dxFormat(m_description.format);
             viewdesc.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;
             viewdesc.Buffer.FirstElement = m_description.firstElement;
-            viewdesc.Buffer.NumElements = static_cast<UINT>(elements);
-            viewdesc.Buffer.StructureByteStride = static_cast<UINT>(elementSize);
-            if(m_description.append)
-                viewdesc.Buffer.CounterOffsetInBytes = roundUpToMultiple(m_description.elements * m_description.elementSize, D3D12_UAV_COUNTER_PLACEMENT_ALIGNMENT);
+            viewdesc.Buffer.NumElements = static_cast<UINT>(m_description.elements);
+            viewdesc.Buffer.StructureByteStride = (m_description.structured || m_description.append) ? static_cast<UINT>(m_description.elementSize) : 0;
+            if (m_description.append)
+            {
+                viewdesc.Buffer.CounterOffsetInBytes = structureCounterOffsetBytes();
+                viewdesc.Format = DXGI_FORMAT_UNKNOWN;
+            }
             else
                 viewdesc.Buffer.CounterOffsetInBytes = 0;
             viewdesc.Buffer.Flags = D3D12_BUFFER_UAV_FLAG_NONE;
@@ -303,7 +356,7 @@ namespace engine
                 m_viewHandle.cpuHandle());
         }
 
-        void BufferUAVImpl::setCounterValue(uint32_t value)
+        /*void BufferUAVImpl::setCounterValue(uint32_t value)
         {
             uint8_t* counterData = nullptr;
             D3D12_RANGE counterRange = { 
@@ -312,12 +365,6 @@ namespace engine
             BufferImplGet::impl(m_buffer)->native()->Map(0, &counterRange, reinterpret_cast<void**>(&counterData));
             memcpy(counterData, &value, sizeof(uint32_t));
             BufferImplGet::impl(m_buffer)->native()->Unmap(0, nullptr);
-
-            /*uint8_t* counterData = nullptr;
-            D3D12_RANGE counterRange = { 0, 0 };
-            m_counterBuffer->Map(0, &counterRange, reinterpret_cast<void**>(&counterData));
-            memcpy(counterData, &value, sizeof(uint32_t));
-            m_counterBuffer->Unmap(0, nullptr);*/
         }
 
         uint32_t BufferUAVImpl::getCounterValue()
@@ -331,15 +378,7 @@ namespace engine
             memcpy(&res, counterData, sizeof(uint32_t));
             BufferImplGet::impl(m_buffer)->native()->Unmap(0, nullptr);
             return res;
-
-            /*uint32_t res = 0;
-            uint8_t* counterData = nullptr;
-            D3D12_RANGE counterRange = { 0, 0 };
-            m_counterBuffer->Map(0, &counterRange, reinterpret_cast<void**>(&counterData));
-            memcpy(&res, counterData, sizeof(uint32_t));
-            m_counterBuffer->Unmap(0, nullptr);
-            return res;*/
-        }
+        }*/
 
         const BufferDescription::Descriptor& BufferUAVImpl::description() const
         {
@@ -552,18 +591,27 @@ namespace engine
             const DeviceImpl& device,
             const TextureDescription& desc)
             : m_description(desc.descriptor)
-            , m_state{ ResourceState::Common }
-            //, m_state{ getResourceStateFromUsage(m_description.usage) }
         {
+            for (int slice = 0; slice < static_cast<int>(m_description.arraySlices); ++slice)
+            {
+                for (int mip = 0; mip < static_cast<int>(m_description.mipLevels); ++mip)
+                {
+                    m_state.emplace_back(ResourceState::Common);
+                }
+            }
+
+            auto bytesAllocated = imageBytes(m_description.format, m_description.width, m_description.height, m_description.arraySlices, m_description.mipLevels);
+            debugMemory(m_description.name, bytesAllocated, false);
+
             ASSERT(m_description.name);
             D3D12_RESOURCE_DESC res = {};
             res.Alignment = D3D12_DEFAULT_RESOURCE_PLACEMENT_ALIGNMENT;
             res.DepthOrArraySize = static_cast<UINT16>(m_description.arraySlices);
             res.Dimension = dxResourceDimension(m_description.dimension);
             res.Flags = flagsFromUsage(desc.descriptor.usage);
-            res.Format = dxFormat(m_description.format);
+            res.Format = dxTypelessFormat(m_description.format);
             
-            if (m_description.format == Format::Format_D32_FLOAT)
+            if (m_description.format == Format::D32_FLOAT)
                 res.Format = DXGI_FORMAT_R32_TYPELESS;
 
             if ((m_description.usage == ResourceUsage::GpuRead) ||
@@ -597,7 +645,7 @@ namespace engine
             heapProperties.CreationNodeMask = 0;
             heapProperties.VisibleNodeMask = 0;
 
-            D3D12_RESOURCE_STATES resState = dxResourceStates(m_state);
+            D3D12_RESOURCE_STATES resState = dxResourceStates(ResourceState::Common);
 
             D3D12_CLEAR_VALUE clearValue = {};
             if ((m_description.usage == ResourceUsage::GpuRenderTargetRead) ||
@@ -615,9 +663,9 @@ namespace engine
             }
             clearValue.Format = dxFormat(m_description.format);
 
-            bool setClearValue = !((res.Dimension != D3D12_RESOURCE_DIMENSION_BUFFER) &&
-                ((res.Flags & D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET) == 0) &&
-                ((res.Flags & D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL) == 0));
+            bool setClearValue =
+                ((res.Flags & D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET) == D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET) ||
+                ((res.Flags & D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL) == D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
 
             auto success = device.device()->CreateCommittedResource(
                 &heapProperties,
@@ -698,14 +746,14 @@ namespace engine
             return m_texture.Get();
         }
 
-        ResourceState TextureImpl::state() const
+        ResourceState TextureImpl::state(int slice, int mip) const
         {
-            return m_state;
+            return m_state[mip + (slice * m_description.mipLevels)];
         }
 
-        void TextureImpl::state(ResourceState _state)
+        void TextureImpl::state(int slice, int mip, ResourceState _state)
         {
-            m_state = _state;
+            m_state[mip + (slice * m_description.mipLevels)] = _state;
         }
 
         TextureSRVImpl::TextureSRVImpl(
@@ -716,6 +764,7 @@ namespace engine
             : m_description(desc.descriptor)
             , m_viewHandle{ device.heaps().cbv_srv_uav->getDescriptor() }
             , m_texture{ texture }
+            , m_subResources{ subResources }
         {
             D3D12_SHADER_RESOURCE_VIEW_DESC viewdesc;
             viewdesc.Format = dxFormat(m_description.format);
@@ -811,6 +860,26 @@ namespace engine
             return m_texture;
         }
 
+        Format TextureSRVImpl::format() const
+        {
+            return m_description.format;
+        }
+
+        uint32_t TextureSRVImpl::width() const
+        {
+            return m_description.width;
+        }
+
+        uint32_t TextureSRVImpl::height() const
+        {
+            return m_description.height;
+        }
+
+        uint32_t TextureSRVImpl::depth() const
+        {
+            return m_description.depth;
+        }
+
         D3D12_CPU_DESCRIPTOR_HANDLE& TextureSRVImpl::native()
         {
             return m_viewHandle.cpuHandle();
@@ -821,6 +890,11 @@ namespace engine
             return m_viewHandle.cpuHandle();
         }
 
+        const SubResource& TextureSRVImpl::subResource() const
+        {
+            return m_subResources;
+        }
+
         TextureUAVImpl::TextureUAVImpl(
             const DeviceImpl& device,
             const Texture& texture,
@@ -829,6 +903,7 @@ namespace engine
             : m_description(desc.descriptor)
             , m_viewHandle{ device.heaps().cbv_srv_uav->getDescriptor() }
             , m_texture{ texture }
+            , m_subResources{ subResources }
         {
             if (m_description.append)
             {
@@ -860,7 +935,7 @@ namespace engine
 
                 ASSERT(SUCCEEDED(success));
 
-                setCounterValue(0);
+                //setCounterValue(0);
             }
 
             D3D12_UNORDERED_ACCESS_VIEW_DESC viewdesc;
@@ -919,7 +994,7 @@ namespace engine
             return m_description;
         }
 
-        void TextureUAVImpl::setCounterValue(uint32_t value)
+        /*void TextureUAVImpl::setCounterValue(uint32_t value)
         {
             uint8_t* counterData = nullptr;
             D3D12_RANGE counterRange = { 0, 0 };
@@ -937,7 +1012,7 @@ namespace engine
             memcpy(&res, counterData, sizeof(uint32_t));
             m_counterBuffer->Unmap(0, nullptr);
             return res;
-        }
+        }*/
 
         Texture& TextureUAVImpl::texture()
         {
@@ -947,6 +1022,26 @@ namespace engine
         const Texture& TextureUAVImpl::texture() const
         {
             return m_texture;
+        }
+
+        Format TextureUAVImpl::format() const
+        {
+            return m_description.format;
+        }
+
+        uint32_t TextureUAVImpl::width() const
+        {
+            return m_description.width;
+        }
+
+        uint32_t TextureUAVImpl::height() const
+        {
+            return m_description.height;
+        }
+
+        uint32_t TextureUAVImpl::depth() const
+        {
+            return m_description.depth;
         }
 
         D3D12_CPU_DESCRIPTOR_HANDLE& TextureUAVImpl::native()
@@ -959,6 +1054,11 @@ namespace engine
             return m_viewHandle.cpuHandle();
         }
 
+        const SubResource& TextureUAVImpl::subResource() const
+        {
+            return m_subResources;
+        }
+
         TextureDSVImpl::TextureDSVImpl(
             const DeviceImpl& device,
             const Texture& texture,
@@ -967,6 +1067,7 @@ namespace engine
             : m_description(desc.descriptor)
             , m_viewHandle{ device.heaps().dsv->getDescriptor() }
             , m_texture{ texture }
+            , m_subResources{ subResources }
         {
             D3D12_DEPTH_STENCIL_VIEW_DESC viewdesc;
             viewdesc.Format = dxFormat(m_description.format);
@@ -1024,6 +1125,21 @@ namespace engine
             return m_texture;
         }
 
+        Format TextureDSVImpl::format() const
+        {
+            return m_description.format;
+        }
+
+        uint32_t TextureDSVImpl::width() const
+        {
+            return m_description.width;
+        }
+
+        uint32_t TextureDSVImpl::height() const
+        {
+            return m_description.height;
+        }
+
         D3D12_CPU_DESCRIPTOR_HANDLE& TextureDSVImpl::native()
         {
             return m_viewHandle.cpuHandle();
@@ -1034,6 +1150,11 @@ namespace engine
             return m_viewHandle.cpuHandle();
         }
 
+        const SubResource& TextureDSVImpl::subResource() const
+        {
+            return m_subResources;
+        }
+
         TextureRTVImpl::TextureRTVImpl(
             const DeviceImpl& device,
             const Texture& texture,
@@ -1042,9 +1163,20 @@ namespace engine
             : m_description(desc.descriptor)
             , m_viewHandle{ device.heaps().rtv->getDescriptor() }
             , m_texture{ texture }
+            , m_subResources{ subResources }
         {
             D3D12_RENDER_TARGET_VIEW_DESC viewdesc;
             viewdesc.Format = dxFormat(m_description.format);
+
+            m_description.width >>= subResources.firstMipLevel;
+            m_description.height >>= subResources.firstMipLevel;
+            if (m_description.width < 1)
+                m_description.width = 1;
+            if (m_description.height < 1)
+                m_description.height = 1;
+
+            if(subResources.mipCount != AllMipLevels)
+                m_description.mipLevels = subResources.mipCount;
 
             switch (m_description.dimension)
             {
@@ -1086,6 +1218,15 @@ namespace engine
                 viewdesc.Texture3D.WSize = static_cast<UINT>(subResources.arraySliceCount != AllArraySlices ? subResources.arraySliceCount : texture.arraySlices());
                 break;
             }
+            case ResourceDimension::TextureCubemap:
+            {
+                viewdesc.ViewDimension = m_description.samples > 1 ? D3D12_RTV_DIMENSION_TEXTURE2DMSARRAY : D3D12_RTV_DIMENSION_TEXTURE2DARRAY;
+                viewdesc.Texture2DArray.MipSlice = static_cast<UINT>(subResources.firstMipLevel);
+                viewdesc.Texture2DArray.ArraySize = static_cast<UINT>(subResources.arraySliceCount != AllArraySlices ? subResources.arraySliceCount : texture.arraySlices());
+                viewdesc.Texture2DArray.FirstArraySlice = static_cast<UINT>(subResources.firstArraySlice);
+                viewdesc.Texture2DArray.PlaneSlice = 0;
+                break;
+            }
             }
 
             auto tex = TextureImplGet::impl(texture)->native();
@@ -1113,6 +1254,21 @@ namespace engine
             return m_texture;
         }
 
+        Format TextureRTVImpl::format() const
+        {
+            return m_description.format;
+        }
+
+        uint32_t TextureRTVImpl::width() const
+        {
+            return m_description.width;
+        }
+
+        uint32_t TextureRTVImpl::height() const
+        {
+            return m_description.height;
+        }
+
         D3D12_CPU_DESCRIPTOR_HANDLE& TextureRTVImpl::native()
         {
             return m_viewHandle.cpuHandle();
@@ -1121,6 +1277,11 @@ namespace engine
         const D3D12_CPU_DESCRIPTOR_HANDLE& TextureRTVImpl::native() const
         {
             return m_viewHandle.cpuHandle();
+        }
+
+        const SubResource& TextureRTVImpl::subResource() const
+        {
+            return m_subResources;
         }
     }
 }

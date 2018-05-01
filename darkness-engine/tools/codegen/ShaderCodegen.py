@@ -44,7 +44,8 @@ def main():
 			options.output,
 			options.stage,
 			options.binarylocation,
-			options.support_path)
+			options.support_path,
+			options.input)
 
 if __name__ == "__main__":
 	main()

@@ -12,21 +12,21 @@ class TestImage : public ::testing::Test
 {
 };
 
-TEST(TestImage, WriteAndReadImage)
+TEST(TestImage, DISABLED_WriteAndReadImage)
 {
     const string filename = "ImageTest.dds";
 
-	auto bytes = engine::imageBytes(engine::Format::Format_BC7_UNORM, 1024, 1024, 1, 1);
+    auto bytes = engine::imageBytes(engine::Format::BC7_UNORM, 1024, 1024, 1, 1);
 
     {
-        auto image = engine::image::Image::createImage(filename, engine::Format::Format_BC7_UNORM, 1024, 1024);
+        auto image = engine::image::Image::createImage(filename, engine::image::ImageType::DDS, engine::Format::BC7_UNORM, 1024, 1024);
         EXPECT_EQ(image->width(), 1024);
         EXPECT_EQ(image->height(), 1024);
         image->save(reinterpret_cast<char*>(generateTestData<unsigned char>(bytes).data()), bytes * sizeof(unsigned char));
     }
 
     {
-        auto image = engine::image::Image::createImage(filename);
+        auto image = engine::image::Image::createImage(filename, engine::image::ImageType::DDS);
         EXPECT_EQ(image->width(), 1024);
         EXPECT_EQ(image->height(), 1024);
         EXPECT_EQ(image->bytes(), bytes * sizeof(unsigned char));

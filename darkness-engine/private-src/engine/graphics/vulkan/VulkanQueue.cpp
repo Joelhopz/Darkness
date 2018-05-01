@@ -84,6 +84,10 @@ namespace engine
 
         void QueueImpl::submit(const CommandList& commandList, Fence& fence)
         {
+            vkCmdEndRenderPass(CommandListImplGet::impl(commandList).native());
+            auto res = vkEndCommandBuffer(CommandListImplGet::impl(commandList).native());
+            ASSERT(res == VK_SUCCESS);
+
             VkPipelineStageFlags m_waitStages[1];
             m_waitStages[0] = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
 
@@ -115,6 +119,10 @@ namespace engine
 
         void QueueImpl::submit(const CommandList& commandList, Semaphore& semaphore)
         {
+            vkCmdEndRenderPass(CommandListImplGet::impl(commandList).native());
+            auto res = vkEndCommandBuffer(CommandListImplGet::impl(commandList).native());
+            ASSERT(res == VK_SUCCESS);
+
             VkPipelineStageFlags m_waitStages[1];
             m_waitStages[0] = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
 

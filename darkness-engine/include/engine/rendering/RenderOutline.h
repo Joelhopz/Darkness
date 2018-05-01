@@ -7,7 +7,9 @@
 #include "components/LightComponent.h"
 #include "components/Camera.h"
 #include "shaders/core/outline/Outline.h"
+#include "shaders/core/outline/CreateOutlineIndirectIndexedDrawArgs.h"
 #include "engine/graphics/ShaderStorage.h"
+#include "engine/graphics/Sampler.h"
 #include "engine/Scene.h"
 #include "engine/rendering/LightData.h"
 #include <memory>
@@ -15,6 +17,7 @@
 
 namespace engine
 {
+    class ModelResources;
     class RenderOutline
     {
     public:
@@ -26,8 +29,9 @@ namespace engine
         void render(
             Device& device,
             TextureRTV& currentRenderTarget,
-            TextureDSV& depthBuffer,
+            TextureSRV& depthBuffer,
             Camera& camera,
+            ModelResources& modelResources,
             CommandList& cmd,
             FlatSceneNode& model
         );
@@ -36,13 +40,10 @@ namespace engine
         Device& m_device;
         ShaderStorage& m_shaderStorage;
         engine::Pipeline<shaders::Outline> m_outlinePipeline;
+        engine::Pipeline<shaders::CreateOutlineIndirectIndexedDrawArgs> m_createOutlineIndirectIndexedDrawArgs;
         Vector2<int> m_virtualResolution;
-
-        unsigned int m_adjacencyId;
-        std::vector<BufferIBV> m_adjacencyBuffers;
-        void rebuildAdjacencyData(FlatSceneNode& model);
-
-        void clearSaves();
-        std::vector<std::pair<uint64_t, std::vector<BufferIBV>>> m_adjacencySave;
+        Sampler m_depthSampler;
+        Buffer m_indexedDrawArguments;
+        BufferUAV m_indexedDrawArgumentsUAV;
     };
 }

@@ -1,4 +1,5 @@
 #include "Hierarchy.h"
+#include "../Tools.h"
 
 #include <QDebug>
 #include <QFileInfo>
@@ -10,8 +11,81 @@
 #include <QProcess>
 #include <QDropEvent>
 #include <QMimeData> 
+#include <QApplication>
 
 using namespace std;
+
+void HierarchyTreeView::keyPressEvent(QKeyEvent* keyEvent)
+{
+    if (hasFocus())
+    {
+        auto engineKey = qtKeyToEngineKey(static_cast<Qt::Key>(keyEvent->key()));
+
+        if (engineKey == engine::Key::Unknown)
+        {
+            auto nativeMods = interpretKeyEvent(keyEvent);
+
+            if ((nativeMods & VK_LSHIFT) == VK_LSHIFT)
+                m_modState[engine::KeyModifier::ShiftLeft] = true;
+
+            if ((nativeMods & VK_RSHIFT) == VK_RSHIFT)
+                m_modState[engine::KeyModifier::ShiftRight] = true;
+
+            if ((nativeMods & VK_LMENU) == VK_LMENU)
+                m_modState[engine::KeyModifier::AltLeft] = true;
+
+            if ((nativeMods & VK_RMENU) == VK_RMENU)
+                m_modState[engine::KeyModifier::AltRight] = true;
+
+            if ((nativeMods & VK_LCONTROL) == VK_LCONTROL)
+                m_modState[engine::KeyModifier::CtrlLeft] = true;
+
+            if ((nativeMods & VK_RCONTROL) == VK_RCONTROL)
+                m_modState[engine::KeyModifier::CtrlRight] = true;
+        }
+
+
+        if (keyEvent->key() == Qt::Key::Key_Delete)
+            emit deleteSelected();
+
+        if ((m_modState[engine::KeyModifier::ShiftLeft] || m_modState[engine::KeyModifier::ShiftRight]) 
+            && (engineKey == engine::Key::D))
+        {
+            emit duplicateSelected();
+        }
+    }
+}
+
+void HierarchyTreeView::keyReleaseEvent(QKeyEvent* keyEvent)
+{
+    if (!hasFocus())
+        return;
+
+    auto engineKey = qtKeyToEngineKey(static_cast<Qt::Key>(keyEvent->key()));
+
+    if (engineKey == engine::Key::Unknown)
+    {
+        auto nativeMods = interpretKeyEvent(keyEvent);
+
+        if ((nativeMods & VK_LSHIFT) == VK_LSHIFT)
+            m_modState[engine::KeyModifier::ShiftLeft] = false;
+
+        if ((nativeMods & VK_RSHIFT) == VK_RSHIFT)
+            m_modState[engine::KeyModifier::ShiftRight] = false;
+
+        if ((nativeMods & VK_LMENU) == VK_LMENU)
+            m_modState[engine::KeyModifier::AltLeft] = false;
+
+        if ((nativeMods & VK_RMENU) == VK_RMENU)
+            m_modState[engine::KeyModifier::AltRight] = false;
+
+        if ((nativeMods & VK_LCONTROL) == VK_LCONTROL)
+            m_modState[engine::KeyModifier::CtrlLeft] = false;
+
+        if ((nativeMods & VK_RCONTROL) == VK_RCONTROL)
+            m_modState[engine::KeyModifier::CtrlRight] = false;
+    }
+}
 
 Hierarchy::Hierarchy(
     const Settings& settings,
@@ -24,13 +98,14 @@ Hierarchy::Hierarchy(
     , m_contentPath{ settings.contentPathAbsolute() }
     , m_mainWindow{ mainWindow }
     , m_sceneModel{ std::make_unique<HierarchyTreeModel>(m_engine, settings.contentPathAbsolute(), settings.processedAssetsPathAbsolute()) }
-    , m_sceneView{ std::make_unique<QTreeView>(this) }
+    , m_sceneView{ std::make_unique<HierarchyTreeView>(this) }
 {
-    manager.addFolder("C:\\work\\darkness\\darkness-coreplugins\\bin\\x64\\Debug\\");
+    //manager.addFolder("C:\\work\\darkness\\darkness-coreplugins\\bin\\x64\\Debug\\");
 
     setWindowTitle("Hierarchy");
     setObjectName("Hierarchy");
     setWidget(m_sceneView.get());
+    setFocusPolicy(Qt::FocusPolicy::ClickFocus);
 
     m_sceneView->setModel(m_sceneModel.get());
     m_sceneView->setRootIsDecorated(true);
@@ -52,6 +127,14 @@ Hierarchy::Hierarchy(
     m_sceneView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(m_sceneView.get(), SIGNAL(customContextMenuRequested(const QPoint&)),
         this, SLOT(ShowContextMenu(const QPoint&)));
+
+    connect(
+        m_sceneView.get(), SIGNAL(deleteSelected()),
+        this, SLOT(deleteSelected()));
+
+    connect(
+        m_sceneView.get(), SIGNAL(duplicateSelected()),
+        this, SLOT(duplicateSelected()));
 
     QObject::connect(
         m_sceneView.get(), SIGNAL(expanded(const QModelIndex&)),
@@ -94,9 +177,10 @@ void Hierarchy::ShowContextMenu(const QPoint& point)
         myMenu.addAction("Copy");
         myMenu.addAction("Paste");
         myMenu.addSeparator();
-        myMenu.addAction("Rename");
         myMenu.addAction("Duplicate");
         myMenu.addAction("Delete");
+        myMenu.addSeparator();
+        myMenu.addAction("Group");
     }
     else if (index.isValid())
     {
@@ -124,6 +208,7 @@ void Hierarchy::ShowContextMenu(const QPoint& point)
         lights->addAction("Point Light");
         lights->addAction("Spot Light");
         myMenu.addAction("Camera");
+        myMenu.addAction("Probe");
     }
     else
     {
@@ -144,6 +229,7 @@ void Hierarchy::ShowContextMenu(const QPoint& point)
         lights->addAction("Point Light");
         lights->addAction("Spot Light");
         myMenu.addAction("Camera");
+        myMenu.addAction("Probe");
     }
     QAction* selectedItem = myMenu.exec(globalPos);
 
@@ -161,6 +247,18 @@ void Hierarchy::ShowContextMenu(const QPoint& point)
             //newNode->addComponent(manager.createType("Transform"));
 
             m_sceneModel->addNode(newNode);
+            m_sceneView->update(index);
+
+            nodeAdded = true;
+        }
+        else if (selectedItem->text().startsWith("Probe"))
+        {
+            newNode->name("Probe");
+            newNode->addComponent(std::make_shared<engine::Transform>());
+            m_sceneModel->addNode(newNode);
+            
+            newNode->addComponent(std::make_shared<engine::ProbeComponent>());
+
             m_sceneView->update(index);
 
             nodeAdded = true;
@@ -207,25 +305,128 @@ void Hierarchy::ShowContextMenu(const QPoint& point)
 
         if (selectedItem->text().startsWith("Delete"))
         {
+            std::vector<int64_t> toRemove;
             for (auto&& ind : selectedIndexes)
             {
-                auto sceneIndex = m_sceneModel->index(ind.row(), ind.column());
-                m_sceneModel->removeNode(index);
-                m_sceneView->update(index);
+                toRemove.emplace_back(reinterpret_cast<engine::SceneNode*>(ind.internalPointer())->id());
+            }
+            for (auto&& rm : toRemove)
+            {
+                auto node = m_engine.scene().find(rm);
+                auto mindex = m_sceneModel->node(node.get());
+                if (node->parent())
+                {
+                    m_sceneModel->startRemoveRows(m_sceneModel->node(node->parent()), mindex.row(), mindex.row());
+                }
+                m_sceneModel->removeNode(mindex);
+                if (node->parent())
+                {
+                    m_sceneModel->stopRemoveRows();
+                }
             }
         }
 
         if (selectedItem->text().startsWith("Duplicate"))
         {
-            m_sceneModel->beginModelReset();
+            std::vector<int64_t> toDuplicate;
             for (auto&& ind : selectedIndexes)
             {
-                auto sceneIndex = m_sceneModel->index(ind.row(), ind.column());
-                auto node = m_sceneModel->node(sceneIndex);
+                toDuplicate.emplace_back(reinterpret_cast<engine::SceneNode*>(ind.internalPointer())->id());
+            }
+            for (auto&& dup : toDuplicate)
+            {
+                auto node = m_engine.scene().find(dup);
+                auto mindex = m_sceneModel->node(node.get());
+                if (node->parent())
+                {
+                    m_sceneModel->startInsertRows(m_sceneModel->node(node->parent()), mindex.row(), mindex.row());
+                }
 
                 node->parent()->addChild(duplicate(node));
+
+                if (node->parent())
+                {
+                    m_sceneModel->stopInsertRows();
+                }
             }
-            m_sceneModel->endModelReset();
+        }
+
+        if (selectedItem->text().startsWith("Group"))
+        {
+            if (selectedIndexes.size() == 0)
+                return;
+            
+            // gather parents
+            std::vector<int64_t> parents;
+            for (auto&& ind : selectedIndexes)
+            {
+                auto node = m_engine.scene().find(reinterpret_cast<engine::SceneNode*>(ind.internalPointer())->id());
+                if (node->parent())
+                {
+                    parents.emplace_back(node->parent()->id());
+                }
+            }
+            
+            // find the parent with the highest hits
+            std::unordered_map<int64_t, int> hits;
+            for(auto&& parent : parents)
+            {
+                hits[parent]++;
+            }
+            int64_t currentId = (*hits.begin()).first;
+            int currentCount = (*hits.begin()).second;
+        
+            for (auto&& hit : hits)
+            {
+                if (hit.second > currentCount)
+                {
+                    currentId = hit.first;
+                    currentCount = hit.second;
+                }
+            }
+            
+            // get that parent and create a new node for it
+            auto masterParentNode = m_engine.scene().find(currentId);
+            
+            auto newNode = std::make_shared<engine::SceneNode>();
+            newNode->name("Group");
+            newNode->addComponent(std::make_shared<engine::Transform>());
+            masterParentNode->addChild(newNode);
+            
+            // grab all the selected nodes
+            std::vector<std::shared_ptr<engine::SceneNode>> nodes;
+            for (auto&& ind : selectedIndexes)
+            {
+                auto node = m_engine.scene().find(reinterpret_cast<engine::SceneNode*>(ind.internalPointer())->id());
+                nodes.emplace_back(node);
+            }
+            
+            // remove all selected from model
+            std::vector<int64_t> toRemove;
+            for (auto&& ind : selectedIndexes)
+            {
+                toRemove.emplace_back(reinterpret_cast<engine::SceneNode*>(ind.internalPointer())->id());
+            }
+            for (auto&& rm : toRemove)
+            {
+                auto node = m_engine.scene().find(rm);
+                auto mindex = m_sceneModel->node(node.get());
+                if (node->parent())
+                {
+                    m_sceneModel->startRemoveRows(m_sceneModel->node(node->parent()), mindex.row(), mindex.row());
+                }
+                m_sceneModel->removeNode(mindex);
+                if (node->parent())
+                {
+                    m_sceneModel->stopRemoveRows();
+                }
+            }
+            
+            // add the selected nodes back to the model under new parent
+            for (auto&& node : nodes)
+            {
+                newNode->addChild(node);
+            }
         }
 
         if (nodeAdded && index.isValid())
@@ -240,6 +441,56 @@ void Hierarchy::ShowContextMenu(const QPoint& point)
     else
     {
         qDebug() << "no selection";
+    }
+}
+
+void Hierarchy::deleteSelected()
+{
+    auto selectedIndexes = m_sceneView->selectionModel()->selectedIndexes();
+    std::vector<int64_t> toRemove;
+    for (auto&& ind : selectedIndexes)
+    {
+        toRemove.emplace_back(reinterpret_cast<engine::SceneNode*>(ind.internalPointer())->id());
+    }
+    for (auto&& rm : toRemove)
+    {
+        auto node = m_engine.scene().find(rm);
+        auto mindex = m_sceneModel->node(node.get());
+        if (node->parent())
+        {
+            m_sceneModel->startRemoveRows(m_sceneModel->node(node->parent()), mindex.row(), mindex.row());
+        }
+        m_sceneModel->removeNode(mindex);
+        if (node->parent())
+        {
+            m_sceneModel->stopRemoveRows();
+        }
+    }
+}
+
+void Hierarchy::duplicateSelected()
+{
+    auto selectedIndexes = m_sceneView->selectionModel()->selectedIndexes();
+    std::vector<int64_t> toDuplicate;
+    for (auto&& ind : selectedIndexes)
+    {
+        toDuplicate.emplace_back(reinterpret_cast<engine::SceneNode*>(ind.internalPointer())->id());
+    }
+    for (auto&& dup : toDuplicate)
+    {
+        auto node = m_engine.scene().find(dup);
+        auto mindex = m_sceneModel->node(node.get());
+        if (node->parent())
+        {
+            m_sceneModel->startInsertRows(m_sceneModel->node(node->parent()), mindex.row(), mindex.row());
+        }
+
+        node->parent()->addChild(duplicate(node));
+
+        if (node->parent())
+        {
+            m_sceneModel->stopInsertRows();
+        }
     }
 }
 
@@ -270,8 +521,33 @@ void Hierarchy::expanded(const QModelIndex &index)
     }
 }
 
+void Hierarchy::onNodeSelected(std::shared_ptr<engine::SceneNode> node)
+{
+    auto nodePath = m_engine.scene().path(node->id());
+    if (nodePath.size() > 0)
+    {
+        for (auto&& n : nodePath)
+        {
+            QModelIndex modelIndex = m_sceneModel->node(n.get());
+            if (modelIndex.isValid())
+            {
+                m_sceneView->expand(modelIndex);
+                QApplication::processEvents();
+            }
+        }
+
+        QModelIndex modelIndex = m_sceneModel->node(node.get());
+        auto selectionModel = m_sceneView->selectionModel();
+        selectionModel->select(modelIndex, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+        //m_sceneView->expand(modelIndex);
+        emit nodeSelected(node);
+    }
+}
+
 void Hierarchy::treeDirClicked(QModelIndex index)
 {
-    emit nodeSelected(m_sceneModel->node(index));
+    auto node = m_sceneModel->node(index);
+    emit nodeSelected(node);
+    m_engine.setSelected(node);
 }
 

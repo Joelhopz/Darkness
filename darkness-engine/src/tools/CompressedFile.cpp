@@ -66,7 +66,8 @@ CompressedFileIf* fileInstance(const string& filename, CompressionTypes defaultT
         return createDefault(defaultType);
 
 
-    if (magic[0] == zstdSignature[0] &&
+    if (magic.size() >= 4 &&
+        magic[0] == zstdSignature[0] &&
         magic[1] == zstdSignature[1] &&
         magic[2] == zstdSignature[2] &&
         magic[3] == zstdSignature[3])
@@ -74,9 +75,35 @@ CompressedFileIf* fileInstance(const string& filename, CompressionTypes defaultT
         return new CompressedFileZstd();
     }
     else if (
+        magic.size() >= 3 &&
         magic[0] == bzip2Signature[0] &&
         magic[1] == bzip2Signature[1] &&
         magic[2] == bzip2Signature[2])
+    {
+        return new CompressedFileBzip2();
+    }
+
+    return createDefault(defaultType);
+}
+
+CompressedFileIf* fileInstance(std::vector<char>& memory, CompressionTypes defaultType)
+{
+    if (memory.size() < 4)
+        return createDefault(defaultType);
+
+    if (memory.size() >= 4 &&
+        static_cast<unsigned char>(memory[0]) == zstdSignature[0] &&
+        static_cast<unsigned char>(memory[1]) == zstdSignature[1] &&
+        static_cast<unsigned char>(memory[2]) == zstdSignature[2] &&
+        static_cast<unsigned char>(memory[3]) == zstdSignature[3])
+    {
+        return new CompressedFileZstd();
+    }
+    else if (
+        memory.size() >= 3 &&
+        static_cast<unsigned char>(memory[0]) == bzip2Signature[0] &&
+        static_cast<unsigned char>(memory[1]) == bzip2Signature[1] &&
+        static_cast<unsigned char>(memory[2]) == bzip2Signature[2])
     {
         return new CompressedFileBzip2();
     }
@@ -93,11 +120,23 @@ void CompressedFile::open(const string& filename, int mode)
     open(filename, mode, CompressionTypes::Zstd);
 }
 
+void CompressedFile::open(std::vector<char>& memory, int mode)
+{
+    open(memory, mode, CompressionTypes::Zstd);
+}
+
 void CompressedFile::open(const string& filename, int mode, CompressionTypes type)
 {
     if (!m_impl)
         m_impl.reset(fileInstance(filename, type));
     m_impl->open(filename, mode);
+}
+
+void CompressedFile::open(std::vector<char>& memory, int mode, CompressionTypes type)
+{
+    if (!m_impl)
+        m_impl.reset(fileInstance(memory, type));
+    m_impl->open(memory, mode);
 }
 
 bool CompressedFile::is_open() const

@@ -21,7 +21,9 @@ public:
     virtual ~CompressedFile() {};
 
     void open(const std::string& filename, int mode) override;
+    void open(std::vector<char>& memory, int mode) override;
     void open(const std::string& filename, int mode, CompressionTypes type);
+    void open(std::vector<char>& memory, int mode, CompressionTypes type);
     bool is_open() const override;
 
     void read(char* buffer, std::streamsize count) override;

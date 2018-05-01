@@ -21,6 +21,8 @@ namespace engine
                 const Device& device, 
                 const std::string& binaryPath, 
                 const std::string& supportPath,
+                int permutationId,
+                const std::vector<std::string>& defines,
                 platform::FileWatcher& watcher);
             ~ShaderBinaryImpl();
 
@@ -33,9 +35,14 @@ namespace engine
             void unregisterForChange(void* client) const;
 
             D3D12_SHADER_BYTECODE& native() const;
+
+            // for debug
+            const std::string& supportPath() const { return m_shaderSupport.file; }
         private:
             std::unique_ptr<char[]> m_buffer;
             D3D12_SHADER_BYTECODE* m_shaderBinary;
+            int m_permutationId;
+            std::vector<std::string> m_defines;
             
             ShaderSupport m_shaderSupport;
             platform::WatchHandle m_watchHandle;

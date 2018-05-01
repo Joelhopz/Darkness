@@ -97,10 +97,10 @@ bool HierarchyTreeModel::dropMimeData(const QMimeData * data, Qt::DropAction act
                     assetFilePathUnderProcessed(
                         m_contentPath, m_processedPath,
                         url.toLocalFile()).toStdString(),
-					0
+                        0
                     ));
 
-				node->addComponent(std::make_shared<MaterialComponent>());
+                node->addComponent(std::make_shared<MaterialComponent>());
                 node->name(QFileInfo(url.toLocalFile()).fileName().toStdString());
                 parentNode->addChild(node);
 
@@ -160,6 +160,25 @@ std::shared_ptr<engine::SceneNode> HierarchyTreeModel::node(const QModelIndex& i
     return static_cast<SceneNode*>(index.internalPointer())->shared_from_this();
 }
 
+QModelIndex HierarchyTreeModel::node(engine::SceneNode* node)
+{
+    if (!node->parent())
+        return QModelIndex();
+
+    return createIndex(static_cast<int>(node->indexInParent()), 0, node);
+
+    /*auto rows = rowCount();
+    for (int i = 0; i < rows; ++i)
+    {
+        auto ind = index(i, 0);
+        SceneNode* item = static_cast<SceneNode*>(ind.internalPointer());
+        if (item->id() == node->id())
+            return ind;
+    }
+
+    return QModelIndex();*/
+}
+
 Qt::ItemFlags HierarchyTreeModel::flags(const QModelIndex &index) const
 {
     if (index.isValid())
@@ -202,9 +221,9 @@ QModelIndex HierarchyTreeModel::parent(const QModelIndex &index) const
         return QModelIndex();
 
     SceneNode* childItem = static_cast<SceneNode*>(index.internalPointer());
-    SceneNode* parentItem = childItem->parent().get();
+    SceneNode* parentItem = childItem->parent();
 
-    if (parentItem == m_engine.scene().root().get())
+    if (!parentItem || parentItem == m_engine.scene().root().get())
     {
         return QModelIndex();
     }
@@ -214,14 +233,14 @@ QModelIndex HierarchyTreeModel::parent(const QModelIndex &index) const
 
 void HierarchyTreeModel::removeNode(const QModelIndex& index)
 {
-	if (index.isValid())
-	{
-		beginResetModel();
-		SceneNode* childItem = static_cast<SceneNode*>(index.internalPointer());
-		SceneNode* parentItem = childItem->parent().get();
-		parentItem->removeChild(childItem->shared_from_this());
-		endResetModel();
-	}
+    if (index.isValid())
+    {
+        //beginResetModel();
+        SceneNode* childItem = static_cast<SceneNode*>(index.internalPointer());
+        SceneNode* parentItem = childItem->parent();
+        parentItem->removeChild(childItem->shared_from_this());
+        //endResetModel();
+    }
 }
 
 int HierarchyTreeModel::rowCount(const QModelIndex &parent) const

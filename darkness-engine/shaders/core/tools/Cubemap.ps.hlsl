@@ -1,4 +1,6 @@
 
+#include "../Common.hlsli"
+
 struct PSInput
 {
     float4 position         : SV_Position0;
@@ -13,9 +15,14 @@ sampler cubemapSampler;
 float4 main(PSInput input) : SV_Target
 {
     float3 N = normalize(input.pos.xyz);
-    N = float3(N.x, -N.y, N.z);
-    float4 cubeSample = cubemap.SampleLevel(cubemapSampler, N, 0);
-    float4 irradianceSample = irradiance.SampleLevel(cubemapSampler, N, 0);
-    float4 convolutionSample = convolution.SampleLevel(cubemapSampler, N, 0);
-    return float4(cubeSample.xyz, 1.0f);
+    N = float3(N.x, N.y, N.z);
+    float3 cubeSample = cubemap.SampleLevel(cubemapSampler, N, 0).xyz;
+    float3 irradianceSample = irradiance.SampleLevel(cubemapSampler, N, 0).xyz;
+    float3 convolutionSample = convolution.SampleLevel(cubemapSampler, N, 0).xyz;
+
+    float3 res = cubeSample * 1.0f;
+    res += irradianceSample * 0.00001f;
+    res += convolutionSample * 0.00001f;
+
+    return float4(res, 1.0f);
 }

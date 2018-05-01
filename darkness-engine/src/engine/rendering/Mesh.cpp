@@ -23,16 +23,16 @@ namespace engine
     {
     }
 
-    Mesh::Mesh(const string& filename)
+    Mesh::Mesh(ModelResources& modelResources, const string& filename)
         : m_filename{ filename }
     {
         if (getMeshVersion(filename) == SupportedMeshVersion)
         {
-            load();
+            load(modelResources);
         }
     }
 
-    void Mesh::load()
+    void Mesh::load(ModelResources& modelResources)
     {
         CompressedFile file;
         file.open(m_filename, ios::in | ios::binary);
@@ -44,9 +44,9 @@ namespace engine
             while (!file.eof())
             {
                 m_subMeshes.emplace_back(SubMesh());
-                if (!m_subMeshes[m_subMeshes.size() - 1].load(file))
+                if (!m_subMeshes.back().load(modelResources, file))
                 {
-                    m_subMeshes.erase(m_subMeshes.end() - 1);
+                    m_subMeshes.pop_back();
                 }
             }
 
@@ -58,6 +58,22 @@ namespace engine
     {
         CompressedFile file;
         file.open(m_filename, ios::out | ios::binary);
+        if (file.is_open())
+        {
+            file.write(reinterpret_cast<const char*>(&SupportedMeshVersion), sizeof(MeshVersion));
+            for (const auto& mesh : m_subMeshes)
+            {
+                mesh.save(file);
+            }
+
+            file.close();
+        }
+    }
+
+    void Mesh::saveToMemory(std::vector<char>& mem)
+    {
+        CompressedFile file;
+        file.open(mem, ios::out | ios::binary);
         if (file.is_open())
         {
             file.write(reinterpret_cast<const char*>(&SupportedMeshVersion), sizeof(MeshVersion));

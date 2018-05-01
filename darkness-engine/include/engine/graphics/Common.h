@@ -5,6 +5,7 @@
 #include "engine/primitives/Vector3.h"
 #include "engine/primitives/Vector4.h"
 #include "engine/primitives/Matrix4.h"
+#include "engine/primitives/BoundingBox.h"
 #include <vector>
 
 constexpr int BackBufferCount = 2;
@@ -76,6 +77,16 @@ namespace engine
 
         const Vector3f& a,
         const Vector3f& b,
+        ImU32 color,
+        float thickness);
+
+    void drawCube3d(
+        Camera& camera,
+        const std::vector<Vector4f>& frustumPlanes,
+        const Matrix4f& mvp,
+        ImDrawList* drawList,
+
+        const BoundingBox& box,
         ImU32 color,
         float thickness);
 

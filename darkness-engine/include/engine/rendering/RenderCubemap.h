@@ -30,20 +30,20 @@ namespace engine
 
         void createIrradianceCubemap(
             Device& device,
-            TextureSRV& diffuseEnvironmentMap
+            TextureSRV& diffuseEnvironmentMap,
+            CommandList& cmd
         );
 
         void prefilterConvolution(
             Device& device,
-            TextureSRV& diffuseEnvironmentMap
+            TextureSRV& diffuseEnvironmentMap,
+            CommandList& cmd
         );
 
-        void brdfConvolution(Device& device);
+        void brdfConvolution(CommandList& cmd);
 
         void render(
-            Device& device,
             TextureRTV& currentRenderTarget,
-            TextureDSV& depthBuffer,
             Camera& camera,
             CommandList& cmd
         );

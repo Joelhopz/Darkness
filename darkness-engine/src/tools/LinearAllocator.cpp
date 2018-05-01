@@ -16,11 +16,10 @@ namespace tools
 
     void* LinearAllocator::allocate(size_t bytes, size_t align)
     {
-        uintptr_t allocationPosition = roundUpToMultiple(
-            reinterpret_cast<uintptr_t>(const_cast<uint8_t*>(m_range.start)) + m_currentPosition, align);
+        uintptr_t allocationPosition = roundUpToMultiple(m_range.start + m_currentPosition, align);
         void* result = reinterpret_cast<void*>(allocationPosition);
-        m_currentPosition = allocationPosition + bytes - reinterpret_cast<uintptr_t>(const_cast<uint8_t*>(m_range.start));
-        ASSERT(m_currentPosition <= m_range.size(), "Ran out of memory from LinearAllocator");
+        m_currentPosition = allocationPosition + bytes - m_range.start;
+        ASSERT(m_currentPosition <= m_range.sizeBytes(), "Ran out of memory from LinearAllocator");
         return result;
     }
 
@@ -31,7 +30,6 @@ namespace tools
 
     size_t LinearAllocator::offset(void* ptr) const
     {
-        return static_cast<size_t>(reinterpret_cast<uintptr_t>(ptr) - 
-            reinterpret_cast<uintptr_t>(const_cast<uint8_t*>(m_range.start)));
+        return static_cast<size_t>(reinterpret_cast<uintptr_t>(ptr) - m_range.start);
     }
 }

@@ -89,8 +89,8 @@ MainWindow::MainWindow(const CustomSizeHintMap &customSizeHints, const QString& 
     
 
     QObject::connect(
-        m_browser.get(), SIGNAL(processDroppedItem(const QString&, const QString&, const engine::Vector3f&, const engine::Quaternionf&, const std::string&)),
-        m_assetImporter.get(), SLOT(processItem(const QString&, const QString&, const engine::Vector3f&, const engine::Quaternionf&, const std::string&))
+        m_browser.get(), SIGNAL(processDroppedItems(const QList<QString>&, const QString&, const engine::Vector3f&, const engine::Quaternionf&, const std::string&)),
+        m_assetImporter.get(), SLOT(processItems(const QList<QString>&, const QString&, const engine::Vector3f&, const engine::Quaternionf&, const std::string&))
     );
 
     QObject::connect(
@@ -103,10 +103,20 @@ MainWindow::MainWindow(const CustomSizeHintMap &customSizeHints, const QString& 
         m_inspector.get(), SLOT(nodeSelected(std::shared_ptr<engine::SceneNode>))
     );
 
-	QObject::connect(
-		m_browser.get(), SIGNAL(fileSelected(const QString&)),
-		m_inspector.get(), SLOT(fileSelected(const QString&))
-	);
+    QObject::connect(
+        m_engineWindow.get(), SIGNAL(nodeSelected(std::shared_ptr<engine::SceneNode>)),
+        m_hierarchy.get(), SLOT(onNodeSelected(std::shared_ptr<engine::SceneNode>))
+    );
+
+    QObject::connect(
+        m_engineWindow.get(), SIGNAL(deleteSelected()),
+        m_hierarchy.get(), SLOT(deleteSelected())
+    );
+
+    QObject::connect(
+        m_browser.get(), SIGNAL(fileSelected(const QString&)),
+        m_inspector.get(), SLOT(fileSelected(const QString&))
+    );
 
     //m_dockWidgets.push_back(new Hierarchy(m_settings, this, this));
 
@@ -165,7 +175,7 @@ void MainWindow::setupToolBar()
     setUnifiedTitleAndToolBarOnMac(true);
 #endif
 
-	auto transformToolbar = new TransformToolBar(this);
+    auto transformToolbar = new TransformToolBar(this);
     m_toolBars.append(transformToolbar);
     addToolBar(transformToolbar);
 
@@ -173,7 +183,7 @@ void MainWindow::setupToolBar()
     connect(transformToolbar, SIGNAL(onRotateClicked(bool)), this, SLOT(rotateClick(bool)));
     connect(transformToolbar, SIGNAL(onResizeClicked(bool)), this, SLOT(resizeClick(bool)));
 
-	connect(m_engineWindow.get(), SIGNAL(mouseGrabbed(bool)), transformToolbar, SLOT(toolbarDisabled(bool)));
+    connect(m_engineWindow.get(), SIGNAL(mouseGrabbed(bool)), transformToolbar, SLOT(toolbarDisabled(bool)));
 
     auto physicsToolbar = new PhysicsToolBar(this);
     m_toolBars.append(physicsToolbar);
@@ -312,10 +322,10 @@ void MainWindow::loadScene()
     if (fileName.isEmpty())
         return;
 
-	m_hierarchy->beginModelReset();
+    m_hierarchy->beginModelReset();
     m_engineWindow->engine().scene().loadFrom(fileName.toStdString());
     m_engineWindow->resetCameraSize();
-	m_hierarchy->endModelReset();
+    m_hierarchy->endModelReset();
 
     m_settings.lastLoadedScene(fileName);
 }

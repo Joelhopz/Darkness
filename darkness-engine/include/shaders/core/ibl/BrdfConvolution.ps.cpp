@@ -9,16 +9,229 @@ namespace engine
 {
     namespace shaders
     {
+#pragma warning( push )
+#pragma warning( disable : 4702 )
         std::shared_ptr<const ShaderBinary> BrdfConvolutionPS::load(const Device& device, ShaderStorage& storage) const
         {
-            return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/dx12/core/ibl/BrdfConvolution.ps.cso", "C:/work/darkness/darkness-engine/data/shaders/dx12/core/ibl/BrdfConvolution.ps.support");
+            
+            return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/ibl/BrdfConvolution.ps.spv", "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/ibl/BrdfConvolution.ps.support", -1, {});
+            
+            ASSERT(false, "Could not load the permutation necessary. This is a bug.");
+            return {};
         }
+#pragma warning( pop )
 
         BrdfConvolutionPS::BrdfConvolutionPS()
             : m_constantRange{
             
             }
+            , m_inputParameters
+            {
+            
+            ShaderInputParameter{"position", "SV_Position0", "float4"}
+            
+            ,
+            
+            
+            ShaderInputParameter{"uv", "TEXCOORD0", "float2"}
+            
+            
+            }
         {}
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        BrdfConvolutionPS::BrdfConvolutionPS(const BrdfConvolutionPS& cl)
+            : m_constantRange{
+            
+            }
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = cl.m_constantRange[i].buffer;
+            }
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        BrdfConvolutionPS::BrdfConvolutionPS(BrdfConvolutionPS&& cl)
+            : m_constantRange{
+            
+            }
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = std::move(cl.m_constantRange[i].buffer);
+            }
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        BrdfConvolutionPS& BrdfConvolutionPS::operator=(const BrdfConvolutionPS& cl)
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = cl.m_constantRange[i].buffer;
+            }
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            return *this;
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        BrdfConvolutionPS& BrdfConvolutionPS::operator=(BrdfConvolutionPS&& cl)
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = std::move(cl.m_constantRange[i].buffer);
+            }
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            return *this;
+        }
+#pragma warning( pop )
+
+        std::vector<std::string> BrdfConvolutionPS::textureSrvNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> BrdfConvolutionPS::textureUavNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> BrdfConvolutionPS::bufferSrvNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> BrdfConvolutionPS::bufferUavNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> BrdfConvolutionPS::samplerNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> BrdfConvolutionPS::srvNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> BrdfConvolutionPS::uavNames() const
+        {
+            return {
+                
+            };
+        }
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        engine::ResourceDimension BrdfConvolutionPS::textureDimension(const std::string& name) const
+        {
+            
+            return engine::ResourceDimension::Unknown;
+        }
+#pragma warning( pop )
 
         std::vector<TextureSRV> BrdfConvolutionPS::texture_srvs() const
         {
@@ -88,10 +301,16 @@ namespace engine
             return result;
         }
 
+        const std::vector<ShaderInputParameter>& BrdfConvolutionPS::inputParameters() const
+        {
+            return m_inputParameters;
+        }
+
 // warning C4172: returning address of local variable or temporary
 // this will never happen as the name will always match the correct resource
 #pragma warning( push )
 #pragma warning( disable : 4172 )
+#pragma warning( disable : 4100 )
 
         bool BrdfConvolutionPS::hasTextureSrv(const std::string& name) const
         {
@@ -167,6 +386,30 @@ namespace engine
             
             ASSERT(false, "Tried to look for non-existing resource");
             return BufferUAV();
+        }
+
+        void BrdfConvolutionPS::textureSrv(const std::string& name, TextureSRV& texture)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void BrdfConvolutionPS::textureUav(const std::string& name, TextureUAV& texture)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void BrdfConvolutionPS::bufferSrv(const std::string& name, BufferSRV& buffer)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void BrdfConvolutionPS::bufferUav(const std::string& name, BufferUAV& buffer)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
         }
 
         const Sampler& BrdfConvolutionPS::sampler(const std::string& name) const

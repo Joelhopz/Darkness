@@ -12,11 +12,11 @@ namespace engine
     ShadowRenderer::ShadowRenderer(Device& device, ShaderStorage& shaderStorage)
         : m_device{ device }
         , m_shaderStorage{ shaderStorage }
-        , m_pipeline{ device.createPipeline<shaders::ShadowRender>(shaderStorage) }
-        , m_transparentPipeline{ device.createPipeline<shaders::ShadowRenderTransparent>(shaderStorage) }
+        , m_clusterRenderer{ device, shaderStorage }
+        , m_culler{ device, shaderStorage }
         /*, m_shadowMap{ device.createTextureDSV(TextureDescription()
             .name("Shadow map")
-            .format(Format::Format_D32_FLOAT)
+            .format(Format::D32_FLOAT)
             .width(ShadowMapWidth)
             .height(ShadowMapHeight)
             .usage(ResourceUsage::DepthStencil)
@@ -33,6 +33,14 @@ namespace engine
         m_cubemapCamera.fieldOfView(90.0f);
         m_cubemapCamera.projection(Projection::Perspective);
 
+        m_shadowCamera.nearPlane(0.1f);
+        m_shadowCamera.farPlane(1000.0f);
+        m_shadowCamera.fieldOfView(60.0f);
+        m_shadowCamera.width(ShadowMapWidth);
+        m_shadowCamera.height(ShadowMapHeight);
+        m_shadowCamera.projection(Projection::Perspective);
+
+#if 0
         DepthStencilOpDescription front;
         front.StencilFailOp = StencilOp::Keep;
         front.StencilDepthFailOp = StencilOp::Incr;
@@ -53,7 +61,6 @@ namespace engine
             //.depthClipEnable(false)
             .slopeScaledDepthBias(-1.75f)
             .cullMode(CullMode::None));
-        m_pipeline.setRenderTargetFormats({}, Format::Format_D32_FLOAT);
         m_pipeline.setDepthStencilState(DepthStencilDescription()
             .depthEnable(true)
             .depthWriteMask(DepthWriteMask::All)
@@ -63,7 +70,6 @@ namespace engine
 
         m_transparentPipeline.setPrimitiveTopologyType(PrimitiveTopologyType::TriangleList);
         m_transparentPipeline.setRasterizerState(RasterizerDescription().cullMode(CullMode::Back));
-        m_transparentPipeline.setRenderTargetFormats({}, Format::Format_D32_FLOAT);
         m_transparentPipeline.ps.transparencySampler = device.createSampler(SamplerDescription().filter(engine::Filter::Bilinear));
         m_transparentPipeline.setDepthStencilState(DepthStencilDescription()
             .depthEnable(true)
@@ -71,48 +77,67 @@ namespace engine
             .depthFunc(ComparisonFunction::Greater)
             .frontFace(front)
             .backFace(back));
+#endif
 
-        m_shadowCamera.nearPlane(0.1f);
-        m_shadowCamera.farPlane(1000.0f);
-        m_shadowCamera.fieldOfView(60.0f);
-        m_shadowCamera.width(ShadowMapWidth);
-        m_shadowCamera.height(ShadowMapHeight);
-        m_shadowCamera.projection(Projection::Perspective);
+        
     }
 
     void ShadowRenderer::clearResources()
     {
-        m_pipeline.vs.vertices = BufferSRV();
+        /*m_pipeline.vs.vertices = BufferSRV();
 
         m_transparentPipeline.vs.vertices = BufferSRV();
         m_transparentPipeline.vs.uv = BufferSRV();
-        m_transparentPipeline.ps.transparencyMap = TextureSRV();
+        m_transparentPipeline.ps.transparencyMap = TextureSRV();*/
     }
 
-    void ShadowRenderer::render(
-        Device& device,
-        TextureRTV& /*currentRenderTarget*/,
-        TextureDSV& /*depthBuffer*/,
-        CommandList& cmd,
-        MaterialComponent& defaultMaterial,
-        Camera& /*camera*/,
-        LightData& lights,
-        FlatScene& scene
-    )
+    bool frustumCull(
+        std::vector<Vector4f>& frustumPlanes,
+        const BoundingBox& aabb,
+        const Vector3f cameraPosition,
+        const Matrix4f& transform,
+        float range)
     {
-        if (scene.selectedCamera == -1 || !scene.cameras[scene.selectedCamera])
-            return;
-
-        cmd.setViewPorts({ Viewport{ 0.0f, 0.0f, static_cast<float>(ShadowMapWidth), static_cast<float>(ShadowMapHeight), 0.0f, 1.0f } });
-        cmd.setScissorRects({ Rectangle{ 0u, 0u, static_cast<unsigned int>(ShadowMapWidth), static_cast<unsigned int>(ShadowMapHeight) } });
-
-        uint32_t shadowCasterMapCount = 0;
-        for (uint32_t i = 0; i < lights.count(); ++i)
+        // Jussi Knuuttilas algorithm
+        // works pretty well
+        Vector3f corner[8] =
         {
-            if (lights.shadowCaster()[i])
+            transform * aabb.min,
+            transform * Vector3f{ aabb.min.x, aabb.max.y, aabb.max.z },
+            transform * Vector3f{ aabb.min.x, aabb.min.y, aabb.max.z },
+            transform * Vector3f{ aabb.min.x, aabb.max.y, aabb.min.z },
+            transform * aabb.max,
+            transform * Vector3f{ aabb.max.x, aabb.min.y, aabb.min.z },
+            transform * Vector3f{ aabb.max.x, aabb.max.y, aabb.min.z },
+            transform * Vector3f{ aabb.max.x, aabb.min.y, aabb.max.z }
+        };
+
+        for (int i = 0; i < 6; ++i)
+        {
+            bool hit = false;
+            for (auto&& c : corner)
             {
-                LightType type = static_cast<LightType>(lights.engineTypes()[i]);
-                if(type == LightType::Spot)
+                if (((c - cameraPosition).magnitude() < range) && frustumPlanes[i].xyz().normalize().dot(c - cameraPosition) >= 0)
+                {
+                    hit = true;
+                    break;
+                }
+            }
+            if (!hit)
+                return false;
+        }
+        return true;
+    }
+
+    uint32_t ShadowRenderer::shadowCasterCount(const engine::LightData& lightData) const
+    {
+        uint32_t shadowCasterMapCount = 0;
+        for (uint32_t i = 0; i < lightData.count(); ++i)
+        {
+            if (lightData.shadowCaster()[i])
+            {
+                LightType type = static_cast<LightType>(lightData.engineTypes()[i]);
+                if (type == LightType::Spot)
                     ++shadowCasterMapCount;
                 else if (type == LightType::Directional)
                     ++shadowCasterMapCount;
@@ -120,13 +145,17 @@ namespace engine
                     shadowCasterMapCount += 6;
             }
         }
+        return shadowCasterMapCount;
+    }
 
-        if((!m_shadowMap.valid() || shadowCasterMapCount != m_shadowMap.texture().description().descriptor.arraySlices || m_refresh) && shadowCasterMapCount > 0)
+    void ShadowRenderer::updateShadowMaps(uint32_t shadowCasterMapCount)
+    {
+        if ((!m_shadowMap.valid() || shadowCasterMapCount != m_shadowMap.texture().description().descriptor.arraySlices || m_refresh) && shadowCasterMapCount > 0)
         {
             m_refresh = false;
-            m_shadowMap = device.createTextureDSV(TextureDescription()
+            m_shadowMap = m_device.createTextureDSV(TextureDescription()
                 .name("Shadow map")
-                .format(Format::Format_D32_FLOAT)
+                .format(Format::D32_FLOAT)
                 .width(ShadowMapWidth)
                 .height(ShadowMapHeight)
                 .arraySlices(shadowCasterMapCount)
@@ -134,19 +163,19 @@ namespace engine
                 .optimizedDepthClearValue(0.0f)
                 .dimension(ResourceDimension::Texture2DArray)
             );
-            m_shadowMapSRV = device.createTextureSRV(m_shadowMap);
+            m_shadowMapSRV = m_device.createTextureSRV(m_shadowMap);
 
             m_shadowMapIndices.clear();
             for (uint32_t i = 0; i < shadowCasterMapCount; ++i)
             {
                 m_shadowMapIndices.emplace_back(
-                    std::move(device.createTextureDSV(
-                        m_shadowMap.texture(), 
+                    std::move(m_device.createTextureDSV(
+                        m_shadowMap.texture(),
                         m_shadowMap.texture().description().dimension(ResourceDimension::Texture2DArray),
                         SubResource{ 0, 1, i, 1 })));
             }
 
-            m_shadowVP = device.createBufferSRV(BufferDescription()
+            m_shadowVP = m_device.createBufferSRV(BufferDescription()
                 .name("Shadow view projection matrixes")
                 .elements(shadowCasterMapCount)
                 .elementSize(sizeof(Float4x4))
@@ -154,11 +183,24 @@ namespace engine
                 .usage(ResourceUsage::GpuReadWrite)
             );
         }
+    }
+
+    void ShadowRenderer::render(
+        CommandList& cmd,
+        FlatScene& scene
+    )
+    {
+        if (scene.selectedCamera == -1 || scene.cameras.size() == 0 || !scene.cameras[scene.selectedCamera])
+            return;
+
+        auto& lights = *scene.lightData;
+        uint32_t shadowCasterMapCount = shadowCasterCount(*scene.lightData);
+        updateShadowMaps(shadowCasterMapCount);
+        
         if(m_shadowMap.valid())
             cmd.clearDepthStencilView(m_shadowMap, 0.0f);
 
         std::vector<Matrix4f> shadowViewProjectionMatrices;
-
         {
             // fast path for opaque and transparent meshes
             int shadowMapIndex = 0;
@@ -187,176 +229,59 @@ namespace engine
                         for(auto&& side : sides)
                         {
                             m_cubemapCamera.rotation(Quaternionf::fromMatrix(side));
-
-                            //cmd.clearDepthStencilView(m_shadowMapIndices[shadowMapIndex], 0.0f);
-                            cmd.setRenderTargets({}, m_shadowMapIndices[shadowMapIndex]);
-                            
                             auto viewMatrix = m_cubemapCamera.viewMatrix();
                             auto shadowProjection = m_cubemapCamera.projectionMatrix();
-
                             shadowViewProjectionMatrices.emplace_back(shadowProjection * viewMatrix);
+                            
+                            auto frameNumber = m_device.frameNumber();
+                            m_culler.frustumCull(cmd, m_cubemapCamera, m_device.modelResources(), frameNumber, { ShadowMapWidth, ShadowMapHeight });
+                            //ASSERT(false, "fix the depth pyramid pass");
+                            m_culler.occlusionCull(cmd, m_cubemapCamera, m_device.modelResources(), nullptr, frameNumber, { ShadowMapWidth, ShadowMapHeight }, CullingMode::EmitVisible);
 
-                            for (auto& node : scene.nodes)
-                            {
-                                for (auto&& subMesh : node.mesh->meshBuffers())
-                                {
-                                    auto transformMatrix = node.transform;
-
-                                    m_pipeline.vs.modelViewProjectionMatrix = fromMatrix(shadowProjection * (viewMatrix * transformMatrix));
-                                    m_pipeline.vs.vertices = subMesh.vertices;
-
-                                    cmd.bindPipe(m_pipeline);
-                                    cmd.bindIndexBuffer(subMesh.indices);
-                                    cmd.drawIndexed(subMesh.indices.desc().elements, 1, 0, 0, 0);
-                                }
-                            }
-
-                            for (auto& node : scene.transparentNodes)
-                            {
-                                for (auto&& subMesh : node.mesh->meshBuffers())
-                                {
-                                    auto transformMatrix = node.transform;
-
-                                    m_pipeline.vs.modelViewProjectionMatrix = fromMatrix(shadowProjection * (viewMatrix * transformMatrix));
-                                    m_pipeline.vs.vertices = subMesh.vertices;
-
-                                    cmd.bindPipe(m_pipeline);
-                                    cmd.bindIndexBuffer(subMesh.indices);
-                                    cmd.drawIndexed(subMesh.indices.desc().elements, 1, 0, 0, 0);
-                                }
-                            }
+                            m_clusterRenderer.render(
+                                cmd,
+                                m_cubemapCamera,
+                                m_device.modelResources(),
+                                nullptr,
+                                &m_shadowMapIndices[shadowMapIndex],
+                                m_culler.occlusionCulledClusters(),
+                                m_culler.occlusionCullingDrawArguments(),
+                                m_device.frameNumber(),
+                                { ShadowMapWidth, ShadowMapHeight },
+                                m_cubemapCamera.viewMatrix(),
+                                m_cubemapCamera.projectionMatrix(),
+                                0
+                            );
 
                             ++shadowMapIndex;
                         }
                     }
                     else if (type == LightType::Spot)
                     {
-                        //cmd.clearDepthStencilView(m_shadowMapIndices[shadowMapIndex], 0.0f);
-                        cmd.setRenderTargets({}, m_shadowMapIndices[shadowMapIndex]);
-
                         m_shadowCamera.position(lights.positions()[i]);
                         m_shadowCamera.rotation(scene.lights[i].rotation);
                         m_shadowCamera.fieldOfView(scene.lights[i].outerCone * 2.0f);
-                        auto viewMatrix = m_shadowCamera.viewMatrix();
-                        auto shadowProjection = m_shadowCamera.projectionMatrix();
-                        shadowViewProjectionMatrices.emplace_back(shadowProjection * viewMatrix);
+                        shadowViewProjectionMatrices.emplace_back(m_shadowCamera.projectionMatrix() * m_shadowCamera.viewMatrix());
 
-                        for (auto& node : scene.nodes)
-                        {
-                            for (auto&& subMesh : node.mesh->meshBuffers())
-                            {
-                                auto transformMatrix = node.transform;
+                        auto frameNumber = m_device.frameNumber();
+                        m_culler.frustumCull(cmd, m_shadowCamera, m_device.modelResources(), frameNumber, { ShadowMapWidth, ShadowMapHeight });
+                        //ASSERT(false, "fix the depth pyramid pass");
+                        m_culler.occlusionCull(cmd, m_shadowCamera, m_device.modelResources(), nullptr, frameNumber, { ShadowMapWidth, ShadowMapHeight }, CullingMode::EmitVisible);
 
-                                m_pipeline.vs.modelViewProjectionMatrix = fromMatrix(shadowProjection * (viewMatrix * transformMatrix));
-                                m_pipeline.vs.vertices = subMesh.vertices;
-
-                                cmd.bindPipe(m_pipeline);
-                                cmd.bindIndexBuffer(subMesh.indices);
-                                cmd.drawIndexed(subMesh.indices.desc().elements, 1, 0, 0, 0);
-                            }
-                        }
-
-                        for (auto& node : scene.transparentNodes)
-                        {
-                            for (auto&& subMesh : node.mesh->meshBuffers())
-                            {
-                                auto transformMatrix = node.transform;
-
-                                m_pipeline.vs.modelViewProjectionMatrix = fromMatrix(shadowProjection * (viewMatrix * transformMatrix));
-                                m_pipeline.vs.vertices = subMesh.vertices;
-
-                                cmd.bindPipe(m_pipeline);
-                                cmd.bindIndexBuffer(subMesh.indices);
-                                cmd.drawIndexed(subMesh.indices.desc().elements, 1, 0, 0, 0);
-                            }
-                        }
-
-                        ++shadowMapIndex;
-                    }
-                }
-            }
-        }
-
-        {
-            // alpha discard for alphaclipped
-            int shadowMapIndex = 0;
-            for (uint32_t i = 0; i < lights.count(); ++i)
-            {
-                if (lights.shadowCaster()[i])
-                {
-                    LightType type = static_cast<LightType>(lights.engineTypes()[i]);
-
-                    if (type == LightType::Point)
-                    {
-                        m_cubemapCamera.width(static_cast<int>(ShadowMapWidth));
-                        m_cubemapCamera.height(static_cast<int>(ShadowMapHeight));
-
-                        Vector3f pos = lights.positions()[i];
-                        m_cubemapCamera.position(pos);
-
-                        std::vector<Matrix4f> sides;
-                        sides.emplace_back(Matrix4f{ m_cubemapCamera.lookAt(pos + Vector3f(0.0f, 0.0f, 0.0f), pos + Vector3f(-1.0f,  0.0f,  0.0f), Vector3f(0.0f, 1.0f,  0.0f)) });
-                        sides.emplace_back(Matrix4f{ m_cubemapCamera.lookAt(pos + Vector3f(0.0f, 0.0f, 0.0f), pos + Vector3f(1.0f,  0.0f,  0.0f), Vector3f(0.0f, 1.0f,  0.0f)) });
-                        sides.emplace_back(Matrix4f{ m_cubemapCamera.lookAt(pos + Vector3f(0.0f, 0.0f, 0.0f), pos + Vector3f(0.0f,  1.0f,  0.0f), Vector3f(0.0f, 0.0f, -1.0f)) });
-                        sides.emplace_back(Matrix4f{ m_cubemapCamera.lookAt(pos + Vector3f(0.0f, 0.0f, 0.0f), pos + Vector3f(0.0f, -1.0f,  0.0f), Vector3f(0.0f, 0.0f,  1.0f)) });
-                        sides.emplace_back(Matrix4f{ m_cubemapCamera.lookAt(pos + Vector3f(0.0f, 0.0f, 0.0f), pos + Vector3f(0.0f,  0.0f,  1.0f), Vector3f(0.0f, 1.0f,  0.0f)) });
-                        sides.emplace_back(Matrix4f{ m_cubemapCamera.lookAt(pos + Vector3f(0.0f, 0.0f, 0.0f), pos + Vector3f(0.0f,  0.0f, -1.0f), Vector3f(0.0f, 1.0f,  0.0f)) });
-
-                        for (auto&& side : sides)
-                        {
-                            m_cubemapCamera.rotation(Quaternionf::fromMatrix(side));
-
-                            //cmd.clearDepthStencilView(m_shadowMapIndices[shadowMapIndex], 0.0f);
-                            cmd.setRenderTargets({}, m_shadowMapIndices[shadowMapIndex]);
-
-                            auto viewMatrix = m_cubemapCamera.viewMatrix();
-                            auto shadowProjection = m_cubemapCamera.projectionMatrix();
-
-                            for (auto& node : scene.alphaclippedNodes)
-                            {
-                                for (auto&& subMesh : node.mesh->meshBuffers())
-                                {
-                                    auto transformMatrix = node.transform;
-
-                                    m_transparentPipeline.vs.modelViewProjectionMatrix = fromMatrix(shadowProjection * (viewMatrix * transformMatrix));
-                                    m_transparentPipeline.vs.vertices = subMesh.vertices;
-                                    m_transparentPipeline.vs.uv = subMesh.uv;
-                                    m_transparentPipeline.ps.transparencyMap = (node.material && node.material->hasAlbedo()) ? node.material->albedo() : defaultMaterial.albedo();
-
-                                    cmd.bindPipe(m_transparentPipeline);
-                                    cmd.bindIndexBuffer(subMesh.indices);
-                                    cmd.drawIndexed(subMesh.indices.desc().elements, 1, 0, 0, 0);
-                                }
-                            }
-                            ++shadowMapIndex;
-                        }
-                    }
-                    else if (type == LightType::Spot)
-                    {
-                        cmd.setRenderTargets({}, m_shadowMapIndices[shadowMapIndex]);
-
-                        m_shadowCamera.position(lights.positions()[i]);
-                        m_shadowCamera.rotation(scene.lights[i].rotation);
-                        m_shadowCamera.fieldOfView(scene.lights[i].outerCone * 2.0f);
-                        auto viewMatrix = m_shadowCamera.viewMatrix();
-
-                        for (auto& node : scene.alphaclippedNodes)
-                        {
-                            for (auto&& subMesh : node.mesh->meshBuffers())
-                            {
-                                auto transformMatrix = node.transform;
-
-                                m_transparentPipeline.vs.modelViewProjectionMatrix = fromMatrix(m_shadowCamera.projectionMatrix() * (viewMatrix * transformMatrix));
-                                m_transparentPipeline.vs.vertices = subMesh.vertices;
-                                m_transparentPipeline.vs.uv = subMesh.uv;
-                                m_transparentPipeline.ps.transparencyMap = (node.material && node.material->hasAlbedo()) ? node.material->albedo() : defaultMaterial.albedo();
-
-                                cmd.bindPipe(m_transparentPipeline);
-                                cmd.bindIndexBuffer(subMesh.indices);
-                                cmd.drawIndexed(subMesh.indices.desc().elements, 1, 0, 0, 0);
-                            }
-                        }
-
+                        m_clusterRenderer.render(
+                            cmd,
+                            m_shadowCamera,
+                            m_device.modelResources(),
+                            nullptr,
+                            &m_shadowMapIndices[shadowMapIndex],
+                            m_culler.occlusionCulledClusters(),
+                            m_culler.occlusionCullingDrawArguments(),
+                            frameNumber,
+                            { ShadowMapWidth, ShadowMapHeight },
+                            m_shadowCamera.viewMatrix(),
+                            m_shadowCamera.projectionMatrix(),
+                            0
+                        );
                         ++shadowMapIndex;
                     }
                 }
@@ -364,6 +289,6 @@ namespace engine
         }
 
         if(shadowCasterMapCount > 0)
-            device.uploadBuffer(cmd, m_shadowVP, ByteRange(shadowViewProjectionMatrices));
+            m_device.uploadBuffer(cmd, m_shadowVP, ByteRange(shadowViewProjectionMatrices));
     }
 }

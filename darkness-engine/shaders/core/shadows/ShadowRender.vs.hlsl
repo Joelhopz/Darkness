@@ -1,5 +1,6 @@
+#include "../VertexPacking.hlsli"
 
-Buffer<float3> vertices;
+Buffer<uint2> vertices;
 
 cbuffer ConstData
 {
@@ -8,5 +9,5 @@ cbuffer ConstData
 
 float4 main(uint id : SV_VertexID) : SV_Position
 {
-    return mul(modelViewProjectionMatrix, float4(vertices[id], 1.0f));
+    return mul(modelViewProjectionMatrix, float4(unpackVertex(vertices[id]), 1.0f));
 }

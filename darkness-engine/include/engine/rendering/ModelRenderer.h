@@ -15,14 +15,20 @@
 #include "shaders/core/ssao/SSAOBlur.h"
 #include "shaders/core/temporal/TemporalResolve.h"
 #include "shaders/core/tools/Wireframe.h"
-#include "shaders/core/culling/Culling.h"
+#include "shaders/core/tools/DebugBoundingSpheres.h"
 #include "engine/rendering/RenderOutline.h"
 #include "engine/graphics/ShaderStorage.h"
 #include "engine/Scene.h"
 #include "engine/rendering/LightData.h"
+#include "engine/rendering/GBuffer.h"
+#include "engine/rendering/ModelResources.h"
+#include "engine/rendering/Culler.h"
+#include "engine/rendering/ClusterRenderer.h"
+#include "engine/rendering/ParticleTest.h"
+#include "engine/rendering/Picker.h"
 #include <memory>
 
-#define EARLYZ_ENABLED
+#undef EARLYZ_ENABLED
 #define SCALEAOSIZE
 
 namespace engine
@@ -43,12 +49,9 @@ namespace engine
         void render(
             Device& device,
             TextureRTV& currentRenderTarget,
-            TextureDSV& depthBuffer,
-            TextureSRV& depthView,
+            DepthPyramid& depthPyramid,
             CommandList& cmd, 
-            MaterialComponent& defaultMaterial,
             Camera& camera,
-            LightData& lights,
             FlatScene& scene,
             TextureSRV& shadowMap,
             BufferSRV& shadowVP,
@@ -60,10 +63,10 @@ namespace engine
 
         void resize(uint32_t width, uint32_t height);
 
-        TextureRTV& gbufferAlbedo()
+        /*TextureRTV& gbufferAlbedo()
         {
-            return m_gbufferAlbedo;
-        }
+            return m_gbuffer->rtv(GBufferType::Albedo);
+        }*/
 
         TextureSRV& ssaoSRV()
         {
@@ -80,10 +83,15 @@ namespace engine
             return m_fullResTargetFrame[m_lastResolvedIndex];
         }
 
-        TextureSRV& motionVectors()
+        TextureRTV& lightingTargetRTV()
         {
-            return m_gbufferMotionSRV;
+            return m_lightingTarget;
         }
+
+        /*TextureSRV& motionVectors()
+        {
+            return m_gbuffer->srv(GBufferType::MotionVector);
+        }*/
 
         unsigned int pickedObject(Device& device);
         void setSelectedObject(int64_t object)
@@ -91,11 +99,21 @@ namespace engine
             m_selectedObject = object;
         }
     private:
+        void renderBoundingSpheres(
+            Device& device,
+            TextureRTV& currentRenderTarget,
+            TextureDSV& depthBuffer,
+            CommandList& cmd,
+            const Matrix4f& cameraProjectionMatrix,
+            const Matrix4f& cameraViewMatrix,
+            const Matrix4f& jitterMatrix);
+
         void renderEarlyZ(
             Device& device,
             TextureDSV& depthBuffer,
             CommandList& cmd,
             FlatScene& scene,
+            Camera& camera,
             const Matrix4f& cameraProjectionMatrix,
             const Matrix4f& cameraViewMatrix,
             const Matrix4f& jitterMatrix);
@@ -110,20 +128,18 @@ namespace engine
             Matrix4f cameraViewMatrix,
             Camera& camera,
             LightData& lights,
-            MaterialComponent& defaultMaterial,
             TextureSRV& shadowMap,
             BufferSRV& shadowVP);
 
         void renderGeometryPbr(
             Device& device,
-            TextureDSV& depthBuffer,
+            TextureDSV* depthBuffer,
             CommandList& cmd,
             FlatScene& scene,
             Camera& camera,
             const Matrix4f& cameraProjectionMatrix,
             const Matrix4f& cameraViewMatrix,
             const Matrix4f& jitterMatrix,
-            MaterialComponent& defaultMaterial,
             unsigned int mouseX,
             unsigned int mouseY,
             const Vector2f& jitter);
@@ -138,7 +154,9 @@ namespace engine
             BufferSRV& shadowVP,
             Matrix4f cameraProjectionMatrix,
             Matrix4f cameraViewMatrix,
-            LightData& lights);
+            LightData& lights,
+            Vector3f probePosition,
+            float probeRange);
 
         void renderSSAO(
             Device& device,
@@ -166,7 +184,6 @@ namespace engine
             const Matrix4f& cameraProjectionMatrix,
             const Matrix4f& cameraViewMatrix,
             const Matrix4f& jitterMatrix,
-            MaterialComponent& defaultMaterial,
             unsigned int mouseX,
             unsigned int mouseY);
 
@@ -174,32 +191,25 @@ namespace engine
         Device& m_device;
         ShaderStorage& m_shaderStorage;
         Vector2<int> m_virtualResolution;
+        Culler m_culler;
+        ClusterRenderer m_clusterRenderer;
+        Picker m_picker;
+        //ParticleTest m_particleTest;
+        
 #ifdef EARLYZ_ENABLED
         engine::Pipeline<shaders::EarlyZ> m_earlyzPipeline;
         engine::Pipeline<shaders::EarlyZAlphaClipped> m_earlyzAlphaClipped;
 #endif
         engine::Pipeline<shaders::MeshRenderer> m_pipeline;
         engine::Pipeline<shaders::MeshRendererPbr> m_pbrPipeline;
+        engine::Pipeline<shaders::MeshRendererPbr> m_pbrPipelineAlphaclipped;
         engine::Pipeline<shaders::Wireframe> m_wireframePipeline;
-        engine::Pipeline<shaders::Lighting> m_lightingPipeline;
-        engine::Pipeline<shaders::TemporalResolve> m_temporalResolve;
-        engine::Pipeline<shaders::Culling> m_culling;
 
-        struct InputData
-        {
-            uint32_t value;
-            uint32_t anotherValue;
-        };
+        std::vector<engine::Pipeline<shaders::Lighting>> m_lightingPipelines;
+        std::vector<engine::Pipeline<shaders::TemporalResolve>> m_temporalResolve;
+        engine::Pipeline<shaders::DebugBoundingSpheres> m_debugBoundingSpheres;
 
-        struct OutputData
-        {
-            uint32_t value;
-            uint32_t anotherValue;
-        };
-
-        BufferSRV m_computeInput;
-        BufferUAV m_computeOutput;
-        Buffer m_computeResult;
+        int m_currentRenderMode;
 
         int m_renderWidth;
         int m_renderHeight;
@@ -207,26 +217,12 @@ namespace engine
 
         std::unique_ptr<engine::RenderOutline> m_renderOutline;
 
-        TextureRTV m_gbufferAlbedo;
-        TextureRTV m_gbufferNormal;
-        TextureRTV m_gbufferMotion;
-        TextureRTV m_gbufferRoughness;
-        TextureRTV m_gbufferMetalness;
-        TextureRTV m_gbufferOcclusion;
-        TextureRTV m_objectId;
-
-        TextureSRV m_gbufferAlbedoSRV;
-        TextureSRV m_gbufferNormalSRV;
-        TextureSRV m_gbufferMotionSRV;
-        TextureSRV m_gbufferRoughnessSRV;
-        TextureSRV m_gbufferMetalnessSRV;
-        TextureSRV m_gbufferOcclusionSRV;
-        TextureSRV m_objectIdSRV;
+        std::shared_ptr<GBuffer> m_gbuffer;
 
         BufferSRV m_shadowsSRV;
 
-        BufferUAV m_pickBufferUAV;
-        BufferSRV m_pickBufferReadBack;
+        /*BufferUAV m_pickBufferUAV;
+        BufferSRV m_pickBufferReadBack;*/
 
         engine::Pipeline<shaders::SSAO> m_ssaoPipeline;
         std::vector<Vector4f> m_ssaoKernel;
@@ -248,6 +244,9 @@ namespace engine
         TextureSRV m_fullResTargetFrameSRV[HistoryCount];
         int m_currentFullResIndex;
         int m_lastResolvedIndex;
+
+        TextureDSV m_dsv;
+        TextureSRV m_dsvSRV;
 
         int previousFrameIndex()
         {

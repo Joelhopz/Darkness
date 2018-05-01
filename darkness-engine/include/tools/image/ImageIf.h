@@ -36,6 +36,9 @@ namespace engine
             virtual void save() = 0;
             virtual const uint8_t* data() const = 0;
             virtual size_t bytes() const = 0;
+
+            virtual void flipVertical() = 0;
+            virtual void convert() = 0;
         };
 
     }

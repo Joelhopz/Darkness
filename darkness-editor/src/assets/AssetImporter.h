@@ -7,16 +7,20 @@
 
 #include <string>
 
-#include "tools/image/Image.h"
+//#include "tools/image/Image.h"
 #include "engine/primitives/Vector3.h"
 #include "engine/primitives/Quaternion.h"
 
-class AssetImporterWorker : public QObject,
+#include "engine/resources/ResourceDropHandler.h"
+#include "engine/resources/ResourceHost.h"
+
+/*class AssetImporterWorker : public QObject,
                             public QRunnable
 {
     Q_OBJECT
 public:
     AssetImporterWorker(
+        engine::ResourceHost& resourceHost,
         QMutex& imageMutex,
         QMutex& compressMutex,
         const QString& contentPath,
@@ -61,8 +65,9 @@ private:
         const QString& reprocessSourcePath,
         const QString& reprocessDestinationPath,
         bool performCopy,
-        engine::Format encodeType = engine::Format::Format_BC1_UNORM) const;
+        engine::Format encodeType = engine::Format::BC1_UNORM) const;
 private:
+    engine::ResourceHost& m_resourceHost;
     QMutex& m_imageMutex;
     QMutex& m_compressMutex;
     QString m_contentPath;
@@ -73,7 +78,7 @@ private:
     engine::Quaternionf m_rotation;
     std::string m_preferredEncoding;
     bool m_performCopy;
-};
+};*/
 
 class AssetImporter : public QObject
 {
@@ -82,10 +87,10 @@ public:
     AssetImporter(
         const QString& contentPath,
         const QString& processedAssetsPath);
-	virtual ~AssetImporter();
+    virtual ~AssetImporter();
 public slots:
-    void processItem(
-        const QString& sourceFilePath,
+    void processItems(
+        const QList<QString>& sourceFilePaths,
         const QString& targetPath,
         const engine::Vector3f& scale,
         const engine::Quaternionf& rotation,
@@ -95,10 +100,10 @@ public slots:
         const QList<QString>& sourceFilePath,
         const QList<QString>& targetFilePath);
 
-    void onAssetWorkStarted(QString sourceFilePath) const;
+    /*void onAssetWorkStarted(QString sourceFilePath) const;
     void onAssetWorkStatusChange(QString sourceFilePath, QString msg) const;
     void onAssetWorkProgress(QString sourceFilePath, float progress) const;
-    void onAssetWorkStopped(QString sourceFilePath, const AssetImporterWorker* worker) const;
+    void onAssetWorkStopped(QString sourceFilePath, const AssetImporterWorker* worker) const;*/
 
 signals:
     void assetWorkStarted(QString sourceFilePath) const;
@@ -112,4 +117,7 @@ private:
     QString m_processedAssetPath;
     QMutex m_workerImageMutex;
     QMutex m_workerCompressMutex;
+
+    engine::ResourceDropHandler m_dropHandler;
+    engine::ResourceHost m_resourceHost;
 };

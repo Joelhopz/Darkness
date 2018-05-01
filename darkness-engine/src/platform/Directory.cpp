@@ -45,6 +45,19 @@ namespace engine
         }
         return result;
     }
+
+    std::vector<std::string> Directory::directories() const
+    {
+        vector<string> result;
+        for (const auto& file : filesystem::directory_iterator{ m_path })
+        {
+            if (filesystem::is_directory(file.status()))
+            {
+                result.emplace_back(file.path().filename().u8string());
+            }
+        }
+        return result;
+    }
 }
 #else
 namespace engine
@@ -52,6 +65,7 @@ namespace engine
     Directory::Directory(const string& path)
     : m_path{ path }
     {
+        ASSERT(false, "TODO: Need to implement Directory support for this platform");
     }
     
     bool Directory::exists() const

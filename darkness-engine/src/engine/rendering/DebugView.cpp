@@ -15,7 +15,6 @@ namespace engine
     {
         m_pipeline.setPrimitiveTopologyType(PrimitiveTopologyType::TriangleStrip);
         m_pipeline.setRasterizerState(RasterizerDescription().frontCounterClockwise(false));
-        m_pipeline.setRenderTargetFormat(Format::Format_R8G8B8A8_UNORM, Format::Format_D32_FLOAT);
         m_pipeline.ps.tex_sampler = device.createSampler(SamplerDescription().filter(engine::Filter::Bilinear));
     }
 

@@ -9,10 +9,17 @@ namespace engine
 {
     namespace shaders
     {
+#pragma warning( push )
+#pragma warning( disable : 4702 )
         std::shared_ptr<const ShaderBinary> PrefilterConvolutionVS::load(const Device& device, ShaderStorage& storage) const
         {
-            return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/dx12/core/ibl/PrefilterConvolution.vs.cso", "C:/work/darkness/darkness-engine/data/shaders/dx12/core/ibl/PrefilterConvolution.vs.support");
+            
+            return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/ibl/PrefilterConvolution.vs.spv", "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/ibl/PrefilterConvolution.vs.support", -1, {});
+            
+            ASSERT(false, "Could not load the permutation necessary. This is a bug.");
+            return {};
         }
+#pragma warning( pop )
 
         PrefilterConvolutionVS::PrefilterConvolutionVS()
             : m_constantRange{
@@ -29,7 +36,230 @@ namespace engine
             
             
             }
+            , m_inputParameters
+            {
+            
+            ShaderInputParameter{"id", "SV_VertexID", "uint"}
+            
+            
+            }
         {}
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        PrefilterConvolutionVS::PrefilterConvolutionVS(const PrefilterConvolutionVS& cl)
+            : m_constantRange{
+            
+            
+                ConstantRange{
+                    tools::ByteRange(
+                        reinterpret_cast<const uint8_t*>(static_cast<const ConstData*>(this)),
+                        reinterpret_cast<const uint8_t*>(static_cast<const ConstData*>(this)) + sizeof(ConstData)),
+                    nullptr,
+                    "ConstData"
+                }
+                
+            
+            
+            }
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = cl.m_constantRange[i].buffer;
+            }
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        PrefilterConvolutionVS::PrefilterConvolutionVS(PrefilterConvolutionVS&& cl)
+            : m_constantRange{
+            
+            
+                ConstantRange{
+                    tools::ByteRange(
+                        reinterpret_cast<const uint8_t*>(static_cast<const ConstData*>(this)),
+                        reinterpret_cast<const uint8_t*>(static_cast<const ConstData*>(this)) + sizeof(ConstData)),
+                    nullptr,
+                    "ConstData"
+                }
+                
+            
+            
+            }
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = std::move(cl.m_constantRange[i].buffer);
+            }
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        PrefilterConvolutionVS& PrefilterConvolutionVS::operator=(const PrefilterConvolutionVS& cl)
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = cl.m_constantRange[i].buffer;
+            }
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            return *this;
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        PrefilterConvolutionVS& PrefilterConvolutionVS::operator=(PrefilterConvolutionVS&& cl)
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = std::move(cl.m_constantRange[i].buffer);
+            }
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            return *this;
+        }
+#pragma warning( pop )
+
+        std::vector<std::string> PrefilterConvolutionVS::textureSrvNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> PrefilterConvolutionVS::textureUavNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> PrefilterConvolutionVS::bufferSrvNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> PrefilterConvolutionVS::bufferUavNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> PrefilterConvolutionVS::samplerNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> PrefilterConvolutionVS::srvNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> PrefilterConvolutionVS::uavNames() const
+        {
+            return {
+                
+            };
+        }
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        engine::ResourceDimension PrefilterConvolutionVS::textureDimension(const std::string& name) const
+        {
+            
+            return engine::ResourceDimension::Unknown;
+        }
+#pragma warning( pop )
 
         std::vector<TextureSRV> PrefilterConvolutionVS::texture_srvs() const
         {
@@ -99,10 +329,16 @@ namespace engine
             return result;
         }
 
+        const std::vector<ShaderInputParameter>& PrefilterConvolutionVS::inputParameters() const
+        {
+            return m_inputParameters;
+        }
+
 // warning C4172: returning address of local variable or temporary
 // this will never happen as the name will always match the correct resource
 #pragma warning( push )
 #pragma warning( disable : 4172 )
+#pragma warning( disable : 4100 )
 
         bool PrefilterConvolutionVS::hasTextureSrv(const std::string& name) const
         {
@@ -178,6 +414,30 @@ namespace engine
             
             ASSERT(false, "Tried to look for non-existing resource");
             return BufferUAV();
+        }
+
+        void PrefilterConvolutionVS::textureSrv(const std::string& name, TextureSRV& texture)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void PrefilterConvolutionVS::textureUav(const std::string& name, TextureUAV& texture)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void PrefilterConvolutionVS::bufferSrv(const std::string& name, BufferSRV& buffer)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void PrefilterConvolutionVS::bufferUav(const std::string& name, BufferUAV& buffer)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
         }
 
         const Sampler& PrefilterConvolutionVS::sampler(const std::string& name) const

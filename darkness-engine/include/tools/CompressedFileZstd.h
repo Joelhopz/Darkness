@@ -5,6 +5,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <memory>
 
 class CompressedFileZstd : public CompressedFileIf
 {
@@ -12,6 +13,7 @@ public:
     CompressedFileZstd();
 
     void open(const std::string& filename, int mode) override;
+    void open(std::vector<char>& memory, int mode) override;
     bool is_open() const override;
 
     void read(char* buffer, std::streamsize count) override;
@@ -28,8 +30,10 @@ private:
     std::fstream m_file;
     std::string m_filename;
     int m_mode;
+    bool m_memoryFile;
 
-    std::vector<char> m_fileContents;
+    std::unique_ptr<std::vector<char>> m_fileContents;
+    std::vector<char>* m_fileContentsActive;
     bool m_eof;
     size_t m_filePosition;
 

@@ -40,3 +40,19 @@ const T roundDownToMultiple(const T& value, size_t align)
 {
     return roundUpToMultiple(value, align) - align;
 }
+
+template<typename T>
+const T roundUpToPow2(const T& value)
+{
+    T val = value;
+    if (!(val & (val - 1))) {
+        return (val);
+    }
+
+    while (val & (val - 1)) {
+        val = val & (val - 1);
+    }
+
+    val = val << 1;
+    return val;
+}

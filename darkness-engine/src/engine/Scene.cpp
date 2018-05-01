@@ -4,10 +4,11 @@
 #include "tools/Debug.h"
 #include "tools/StringTools.h"
 #include "btBulletDynamicsCommon.h"
+#include "components/ProbeComponent.h"
 
 namespace engine
 {
-    SceneNode::SceneNode(std::shared_ptr<SceneNode> parent)
+    SceneNode::SceneNode(SceneNode* parent)
         : m_parent{ parent }
         , m_transformComponent{ nullptr }
     {
@@ -16,7 +17,7 @@ namespace engine
     void SceneNode::addChild(std::shared_ptr<SceneNode> child)
     {
         m_childs.emplace_back(child);
-        child->parent(shared_from_this());
+        child->parent(this);
         child->recalculateCombinedTransform();
         invalidate();
     }
@@ -59,17 +60,17 @@ namespace engine
         return{};
     }
 
-    void SceneNode::parent(std::shared_ptr<SceneNode> parent)
+    void SceneNode::parent(SceneNode* parent)
     {
         m_parent = parent;
     }
 
-    const std::shared_ptr<SceneNode> SceneNode::parent() const
+    const SceneNode* SceneNode::parent() const
     {
         return m_parent;
     }
 
-    std::shared_ptr<SceneNode> SceneNode::parent()
+    SceneNode* SceneNode::parent()
     {
         return m_parent;
     }
@@ -98,8 +99,45 @@ namespace engine
         return m_components.size();
     }
 
+    std::shared_ptr<SceneNode> SceneNode::find(int64_t id)
+    {
+        if (m_id == id)
+            return shared_from_this();
+        for (auto&& child : m_childs)
+        {
+            auto&& temp = child->find(id);
+            if (temp)
+                return temp;
+        }
+        return nullptr;
+    }
+
+    std::vector<std::shared_ptr<SceneNode>> SceneNode::path(int64_t id)
+    {
+        std::vector<std::shared_ptr<SceneNode>> res;
+        if (m_id == id)
+        {
+            res.emplace_back(shared_from_this());
+            return res;
+        }
+
+        for (auto&& child : m_childs)
+        {
+            auto temp = child->path(id);
+            if (temp.size() > 0)
+            {
+                res.emplace_back(shared_from_this());
+                res.insert(res.end(), temp.begin(), temp.end());
+                return res;
+            }
+        }
+        return res;
+    }
+
     void SceneNode::flatten(bool simulating, FlatScene& resultList, unsigned int& objectIndex)
     {
+        m_id = objectIndex;
+
         auto transform = getComponent<Transform>();
         if (!transform)
             return;
@@ -146,8 +184,11 @@ namespace engine
             else
                 resultList.nodes.emplace_back(FlatSceneNode{ m_combinedTransform, m_combinedTransform, mesh, material, rigidBody, objectIndex });
 
-            ++objectIndex;
+            mesh->updateObjectId(objectIndex);
+
         }
+
+        ++objectIndex;
         
         auto camera = getComponent<Camera>();
         if (camera)
@@ -155,6 +196,7 @@ namespace engine
             if (!getComponent<PostprocessComponent>())
                 this->addComponent(std::make_shared<PostprocessComponent>());
             resultList.cameras.emplace_back(camera);
+            resultList.cameraNodes.emplace_back(shared_from_this());
             resultList.postprocess = getComponent<PostprocessComponent>();
         }
 
@@ -166,6 +208,7 @@ namespace engine
                 m_combinedTransform,
                 transform->position(),
                 lightDir,
+                light->range(),
                 transform->rotation(),
                 light->lightType(),
                 light->outerConeAngle(),
@@ -173,7 +216,15 @@ namespace engine
                 light->shadowCaster(),
                 transform->positionChanged(true),
                 transform->rotationChanged(true),
-                light });
+                light,
+                shared_from_this() });
+        }
+
+        auto probe = getComponent<ProbeComponent>();
+        if (probe)
+        {
+            resultList.probes.emplace_back(probe);
+            resultList.probeNodes.emplace_back(shared_from_this());
         }
 
         for (int i = 0; i < childCount(); ++i)
@@ -223,11 +274,17 @@ namespace engine
         {
             child->recalculateCombinedTransform();
         }
+
+        auto mesh = getComponent<MeshRendererComponent>();
+        if (mesh)
+        {
+            mesh->updateTransform(m_combinedTransform);
+        }
     }
 
     void SceneNode::addComponent(std::shared_ptr<EngineComponent> component)
     {
-        component->parentNode(shared_from_this());
+        component->parentNode(this);
         m_components.emplace_back(component);
         component->start();
         recalculateCombinedTransform();
@@ -291,6 +348,16 @@ namespace engine
         }
     }
 
+    std::shared_ptr<SceneNode> Scene::find(int64_t id)
+    {
+        return m_rootNode->find(id);
+    }
+
+    std::vector<std::shared_ptr<SceneNode>> Scene::path(int64_t id)
+    {
+        return m_rootNode->path(id);
+    }
+
     const std::shared_ptr<SceneNode> Scene::root() const
     {
         return m_rootNode;
@@ -316,10 +383,12 @@ namespace engine
         }
     }
 
-    void Scene::clear()
+    void Scene::clear(bool full)
     {
         m_rootNode = std::make_shared<SceneNode>();
-        m_rootNode->addComponent(std::make_shared<Transform>());
+        if(!full)
+            m_rootNode->addComponent(std::make_shared<Transform>());
+        m_flatscene = FlatScene();
     }
 
     void Scene::loadFrom(const std::string& filepath)
@@ -336,11 +405,12 @@ namespace engine
             inFile.close();
 
             shared_ptr<SceneNode> scene = make_shared<SceneNode>();
-            rapidjson::Reader reader;
-            rapidjson::StringStream ss(buffer.data());
-            SceneDeserialize handler(scene);
-            reader.Parse(ss, handler);
-
+            {
+                rapidjson::Reader reader;
+                rapidjson::StringStream ss(buffer.data());
+                SceneDeserialize handler(scene);
+                reader.Parse(ss, handler);
+            }
             if (!scene->getComponent<Transform>())
                 scene->addComponent(std::make_shared<Transform>());
 

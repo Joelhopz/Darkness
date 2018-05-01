@@ -108,7 +108,7 @@ namespace engine
         m_canReceiveUpdate = false;
         if (m_matrix)
         {
-			Matrix4f rotation = Matrix4f::rotation(m_xLine->text().toFloat(), m_yLine->text().toFloat(), m_zLine->text().toFloat());
+            Matrix4f rotation = Matrix4f::rotation(m_xLine->text().toFloat(), m_yLine->text().toFloat(), m_zLine->text().toFloat());
             m_value.value<Matrix4f>(rotation);
         }
         else

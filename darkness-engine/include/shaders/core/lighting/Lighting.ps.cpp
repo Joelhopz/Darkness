@@ -9,10 +9,171 @@ namespace engine
 {
     namespace shaders
     {
+#pragma warning( push )
+#pragma warning( disable : 4702 )
         std::shared_ptr<const ShaderBinary> LightingPS::load(const Device& device, ShaderStorage& storage) const
         {
-            return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/dx12/core/lighting/Lighting.ps.cso", "C:/work/darkness/darkness-engine/data/shaders/dx12/core/lighting/Lighting.ps.support");
+            
+            if((true)
+            
+            && (drawmode == Drawmode::Full)
+            
+            )
+            {
+                return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/lighting/Lighting.ps_000.spv", "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/lighting/Lighting.ps.support", 1-1, {
+                    
+                    "ENUM_DRAWMODE_FULL"
+                    
+                    });
+            }
+            
+            if((true)
+            
+            && (drawmode == Drawmode::DebugClusters)
+            
+            )
+            {
+                return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/lighting/Lighting.ps_001.spv", "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/lighting/Lighting.ps.support", 2-1, {
+                    
+                    "ENUM_DRAWMODE_DEBUG_CLUSTERS"
+                    
+                    });
+            }
+            
+            if((true)
+            
+            && (drawmode == Drawmode::MipAlbedo)
+            
+            )
+            {
+                return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/lighting/Lighting.ps_002.spv", "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/lighting/Lighting.ps.support", 3-1, {
+                    
+                    "ENUM_DRAWMODE_MIP_ALBEDO"
+                    
+                    });
+            }
+            
+            if((true)
+            
+            && (drawmode == Drawmode::MipRoughness)
+            
+            )
+            {
+                return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/lighting/Lighting.ps_003.spv", "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/lighting/Lighting.ps.support", 4-1, {
+                    
+                    "ENUM_DRAWMODE_MIP_ROUGHNESS"
+                    
+                    });
+            }
+            
+            if((true)
+            
+            && (drawmode == Drawmode::MipMetalness)
+            
+            )
+            {
+                return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/lighting/Lighting.ps_004.spv", "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/lighting/Lighting.ps.support", 5-1, {
+                    
+                    "ENUM_DRAWMODE_MIP_METALNESS"
+                    
+                    });
+            }
+            
+            if((true)
+            
+            && (drawmode == Drawmode::MipAo)
+            
+            )
+            {
+                return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/lighting/Lighting.ps_005.spv", "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/lighting/Lighting.ps.support", 6-1, {
+                    
+                    "ENUM_DRAWMODE_MIP_AO"
+                    
+                    });
+            }
+            
+            if((true)
+            
+            && (drawmode == Drawmode::Albedo)
+            
+            )
+            {
+                return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/lighting/Lighting.ps_006.spv", "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/lighting/Lighting.ps.support", 7-1, {
+                    
+                    "ENUM_DRAWMODE_ALBEDO"
+                    
+                    });
+            }
+            
+            if((true)
+            
+            && (drawmode == Drawmode::Roughness)
+            
+            )
+            {
+                return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/lighting/Lighting.ps_007.spv", "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/lighting/Lighting.ps.support", 8-1, {
+                    
+                    "ENUM_DRAWMODE_ROUGHNESS"
+                    
+                    });
+            }
+            
+            if((true)
+            
+            && (drawmode == Drawmode::Metalness)
+            
+            )
+            {
+                return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/lighting/Lighting.ps_008.spv", "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/lighting/Lighting.ps.support", 9-1, {
+                    
+                    "ENUM_DRAWMODE_METALNESS"
+                    
+                    });
+            }
+            
+            if((true)
+            
+            && (drawmode == Drawmode::Occlusion)
+            
+            )
+            {
+                return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/lighting/Lighting.ps_009.spv", "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/lighting/Lighting.ps.support", 10-1, {
+                    
+                    "ENUM_DRAWMODE_OCCLUSION"
+                    
+                    });
+            }
+            
+            if((true)
+            
+            && (drawmode == Drawmode::Uv)
+            
+            )
+            {
+                return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/lighting/Lighting.ps_010.spv", "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/lighting/Lighting.ps.support", 11-1, {
+                    
+                    "ENUM_DRAWMODE_UV"
+                    
+                    });
+            }
+            
+            if((true)
+            
+            && (drawmode == Drawmode::DebugNormal)
+            
+            )
+            {
+                return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/lighting/Lighting.ps_011.spv", "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/lighting/Lighting.ps.support", 12-1, {
+                    
+                    "ENUM_DRAWMODE_DEBUG_NORMAL"
+                    
+                    });
+            }
+            
+            ASSERT(false, "Could not load the permutation necessary. This is a bug.");
+            return {};
         }
+#pragma warning( pop )
 
         LightingPS::LightingPS()
             : m_constantRange{
@@ -29,7 +190,677 @@ namespace engine
             
             
             }
+            , m_inputParameters
+            {
+            
+            ShaderInputParameter{"position", "SV_Position0", "float4"}
+            
+            ,
+            
+            
+            ShaderInputParameter{"uv", "TEXCOORD0", "float2"}
+            
+            
+            }
         {}
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        LightingPS::LightingPS(const LightingPS& cl)
+            : m_constantRange{
+            
+            
+                ConstantRange{
+                    tools::ByteRange(
+                        reinterpret_cast<const uint8_t*>(static_cast<const ConstData*>(this)),
+                        reinterpret_cast<const uint8_t*>(static_cast<const ConstData*>(this)) + sizeof(ConstData)),
+                    nullptr,
+                    "ConstData"
+                }
+                
+            
+            
+            }
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = cl.m_constantRange[i].buffer;
+            }
+
+            
+            environmentIrradianceCubemap = cl.environmentIrradianceCubemap;
+            
+            environmentIrradiance = cl.environmentIrradiance;
+            
+            environmentSpecular = cl.environmentSpecular;
+            
+            environmentBrdfLut = cl.environmentBrdfLut;
+            
+            gbufferNormals = cl.gbufferNormals;
+            
+            gbufferUV = cl.gbufferUV;
+            
+            gbufferInstanceId = cl.gbufferInstanceId;
+            
+            shadowMap = cl.shadowMap;
+            
+            ssao = cl.ssao;
+            
+            depth = cl.depth;
+            
+
+            
+
+            
+            instanceMaterials = cl.instanceMaterials;
+            
+            shadowVP = cl.shadowVP;
+            
+            lightWorldPosition = cl.lightWorldPosition;
+            
+            lightDirection = cl.lightDirection;
+            
+            lightColor = cl.lightColor;
+            
+            lightParameters = cl.lightParameters;
+            
+            lightType = cl.lightType;
+            
+            lightIntensity = cl.lightIntensity;
+            
+            lightRange = cl.lightRange;
+            
+
+            
+
+            
+            materialTextures = cl.materialTextures;
+            
+
+            
+
+            
+
+            
+
+            
+            tex_sampler = cl.tex_sampler;
+            
+            tri_sampler = cl.tri_sampler;
+            
+            depth_sampler = cl.depth_sampler;
+            
+            point_sampler = cl.point_sampler;
+            
+            shadow_sampler = cl.shadow_sampler;
+            
+
+            
+            drawmode = cl.drawmode;
+            
+
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        LightingPS::LightingPS(LightingPS&& cl)
+            : m_constantRange{
+            
+            
+                ConstantRange{
+                    tools::ByteRange(
+                        reinterpret_cast<const uint8_t*>(static_cast<const ConstData*>(this)),
+                        reinterpret_cast<const uint8_t*>(static_cast<const ConstData*>(this)) + sizeof(ConstData)),
+                    nullptr,
+                    "ConstData"
+                }
+                
+            
+            
+            }
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = std::move(cl.m_constantRange[i].buffer);
+            }
+
+            
+            environmentIrradianceCubemap = std::move(cl.environmentIrradianceCubemap);
+            
+            environmentIrradiance = std::move(cl.environmentIrradiance);
+            
+            environmentSpecular = std::move(cl.environmentSpecular);
+            
+            environmentBrdfLut = std::move(cl.environmentBrdfLut);
+            
+            gbufferNormals = std::move(cl.gbufferNormals);
+            
+            gbufferUV = std::move(cl.gbufferUV);
+            
+            gbufferInstanceId = std::move(cl.gbufferInstanceId);
+            
+            shadowMap = std::move(cl.shadowMap);
+            
+            ssao = std::move(cl.ssao);
+            
+            depth = std::move(cl.depth);
+            
+
+            
+
+            
+            instanceMaterials = std::move(cl.instanceMaterials);
+            
+            shadowVP = std::move(cl.shadowVP);
+            
+            lightWorldPosition = std::move(cl.lightWorldPosition);
+            
+            lightDirection = std::move(cl.lightDirection);
+            
+            lightColor = std::move(cl.lightColor);
+            
+            lightParameters = std::move(cl.lightParameters);
+            
+            lightType = std::move(cl.lightType);
+            
+            lightIntensity = std::move(cl.lightIntensity);
+            
+            lightRange = std::move(cl.lightRange);
+            
+
+            
+
+            
+            materialTextures = std::move(cl.materialTextures);
+            
+
+            
+
+            
+
+            
+
+            
+            tex_sampler = std::move(cl.tex_sampler);
+            
+            tri_sampler = std::move(cl.tri_sampler);
+            
+            depth_sampler = std::move(cl.depth_sampler);
+            
+            point_sampler = std::move(cl.point_sampler);
+            
+            shadow_sampler = std::move(cl.shadow_sampler);
+            
+
+            
+            drawmode = cl.drawmode;
+            
+
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        LightingPS& LightingPS::operator=(const LightingPS& cl)
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = cl.m_constantRange[i].buffer;
+            }
+
+            
+            environmentIrradianceCubemap = cl.environmentIrradianceCubemap;
+            
+            environmentIrradiance = cl.environmentIrradiance;
+            
+            environmentSpecular = cl.environmentSpecular;
+            
+            environmentBrdfLut = cl.environmentBrdfLut;
+            
+            gbufferNormals = cl.gbufferNormals;
+            
+            gbufferUV = cl.gbufferUV;
+            
+            gbufferInstanceId = cl.gbufferInstanceId;
+            
+            shadowMap = cl.shadowMap;
+            
+            ssao = cl.ssao;
+            
+            depth = cl.depth;
+            
+
+            
+
+            
+            instanceMaterials = cl.instanceMaterials;
+            
+            shadowVP = cl.shadowVP;
+            
+            lightWorldPosition = cl.lightWorldPosition;
+            
+            lightDirection = cl.lightDirection;
+            
+            lightColor = cl.lightColor;
+            
+            lightParameters = cl.lightParameters;
+            
+            lightType = cl.lightType;
+            
+            lightIntensity = cl.lightIntensity;
+            
+            lightRange = cl.lightRange;
+            
+
+            
+
+            
+            materialTextures = cl.materialTextures;
+            
+
+            
+
+            
+
+            
+
+            
+            tex_sampler = cl.tex_sampler;
+            
+            tri_sampler = cl.tri_sampler;
+            
+            depth_sampler = cl.depth_sampler;
+            
+            point_sampler = cl.point_sampler;
+            
+            shadow_sampler = cl.shadow_sampler;
+            
+
+            
+            drawmode = cl.drawmode;
+            
+
+            return *this;
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        LightingPS& LightingPS::operator=(LightingPS&& cl)
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = std::move(cl.m_constantRange[i].buffer);
+            }
+
+            
+            environmentIrradianceCubemap = std::move(cl.environmentIrradianceCubemap);
+            
+            environmentIrradiance = std::move(cl.environmentIrradiance);
+            
+            environmentSpecular = std::move(cl.environmentSpecular);
+            
+            environmentBrdfLut = std::move(cl.environmentBrdfLut);
+            
+            gbufferNormals = std::move(cl.gbufferNormals);
+            
+            gbufferUV = std::move(cl.gbufferUV);
+            
+            gbufferInstanceId = std::move(cl.gbufferInstanceId);
+            
+            shadowMap = std::move(cl.shadowMap);
+            
+            ssao = std::move(cl.ssao);
+            
+            depth = std::move(cl.depth);
+            
+
+            
+
+            
+            instanceMaterials = std::move(cl.instanceMaterials);
+            
+            shadowVP = std::move(cl.shadowVP);
+            
+            lightWorldPosition = std::move(cl.lightWorldPosition);
+            
+            lightDirection = std::move(cl.lightDirection);
+            
+            lightColor = std::move(cl.lightColor);
+            
+            lightParameters = std::move(cl.lightParameters);
+            
+            lightType = std::move(cl.lightType);
+            
+            lightIntensity = std::move(cl.lightIntensity);
+            
+            lightRange = std::move(cl.lightRange);
+            
+
+            
+
+            
+            materialTextures = std::move(cl.materialTextures);
+            
+
+            
+
+            
+
+            
+
+            
+            tex_sampler = std::move(cl.tex_sampler);
+            
+            tri_sampler = std::move(cl.tri_sampler);
+            
+            depth_sampler = std::move(cl.depth_sampler);
+            
+            point_sampler = std::move(cl.point_sampler);
+            
+            shadow_sampler = std::move(cl.shadow_sampler);
+            
+
+            
+            drawmode = cl.drawmode;
+            
+
+            return *this;
+        }
+#pragma warning( pop )
+
+        std::vector<std::string> LightingPS::textureSrvNames() const
+        {
+            return {
+                
+                "environmentIrradianceCubemap"
+                
+                ,
+                
+                
+                "environmentIrradiance"
+                
+                ,
+                
+                
+                "environmentSpecular"
+                
+                ,
+                
+                
+                "environmentBrdfLut"
+                
+                ,
+                
+                
+                "gbufferNormals"
+                
+                ,
+                
+                
+                "gbufferUV"
+                
+                ,
+                
+                
+                "gbufferInstanceId"
+                
+                ,
+                
+                
+                "shadowMap"
+                
+                ,
+                
+                
+                "ssao"
+                
+                ,
+                
+                
+                "depth"
+                
+                
+            };
+        }
+
+        std::vector<std::string> LightingPS::textureUavNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> LightingPS::bufferSrvNames() const
+        {
+            return {
+                
+                "instanceMaterials"
+                
+                ,
+                
+                
+                "shadowVP"
+                
+                ,
+                
+                
+                "lightWorldPosition"
+                
+                ,
+                
+                
+                "lightDirection"
+                
+                ,
+                
+                
+                "lightColor"
+                
+                ,
+                
+                
+                "lightParameters"
+                
+                ,
+                
+                
+                "lightType"
+                
+                ,
+                
+                
+                "lightIntensity"
+                
+                ,
+                
+                
+                "lightRange"
+                
+                
+            };
+        }
+
+        std::vector<std::string> LightingPS::bufferUavNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> LightingPS::samplerNames() const
+        {
+            return {
+                
+                "tex_sampler"
+                
+                ,
+                
+                
+                "tri_sampler"
+                
+                ,
+                
+                
+                "depth_sampler"
+                
+                ,
+                
+                
+                "point_sampler"
+                
+                ,
+                
+                
+                "shadow_sampler"
+                
+                
+            };
+        }
+
+        std::vector<std::string> LightingPS::srvNames() const
+        {
+            return {
+                
+                "environmentIrradianceCubemap"
+                
+                ,
+                
+                
+                "environmentIrradiance"
+                
+                ,
+                
+                
+                "environmentSpecular"
+                
+                ,
+                
+                
+                "environmentBrdfLut"
+                
+                ,
+                
+                
+                "gbufferNormals"
+                
+                ,
+                
+                
+                "gbufferUV"
+                
+                ,
+                
+                
+                "gbufferInstanceId"
+                
+                ,
+                
+                
+                "instanceMaterials"
+                
+                ,
+                
+                
+                "shadowMap"
+                
+                ,
+                
+                
+                "shadowVP"
+                
+                ,
+                
+                
+                "ssao"
+                
+                ,
+                
+                
+                "lightWorldPosition"
+                
+                ,
+                
+                
+                "lightDirection"
+                
+                ,
+                
+                
+                "lightColor"
+                
+                ,
+                
+                
+                "lightParameters"
+                
+                ,
+                
+                
+                "lightType"
+                
+                ,
+                
+                
+                "lightIntensity"
+                
+                ,
+                
+                
+                "lightRange"
+                
+                ,
+                
+                
+                "depth"
+                
+                ,
+                
+                
+                "materialTextures"
+                
+                
+            };
+        }
+
+        std::vector<std::string> LightingPS::uavNames() const
+        {
+            return {
+                
+            };
+        }
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        engine::ResourceDimension LightingPS::textureDimension(const std::string& name) const
+        {
+            
+            if("environmentIrradianceCubemap" == name) return engine::ResourceDimension::TextureCubemap;
+            
+            if("environmentIrradiance" == name) return engine::ResourceDimension::Texture2D;
+            
+            if("environmentSpecular" == name) return engine::ResourceDimension::TextureCubemap;
+            
+            if("environmentBrdfLut" == name) return engine::ResourceDimension::Texture2D;
+            
+            if("gbufferNormals" == name) return engine::ResourceDimension::Texture2D;
+            
+            if("gbufferUV" == name) return engine::ResourceDimension::Texture2D;
+            
+            if("gbufferInstanceId" == name) return engine::ResourceDimension::Texture2D;
+            
+            if("shadowMap" == name) return engine::ResourceDimension::Texture2DArray;
+            
+            if("ssao" == name) return engine::ResourceDimension::Texture2D;
+            
+            if("depth" == name) return engine::ResourceDimension::Texture2D;
+            
+            if("materialTextures" == name) return engine::ResourceDimension::Texture2D;
+            
+            return engine::ResourceDimension::Unknown;
+        }
+#pragma warning( pop )
 
         std::vector<TextureSRV> LightingPS::texture_srvs() const
         {
@@ -43,15 +874,11 @@ namespace engine
             
             result.emplace_back(environmentBrdfLut);
             
-            result.emplace_back(albedo);
+            result.emplace_back(gbufferNormals);
             
-            result.emplace_back(normal);
+            result.emplace_back(gbufferUV);
             
-            result.emplace_back(roughness);
-            
-            result.emplace_back(metalness);
-            
-            result.emplace_back(occlusion);
+            result.emplace_back(gbufferInstanceId);
             
             result.emplace_back(shadowMap);
             
@@ -72,6 +899,8 @@ namespace engine
         std::vector<BufferSRV> LightingPS::buffer_srvs() const
         {
             std::vector<BufferSRV> result;
+            
+            result.emplace_back(instanceMaterials);
             
             result.emplace_back(shadowVP);
             
@@ -102,6 +931,8 @@ namespace engine
         std::vector<TextureBindlessSRV> LightingPS::bindless_texture_srvs() const
         {
             std::vector<TextureBindlessSRV> result;
+            
+            result.emplace_back(materialTextures);
             
             return result;
         }
@@ -138,6 +969,8 @@ namespace engine
             
             result.emplace_back(tex_sampler);
             
+            result.emplace_back(tri_sampler);
+            
             result.emplace_back(depth_sampler);
             
             result.emplace_back(point_sampler);
@@ -147,10 +980,16 @@ namespace engine
             return result;
         }
 
+        const std::vector<ShaderInputParameter>& LightingPS::inputParameters() const
+        {
+            return m_inputParameters;
+        }
+
 // warning C4172: returning address of local variable or temporary
 // this will never happen as the name will always match the correct resource
 #pragma warning( push )
 #pragma warning( disable : 4172 )
+#pragma warning( disable : 4100 )
 
         bool LightingPS::hasTextureSrv(const std::string& name) const
         {
@@ -164,15 +1003,11 @@ namespace engine
             
             if(name == std::string("environmentBrdfLut")) return true;
             
-            if(name == std::string("albedo")) return true;
+            if(name == std::string("gbufferNormals")) return true;
             
-            if(name == std::string("normal")) return true;
+            if(name == std::string("gbufferUV")) return true;
             
-            if(name == std::string("roughness")) return true;
-            
-            if(name == std::string("metalness")) return true;
-            
-            if(name == std::string("occlusion")) return true;
+            if(name == std::string("gbufferInstanceId")) return true;
             
             if(name == std::string("shadowMap")) return true;
             
@@ -193,6 +1028,8 @@ namespace engine
         bool LightingPS::hasBufferSrv(const std::string& name) const
         {
             
+            
+            if (name == std::string("instanceMaterials")) return true;
             
             if (name == std::string("shadowVP")) return true;
             
@@ -222,6 +1059,10 @@ namespace engine
 
         bool LightingPS::hasBindlessTextureSrv(const std::string& name) const
         {
+            
+            
+            if (name == std::string("materialTextures")) return true;
+            
             
             return false;
         }
@@ -256,15 +1097,11 @@ namespace engine
             
             if(name == std::string("environmentBrdfLut")) return environmentBrdfLut;
             
-            if(name == std::string("albedo")) return albedo;
+            if(name == std::string("gbufferNormals")) return gbufferNormals;
             
-            if(name == std::string("normal")) return normal;
+            if(name == std::string("gbufferUV")) return gbufferUV;
             
-            if(name == std::string("roughness")) return roughness;
-            
-            if(name == std::string("metalness")) return metalness;
-            
-            if(name == std::string("occlusion")) return occlusion;
+            if(name == std::string("gbufferInstanceId")) return gbufferInstanceId;
             
             if(name == std::string("shadowMap")) return shadowMap;
             
@@ -287,6 +1124,8 @@ namespace engine
         const BufferSRV& LightingPS::bufferSrv(const std::string& name) const
         {
             
+            
+            if(name == std::string("instanceMaterials")) return instanceMaterials;
             
             if(name == std::string("shadowVP")) return shadowVP;
             
@@ -316,11 +1155,79 @@ namespace engine
             return BufferUAV();
         }
 
+        void LightingPS::textureSrv(const std::string& name, TextureSRV& texture)
+        {
+            
+            
+            if(name == std::string("environmentIrradianceCubemap")) { environmentIrradianceCubemap = texture; return; }
+            
+            if(name == std::string("environmentIrradiance")) { environmentIrradiance = texture; return; }
+            
+            if(name == std::string("environmentSpecular")) { environmentSpecular = texture; return; }
+            
+            if(name == std::string("environmentBrdfLut")) { environmentBrdfLut = texture; return; }
+            
+            if(name == std::string("gbufferNormals")) { gbufferNormals = texture; return; }
+            
+            if(name == std::string("gbufferUV")) { gbufferUV = texture; return; }
+            
+            if(name == std::string("gbufferInstanceId")) { gbufferInstanceId = texture; return; }
+            
+            if(name == std::string("shadowMap")) { shadowMap = texture; return; }
+            
+            if(name == std::string("ssao")) { ssao = texture; return; }
+            
+            if(name == std::string("depth")) { depth = texture; return; }
+            
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void LightingPS::textureUav(const std::string& name, TextureUAV& texture)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void LightingPS::bufferSrv(const std::string& name, BufferSRV& buffer)
+        {
+            
+            
+            if(name == std::string("instanceMaterials")) { instanceMaterials = buffer; return; }
+            
+            if(name == std::string("shadowVP")) { shadowVP = buffer; return; }
+            
+            if(name == std::string("lightWorldPosition")) { lightWorldPosition = buffer; return; }
+            
+            if(name == std::string("lightDirection")) { lightDirection = buffer; return; }
+            
+            if(name == std::string("lightColor")) { lightColor = buffer; return; }
+            
+            if(name == std::string("lightParameters")) { lightParameters = buffer; return; }
+            
+            if(name == std::string("lightType")) { lightType = buffer; return; }
+            
+            if(name == std::string("lightIntensity")) { lightIntensity = buffer; return; }
+            
+            if(name == std::string("lightRange")) { lightRange = buffer; return; }
+            
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void LightingPS::bufferUav(const std::string& name, BufferUAV& buffer)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
         const Sampler& LightingPS::sampler(const std::string& name) const
         {
             
             
             if(name == std::string("tex_sampler")) return tex_sampler;
+            
+            if(name == std::string("tri_sampler")) return tri_sampler;
             
             if(name == std::string("depth_sampler")) return depth_sampler;
             
@@ -335,6 +1242,10 @@ namespace engine
 
         const TextureBindlessSRV& LightingPS::bindlessTextureSrv(const std::string& name) const
         {
+            
+            
+            if(name == std::string("materialTextures")) return materialTextures;
+            
             
             ASSERT(false, "Tried to look for non-existing resource");
             return TextureBindlessSRV();

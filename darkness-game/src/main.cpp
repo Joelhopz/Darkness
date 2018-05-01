@@ -13,9 +13,6 @@ int CALLBACK WinMain(
     _In_ int   //       nCmdShow
     )
 {
-    PluginManager manager;
-    manager.addFolder("C:\\work\\darkness\\darkness-coreplugins\\bin\\x64\\Debug\\");
-
     Application app;
     return 0;
 }

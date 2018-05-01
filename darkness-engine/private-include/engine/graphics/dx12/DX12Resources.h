@@ -77,8 +77,8 @@ namespace engine
 
             const BufferDescription::Descriptor& description() const;
 
-            void setCounterValue(uint32_t value);
-            uint32_t getCounterValue();
+            /*void setCounterValue(uint32_t value);
+            uint32_t getCounterValue();*/
 
             D3D12_CPU_DESCRIPTOR_HANDLE& native();
             const D3D12_CPU_DESCRIPTOR_HANDLE& native() const;
@@ -91,7 +91,10 @@ namespace engine
                 return m_viewHandle.uniqueId();
             }
 
+            uint32_t structureCounterOffsetBytes() const;
+
         protected:
+            friend class CommandListImpl;
             BufferDescription::Descriptor m_description;
             DescriptorHandle m_viewHandle;
             //tools::ComPtr<ID3D12Resource> m_counterBuffer;
@@ -207,13 +210,14 @@ namespace engine
             const TextureDescription::Descriptor& description() const;
 
             ID3D12Resource* native() const;
-            ResourceState state() const;
-            void state(ResourceState _state);
+
+            ResourceState state(int slice, int mip) const;
+            void state(int slice, int mip, ResourceState _state);
 
         protected:
             TextureDescription::Descriptor m_description;
             tools::ComPtr<ID3D12Resource> m_texture;
-            ResourceState m_state;
+            std::vector<ResourceState> m_state;
         };
 
         class TextureSRVImpl
@@ -230,6 +234,11 @@ namespace engine
             Texture& texture();
             const Texture& texture() const;
 
+            Format format() const;
+            uint32_t width() const;
+            uint32_t height() const;
+            uint32_t depth() const;
+
             D3D12_CPU_DESCRIPTOR_HANDLE& native();
             const D3D12_CPU_DESCRIPTOR_HANDLE& native() const;
 
@@ -238,10 +247,13 @@ namespace engine
                 return m_viewHandle.uniqueId();
             }
 
+            const SubResource& subResource() const;
+
         protected:
             TextureDescription::Descriptor m_description;
             DescriptorHandle m_viewHandle;
             Texture m_texture;
+            SubResource m_subResources;
         };
 
         class TextureUAVImpl
@@ -255,11 +267,16 @@ namespace engine
 
             const TextureDescription::Descriptor& description() const;
 
-            void setCounterValue(uint32_t value);
-            uint32_t getCounterValue();
+            /*void setCounterValue(uint32_t value);
+            uint32_t getCounterValue();*/
 
             Texture& texture();
             const Texture& texture() const;
+
+            Format format() const;
+            uint32_t width() const;
+            uint32_t height() const;
+            uint32_t depth() const;
 
             D3D12_CPU_DESCRIPTOR_HANDLE& native();
             const D3D12_CPU_DESCRIPTOR_HANDLE& native() const;
@@ -268,11 +285,14 @@ namespace engine
             {
                 return m_viewHandle.uniqueId();
             }
+
+            const SubResource& subResource() const;
         protected:
             TextureDescription::Descriptor m_description;
             DescriptorHandle m_viewHandle;
             tools::ComPtr<ID3D12Resource> m_counterBuffer;
             Texture m_texture;
+            SubResource m_subResources;
         };
 
         class TextureDSVImpl
@@ -289,6 +309,10 @@ namespace engine
             Texture& texture();
             const Texture& texture() const;
 
+            Format format() const;
+            uint32_t width() const;
+            uint32_t height() const;
+
             D3D12_CPU_DESCRIPTOR_HANDLE& native();
             const D3D12_CPU_DESCRIPTOR_HANDLE& native() const;
 
@@ -296,11 +320,12 @@ namespace engine
             {
                 return m_viewHandle.uniqueId();
             }
-
+            const SubResource& subResource() const;
         protected:
             TextureDescription::Descriptor m_description;
             DescriptorHandle m_viewHandle;
             Texture m_texture;
+            SubResource m_subResources;
         };
 
         class TextureRTVImpl
@@ -317,6 +342,10 @@ namespace engine
             Texture& texture();
             const Texture& texture() const;
 
+            Format format() const;
+            uint32_t width() const;
+            uint32_t height() const;
+
             D3D12_CPU_DESCRIPTOR_HANDLE& native();
             const D3D12_CPU_DESCRIPTOR_HANDLE& native() const;
 
@@ -324,10 +353,12 @@ namespace engine
             {
                 return m_viewHandle.uniqueId();
             }
+            const SubResource& subResource() const;
         protected:
             TextureDescription::Descriptor m_description;
             DescriptorHandle m_viewHandle;
             Texture m_texture;
+            SubResource m_subResources;
         };
 
     }

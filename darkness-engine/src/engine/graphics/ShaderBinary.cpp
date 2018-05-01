@@ -22,9 +22,11 @@ namespace engine
     ShaderBinary::ShaderBinary(
         const Device& device, 
         const std::string& binaryPath, 
-        const std::string& supportPath, 
+        const std::string& supportPath,
+        int permutationId,
+        const std::vector<std::string>& defines,
         platform::FileWatcher& watcher)
-        : m_impl{ tools::make_unique_impl<ShaderBinaryImpl>(device, binaryPath, supportPath, watcher) }
+        : m_impl{ tools::make_unique_impl<ShaderBinaryImpl>(device, binaryPath, supportPath, permutationId, defines, watcher) }
     {
     }
 

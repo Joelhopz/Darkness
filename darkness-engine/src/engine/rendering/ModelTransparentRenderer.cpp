@@ -16,7 +16,7 @@ namespace engine
         , m_compositePipeline{ device.createPipeline<shaders::MeshTransparentComposite>(shaderStorage) }
     {
         m_colorAccumulate = device.createTextureRTV(TextureDescription()
-            .format(Format::Format_R16G16B16A16_FLOAT)
+            .format(Format::R16G16B16A16_FLOAT)
             .width(device.width())
             .height(device.height())
             .name("transparency color accumulate")
@@ -24,7 +24,7 @@ namespace engine
             .optimizedClearValue(Float4(0.0f, 0.0f, 0.0f, 0.0f)));
 
         m_transparencyAccumulate = device.createTextureRTV(TextureDescription()
-            .format(Format::Format_R16_FLOAT)
+            .format(Format::R16_FLOAT)
             .width(device.width())
             .height(device.height())
             .name("transparency alpha accumulate")
@@ -36,9 +36,6 @@ namespace engine
 
         m_pipeline.setPrimitiveTopologyType(PrimitiveTopologyType::TriangleList);
         m_pipeline.setRasterizerState(RasterizerDescription().cullMode(CullMode::None));
-        m_pipeline.setRenderTargetFormats(
-            { Format::Format_R16G16B16A16_FLOAT, Format::Format_R16_FLOAT },
-            Format::Format_D32_FLOAT);
         m_pipeline.ps.tex_sampler = device.createSampler(SamplerDescription().filter(engine::Filter::Bilinear));
         m_pipeline.ps.shadow_sampler = device.createSampler(SamplerDescription()
             .addressU(TextureAddressMode::Mirror)
@@ -89,7 +86,6 @@ namespace engine
         // compositing pass
         m_compositePipeline.setPrimitiveTopologyType(PrimitiveTopologyType::TriangleList);
         m_compositePipeline.setRasterizerState(RasterizerDescription().cullMode(CullMode::None));
-        m_compositePipeline.setRenderTargetFormat(Format::Format_R16G16B16A16_FLOAT, Format::Format_D32_FLOAT);
         m_compositePipeline.ps.tex_sampler = device.createSampler(SamplerDescription().filter(engine::Filter::Point));
         m_compositePipeline.setBlendState(BlendDescription().renderTarget(0, RenderTargetBlendDescription()
             .blendEnable(true)
@@ -132,7 +128,6 @@ namespace engine
         // compositing pass
         m_compositePipeline.setPrimitiveTopologyType(PrimitiveTopologyType::TriangleList);
         m_compositePipeline.setRasterizerState(RasterizerDescription().cullMode(CullMode::None));
-        m_compositePipeline.setRenderTargetFormat(Format::Format_R8G8B8A8_UNORM, Format::Format_D32_FLOAT);
         m_compositePipeline.ps.tex_sampler = device.createSampler(SamplerDescription().filter(engine::Filter::Point));
         m_compositePipeline.setBlendState(BlendDescription().renderTarget(0, RenderTargetBlendDescription()
             .blendEnable(true)
@@ -172,18 +167,19 @@ namespace engine
     }
 
     void ModelTransparentRenderer::render(
-        Device& device,
-        TextureRTV& currentRenderTarget,
-        TextureDSV& depthBuffer,
-        CommandList& cmd,
-        MaterialComponent& defaultMaterial,
-        Camera& camera,
-        LightData& lights,
-        FlatScene& scene,
-        TextureSRV& shadowMap,
+        Device& /*device*/,
+        TextureRTV& /*currentRenderTarget*/,
+        TextureDSV& /*depthBuffer*/,
+        CommandList& /*cmd*/,
+        MaterialComponent& /*defaultMaterial*/,
+        Camera& /*camera*/,
+        LightData& /*lights*/,
+        FlatScene& /*scene*/,
+        TextureSRV& /*shadowMap*/,
         BufferSRV& /*shadowVP*/
     )
     {
+#if 0
         if (scene.transparentNodes.size() == 0)
             return;
         cmd.clearRenderTargetView(m_colorAccumulate, { 0.0f, 0.0f, 0.0f, 0.0f });
@@ -191,8 +187,6 @@ namespace engine
 
         {
             cmd.setRenderTargets({ m_colorAccumulate, m_transparencyAccumulate }, depthBuffer);
-            cmd.setViewPorts({ Viewport{ 0.0f, 0.0f, static_cast<float>(m_colorAccumulate.width()), static_cast<float>(m_colorAccumulate.height()), 0.0f, 1.0f } });
-            cmd.setScissorRects({ Rectangle{ 0, 0, m_colorAccumulate.width(), m_colorAccumulate.height() } });
 
             auto viewMatrix = camera.viewMatrix();
 
@@ -214,7 +208,7 @@ namespace engine
 
             for (auto& node : scene.transparentNodes)
             {
-                for (auto&& subMesh : node.mesh->meshBuffers())
+                auto& subMesh = node.mesh->meshBuffer();
                 {
                     auto transformMatrix = node.transform;
 
@@ -252,8 +246,6 @@ namespace engine
         }
         {
             cmd.setRenderTargets({ currentRenderTarget });
-            cmd.setViewPorts({ Viewport{ 0.0f, 0.0f, static_cast<float>(currentRenderTarget.width()), static_cast<float>(currentRenderTarget.height()), 0.0f, 1.0f } });
-            cmd.setScissorRects({ Rectangle{ 0, 0, currentRenderTarget.width(), currentRenderTarget.height() } });
 
             m_compositePipeline.ps.width = static_cast<float>(currentRenderTarget.width());
             m_compositePipeline.ps.height = static_cast<float>(currentRenderTarget.height());
@@ -264,5 +256,6 @@ namespace engine
             cmd.bindPipe(m_compositePipeline);
             cmd.draw(4u);
         }
+#endif
     }
 }

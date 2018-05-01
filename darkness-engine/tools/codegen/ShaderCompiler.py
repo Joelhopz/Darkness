@@ -76,13 +76,14 @@ DX12Stages = {
 
 class DX12Compiler:
 	def __init__(self, defines, includes):
-		self.compilerBinary = '"C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.15063.0\\x64\\fxc.exe"'
+		self.compilerBinary = '"C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.16299.0\\x64\\fxc.exe"'
 		self.inputFlag = ''
 		# /Od  for disable optimization
 		# /Zpr = Row major
 		self.outputFlag = '/nologo /Zpr /Od /Zi /Fo'
 		self.include_paths = []
 		self.defines = []
+		
 		if includes is not None:
 			self.include_paths.extend(includes)
 		if defines is not None:
@@ -96,11 +97,23 @@ class DX12Compiler:
 		# check input_file for bindless texture
 		# /enable_unbounded_descriptor_tables
 
+		defineStr = ''
+		for i in range(len(self.defines)):
+			defineStr += '/D'+str(self.defines[i])
+			if i < len(self.defines)-1:
+				defineStr += ' '
+
 		filename, file_extension = os.path.splitext(output_file)
 		if not bindless:
-			os.system(self.compilerBinary+' /T '+self.profile(input_file)+' '+input_file+' '+self.outputFlag+' '+output_file+' /Fd '+filename+'.pdb')
+			cmd = self.compilerBinary+' /T '+self.profile(input_file)+' '+input_file+' '+self.outputFlag+' '+output_file+' /Fd '+filename+'.pdb'
+			if defineStr != '':
+				cmd += ' '+defineStr
+			os.system(cmd)
 		else:
-			os.system(self.compilerBinary+' /enable_unbounded_descriptor_tables /T '+self.profile(input_file)+' '+input_file+' '+self.outputFlag+' '+output_file+' /Fd '+filename+'.pdb')
+			cmd = self.compilerBinary+' /enable_unbounded_descriptor_tables /T '+self.profile(input_file)+' '+input_file+' '+self.outputFlag+' '+output_file+' /Fd '+filename+'.pdb'
+			if defineStr != '':
+				cmd += ' '+defineStr
+			os.system(cmd)
 
 class Compiler:
 	def __init__(self, graphicsApi, defines, includes):
@@ -116,13 +129,14 @@ class Compiler:
 # del %(Filename).frag.spv && 
 # C:\VulkanSDK\1.0.21.1\Bin\glslangValidator.exe -s -V "%(FullPath)" && 
 # rename frag.spv %(Filename).frag.spv
+# -i C:\work\darkness\darkness-engine\shaders\core\culling\OcclusionCulling.cs.hlsl -t C:\work\darkness\darkness-engine\tools\codegen\ShaderLoadInterfaceTemplate.cpp -o C:\work\darkness\darkness-engine\include\shaders\core\culling\OcclusionCulling.cs.cpp -b C:\work\darkness\darkness-engine\data\shaders\dx12\core\culling\OcclusionCulling.cs.cso -s Compute -x C:\work\darkness\darkness-engine\data\shaders\dx12\core\culling\OcclusionCulling.cs.support
 
 def main():
 	parser = OptionParser()
 	parser.add_option("-g", "--graphics-api", dest="graphicsapi", help="select graphics api. example 1: -g VULKAN , example 2: -g DX12")
 	parser.add_option("-i", "--input", dest="input", help="input file. example: -i C:\\work\\Test.frag")
 	parser.add_option("-o", "--output", dest="output", help="output file. example: -o C:\\work\\Test.frag.spv")
-	parser.add_option("-D", "--define", action='append', dest="define", help="example: -D DEBUG")
+	parser.add_option("-D", "--define", action='append', dest="define", help="example: -DDEBUG")
 	parser.add_option("-I", "--include", action='append', dest="include", help="example: -I ../inc")
 
 	options, arguments = parser.parse_args()

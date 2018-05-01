@@ -9,16 +9,256 @@ namespace engine
 {
     namespace shaders
     {
+#pragma warning( push )
+#pragma warning( disable : 4702 )
         std::shared_ptr<const ShaderBinary> EquirectToCubemapPS::load(const Device& device, ShaderStorage& storage) const
         {
-            return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/dx12/core/tools/EquirectToCubemap.ps.cso", "C:/work/darkness/darkness-engine/data/shaders/dx12/core/tools/EquirectToCubemap.ps.support");
+            
+            return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/tools/EquirectToCubemap.ps.spv", "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/tools/EquirectToCubemap.ps.support", -1, {});
+            
+            ASSERT(false, "Could not load the permutation necessary. This is a bug.");
+            return {};
         }
+#pragma warning( pop )
 
         EquirectToCubemapPS::EquirectToCubemapPS()
             : m_constantRange{
             
             }
+            , m_inputParameters
+            {
+            
+            ShaderInputParameter{"position", "SV_Position0", "float4"}
+            
+            ,
+            
+            
+            ShaderInputParameter{"normal", "NORMAL", "float4"}
+            
+            
+            }
         {}
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        EquirectToCubemapPS::EquirectToCubemapPS(const EquirectToCubemapPS& cl)
+            : m_constantRange{
+            
+            }
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = cl.m_constantRange[i].buffer;
+            }
+
+            
+            equirectangularMap = cl.equirectangularMap;
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+            equirectangularSampler = cl.equirectangularSampler;
+            
+
+            
+
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        EquirectToCubemapPS::EquirectToCubemapPS(EquirectToCubemapPS&& cl)
+            : m_constantRange{
+            
+            }
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = std::move(cl.m_constantRange[i].buffer);
+            }
+
+            
+            equirectangularMap = std::move(cl.equirectangularMap);
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+            equirectangularSampler = std::move(cl.equirectangularSampler);
+            
+
+            
+
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        EquirectToCubemapPS& EquirectToCubemapPS::operator=(const EquirectToCubemapPS& cl)
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = cl.m_constantRange[i].buffer;
+            }
+
+            
+            equirectangularMap = cl.equirectangularMap;
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+            equirectangularSampler = cl.equirectangularSampler;
+            
+
+            
+
+            return *this;
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        EquirectToCubemapPS& EquirectToCubemapPS::operator=(EquirectToCubemapPS&& cl)
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = std::move(cl.m_constantRange[i].buffer);
+            }
+
+            
+            equirectangularMap = std::move(cl.equirectangularMap);
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+            equirectangularSampler = std::move(cl.equirectangularSampler);
+            
+
+            
+
+            return *this;
+        }
+#pragma warning( pop )
+
+        std::vector<std::string> EquirectToCubemapPS::textureSrvNames() const
+        {
+            return {
+                
+                "equirectangularMap"
+                
+                
+            };
+        }
+
+        std::vector<std::string> EquirectToCubemapPS::textureUavNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> EquirectToCubemapPS::bufferSrvNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> EquirectToCubemapPS::bufferUavNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> EquirectToCubemapPS::samplerNames() const
+        {
+            return {
+                
+                "equirectangularSampler"
+                
+                
+            };
+        }
+
+        std::vector<std::string> EquirectToCubemapPS::srvNames() const
+        {
+            return {
+                
+                "equirectangularMap"
+                
+                
+            };
+        }
+
+        std::vector<std::string> EquirectToCubemapPS::uavNames() const
+        {
+            return {
+                
+            };
+        }
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        engine::ResourceDimension EquirectToCubemapPS::textureDimension(const std::string& name) const
+        {
+            
+            if("equirectangularMap" == name) return engine::ResourceDimension::Texture2D;
+            
+            return engine::ResourceDimension::Unknown;
+        }
+#pragma warning( pop )
 
         std::vector<TextureSRV> EquirectToCubemapPS::texture_srvs() const
         {
@@ -92,10 +332,16 @@ namespace engine
             return result;
         }
 
+        const std::vector<ShaderInputParameter>& EquirectToCubemapPS::inputParameters() const
+        {
+            return m_inputParameters;
+        }
+
 // warning C4172: returning address of local variable or temporary
 // this will never happen as the name will always match the correct resource
 #pragma warning( push )
 #pragma warning( disable : 4172 )
+#pragma warning( disable : 4100 )
 
         bool EquirectToCubemapPS::hasTextureSrv(const std::string& name) const
         {
@@ -179,6 +425,34 @@ namespace engine
             
             ASSERT(false, "Tried to look for non-existing resource");
             return BufferUAV();
+        }
+
+        void EquirectToCubemapPS::textureSrv(const std::string& name, TextureSRV& texture)
+        {
+            
+            
+            if(name == std::string("equirectangularMap")) { equirectangularMap = texture; return; }
+            
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void EquirectToCubemapPS::textureUav(const std::string& name, TextureUAV& texture)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void EquirectToCubemapPS::bufferSrv(const std::string& name, BufferSRV& buffer)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void EquirectToCubemapPS::bufferUav(const std::string& name, BufferUAV& buffer)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
         }
 
         const Sampler& EquirectToCubemapPS::sampler(const std::string& name) const

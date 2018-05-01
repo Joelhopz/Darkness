@@ -145,7 +145,6 @@ namespace engine
 
             //m_colorAttachement.format = SwapChainImplGet::impl(*swapChain).surfaceFormat().format;
             m_colorAttachement.format = VK_FORMAT_B8G8R8A8_UNORM;
-            LOG("set color attachement format");
             m_colorAttachement.samples = VK_SAMPLE_COUNT_1_BIT;
             m_colorAttachement.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
             m_colorAttachement.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -157,7 +156,7 @@ namespace engine
             m_colorAttachmentRef.attachment = 0;
             m_colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
-            m_depthAttachment.format = vulkanFormat(Format::Format_D32_FLOAT);
+            m_depthAttachment.format = vulkanFormat(Format::D32_FLOAT);
             m_depthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
             m_depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
             m_depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
@@ -182,21 +181,21 @@ namespace engine
 #if 0
             InputElementDescription vertDesc;
             vertDesc.alignedByteOffset(sizeof(Vertex))
-                .format(Format::Format_R32G32B32_FLOAT)
+                .format(Format::R32G32B32_FLOAT)
                 .inputSlot(0)
                 .inputSlotClass(InputClassification::PerVertexData)
                 .offset(offsetof(Vertex, pos));
 
             InputElementDescription colorDesc;
             colorDesc.alignedByteOffset(sizeof(Vertex))
-                .format(Format::Format_R32G32B32_FLOAT)
+                .format(Format::R32G32B32_FLOAT)
                 .inputSlot(0)
                 .inputSlotClass(InputClassification::PerVertexData)
                 .offset(offsetof(Vertex, color));
 
             InputElementDescription uvDesc;
             uvDesc.alignedByteOffset(sizeof(Vertex))
-                .format(Format::Format_R32G32_FLOAT)
+                .format(Format::R32G32_FLOAT)
                 .inputSlot(0)
                 .inputSlotClass(InputClassification::PerVertexData)
                 .offset(offsetof(Vertex, texCoord));
@@ -230,9 +229,6 @@ namespace engine
             setRootSignature(rootSignature);
 #endif
         }
-
-        void PipelineImpl::setRenderTarget(TextureRTV rtv)
-        {}
 
         const VkDescriptorSet& PipelineImpl::descriptorSet() const
         {
@@ -456,21 +452,21 @@ namespace engine
         {
             /*InputElementDescription vertDesc;
             vertDesc.alignedByteOffset(sizeof(Vertex))
-                .format(Format::Format_R32G32B32_FLOAT)
+                .format(Format::R32G32B32_FLOAT)
                 .inputSlot(0)
                 .inputSlotClass(InputClassification::PerVertexData)
                 .offset(offsetof(Vertex, pos));
 
             InputElementDescription colorDesc;
             colorDesc.alignedByteOffset(sizeof(Vertex))
-                .format(Format::Format_R32G32B32_FLOAT)
+                .format(Format::R32G32B32_FLOAT)
                 .inputSlot(0)
                 .inputSlotClass(InputClassification::PerVertexData)
                 .offset(offsetof(Vertex, color));
 
             InputElementDescription uvDesc;
             uvDesc.alignedByteOffset(sizeof(Vertex))
-                .format(Format::Format_R32G32_FLOAT)
+                .format(Format::R32G32_FLOAT)
                 .inputSlot(0)
                 .inputSlotClass(InputClassification::PerVertexData)
                 .offset(offsetof(Vertex, texCoord));

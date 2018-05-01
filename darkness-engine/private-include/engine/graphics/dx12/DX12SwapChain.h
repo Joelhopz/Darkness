@@ -39,7 +39,7 @@ namespace engine
             IDXGISwapChain3* native();
             const IDXGISwapChain3* native() const;
 
-            bool needRefresh() const;
+            bool needRefresh();
 
             void resize(const Device& device, Size size);
         private:
@@ -51,6 +51,7 @@ namespace engine
             int m_videoCardMemory;
             char m_videoCardDescription[128];
             bool m_vsync;
+			bool m_needRefresh;
         };
     }
 }

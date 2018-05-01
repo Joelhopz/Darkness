@@ -21,18 +21,6 @@ namespace engine
         class BufferImpl;
     }
 
-    enum class ResourceDimension
-    {
-        Unknown,
-        Texture1D,
-        Texture2D,
-        Texture3D,
-        Texture1DArray,
-        Texture2DArray,
-        TextureCubemap,
-        TextureCubemapArray
-    };
-
     struct SampleDescription
     {
         unsigned int count;
@@ -92,13 +80,13 @@ namespace engine
 
     enum class ResourceUsage
     {
-        CpuToGpu,
-        GpuToCpu,
         GpuRead,
         GpuReadWrite,
         GpuRenderTargetRead,
         GpuRenderTargetReadWrite,
-        DepthStencil
+        DepthStencil,
+        GpuToCpu,
+        Upload
     };
 
     constexpr const size_t InvalidElementsValue = static_cast<size_t>(-1);
@@ -108,7 +96,7 @@ namespace engine
        
         struct Descriptor
         {
-            Format format = Format::Format_UNKNOWN;
+            Format format = Format::UNKNOWN;
             int32_t elements = -1;
             int32_t elementSize = -1;
             uint32_t firstElement = 0;
@@ -205,13 +193,11 @@ namespace engine
             
             InitialData(const tools::ByteRange& srcdata, uint32_t alignment, uint32_t elemStart = 0)
             {
-                elements = (static_cast<int32_t>(srcdata.size() / srcdata.elementSize) + (alignment -1 )) & ~(alignment - 1);
-                elementSize = static_cast<int32_t>(srcdata.elementSize);
-                auto size = (elements * elementSize);
-                data = std::vector<uint8_t>(size, 0);
-                uint32_t copySize = size > srcdata.size() ? static_cast<uint32_t>(srcdata.size()) : size;
-                memcpy(data.data(), reinterpret_cast<const uint8_t*>(srcdata.start), copySize);
+                elements = (static_cast<int32_t>(srcdata.length()) + (alignment -1 )) & ~(alignment - 1);
+                data = std::vector<uint8_t>(srcdata.sizeBytes(), 0);
+                memcpy(data.data(), reinterpret_cast<const uint8_t*>(srcdata.start), srcdata.sizeBytes());
                 elementStart = elemStart;
+                elementSize = static_cast<int32_t>(srcdata.elementSize);
             }
         };
         InitialData initialData;
@@ -291,8 +277,8 @@ namespace engine
     public:
         BufferUAV() = default;
 
-        void setCounterValue(uint32_t value);
-        uint32_t getCounterValue();
+        /*void setCounterValue(uint32_t value);
+        uint32_t getCounterValue();*/
 
         bool valid() const;
         const BufferDescription::Descriptor& desc() const;
@@ -395,7 +381,7 @@ namespace engine
     {
         struct Descriptor
         {
-            Format format = Format::Format_UNKNOWN;
+            Format format = Format::UNKNOWN;
             uint32_t width = 0;
             uint32_t height = 0;
             uint32_t depth = 1;
@@ -508,9 +494,9 @@ namespace engine
             InitialData(const tools::ByteRange& srcdata, uint32_t _pitch, uint32_t _slicePitch)
                 : pitch{ _pitch }
                 , slicePitch{ _slicePitch }
-                , data( srcdata.size() )
+                , data( srcdata.sizeBytes() )
             {
-                memcpy(data.data(), reinterpret_cast<const uint8_t*>(srcdata.start), srcdata.size());
+                memcpy(data.data(), reinterpret_cast<const uint8_t*>(srcdata.start), srcdata.sizeBytes());
             }
         };
         InitialData initialData;
@@ -545,8 +531,8 @@ namespace engine
         ResourceDimension dimension() const;
 
         TextureDescription description() const;
-        ResourceState state() const;
-        void state(ResourceState state);
+        ResourceState state(int slice, int mip) const;
+        void state(int slice, int mip, ResourceState state);
 
     protected:
         friend class implementation::SwapChainImpl;
@@ -567,8 +553,16 @@ namespace engine
         TextureSRV() = default;
 
         bool valid() const;
+
+        Format format() const;
+        uint32_t width() const;
+        uint32_t height() const;
+        uint32_t depth() const;
+
         Texture& texture();
         const Texture& texture() const;
+
+        const SubResource& subResource() const;
 
     protected:
         friend class implementation::SwapChainImpl;
@@ -588,8 +582,16 @@ namespace engine
         TextureUAV() = default;
         
         bool valid() const;
+
+        Format format() const;
+        uint32_t width() const;
+        uint32_t height() const;
+        uint32_t depth() const;
+
         Texture& texture();
         const Texture& texture() const;
+
+        const SubResource& subResource() const;
 
     protected:
         friend class implementation::SwapChainImpl;
@@ -609,8 +611,15 @@ namespace engine
         TextureDSV() = default;
 
         bool valid() const;
+
+        Format format() const;
+        uint32_t width() const;
+        uint32_t height() const;
+
         Texture& texture();
         const Texture& texture() const;
+
+        const SubResource& subResource() const;
 
     protected:
         friend class implementation::SwapChainImpl;
@@ -631,15 +640,21 @@ namespace engine
         TextureRTV() = default;
 
         bool valid() const;
+
+        Format format() const;
         uint32_t width() const;
         uint32_t height() const;
+
         Texture& texture();
         const Texture& texture() const;
+
+        const SubResource& subResource() const;
 
     protected:
         friend class implementation::SwapChainImpl;
         friend class Device;
         friend class implementation::DeviceImpl;
+        friend class implementation::CommandListImpl;
         TextureRTV(std::shared_ptr<implementation::TextureRTVImpl> view);
 
         friend struct implementation::TextureRTVImplGet;
@@ -661,7 +676,7 @@ namespace engine
             }
             return -1;
         }
-        uint32_t push(const ResourceKey& key, TextureSRV& texture)
+        uint32_t push(const ResourceKey& key, TextureSRV texture)
         {
             auto texId = id(key);
             if (texId == -1)

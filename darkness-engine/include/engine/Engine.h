@@ -1,5 +1,6 @@
 #pragma once
 
+#include "components/ProbeComponent.h"
 #include "engine/Scene.h"
 #include "components/Camera.h"
 #include "rendering/Rendering.h"
@@ -10,21 +11,21 @@
 #include "engine/graphics/SwapChain.h"
 #include "engine/graphics/Resources.h"
 #include "engine/rendering/Mesh.h"
-#include "engine/rendering/ModelRenderer.h"
-#include "engine/rendering/ModelTransparentRenderer.h"
-#include "engine/rendering/ShadowRenderer.h"
 #include "engine/rendering/ImguiRenderer.h"
-#include "engine/rendering/RenderCubemap.h"
 #include "engine/rendering/DebugView.h"
-#include "engine/rendering/LightData.h"
 #include "engine/rendering/LogWindow.h"
-#include "engine/rendering/Postprocess.h"
+#include "engine/rendering/ViewportRenderer.h"
+#include "engine/rendering/DebugMenu.h"
 #include "engine/RenderSetup.h"
 #include "engine/InputEvents.h"
 #include "engine/primitives/Quaternion.h"
 #include "engine/primitives/Vector2.h"
 #include "engine/primitives/Vector3.h"
 #include "engine/primitives/Matrix4.h"
+#include "engine/input/InputManager.h"
+#include "engine/resources/ResourceHost.h"
+
+#include "shaders/core/tools/CycleTransforms.h"
 
 #include "components/MeshRendererComponent.h"
 #include "components/MaterialComponent.h"
@@ -35,16 +36,22 @@
 #include <string>
 #include <chrono>
 
-#include "btBulletDynamicsCommon.h"
+//#include "btBulletDynamicsCommon.h"
 
-class AssetConvert
+/*class AssetConvert
 {
 public:
     AssetConvert(const std::shared_ptr<engine::Mesh>& source);
 
     std::vector<engine::Vertex> target;
     std::vector<uint32_t>       targetIndices;
-};
+};*/
+
+class btDefaultCollisionConfiguration;
+class btCollisionDispatcher;
+class btBroadphaseInterface;
+class btSequentialImpulseConstraintSolver;
+class btDiscreteDynamicsWorld;
 
 constexpr float MoveSpeed = 2.0f;
 constexpr float FastMoveSpeed = 10.0f;
@@ -451,25 +458,24 @@ public:
     void resetCameraSize();
     void playClicked(bool value);
 
+    std::shared_ptr<engine::SceneNode> grabSelected();
+    void setSelected(std::shared_ptr<engine::SceneNode> node);
+
 private:
     std::shared_ptr<platform::Window> m_window;
     std::unique_ptr<engine::RenderSetup> m_renderSetup;
     std::string m_shaderRootPath;
     engine::Scene m_scene;
     engine::Vector2<int> m_virtualResolution;
-    std::unique_ptr<engine::ModelRenderer> m_modelRenderer;
-    std::unique_ptr<engine::ModelTransparentRenderer> m_modelTransparentRenderer;
-    std::unique_ptr<engine::ShadowRenderer> m_shadowRenderer;
+    std::unique_ptr<engine::ViewportRenderer> m_viewportRenderer;
     std::unique_ptr<engine::ImguiRenderer> m_imguiRenderer;
-    std::unique_ptr<engine::RenderCubemap> m_renderCubemap;
-    std::unique_ptr<engine::Postprocess> m_postProcess;
     std::unique_ptr<engine::DebugView> m_debugViewer;
+    std::unique_ptr<engine::Pipeline<engine::shaders::CycleTransforms>> m_cycleTransforms;
+    engine::BufferUAV m_cycleBufferView;
     engine::LogWindow m_logWindow;
-
-    engine::TextureRTV m_rtv;
-    engine::TextureSRV m_srv;
-    engine::TextureDSV m_dsv;
-    engine::TextureSRV m_dsvSRV;
+    engine::InputManager m_inputManager;
+    engine::DebugMenu m_debugMenu;
+    //engine::ResourceHost m_resourceHost;
 
     bool m_cameraSizeRefresh;
 
@@ -477,19 +483,13 @@ private:
     bool m_cameraInputActive;
 
     std::unique_ptr<engine::MaterialComponent> m_defaultMaterial;
-    std::unique_ptr<engine::LightData> m_lightData;
+    std::shared_ptr<engine::LightData> m_lightData;
 
     void render();
     void clear(engine::CommandList& cmd);
-    void updateEnvironmentCubemap(engine::Device& device, engine::Camera& camera);
-    void updateLighting(engine::Device& device, engine::CommandList& cmd, engine::FlatScene& flatScene);
-    void renderEnvironmentCubemap(engine::Device& device, engine::CommandList& cmd, engine::FlatScene& flatScene);
-    void renderShadows(engine::Device& device, engine::CommandList& cmd, engine::FlatScene& flatScene);
-    void renderModels(engine::Device& device, engine::CommandList& cmd, engine::FlatScene& flatScene);
-    void renderTransparentModels(engine::Device& device, engine::CommandList& cmd, engine::FlatScene& flatScene);
-    void renderPostprocess(engine::Device& device, engine::CommandList& cmd, engine::FlatScene& flatScene);
+    void updateEnvironmentCubemap(engine::Device& device, engine::CommandList& cmd, engine::Camera& camera, bool force = false);
+    void updateLighting(engine::CommandList& cmd, engine::FlatScene& flatScene);
     void renderDebugView(engine::CommandList& cmd);
-    void processShaderHotreload();
 
     float delta();
     std::chrono::high_resolution_clock::time_point m_lastUpdate;
@@ -500,17 +500,20 @@ private:
     engine::Camera m_camera;
 
     // bullet
-    std::unique_ptr<btDefaultCollisionConfiguration> m_collisionConfiguration;
-    std::unique_ptr<btCollisionDispatcher> m_dispatcher;
-    std::unique_ptr<btBroadphaseInterface> m_overlappingPairCache;
-    std::unique_ptr<btSequentialImpulseConstraintSolver> m_solver;
-    std::unique_ptr<btDiscreteDynamicsWorld> m_dynamicsWorld;
+    std::shared_ptr<btDefaultCollisionConfiguration> m_collisionConfiguration;
+    std::shared_ptr<btCollisionDispatcher> m_dispatcher;
+    std::shared_ptr<btBroadphaseInterface> m_overlappingPairCache;
+    std::shared_ptr<btSequentialImpulseConstraintSolver> m_solver;
+    std::shared_ptr<btDiscreteDynamicsWorld> m_dynamicsWorld;
 
-    std::unique_ptr<btAlignedObjectArray<btCollisionShape*>> m_collisionShapes;
+    std::shared_ptr<void> m_collisionShapes;
 
     std::vector<void*> m_addedRigidBodies;
 
-
-
     bool m_simulating;
+    int64_t m_lastPickedObject;
+    int64_t m_selectedObject;
+    std::shared_ptr<engine::SceneNode> m_lastPickedNode;
+
+    int m_updateEnvironmentOnNextFrame;
 };

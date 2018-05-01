@@ -2,6 +2,7 @@
 
 #ifdef _WIN32
 #pragma warning(push, 0) 
+#include <WinSock2.h>
 #include <Windows.h>
 #pragma warning(pop)
 namespace platform

@@ -9,10 +9,17 @@ namespace engine
 {
     namespace shaders
     {
+#pragma warning( push )
+#pragma warning( disable : 4702 )
         std::shared_ptr<const ShaderBinary> DrawWithConstantsVS::load(const Device& device, ShaderStorage& storage) const
         {
-            return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/dx12/core/tests/DrawWithConstants.vs.cso", "C:/work/darkness/darkness-engine/data/shaders/dx12/core/tests/DrawWithConstants.vs.support");
+            
+            return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/tests/DrawWithConstants.vs.spv", "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/tests/DrawWithConstants.vs.support", -1, {});
+            
+            ASSERT(false, "Could not load the permutation necessary. This is a bug.");
+            return {};
         }
+#pragma warning( pop )
 
         DrawWithConstantsVS::DrawWithConstantsVS()
             : m_constantRange{
@@ -40,7 +47,252 @@ namespace engine
             
             
             }
+            , m_inputParameters
+            {
+            
+            ShaderInputParameter{"id", "SV_VertexID", "uint"}
+            
+            
+            }
         {}
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        DrawWithConstantsVS::DrawWithConstantsVS(const DrawWithConstantsVS& cl)
+            : m_constantRange{
+            
+            
+                ConstantRange{
+                    tools::ByteRange(
+                        reinterpret_cast<const uint8_t*>(static_cast<const constants_struct*>(this)),
+                        reinterpret_cast<const uint8_t*>(static_cast<const constants_struct*>(this)) + sizeof(constants_struct)),
+                    nullptr,
+                    "constants_struct"
+                }
+                
+                ,
+                
+            
+                ConstantRange{
+                    tools::ByteRange(
+                        reinterpret_cast<const uint8_t*>(static_cast<const constants_struct2*>(this)),
+                        reinterpret_cast<const uint8_t*>(static_cast<const constants_struct2*>(this)) + sizeof(constants_struct2)),
+                    nullptr,
+                    "constants_struct2"
+                }
+                
+            
+            
+            }
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = cl.m_constantRange[i].buffer;
+            }
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        DrawWithConstantsVS::DrawWithConstantsVS(DrawWithConstantsVS&& cl)
+            : m_constantRange{
+            
+            
+                ConstantRange{
+                    tools::ByteRange(
+                        reinterpret_cast<const uint8_t*>(static_cast<const constants_struct*>(this)),
+                        reinterpret_cast<const uint8_t*>(static_cast<const constants_struct*>(this)) + sizeof(constants_struct)),
+                    nullptr,
+                    "constants_struct"
+                }
+                
+                ,
+                
+            
+                ConstantRange{
+                    tools::ByteRange(
+                        reinterpret_cast<const uint8_t*>(static_cast<const constants_struct2*>(this)),
+                        reinterpret_cast<const uint8_t*>(static_cast<const constants_struct2*>(this)) + sizeof(constants_struct2)),
+                    nullptr,
+                    "constants_struct2"
+                }
+                
+            
+            
+            }
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = std::move(cl.m_constantRange[i].buffer);
+            }
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        DrawWithConstantsVS& DrawWithConstantsVS::operator=(const DrawWithConstantsVS& cl)
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = cl.m_constantRange[i].buffer;
+            }
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            return *this;
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        DrawWithConstantsVS& DrawWithConstantsVS::operator=(DrawWithConstantsVS&& cl)
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = std::move(cl.m_constantRange[i].buffer);
+            }
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            return *this;
+        }
+#pragma warning( pop )
+
+        std::vector<std::string> DrawWithConstantsVS::textureSrvNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> DrawWithConstantsVS::textureUavNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> DrawWithConstantsVS::bufferSrvNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> DrawWithConstantsVS::bufferUavNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> DrawWithConstantsVS::samplerNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> DrawWithConstantsVS::srvNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> DrawWithConstantsVS::uavNames() const
+        {
+            return {
+                
+            };
+        }
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        engine::ResourceDimension DrawWithConstantsVS::textureDimension(const std::string& name) const
+        {
+            
+            return engine::ResourceDimension::Unknown;
+        }
+#pragma warning( pop )
 
         std::vector<TextureSRV> DrawWithConstantsVS::texture_srvs() const
         {
@@ -110,10 +362,16 @@ namespace engine
             return result;
         }
 
+        const std::vector<ShaderInputParameter>& DrawWithConstantsVS::inputParameters() const
+        {
+            return m_inputParameters;
+        }
+
 // warning C4172: returning address of local variable or temporary
 // this will never happen as the name will always match the correct resource
 #pragma warning( push )
 #pragma warning( disable : 4172 )
+#pragma warning( disable : 4100 )
 
         bool DrawWithConstantsVS::hasTextureSrv(const std::string& name) const
         {
@@ -189,6 +447,30 @@ namespace engine
             
             ASSERT(false, "Tried to look for non-existing resource");
             return BufferUAV();
+        }
+
+        void DrawWithConstantsVS::textureSrv(const std::string& name, TextureSRV& texture)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void DrawWithConstantsVS::textureUav(const std::string& name, TextureUAV& texture)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void DrawWithConstantsVS::bufferSrv(const std::string& name, BufferSRV& buffer)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void DrawWithConstantsVS::bufferUav(const std::string& name, BufferUAV& buffer)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
         }
 
         const Sampler& DrawWithConstantsVS::sampler(const std::string& name) const

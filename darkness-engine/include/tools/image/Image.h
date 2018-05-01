@@ -12,12 +12,20 @@ namespace engine
 {
     namespace image
     {
+        enum class ImageType
+        {
+            DDS,
+            BMP
+        };
+
         class Image
         {
         public:
             static std::shared_ptr<ImageIf> createImage(
                 const std::string& filename,
-                Format type = Format::Format_BC7_UNORM,
+                ImageType imageType,
+                Format type = Format::BC7_UNORM,
+
                 int width = -1,
                 int height = -1,
                 int slices = -1,

@@ -2,6 +2,7 @@
 
 #include "engine/graphics/dx12/DX12Headers.h"
 #include "engine/graphics/dx12/DX12Common.h"
+#include "engine/graphics/CommonNoDep.h"
 #include "tools/ComPtr.h"
 #include "tools/SmartPimpl.h"
 
@@ -40,13 +41,14 @@ namespace engine
 
     namespace implementation
     {
+        class BufferUAVImpl;
         class DeviceImpl;
         class PipelineImpl;
         class CommandAllocatorImpl;
         class CommandListImpl
         {
         public:
-            CommandListImpl(DeviceImpl* device);
+            CommandListImpl(DeviceImpl* device, CommandListType type);
             ~CommandListImpl();
 
             CommandListImpl(const CommandListImpl&) = default;
@@ -89,23 +91,29 @@ namespace engine
             void clearTextureDSV(TextureDSV& texture, const Color4f& color, const SubResource& subResource);
             void clearTextureRTV(TextureRTV& texture, const Color4f& color, const SubResource& subResource);
 
+            void setStructureCounter(BufferUAV& buffer, uint32_t value);
+            void copyStructureCounter(BufferUAV& srcBuffer, Buffer& dst, uint32_t dstByteOffset);
+
             void draw(uint32_t vertexCount);
+            void drawIndirect(Buffer& indirectArguments, uint64_t argumentBufferOffset);
             void drawIndexed(
                 uint32_t indexCount,
                 uint32_t instanceCount,
                 uint32_t firstIndex,
                 int32_t vertexOffset,
                 uint32_t firstInstance);
+            void drawIndexedIndirect(Buffer& indirectArguments, uint64_t argumentBufferOffset);
 
             void dispatch(
                 uint32_t threadGroupCountX,
                 uint32_t threadGroupCountY,
                 uint32_t threadGroupCountZ);
 
-            void executeIndirect(
-                Buffer& argumentBuffer,
-                uint64_t argumentBufferOffset
-            );
+            void dispatchIndirect(
+                Buffer& indirectArguments,
+                uint64_t argumentBufferOffset);
+
+            void executeBundle(CommandListImpl& commandList);
 
             void begin();
             void end();
@@ -113,7 +121,7 @@ namespace engine
             void beginRenderPass(implementation::PipelineImpl& pipeline, int frameBufferIndex);
             void endRenderPass();
 
-            void transition(Texture& resource, ResourceState state);
+            void transition(Texture& resource, ResourceState state, const SubResource& subResource = SubResource());
             void transition(TextureRTV& resource, ResourceState state);
             void transition(TextureSRV& resource, ResourceState state);
             void transition(TextureDSV& resource, ResourceState state);
@@ -124,8 +132,10 @@ namespace engine
             void transition(BufferCBV& resource, ResourceState state);
             void transition(BufferVBV& resource, ResourceState state);
 
-            //void transitionTexture(const Texture& image, ImageLayout from, ImageLayout to);
-            void copyTexture(const Texture& src, Texture& dst);
+            void copyTexture(const TextureSRV& src, TextureUAV& dst);
+            void copyTexture(const TextureSRV& src, TextureSRV& dst);
+            void copyTexture(const TextureSRV& src, BufferUAV& dst);
+            void copyTexture(const TextureSRV& src, BufferSRV& dst);
 
             ID3D12GraphicsCommandList* native();
             ID3D12GraphicsCommandList* native() const;
@@ -144,6 +154,11 @@ namespace engine
 
             std::vector<D3D12_INDIRECT_ARGUMENT_DESC> m_argumentDescs;
             std::vector<ID3D12CommandSignature*> m_commandSignatures;
+
+            std::vector<uint64_t> m_lastRootDescriptor;
+            D3D_PRIMITIVE_TOPOLOGY m_lastTopology;
+            std::vector<TextureRTV> m_clearTargetsAlive;
+            std::vector<BufferUAVImpl> m_bufferUAVClearTargets;
         };
     }
 }

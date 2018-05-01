@@ -32,34 +32,39 @@ void EngineWrap::update()
     m_engine.update();
 }
 
+std::shared_ptr<engine::SceneNode> EngineWrap::grabNode()
+{
+    return m_engine.grabSelected();
+}
+
 void EngineWrap::onMouseMove(int x, int y)
 {
-	m_engine.onMouseMove(x, y);
+    m_engine.onMouseMove(x, y);
 }
 
 void EngineWrap::onMouseDown(MouseButton button, int x, int y)
 {
-	m_engine.onMouseDown(button, x, y);
+    m_engine.onMouseDown(button, x, y);
 }
 
 void EngineWrap::onMouseUp(MouseButton button, int x, int y)
 {
-	m_engine.onMouseUp(button, x, y);
+    m_engine.onMouseUp(button, x, y);
 }
 
 void EngineWrap::onMouseDoubleClick(MouseButton button, int x, int y)
 {
-	m_engine.onMouseDoubleClick(button, x, y);
+    m_engine.onMouseDoubleClick(button, x, y);
 }
 
 void EngineWrap::onKeyDown(engine::Key key, const engine::ModifierState& modifierState)
 {
-	m_engine.onKeyDown(key, modifierState);
+    m_engine.onKeyDown(key, modifierState);
 }
 
 void EngineWrap::onKeyUp(engine::Key key, const engine::ModifierState& modifierState)
 {
-	m_engine.onKeyUp(key, modifierState);
+    m_engine.onKeyUp(key, modifierState);
 }
 
 void EngineWrap::resetCameraSize()

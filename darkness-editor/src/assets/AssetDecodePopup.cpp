@@ -8,7 +8,6 @@ AssetDecodePopup::AssetDecodePopup(QWidget *parent, Qt::WindowFlags f)
     , m_itemCount{ 0 }
 {
     setGeometry(0, 0, 0, 0);
-    //setStyleSheet("background-color:red;");
     show();
 }
 
@@ -24,6 +23,21 @@ void AssetDecodePopup::resizeEvent(QResizeEvent *event)
 void AssetDecodePopup::addItem(const QString& absoluteFilename)
 {
     itemMutex.lock();
+    bool alreadyHaveIt = m_items.contains(absoluteFilename);
+    for (auto& item : m_queue)
+    {
+        if (item.absoluteFilename == absoluteFilename)
+        {
+            alreadyHaveIt = true;
+            break;
+        }
+    }
+    if (alreadyHaveIt)
+    {
+        itemMutex.unlock();
+        return;
+    }
+
     if (m_items.count() >= MaxItemCount)
     {
         m_queue.enqueue({ absoluteFilename, "", 0.0f, QFileInfo(absoluteFilename).fileName() });

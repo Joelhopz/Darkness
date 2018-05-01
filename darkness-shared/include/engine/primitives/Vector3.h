@@ -13,10 +13,22 @@ namespace engine
         T y;
         T z;
 
-        Vector2<T> xy() const
-        {
-            return { x, y };
-        }
+        Vector2<T> xy() const { return { x, y }; }
+        Vector2<T> xz() const { return { x, z }; }
+        Vector2<T> yx() const { return { y, x }; }
+        Vector2<T> yz() const { return { y, z }; }
+        Vector2<T> zx() const { return { z, x }; }
+        Vector2<T> zy() const { return { z, y }; }
+
+        Vector3<T> xyz() const { return { x, y, z }; }
+        Vector3<T> xzy() const { return { x, z, y }; }
+        Vector3<T> yxz() const { return { y, x, z }; }
+        Vector3<T> yzx() const { return { y, z, x }; }
+        Vector3<T> zxy() const { return { z, x, y }; }
+        Vector3<T> zyx() const { return { z, y, x }; }
+
+        void xy(const Vector2<T>& xy) { x = xy.x; y = xy.y; }
+        void xyz(const Vector3<T>& xyz) { x = xyz.x; y = xyz.y; z = xyz.z; }
 
         Vector3()
             : x{}
@@ -27,6 +39,12 @@ namespace engine
         Vector3(T x, T y, T z)
             : x{ x }
             , y{ y }
+            , z{ z }
+        {}
+
+        Vector3(Vector2<T> xy, T z)
+            : x{ xy.x }
+            , y{ xy.y }
             , z{ z }
         {}
 
@@ -188,7 +206,7 @@ namespace engine
                 return static_cast<T>(0.0);
             }
             else
-                return static_cast<T>(std::sqrt(xx * xx + yy * yy + zz * zz));
+                return static_cast<T>(std::sqrt(sum));
         }
 
         static Vector3<T> normalize(const Vector3& vec)

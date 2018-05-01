@@ -289,7 +289,7 @@ private:
     //  * is a not-very-regular mix of 1's and 0's
     //  * does not need any other special mathematical properties
     //
-    static const uint64 sc_const = 0xdeadbeefdeadbeefLL;
+    static const uint64 sc_const = static_cast<const uint64>(0xdeadbeefdeadbeefLL);
 
     uint64 m_data[2 * sc_numVars];   // unhashed data, for partial messages
     uint64 m_state[sc_numVars];  // internal state of the hash

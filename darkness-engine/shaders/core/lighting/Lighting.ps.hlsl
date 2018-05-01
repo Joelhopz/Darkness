@@ -1,5 +1,6 @@
 
 #include "../Common.hlsli"
+#include "../shared_types/InstanceMaterial.hlsli"
 
 struct PSInput
 {
@@ -12,11 +13,11 @@ Texture2D<float4> environmentIrradiance;
 TextureCube<float4> environmentSpecular;
 Texture2D<float4> environmentBrdfLut;
 
-Texture2D<float4> albedo;
-Texture2D<float4> normal;
-Texture2D<float4> roughness;
-Texture2D<float4> metalness;
-Texture2D<float4> occlusion;
+Texture2D<float2> gbufferNormals;
+Texture2D<uint2> gbufferUV;
+Texture2D<uint> gbufferInstanceId;
+
+StructuredBuffer<InstanceMaterial> instanceMaterials;
 
 Texture2DArray<float4> shadowMap;
 StructuredBuffer<float4x4> shadowVP;
@@ -31,10 +32,13 @@ Buffer<uint> lightType;
 Buffer<float> lightIntensity;
 Buffer<float> lightRange;
 
-Texture2D<float4> depth;
+Texture2D<float> depth;
+
+Texture2D<float4> materialTextures[];
 
 cbuffer ConstData
 {
+    // 16 floats
     float3 cameraWorldSpacePosition;
     float roughnessStrength;
 
@@ -52,28 +56,43 @@ cbuffer ConstData
     uint hasOcclusion;
     uint hasEnvironmentIrradianceCubemap;
 
+    // 16 floats
     uint hasEnvironmentIrradianceEquirect;
     uint hasEnvironmentSpecular;
     float environmentStrength;
     float padding;
 
+    float4 probePositionRange;
+
+    float4 probeBBmin;
+
+    float4 probeBBmax;
+
+    // 16 floats
     float4x4 cameraInverseProjectionMatrix;
+
+    // 16 floats
     float4x4 cameraInverseViewMatrix;
 
+    // the rest
     float2 shadowSize;
+    uint2 frameSize;
+    uint usingProbe;
 };
 
 sampler tex_sampler;
+sampler tri_sampler;
 sampler depth_sampler;
 sampler point_sampler;
 SamplerComparisonState shadow_sampler;
 
 float3 sampleEnvironment(float3 direction, float lod)
 {
+    float3 inverseDirection = float3(direction.x, direction.y, -direction.z);
     if (hasEnvironmentIrradianceCubemap)
-        return environmentIrradianceCubemap.SampleLevel(tex_sampler, direction, lod).xyz;
+        return environmentIrradianceCubemap.SampleLevel(tri_sampler, inverseDirection, lod).xyz;
     else if(hasEnvironmentIrradianceEquirect)
-        return environmentIrradiance.SampleLevel(tex_sampler, envMapEquirect(direction), lod).xyz;
+        return environmentIrradiance.SampleLevel(tri_sampler, envMapEquirect(direction), lod).xyz;
     else 
         return float3(0.0f, 0.0f, 0.0f);
 }
@@ -93,6 +112,17 @@ float distributionGGX(float3 N, float3 H, float roughness)
     denominator = PI * denominator * denominator;
 
     return nominator / denominator;
+}
+
+float GGX_D(float dotNH, float roughness)
+{
+    float alpha = roughness*roughness;
+    float alphaSqr = alpha*alpha;
+    float pi = 3.14159f;
+    float denom = dotNH * dotNH *(alphaSqr - 1.0) + 1.0f;
+
+    float D = alphaSqr / (pi * denom * denom);
+    return D;
 }
 
 // The Fresnel equation (pronounced as Freh-nel) describes the ratio of light that 
@@ -126,18 +156,126 @@ float geometryFunctionSmith(float3 N, float3 V, float3 L, float roughness)
     return ggx1 * ggx2;
 }
 
+float2 GGX_FV(float dotLH, float roughness)
+{
+    float alpha = roughness*roughness;
+
+    // F
+    float F_a, F_b;
+    float dotLH5 = pow(1.0f - dotLH, 5);
+    F_a = 1.0f;
+    F_b = dotLH5;
+
+    // V
+    float vis;
+    float k = alpha / 2.0f;
+    float k2 = k*k;
+    float invK2 = 1.0f - k2;
+    vis = rcp(dotLH*dotLH*invK2 + k2);
+
+    return float2(F_a*vis, F_b*vis);
+}
+
+float GGX_OPT3(float3 N, float3 V, float3 L, float roughness, float F0)
+{
+    float3 H = normalize(V + L);
+
+    float dotNL = saturate(dot(N, L));
+    float dotLH = saturate(dot(L, H));
+    float dotNH = saturate(dot(N, H));
+
+    float D = GGX_D(dotNH, roughness);
+    float2 FV_helper = GGX_FV(dotLH, roughness);
+    float FV = F0*FV_helper.x + (1.0f - F0)*FV_helper.y;
+    float specular = dotNL * D * FV;
+
+    return specular;
+}
+
 float3 fresnelSchlickRoughness(float cosTheta, float3 F0, float roughness)
 {
     return F0 + (max(float3(1.0 - roughness, 1.0 - roughness, 1.0 - roughness), F0) - F0) * pow(1.0 - cosTheta, 5.0);
 }
 
-float3 worldPositionFromUV(float2 uv)
+float3 worldPositionFromUV(float2 uv, float depthSample)
 {
-    float depthSample = depth.Sample(depth_sampler, uv).x;
+    
     float4 screen = float4(float2(uv.x, 1.0f - uv.y) * 2.0 - 1.0, depthSample, 1.0);
     screen = mul(cameraInverseProjectionMatrix, screen);
     float3 cameraSpace = screen.xyz / screen.w;
     return mul(cameraInverseViewMatrix, float4(cameraSpace, 0.0f)).xyz + cameraWorldSpacePosition.xyz;
+}
+
+
+#ifdef ENUM_DRAWMODE_FULL
+#endif
+#ifdef ENUM_DRAWMODE_DEBUG_CLUSTERS
+float rand_1_05(in float2 uv)
+{
+    float2 noise = (frac(sin(dot(uv, float2(12.9898, 78.233)*2.0)) * 43758.5453));
+    return abs(noise.x + noise.y) * 0.5;
+}
+#endif
+
+#include "../GBuffer.hlsli"
+
+float4 calculateDdxDdyFromUV(float2 gbufferUVSample, uint2 uintUV, float2 materialScale, uint instanceId)
+{
+    uint idUp = gbufferInstanceId[uintUV + uint2(0, 1)];
+    uint idDown = gbufferInstanceId[uintUV + uint2(0, -1)];
+    uint idLeft = gbufferInstanceId[uintUV + uint2(-1, 0)];
+    uint idRight = gbufferInstanceId[uintUV + uint2(1, 0)];
+
+    float2 dxUp = unpackUV(gbufferUV[uintUV + uint2(0, 1)]);
+    float2 dxDown = unpackUV(gbufferUV[uintUV + uint2(0, -1)]);
+    float2 dxLeft = unpackUV(gbufferUV[uintUV + uint2(-1, 0)]);
+    float2 dxRight = unpackUV(gbufferUV[uintUV + uint2(1, 0)]);
+
+    const float2 gradientThreshold = 0.03f;
+    bool up = any(abs(gbufferUVSample - dxUp) <= gradientThreshold) && (idUp == instanceId);
+    bool down = any(abs(gbufferUVSample - dxDown) <= gradientThreshold) && (idDown == instanceId);
+    bool left = any(abs(gbufferUVSample - dxLeft) <= gradientThreshold) && (idLeft == instanceId);
+    bool right = any(abs(gbufferUVSample - dxRight) <= gradientThreshold) && (idRight == instanceId);
+
+    float2 uvDX = 0.0f;
+    float2 uvDY = 0.0f;
+
+    if (up)
+        uvDY = gbufferUVSample - dxUp * materialScale;
+    else if (down)
+        uvDY = dxDown * materialScale - gbufferUVSample;
+
+    if (left)
+        uvDX = gbufferUVSample - dxLeft * materialScale;
+    else if (right)
+        uvDX = dxRight * materialScale - gbufferUVSample;
+
+    if (uvDX.x > 1.0f)
+        uvDX.x -= 2.0f;
+    else if (uvDX.x < -1.0f)
+        uvDX.x += 2.0f;
+    if (uvDX.y > 1.0f)
+        uvDX.y -= 2.0f;
+    else if (uvDX.y < -1.0f)
+        uvDX.y += 2.0f;
+
+    if (uvDY.x > 1.0f)
+        uvDY.x -= 2.0f;
+    else if (uvDY.x < -1.0f)
+        uvDY.x += 2.0f;
+    if (uvDY.y > 1.0f)
+        uvDY.y -= 2.0f;
+    else if (uvDY.y < -1.0f)
+        uvDY.y += 2.0f;
+
+    return float4(uvDX, uvDY);
+}
+
+float mipFromDdxDdy(float4 ddxDdy)
+{
+    float deltaMaxSqr = max(dot(ddxDdy.xy, ddxDdy.xy), dot(ddxDdy.zw, ddxDdy.zw));
+    float mml = 0.5 * log2(deltaMaxSqr);
+    return max(0, mml);
 }
 
 float4 main(PSInput input) : SV_Target
@@ -145,34 +283,164 @@ float4 main(PSInput input) : SV_Target
     // calculate UV
     float2 uv = input.uv;
 
-    // sample texture resources
-    float4 albedoSample = albedo.Sample(tex_sampler, uv);
-    float4 normalSample = normal.Sample(tex_sampler, uv);
-    float  roughnessSample = roughness.Sample(tex_sampler, uv).x;
-    float  metalnessSample = metalness.Sample(tex_sampler, uv).x;
-    float  occlusionSample = occlusion.Sample(tex_sampler, uv).x;
+    float depthSample = depth.Sample(depth_sampler, uv);
+    clip(depthSample - 0.0001);
+
+    float2 floatUV = input.position.xy;
+    uint2 uintUV = uint2((uint)floatUV.x, (uint)floatUV.y);
+
+    uint instanceId = gbufferInstanceId[uintUV];
+
+#ifdef ENUM_DRAWMODE_DEBUG_CLUSTERS
+    bool hasAlbedo = false;
+    bool hasMetalness = false;
+    bool hasRoughness = false;
+    bool hasNormal = false;
+    bool hasOcclusion = false;
+    float2 materialScale = float2(1.0f, 1.0f);
+#else
+    InstanceMaterial material = instanceMaterials[instanceId];
+    float2 materialScale = float2(material.scaleX, material.scaleY);
+    bool hasAlbedo = (material.materialSet & 0x1) == 0x1;
+    bool hasMetalness = (material.materialSet & 0x2) == 0x2;
+    bool hasRoughness = (material.materialSet & 0x4) == 0x4;
+    bool hasNormal = (material.materialSet & 0x8) == 0x8;
+    bool hasOcclusion = (material.materialSet & 0x10) == 0x10;
+    float4 albedoSample = float4(material.color, 1.0f);
+#endif
+
+    float2 gbufferUVSample = unpackUV(gbufferUV[uintUV]) * materialScale;
+
+    float  roughnessSample = 0;
+    float  metalnessSample = 0;
+    float  occlusionSample = 0;
+
+#ifdef ENUM_DRAWMODE_DEBUG_CLUSTERS
+    float4 albedoSample = float4(
+        rand_1_05(float2(instanceId, instanceId)),
+        rand_1_05(float2(instanceId + 1, instanceId)),
+        rand_1_05(float2(instanceId + 2, instanceId)),
+        1.0f);
+#endif
+
+    float2 normalSample = gbufferNormals.Sample(point_sampler, uv);
+
+#ifndef ENUM_DRAWMODE_DEBUG_CLUSTERS
+
+    float4 ddxDdy = calculateDdxDdyFromUV(gbufferUVSample, uintUV, materialScale, instanceId);
+    // log2(0.7) comes from ubi presentation about mip bias for temporal antialiasing
+    // log2(0.7) == -0.51457317283
+
+    uint width;
+    uint height;
+#ifdef ENUM_DRAWMODE_MIP_ALBEDO
+    float albedoMip = 0.0f;
+    float albedoMaxMip = 0.0f;
+#endif
+#ifdef ENUM_DRAWMODE_MIP_ROUGHNESS
+    float roughnessMip = 0.0f;
+    float roughnessMaxMip = 0.0f;
+#endif
+#ifdef ENUM_DRAWMODE_MIP_METALNESS
+    float metalnessMip = 0.0f;
+    float metalnessMaxMip = 0.0f;
+#endif
+#ifdef ENUM_DRAWMODE_MIP_AO
+    float aoMip = 0.0f;
+    float aoMaxMip = 0.0f;
+#endif
+    if (hasAlbedo)
+    {
+        materialTextures[material.albedo].GetDimensions(width, height);
+        float texSize = (float)max(width, height);
+        float mip = max(mipFromDdxDdy(ddxDdy * texSize) + log2(0.70), 0);
+#ifdef ENUM_DRAWMODE_MIP_ALBEDO
+        albedoMip = mip;
+        albedoMaxMip = 1.0f + floor(log2(max(width, height)));
+#endif
+        albedoSample *= materialTextures[material.albedo].SampleLevel(tex_sampler, gbufferUVSample, mip);
+    }
+    if (hasRoughness)
+    {
+        materialTextures[material.roughness].GetDimensions(width, height);
+        float texSize = (float)max(width, height);
+        float mip = max(mipFromDdxDdy(ddxDdy * texSize) + log2(0.70), 0);
+#ifdef ENUM_DRAWMODE_MIP_ROUGHNESS
+        roughnessMip = mip;
+        roughnessMaxMip = 1.0f + floor(log2(max(width, height)));
+#endif
+        roughnessSample = materialTextures[material.roughness].SampleLevel(tex_sampler, gbufferUVSample, mip).r;
+    }
+    if (hasMetalness)
+    {
+        materialTextures[material.metalness].GetDimensions(width, height);
+        float texSize = (float)max(width, height);
+        float mip = max(mipFromDdxDdy(ddxDdy * texSize) + log2(0.70), 0);
+#ifdef ENUM_DRAWMODE_MIP_METALNESS
+        metalnessMip = mip;
+        metalnessMaxMip = 1.0f + floor(log2(max(width, height)));
+#endif
+        metalnessSample = materialTextures[material.metalness].SampleLevel(tex_sampler, gbufferUVSample, mip).r;
+    }
+    if (hasOcclusion)
+    {
+        materialTextures[material.ao].GetDimensions(width, height);
+        float texSize = (float)max(width, height);
+        float mip = max(mipFromDdxDdy(ddxDdy * texSize) + log2(0.70), 0);
+#ifdef ENUM_DRAWMODE_MIP_AO
+        aoMip = mip;
+        aoMaxMip = 1.0f + floor(log2(max(width, height)));
+#endif
+        occlusionSample = materialTextures[material.ao].SampleLevel(tex_sampler, gbufferUVSample, mip).r;
+    }
+#endif
+
     float  ssaoSample = ssao.Sample(tex_sampler, uv).x;
-    //ssaoSample = 1.0f;
+    //ssaoSample = 0.0f;
 
     // create normal from normal map sample
-    float3 normal = normalSample.xyz;
+    float3 normal = unpackNormalOctahedron(normalSample);
     
     // Gamma correct textures
     float4 albedoColor = albedoSample;
-    albedoColor.xyz = albedoColor.xyz * ssaoSample;
 
     // occlusion
-    float occlusion = occlusionSample;
+    float occlusion = 1.0f - ssaoSample;
 
-    float roughnessValue = roughnessSample;
-    float metalnessValue = metalnessSample;
+#ifdef ENUM_DRAWMODE_DEBUG_CLUSTERS
+    float roughnessValue = 1.0f;
+    float metalnessValue = 0.0f;
+#else
+    if (hasOcclusion)
+        occlusion = 1.0f - ((1.0 - (occlusionSample - ssaoSample)) * material.occlusionStrength);
+
+    float roughnessValue = material.roughnessStrength;
+    float metalnessValue = material.metalnessStrength;
+
+    if (hasRoughness)
+        roughnessValue = roughnessSample * material.roughnessStrength;
+    if (hasMetalness)
+        metalnessValue = metalnessSample * material.metalnessStrength;
+#endif
+
+    roughnessValue = min(max(roughnessValue, 0.0f), 1.0);
+    metalnessValue = min(max(metalnessValue, 0.0f), 1.0);
 
     float3 camPos = cameraWorldSpacePosition.xyz;
 
     // calculate world position
-    float3 worldPosition = worldPositionFromUV(uv);
+    float2 inverseSize = float2(1.0f / (float)frameSize.x, 1.0f / (float)frameSize.y);
+    float3 inputpos = float3(
+        (input.position.x * inverseSize.x) * 2.0f - 1.0f,
+        ((input.position.y * inverseSize.y) * 2.0f - 1.0f) * -1.0f,
+        depthSample);
 
-    float3 N = normalize(normal);
+    float4 ci = mul(cameraInverseProjectionMatrix, float4(inputpos.xyz, 1.0f));
+    ci.xyz /= ci.w;
+    float3 worldPosition = mul(cameraInverseViewMatrix, float4(ci.xyz, 0.0f)).xyz + camPos.xyz;
+
+
+    float3 N = normal;
     float3 V = normalize(camPos - worldPosition); // maybe switch?
 
     float3 F0 = float3(0.04, 0.04, 0.04);
@@ -182,11 +450,10 @@ float4 main(PSInput input) : SV_Target
     uint shadowCasterIndex = 0;
     for (uint i = 0; i < lightCount; ++i)
     {
-        
-
         float distance = length(lightWorldPosition[i].xyz - worldPosition);
         float distanceSqrd = distance * distance;
         float attenuation = 1.0 / distanceSqrd;
+        float distanceSqrdS = distanceSqrd + 10.0;
 
         float rangeSqrd = lightRange[i] * lightRange[i];
         float overDistance = distanceSqrd - rangeSqrd;
@@ -256,8 +523,8 @@ float4 main(PSInput input) : SV_Target
                 float3 directContrib = (kD * albedoColor.xyz / PI + specular) * radiance * NdotL * spot;
 
                 // shadow bias
-                float hi = 0.00015;
-                float lo = 0.00005;
+                float hi = 0.00005;
+                float lo = 0.000005;
                 float bias = lerp(hi, lo, pow(NdotL, 0.2));
 
                 // spot shadow
@@ -307,7 +574,9 @@ float4 main(PSInput input) : SV_Target
             float3 radiance = (lightColor[i].xyz * lightIntensity[i]) * attenuation;
 
             float NDF = distributionGGX(N, H, roughnessValue);
+            //float NDF = GGX_D(dot(N, H), roughnessValue);
             float G = geometryFunctionSmith(N, V, L, roughnessValue);
+            //float G = GGX_OPT3(N, V, L, roughnessValue, F0);
             float3 F = fresnelSchlick(max(dot(H, V), 0.0), F0);
 
             float3 kS = F;
@@ -320,14 +589,15 @@ float4 main(PSInput input) : SV_Target
 
             float NdotL = max(dot(N, L), 0.0);
             float3 directContrib = (kD * albedoColor.xyz / PI + specular) * radiance * NdotL;
+            //float3 directContrib = albedoColor.xyz* NdotL;
 
             // point shadows
             bool shadowCasting = lightParameters[i].z > 0.0f;
             if (shadowCasting)
             {
                 // shadow bias
-                float hi = 0.00015;
-                float lo = 0.00005;
+                float hi = 0.00030;// * distanceSqrdS;
+                float lo = 0.00025;// * distanceSqrdS;
                 float bias = lerp(hi, lo, pow(NdotL, 0.2));
 
                 for (int caster = 0; caster < 6; ++caster)
@@ -370,15 +640,38 @@ float4 main(PSInput input) : SV_Target
     }
 
     // ambient specular
-    float3 R = reflect(-V, N);
-    const float MaxReflectionLod = 4.0;
-    float3 prefilteredColor = environmentSpecular.SampleLevel(tex_sampler, R, roughnessValue * MaxReflectionLod).xyz;
+    const float MaxReflectionLod = 4;
+    float3 from = worldPosition;
+    float3 probePosition = probePositionRange.xyz;
+    float probeRange = probePositionRange.w;
 
-    float3 F = fresnelSchlickRoughness(max(dot(N, V), 0.0), F0, roughnessValue);
-    float2 envBRDF = environmentBrdfLut.Sample(tex_sampler, float2(min(max(dot(N, V), 0.0), 0.999), roughnessValue)).rg;
+    // cubemap parallax correction
+    float3 Rp = reflect(-V, N);
+    float3 newRp;
+    float3 probeValue;
+    if (usingProbe)
+    {
+        newRp = boxLineIntersect(probeBBmin.xyz, probeBBmax.xyz, worldPosition, -Rp, probePosition);
+        probeValue = float3(-newRp.x, -newRp.y, -newRp.z);
+    }
+    else
+    {
+        newRp = boxLineIntersect(probeBBmin.xyz, probeBBmax.xyz, worldPosition, Rp, probePosition);
+        probeValue = float3(newRp.x, newRp.y, -newRp.z);
+    }
+    
+
+    float3 prefilteredColor = environmentSpecular.SampleLevel(tri_sampler, probeValue, roughnessValue * MaxReflectionLod).xyz;
+
+    float3 F = fresnelSchlickRoughness(max(dot(N, V), 0.0), F0, roughnessValue) * 0.7;
+    float2 envBRDF = environmentBrdfLut.Sample(point_sampler, float2(min(max(dot(N, V), 0.0), 0.99999), roughnessValue)).rg;
     float3 specular = prefilteredColor * (F * envBRDF.x + envBRDF.y);
+    //specular = float3(0.0f, 0.0f, 0.0f);
 
     // ambient diffuse
+    //float3 NN = boxLineIntersect(probeBBmin.xyz, probeBBmax.xyz, worldPosition, N, probePosition);
+    //NN = float3(NN.x, NN.y, NN.z);
+
     float3 environIrradianceSample = sampleEnvironment(N, 0.0f);
     float3 kS = F;
     float3 kD = 1.0 - kS;
@@ -386,12 +679,30 @@ float4 main(PSInput input) : SV_Target
     float3 irradiance = environIrradianceSample;
     float3 diffuse = irradiance * albedoColor.xyz;
 
-    float3 ambient = max((kD * diffuse + specular) * occlusion * environmentStrength * ssaoSample, float3(0.0, 0.0, 0.0));
+    float3 ambient = max((kD * diffuse + specular) * occlusion * environmentStrength, float3(0.0, 0.0, 0.0));
+    //float3 ambient = diffuse;
 
     float3 color = (ambient + Lo);
 
     color *= exposure;
 
+#ifndef ENUM_DRAWMODE_DEBUG_CLUSTERS
+#ifdef ENUM_DRAWMODE_MIP_ALBEDO
+    return float4(albedoMip / albedoMaxMip, 0.0f, 0.0f, 1.0f);
+#endif
+#ifdef ENUM_DRAWMODE_MIP_ROUGHNESS
+    return float4(roughnessMip / roughnessMaxMip, 0.0f, 0.0f, 1.0f);
+#endif
+#ifdef ENUM_DRAWMODE_MIP_METALNESS
+    return float4(metalnessMip / metalnessMaxMip, 0.0f, 0.0f, 1.0f);
+#endif
+#ifdef ENUM_DRAWMODE_MIP_AO
+    return float4(aoMip / aoMaxMip, 0.0f, 0.0f, 1.0f);
+#endif
+#endif
+
+    /*color *= 0.00001f;
+    color += float3(albedoMip / 5, 0, 0.0f);*/
     // TONEMAPPING
     //return float4(Uncharted2Tonemap(color), 1.0f);
     //return float4(JimHejlRichardBurgessDawsonTonemap(color), 1.0f);
@@ -399,7 +710,41 @@ float4 main(PSInput input) : SV_Target
 
     //return float4(normalSample.xyz, 1.0);
     //return float4(ssaoSample, ssaoSample, ssaoSample, 1.0);
-    return float4(color, 1.0f);
+    //return float4(abs(N.xyz), 1.0f);
+#ifdef ENUM_DRAWMODE_DEBUG_CLUSTERS
+    return float4(color.xyz, 1.0f);
+#endif
+
+#ifdef ENUM_DRAWMODE_FULL
+    return float4(color.xyz, 1.0f);
+#endif
+
+#ifdef ENUM_DRAWMODE_ALBEDO
+    return float4(albedoSample.xyz, 1.0f);
+#endif
+
+#ifdef ENUM_DRAWMODE_ROUGHNESS
+    return float4(roughnessSample, roughnessSample, roughnessSample, 1.0f);
+#endif
+
+#ifdef ENUM_DRAWMODE_METALNESS
+    return float4(metalnessSample, metalnessSample, metalnessSample, 1.0f);
+#endif
+
+#ifdef ENUM_DRAWMODE_OCCLUSION
+    return float4(occlusion, occlusion, occlusion, 1.0f);
+#endif
+
+#ifdef ENUM_DRAWMODE_UV
+    return float4(gbufferUVSample.xy, 0.0f, 1.0f);
+#endif
+
+#ifdef ENUM_DRAWMODE_DEBUG_NORMAL
+    return float4(normal.xyz, 1.0f);
+#endif
+
+    return float4(0.0f, 0.0f, 0.0f, 0.0f);
+
     /*float2  motionSample = motion.Sample(point_sampler, uv);
     float4  historySample = history.Sample(point_sampler, uv + motionSample);
     

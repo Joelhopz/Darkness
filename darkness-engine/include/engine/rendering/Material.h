@@ -69,6 +69,7 @@ namespace engine
         TextureMapMode mode;
         TextureType type;
         TextureOp op;
+        unsigned int uvIndex;
 
         size_t size() const;
         std::vector<uint8_t> data() const;

@@ -12,6 +12,12 @@ namespace engine
     class BufferCBV;
     namespace implementation
     {
+        struct ConstantBufferUpdates
+        {
+            std::shared_ptr<BufferCBV> buffer;
+            tools::ByteRange range;
+        };
+
         struct UploadTask
         {
             tools::ByteRange data;
@@ -153,7 +159,7 @@ namespace engine
                     allocator,
                     allocator->allocate(
                         numDescriptors * descriptorSize,
-                        4),
+                        1),
                     numDescriptors,
                     cpuStartHandle,
                     gpuStartHandle

@@ -9,16 +9,276 @@ namespace engine
 {
     namespace shaders
     {
+#pragma warning( push )
+#pragma warning( disable : 4702 )
         std::shared_ptr<const ShaderBinary> BloomPS::load(const Device& device, ShaderStorage& storage) const
         {
-            return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/dx12/core/postprocess/Bloom.ps.cso", "C:/work/darkness/darkness-engine/data/shaders/dx12/core/postprocess/Bloom.ps.support");
+            
+            return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/postprocess/Bloom.ps.spv", "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/postprocess/Bloom.ps.support", -1, {});
+            
+            ASSERT(false, "Could not load the permutation necessary. This is a bug.");
+            return {};
         }
+#pragma warning( pop )
 
         BloomPS::BloomPS()
             : m_constantRange{
             
             }
+            , m_inputParameters
+            {
+            
+            ShaderInputParameter{"position", "SV_Position0", "float4"}
+            
+            ,
+            
+            
+            ShaderInputParameter{"uv", "TEXCOORD0", "float2"}
+            
+            
+            }
         {}
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        BloomPS::BloomPS(const BloomPS& cl)
+            : m_constantRange{
+            
+            }
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = cl.m_constantRange[i].buffer;
+            }
+
+            
+            framebuffer = cl.framebuffer;
+            
+            blur = cl.blur;
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+            framebufferSampler = cl.framebufferSampler;
+            
+
+            
+
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        BloomPS::BloomPS(BloomPS&& cl)
+            : m_constantRange{
+            
+            }
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = std::move(cl.m_constantRange[i].buffer);
+            }
+
+            
+            framebuffer = std::move(cl.framebuffer);
+            
+            blur = std::move(cl.blur);
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+            framebufferSampler = std::move(cl.framebufferSampler);
+            
+
+            
+
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        BloomPS& BloomPS::operator=(const BloomPS& cl)
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = cl.m_constantRange[i].buffer;
+            }
+
+            
+            framebuffer = cl.framebuffer;
+            
+            blur = cl.blur;
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+            framebufferSampler = cl.framebufferSampler;
+            
+
+            
+
+            return *this;
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        BloomPS& BloomPS::operator=(BloomPS&& cl)
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = std::move(cl.m_constantRange[i].buffer);
+            }
+
+            
+            framebuffer = std::move(cl.framebuffer);
+            
+            blur = std::move(cl.blur);
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+            framebufferSampler = std::move(cl.framebufferSampler);
+            
+
+            
+
+            return *this;
+        }
+#pragma warning( pop )
+
+        std::vector<std::string> BloomPS::textureSrvNames() const
+        {
+            return {
+                
+                "framebuffer"
+                
+                ,
+                
+                
+                "blur"
+                
+                
+            };
+        }
+
+        std::vector<std::string> BloomPS::textureUavNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> BloomPS::bufferSrvNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> BloomPS::bufferUavNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> BloomPS::samplerNames() const
+        {
+            return {
+                
+                "framebufferSampler"
+                
+                
+            };
+        }
+
+        std::vector<std::string> BloomPS::srvNames() const
+        {
+            return {
+                
+                "framebuffer"
+                
+                ,
+                
+                
+                "blur"
+                
+                
+            };
+        }
+
+        std::vector<std::string> BloomPS::uavNames() const
+        {
+            return {
+                
+            };
+        }
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        engine::ResourceDimension BloomPS::textureDimension(const std::string& name) const
+        {
+            
+            if("framebuffer" == name) return engine::ResourceDimension::Texture2D;
+            
+            if("blur" == name) return engine::ResourceDimension::Texture2D;
+            
+            return engine::ResourceDimension::Unknown;
+        }
+#pragma warning( pop )
 
         std::vector<TextureSRV> BloomPS::texture_srvs() const
         {
@@ -94,10 +354,16 @@ namespace engine
             return result;
         }
 
+        const std::vector<ShaderInputParameter>& BloomPS::inputParameters() const
+        {
+            return m_inputParameters;
+        }
+
 // warning C4172: returning address of local variable or temporary
 // this will never happen as the name will always match the correct resource
 #pragma warning( push )
 #pragma warning( disable : 4172 )
+#pragma warning( disable : 4100 )
 
         bool BloomPS::hasTextureSrv(const std::string& name) const
         {
@@ -185,6 +451,36 @@ namespace engine
             
             ASSERT(false, "Tried to look for non-existing resource");
             return BufferUAV();
+        }
+
+        void BloomPS::textureSrv(const std::string& name, TextureSRV& texture)
+        {
+            
+            
+            if(name == std::string("framebuffer")) { framebuffer = texture; return; }
+            
+            if(name == std::string("blur")) { blur = texture; return; }
+            
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void BloomPS::textureUav(const std::string& name, TextureUAV& texture)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void BloomPS::bufferSrv(const std::string& name, BufferSRV& buffer)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void BloomPS::bufferUav(const std::string& name, BufferUAV& buffer)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
         }
 
         const Sampler& BloomPS::sampler(const std::string& name) const

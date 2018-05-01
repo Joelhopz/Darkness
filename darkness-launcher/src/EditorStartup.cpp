@@ -8,6 +8,7 @@
 EditorStartup::EditorStartup(QObject* parent, const QString& projectPath)
 {
     QString program = getEditorPath();
+    qDebug() << program;
     QStringList arguments;
     arguments << "-project" << projectPath;
     qDebug() << arguments;
@@ -23,6 +24,6 @@ QString EditorStartup::getEditorPath() const
     return QFileInfo(
         QCoreApplication::applicationDirPath() + 
         QDir::separator() + 
-        "../../../../darkness-editor/bin/x64/Debug/DarknessEditor.exe")
+        "../../../../darkness-editor/bin/x64/Release DX12/DarknessEditor.exe")
         .absoluteFilePath();
 }

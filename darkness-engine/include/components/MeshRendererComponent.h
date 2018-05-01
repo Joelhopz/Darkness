@@ -12,6 +12,8 @@
 #include "engine/graphics/CommandList.h"
 #include "engine/graphics/Device.h"
 #include "engine/graphics/Pipeline.h"
+#include "engine/rendering/ModelResources.h"
+#include "tools/PathTools.h"
 #include "platform/File.h"
 #include <memory>
 #include <string>
@@ -20,32 +22,24 @@ namespace engine
 {
     struct MeshBuffers
     {
-        engine::BufferSRV vertices;
-        engine::BufferSRV normals;
-        engine::BufferSRV tangents;
-        engine::BufferSRV uv;
-        engine::BufferIBV indices;
-        engine::BufferIBV indicesAdjacency;
-
-        engine::BufferSRV clusterId;
-        engine::BufferSRV clusterIndexCount;
-        engine::BufferSRV clusterBounds;
+        std::shared_ptr<ModelResources::ModelAllocation> modelAllocations;
     };
 
     MeshBuffers convert(
         const std::string& path,
         Device& device, 
-        engine::SubMesh& source);
+        std::shared_ptr<engine::SubMeshInstance>& source);
 
     class MeshRendererComponent : public EngineComponent
     {
         Property m_meshPath;
         Property m_meshIndex;
-        std::shared_ptr<engine::Mesh> m_mesh;
+        std::shared_ptr<engine::SubMeshInstance> m_mesh;
         size_t m_vertexBufferPosition;
         size_t m_indexBufferPosition;
 
-        std::vector<MeshBuffers> m_meshBuffers;
+        MeshBuffers m_meshBuffers;
+        
         bool m_cpuDirty;
         bool m_gpuDirty;
         bool m_modelsChanged;
@@ -66,6 +60,8 @@ namespace engine
             , m_cpuDirty{ false }
             , m_gpuDirty{ false }
             , m_modelsChanged{ true }
+            , m_matrixUpdate{ false }
+            , m_objectIdUpdate{ false }
         {
             m_name = "MeshRenderer";
         }
@@ -76,6 +72,8 @@ namespace engine
             , m_cpuDirty{ true }
             , m_gpuDirty{ false }
             , m_modelsChanged{ true }
+            , m_matrixUpdate{ false }
+            , m_objectIdUpdate{ false }
         {
             m_name = "MeshRenderer";
         }
@@ -105,21 +103,27 @@ namespace engine
             m_meshPath.value<std::string>(path);
         }
 
-        std::vector<MeshBuffers>& meshBuffers()
+        MeshBuffers& meshBuffer()
         {
             return m_meshBuffers;
         }
 
-        const std::vector<SubMesh>& subMeshes() const
+        /*const SubMesh& subMesh() const
         {
-            return m_mesh->subMeshes();
-        }
+            return m_mesh->subMeshes()[m_meshIndex.value<int>()];
+        }*/
 
     public:
         void invalidateGpu()
         {
             m_gpuDirty = true;
         }
+
+    private:
+        Matrix4f m_lastMatrix;
+        uint32_t m_lastObjectId;
+        bool m_matrixUpdate;
+        bool m_objectIdUpdate;
 
     public:
         void cpuRefresh(Device& device)
@@ -135,8 +139,9 @@ namespace engine
                     if (foundFile)
                     {
                         m_mesh = device.createMesh(
-                            tools::hash(meshPathStr),
-                            meshPathStr);
+                            tools::hash(pathClean(meshPathStr)),
+                            meshPathStr,
+                            static_cast<uint32_t>(m_meshIndex.value<int>()));
                         m_gpuDirty = true;
                     }
                     else
@@ -152,23 +157,41 @@ namespace engine
             {
                 m_gpuDirty = false;
                 change = true;
-                m_meshBuffers.clear();
                 if (m_mesh)
                 {
-                    //for (auto&& subMesh : m_mesh->subMeshes())
-                    {
-                        if (m_meshIndex.value<int>() < m_mesh->subMeshes().size())
-                        {
-                            m_meshBuffers.emplace_back(convert(
-                                m_meshPath.value<std::string>() + std::to_string(m_meshIndex.value<int>()),
-                                device,
-                                m_mesh->subMeshes()[m_meshIndex.value<int>()]));
-                        }
-                    }
+                    m_meshBuffers = convert(
+                        m_meshPath.value<std::string>() + std::to_string(m_meshIndex.value<int>()),
+                        device,
+                        m_mesh);
                 }
                 m_modelsChanged = true;
             }
+
+            if (m_matrixUpdate && m_meshBuffers.modelAllocations)
+            {
+                m_matrixUpdate = false;
+                device.modelResources().updateSubmeshTransform(*m_meshBuffers.modelAllocations, m_lastMatrix);
+            }
+
+            if (m_objectIdUpdate && m_meshBuffers.modelAllocations)
+            {
+                m_objectIdUpdate = false;
+                device.modelResources().updateSubmeshObjectId(*m_meshBuffers.modelAllocations, m_lastObjectId);
+            }
+
             return change;
+        }
+
+        void updateTransform(const Matrix4f& mat)
+        {
+            m_lastMatrix = mat;
+            m_matrixUpdate = true;
+        }
+
+        void updateObjectId(uint32_t objectId)
+        {
+            m_lastObjectId = objectId;
+            m_objectIdUpdate = true;
         }
     };
 }

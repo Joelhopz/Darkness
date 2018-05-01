@@ -27,7 +27,6 @@ namespace engine
     {
         m_cubemapPipeline.setPrimitiveTopologyType(PrimitiveTopologyType::TriangleList);
         m_cubemapPipeline.setRasterizerState(RasterizerDescription().frontCounterClockwise(false).cullMode(CullMode::Back));
-        m_cubemapPipeline.setRenderTargetFormat(Format::Format_R16G16B16A16_FLOAT, Format::Format_UNKNOWN);
         m_cubemapPipeline.setDepthStencilState(DepthStencilDescription().depthEnable(false));
         m_cubemapPipeline.ps.cubemapSampler = device.createSampler(SamplerDescription().filter(engine::Filter::Bilinear));
 
@@ -48,7 +47,7 @@ namespace engine
             );
 
         m_brdfConvolution = device.createTextureSRV(TextureDescription()
-            .format(Format::Format_R16G16B16A16_FLOAT)
+            .format(Format::R16G16B16A16_FLOAT)
             .width(512)
             .height(512)
             .dimension(ResourceDimension::Texture2D)
@@ -58,26 +57,22 @@ namespace engine
         m_brdfConvolutionRTV = device.createTextureRTV(m_brdfConvolution.texture());
 
         m_equirectToCubemapPipeline.setPrimitiveTopologyType(PrimitiveTopologyType::TriangleList);
-        m_equirectToCubemapPipeline.setRasterizerState(RasterizerDescription().frontCounterClockwise(false).cullMode(CullMode::Back));
-        m_equirectToCubemapPipeline.setRenderTargetFormat(Format::Format_R16G16B16A16_FLOAT, Format::Format_UNKNOWN);
+        m_equirectToCubemapPipeline.setRasterizerState(RasterizerDescription().frontCounterClockwise(true).cullMode(CullMode::Back));
         m_equirectToCubemapPipeline.setDepthStencilState(DepthStencilDescription().depthEnable(false));
         m_equirectToCubemapPipeline.ps.equirectangularSampler = device.createSampler(SamplerDescription().filter(engine::Filter::Bilinear));
 
         m_irradiancePipeline.setPrimitiveTopologyType(PrimitiveTopologyType::TriangleList);
         m_irradiancePipeline.setRasterizerState(RasterizerDescription().frontCounterClockwise(false).cullMode(CullMode::Back));
-        m_irradiancePipeline.setRenderTargetFormat(Format::Format_R16G16B16A16_FLOAT, Format::Format_UNKNOWN);
         m_irradiancePipeline.setDepthStencilState(DepthStencilDescription().depthEnable(false));
         m_irradiancePipeline.ps.environmentSampler = device.createSampler(SamplerDescription().filter(engine::Filter::Bilinear));
 
         m_prefilterConvolutionPipeline.setPrimitiveTopologyType(PrimitiveTopologyType::TriangleList);
         m_prefilterConvolutionPipeline.setRasterizerState(RasterizerDescription().frontCounterClockwise(false).cullMode(CullMode::Back));
-        m_prefilterConvolutionPipeline.setRenderTargetFormat(Format::Format_R16G16B16A16_FLOAT, Format::Format_UNKNOWN);
         m_prefilterConvolutionPipeline.setDepthStencilState(DepthStencilDescription().depthEnable(false));
         m_prefilterConvolutionPipeline.ps.environmentSampler = device.createSampler(SamplerDescription().filter(engine::Filter::Bilinear));
 
         m_brdfConvolutionPipeline.setPrimitiveTopologyType(PrimitiveTopologyType::TriangleStrip);
         m_brdfConvolutionPipeline.setRasterizerState(RasterizerDescription().frontCounterClockwise(false).cullMode(CullMode::Back));
-        m_brdfConvolutionPipeline.setRenderTargetFormat(Format::Format_R16G16B16A16_FLOAT, Format::Format_UNKNOWN);
         m_brdfConvolutionPipeline.setDepthStencilState(DepthStencilDescription().depthEnable(false));
 
         m_cubemapCamera.nearPlane(0.1f);
@@ -108,19 +103,19 @@ namespace engine
 
     void RenderCubemap::createCubemapFromEquirect(Device& device, TextureSRV& equirectEnvironmentMap)
     {
-        uint32_t width = std::min(equirectEnvironmentMap.texture().width(), equirectEnvironmentMap.texture().height());
+        uint32_t width = 2048;// std::min(equirectEnvironmentMap.texture().width(), equirectEnvironmentMap.texture().height());
         uint32_t height = width;
 
         if (m_lastCubemapSize != width)
         {
             m_cubemap = device.createTextureSRV(TextureDescription()
-                .format(Format::Format_R16G16B16A16_FLOAT)
+                .format(Format::R16G16B16A16_FLOAT)
                 .width(width)
                 .height(height)
                 .arraySlices(6)
                 .dimension(ResourceDimension::TextureCubemap)
                 .mipLevels(static_cast<uint32_t>(mipCount(static_cast<int>(width), static_cast<int>(height))))
-                .name("Environment Cubemap")
+                .name("Environment Cubemap equi")
                 .usage(ResourceUsage::GpuRenderTargetReadWrite)
                 .optimizedClearValue(Float4(0.0f, 0.0f, 0.0f, 0.0f)));
 
@@ -141,8 +136,6 @@ namespace engine
             m_lastCubemapSize = width;
         }
         
-
-
         m_cubemapCamera.width(static_cast<int>(width));
         m_cubemapCamera.height(static_cast<int>(height));
 
@@ -150,12 +143,12 @@ namespace engine
         for (int i = 0; i < static_cast<int>(m_cubemap.texture().mipLevels()); ++i)
         {
             std::vector<std::pair<TextureRTV&, Matrix4f>> sides;
-            sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_cubemapRenderTargets[i][0], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(-1.0f,  0.0f,  0.0f), Vector3f(0.0f, 1.0f,  0.0f)) });
-            sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_cubemapRenderTargets[i][1], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f( 1.0f,  0.0f,  0.0f), Vector3f(0.0f, 1.0f,  0.0f)) });
-            sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_cubemapRenderTargets[i][2], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f( 0.0f,  1.0f,  0.0f), Vector3f(0.0f, 0.0f, -1.0f)) });
-            sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_cubemapRenderTargets[i][3], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f( 0.0f, -1.0f,  0.0f), Vector3f(0.0f, 0.0f,  1.0f)) });
-            sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_cubemapRenderTargets[i][4], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f( 0.0f,  0.0f,  1.0f), Vector3f(0.0f, 1.0f,  0.0f)) });
-            sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_cubemapRenderTargets[i][5], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f( 0.0f,  0.0f, -1.0f), Vector3f(0.0f, 1.0f,  0.0f)) });
+            sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_cubemapRenderTargets[i][0], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f( 1.0f,  0.0f,  0.0f), Vector3f(0.0f, 1.0f,  0.0f)) });
+            sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_cubemapRenderTargets[i][1], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(-1.0f,  0.0f,  0.0f), Vector3f(0.0f, 1.0f,  0.0f)) });
+            sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_cubemapRenderTargets[i][2], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f( 0.0f,  1.0f,  0.0f), Vector3f(0.0f, 0.0f,  1.0f)) });
+            sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_cubemapRenderTargets[i][3], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f( 0.0f, -1.0f,  0.0f), Vector3f(0.0f, 0.0f, -1.0f)) });
+            sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_cubemapRenderTargets[i][4], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f( 0.0f,  0.0f, -1.0f), Vector3f(0.0f, 1.0f,  0.0f)) });
+            sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_cubemapRenderTargets[i][5], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f( 0.0f,  0.0f,  1.0f), Vector3f(0.0f, 1.0f,  0.0f)) });
 
             for (auto&& side : sides)
             {
@@ -183,9 +176,13 @@ namespace engine
         fence.blockUntilSignaled();
     }
 
-    void RenderCubemap::createIrradianceCubemap(Device& device, TextureSRV& diffuseEnvironmentMap)
+    void RenderCubemap::createIrradianceCubemap(Device& device, TextureSRV& diffuseEnvironmentMap,
+        CommandList& cmd)
     {
-        uint32_t width = 512;// std::min(diffuseEnvironmentMap.texture().width() >> 4, diffuseEnvironmentMap.texture().height() >> 4);
+        CPU_MARKER("Create irradiance cubemap");
+        GPU_MARKER(cmd, "Create irradiance cubemap");
+
+        uint32_t width = 256;// std::min(diffuseEnvironmentMap.texture().width() >> 4, diffuseEnvironmentMap.texture().height() >> 4);
         uint32_t height = width;
 
         if (m_lastIrradianceSize != width)
@@ -193,12 +190,12 @@ namespace engine
             m_irradianceRenderTargets.clear();
 
             m_irradiance = device.createTextureSRV(TextureDescription()
-                .format(Format::Format_R16G16B16A16_FLOAT)
+                .format(Format::R16G16B16A16_FLOAT)
                 .width(width)
                 .height(height)
                 .arraySlices(6)
                 .dimension(ResourceDimension::TextureCubemap)
-                .name("Environment Cubemap Irradiance")
+                .name("Environment Irradiance")
                 .usage(ResourceUsage::GpuRenderTargetReadWrite)
                 .optimizedClearValue(Float4(0.0f, 0.0f, 0.0f, 0.0f)));
 
@@ -214,30 +211,22 @@ namespace engine
         }
 
         std::vector<std::pair<TextureRTV&, Matrix4f>> sides;
-        sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_irradianceRenderTargets[0], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(-1.0f,  0.0f,  0.0f), Vector3f(0.0f, 1.0f,  0.0f)) });
-        sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_irradianceRenderTargets[1], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f( 1.0f,  0.0f,  0.0f), Vector3f(0.0f, 1.0f,  0.0f)) });
-        sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_irradianceRenderTargets[2], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f( 0.0f,  1.0f,  0.0f), Vector3f(0.0f, 0.0f, -1.0f)) });
-        sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_irradianceRenderTargets[3], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f( 0.0f, -1.0f,  0.0f), Vector3f(0.0f, 0.0f,  1.0f)) });
-        sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_irradianceRenderTargets[4], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f( 0.0f,  0.0f,  1.0f), Vector3f(0.0f, 1.0f,  0.0f)) });
-        sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_irradianceRenderTargets[5], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f( 0.0f,  0.0f, -1.0f), Vector3f(0.0f, 1.0f,  0.0f)) });
+        sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_irradianceRenderTargets[0], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f( 1.0f,  0.0f,  0.0f), Vector3f(0.0f, 1.0f,  0.0f)) });
+        sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_irradianceRenderTargets[1], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(-1.0f,  0.0f,  0.0f), Vector3f(0.0f, 1.0f,  0.0f)) });
+        sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_irradianceRenderTargets[2], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f( 0.0f,  1.0f,  0.0f), Vector3f(0.0f, 0.0f,  1.0f)) });
+        sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_irradianceRenderTargets[3], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f( 0.0f, -1.0f,  0.0f), Vector3f(0.0f, 0.0f, -1.0f)) });
+        sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_irradianceRenderTargets[4], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f( 0.0f,  0.0f, -1.0f), Vector3f(0.0f, 1.0f,  0.0f)) });
+        sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_irradianceRenderTargets[5], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f( 0.0f,  0.0f,  1.0f), Vector3f(0.0f, 1.0f,  0.0f)) });
 
         m_cubemapCamera.width(static_cast<int>(width));
         m_cubemapCamera.height(static_cast<int>(height));
 
+        //cmd.clearTexture(m_irradiance.texture());
+
         for (auto&& side : sides)
         {
-            auto cmd = device.createCommandList();
-
+            cmd.clearRenderTargetView(side.first, { 0.0f, 0.0f, 0.0f, 0.0f });
             cmd.setRenderTargets({ side.first });
-            cmd.setViewPorts({ Viewport{ 0.0f, 0.0f,
-                static_cast<float>(width),
-                static_cast<float>(height),
-                0.0f, 1.0f } });
-            cmd.setScissorRects({ Rectangle{ 0, 0,
-                static_cast<unsigned int>(width),
-                static_cast<unsigned int>(height) } });
-
-            //m_cubemapCamera.rotation(side.second);
             m_cubemapCamera.rotation(Quaternionf::fromMatrix(side.second));
 
             m_irradiancePipeline.vs.viewProjectionMatrix = fromMatrix(m_cubemapCamera.projectionMatrix() * m_cubemapCamera.viewMatrix());
@@ -245,24 +234,24 @@ namespace engine
 
             cmd.bindPipe(m_irradiancePipeline);
             cmd.draw(36);
-
-            auto fence = device.createFence();
-            device.queue().submit(cmd, fence);
-            fence.blockUntilSignaled();
         }
         
     }
 
-    void RenderCubemap::prefilterConvolution(Device& device, TextureSRV& diffuseEnvironmentMap)
+    void RenderCubemap::prefilterConvolution(Device& device, TextureSRV& diffuseEnvironmentMap,
+        CommandList& cmd)
     {
-        uint32_t width = 512;// std::min(diffuseEnvironmentMap.texture().width(), diffuseEnvironmentMap.texture().height());
+        CPU_MARKER("Create convolution cubemap");
+        GPU_MARKER(cmd, "Create convolution cubemap");
+
+        uint32_t width = 256;// std::min(diffuseEnvironmentMap.texture().width(), diffuseEnvironmentMap.texture().height());
         uint32_t height = width;
         unsigned int maxMipLevels = std::min(static_cast<uint32_t>(mipCount(static_cast<int>(width), static_cast<int>(height))), 5u);
 
         if (m_lastPrefilterConvolutionSize != width)
         {
             m_prefilteredEnvironmentMap = device.createTextureSRV(TextureDescription()
-                .format(Format::Format_R16G16B16A16_FLOAT)
+                .format(Format::R16G16B16A16_FLOAT)
                 .width(width)
                 .height(height)
                 .arraySlices(6)
@@ -292,22 +281,22 @@ namespace engine
         m_cubemapCamera.width(static_cast<int>(width));
         m_cubemapCamera.height(static_cast<int>(height));
 
-        
+        cmd.clearTexture(m_prefilteredEnvironmentMap.texture());
+
         for (int i = 0; i < static_cast<int>(maxMipLevels); ++i)
         {
             std::vector<std::pair<TextureRTV&, Matrix4f>> sides;
-            sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_prefilterConvolutionTargets[i][0], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(-1.0f,  0.0f,  0.0f), Vector3f(0.0f, 1.0f,  0.0f)) });
-            sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_prefilterConvolutionTargets[i][1], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f( 1.0f,  0.0f,  0.0f), Vector3f(0.0f, 1.0f,  0.0f)) });
-            sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_prefilterConvolutionTargets[i][2], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f( 0.0f,  1.0f,  0.0f), Vector3f(0.0f, 0.0f, -1.0f)) });
-            sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_prefilterConvolutionTargets[i][3], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f( 0.0f, -1.0f,  0.0f), Vector3f(0.0f, 0.0f,  1.0f)) });
-            sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_prefilterConvolutionTargets[i][4], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f( 0.0f,  0.0f,  1.0f), Vector3f(0.0f, 1.0f,  0.0f)) });
-            sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_prefilterConvolutionTargets[i][5], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f( 0.0f,  0.0f, -1.0f), Vector3f(0.0f, 1.0f,  0.0f)) });
+            sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_prefilterConvolutionTargets[i][0], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f( 1.0f,  0.0f,  0.0f), Vector3f(0.0f, 1.0f,  0.0f)) });
+            sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_prefilterConvolutionTargets[i][1], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(-1.0f,  0.0f,  0.0f), Vector3f(0.0f, 1.0f,  0.0f)) });
+            sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_prefilterConvolutionTargets[i][2], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f( 0.0f,  1.0f,  0.0f), Vector3f(0.0f, 0.0f,  1.0f)) });
+            sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_prefilterConvolutionTargets[i][3], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f( 0.0f, -1.0f,  0.0f), Vector3f(0.0f, 0.0f, -1.0f)) });
+            sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_prefilterConvolutionTargets[i][4], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f( 0.0f,  0.0f, -1.0f), Vector3f(0.0f, 1.0f,  0.0f)) });
+            sides.emplace_back(std::pair<TextureRTV&, Matrix4f>{ m_prefilterConvolutionTargets[i][5], m_cubemapCamera.lookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f( 0.0f,  0.0f,  1.0f), Vector3f(0.0f, 1.0f,  0.0f)) });
 
             for (auto&& side : sides)
             {
-                auto cmd = device.createCommandList();
+                cmd.clearRenderTargetView(side.first, { 0.0f, 0.0f, 0.0f, 0.0f });
 
-                cmd.setRenderTargets({ side.first });
                 cmd.setRenderTargets({ side.first });
                 cmd.setViewPorts({ Viewport{ 0.0f, 0.0f,
                     static_cast<float>(std::max(static_cast<int>(width) >> i, 1)),
@@ -317,7 +306,6 @@ namespace engine
                     static_cast<unsigned int>(std::max(static_cast<int>(width) >> i, 1)),
                     static_cast<unsigned int>(std::max(static_cast<int>(height) >> i, 1)) } });
 
-                //m_cubemapCamera.rotation(side.second);
                 m_cubemapCamera.rotation(Quaternionf::fromMatrix(side.second));
 
                 m_prefilterConvolutionPipeline.vs.viewProjectionMatrix = fromMatrix(m_cubemapCamera.projectionMatrix() * m_cubemapCamera.viewMatrix());
@@ -327,49 +315,29 @@ namespace engine
 
                 cmd.bindPipe(m_prefilterConvolutionPipeline);
                 cmd.draw(36);
-
-                auto fence = device.createFence();
-                device.queue().submit(cmd, fence);
-                fence.blockUntilSignaled();
             }
         }
     }
 
-    void RenderCubemap::brdfConvolution(Device& device)
+    void RenderCubemap::brdfConvolution(CommandList& cmd)
     {
-        uint32_t width = 512;
-        uint32_t height = 512;
-        
-        auto cmd = device.createCommandList();
+        CPU_MARKER("Create brdf convolution cubemap");
+        GPU_MARKER(cmd, "Create brdf convolution cubemap");
 
+        cmd.clearRenderTargetView(m_brdfConvolutionRTV, { 0.0f, 0.0f, 0.0f, 0.0f });
         cmd.setRenderTargets({ m_brdfConvolutionRTV });
-        cmd.setViewPorts({ Viewport{ 0.0f, 0.0f,
-            static_cast<float>(width),
-            static_cast<float>(height),
-            0.0f, 1.0f } });
-        cmd.setScissorRects({ Rectangle{ 0, 0,
-            static_cast<unsigned int>(width),
-            static_cast<unsigned int>(height) } });
-
         cmd.bindPipe(m_brdfConvolutionPipeline);
         cmd.draw(4);
-
-        auto fence = device.createFence();
-        device.queue().submit(cmd, fence);
-        fence.blockUntilSignaled();
     }
 
     void RenderCubemap::render(
-        Device& /*device*/,
         TextureRTV& currentRenderTarget,
-        TextureDSV& /*depthBuffer*/,
         Camera& camera,
         CommandList& cmd)
     {
-        return;
+        cmd.clearRenderTargetView(currentRenderTarget, { 0.0f, 0.0f, 0.0f, 1.0f });
+
         cmd.setRenderTargets({ currentRenderTarget });
-        cmd.setViewPorts({ Viewport{ 0.0f, 0.0f, static_cast<float>(currentRenderTarget.width()), static_cast<float>(currentRenderTarget.height()), 0.0f, 1.0f } });
-        cmd.setScissorRects({ Rectangle{ 0, 0, currentRenderTarget.width(), currentRenderTarget.height() } });
 
         m_cubemapPipeline.vs.viewProjectionMatrix = fromMatrix(camera.projectionMatrix() * camera.viewMatrix(Vector3f(0.0f, 0.0f, 0.0f)));
         m_cubemapPipeline.ps.cubemap = m_cubemap;

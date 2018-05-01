@@ -1,11 +1,14 @@
 #include "engine/rendering/ModelRenderer.h"
 #include "engine/rendering/ShadowRenderer.h"
+#include "engine/rendering/DepthPyramid.h"
+#include "engine/rendering/ImguiRenderer.h"
 #include "engine/graphics/SamplerDescription.h"
 #include "engine/graphics/Viewport.h"
 #include "engine/graphics/Rect.h"
 #include "engine/graphics/Pipeline.h"
 #include "engine/graphics/Common.h"
 #include "tools/Measure.h"
+#include "tools/ToolsCommon.h"
 
 #include <random>
 
@@ -13,97 +16,77 @@ using namespace tools;
 
 namespace engine
 {
+    bool frustumCull(
+        std::vector<Vector4f>& frustumPlanes,
+        const BoundingBox& aabb,
+        const Vector3f cameraPosition,
+        const Matrix4f& transform)
+    {
+        Vector3f corner[8] =
+        {
+            transform * aabb.min,
+            transform * Vector3f{ aabb.min.x, aabb.max.y, aabb.max.z },
+            transform * Vector3f{ aabb.min.x, aabb.min.y, aabb.max.z },
+            transform * Vector3f{ aabb.min.x, aabb.max.y, aabb.min.z },
+            transform * aabb.max,
+            transform * Vector3f{ aabb.max.x, aabb.min.y, aabb.min.z },
+            transform * Vector3f{ aabb.max.x, aabb.max.y, aabb.min.z },
+            transform * Vector3f{ aabb.max.x, aabb.min.y, aabb.max.z }
+        };
+
+        for (int i = 0; i < 6; ++i)
+        {
+            bool hit = false;
+            for (auto&& c : corner)
+            {
+                if (frustumPlanes[i].xyz().normalize().dot(c - cameraPosition) >= 0)
+                {
+                    hit = true;
+                    break;
+                }
+            }
+            if (!hit)
+                return false;
+        }
+        return true;
+    }
+
     ModelRenderer::ModelRenderer(Device& device, ShaderStorage& shaderStorage, Vector2<int> virtualResolution)
         : m_device{ device }
         , m_shaderStorage{ shaderStorage }
         , m_virtualResolution{ virtualResolution }
+        , m_culler{ m_device, shaderStorage }
+        , m_clusterRenderer{ m_device, shaderStorage }
+        , m_picker{ m_device, shaderStorage }
+        //, m_particleTest{ device, shaderStorage }
 #ifdef EARLYZ_ENABLED
         , m_earlyzPipeline{ device.createPipeline<shaders::EarlyZ>(shaderStorage) }
         , m_earlyzAlphaClipped{ device.createPipeline<shaders::EarlyZAlphaClipped>(shaderStorage) }
 #endif
         , m_pipeline{ device.createPipeline<shaders::MeshRenderer>(shaderStorage) }
         , m_pbrPipeline{ device.createPipeline<shaders::MeshRendererPbr>(shaderStorage) }
+        , m_pbrPipelineAlphaclipped{ device.createPipeline<shaders::MeshRendererPbr>(shaderStorage) }
         , m_wireframePipeline{ device.createPipeline<shaders::Wireframe>(shaderStorage) }
-        , m_lightingPipeline{ device.createPipeline<shaders::Lighting>(shaderStorage) }
+        , m_lightingPipelines{}
         , m_ssaoPipeline{ device.createPipeline<shaders::SSAO>(shaderStorage) }
         , m_ssaoBlurPipeline{ device.createPipeline<shaders::SSAOBlur>(shaderStorage) }
-        , m_temporalResolve{ device.createPipeline<shaders::TemporalResolve>(shaderStorage) }
-        , m_culling{ device.createPipeline<shaders::Culling>(shaderStorage) }
+        , m_temporalResolve{ }
+        
+        , m_debugBoundingSpheres{ device.createPipeline<shaders::DebugBoundingSpheres>(shaderStorage) }
+
+        , m_currentRenderMode{ 0 }
 
         , m_renderWidth{ m_virtualResolution.x }
         , m_renderHeight{ m_virtualResolution.y }
 
         , m_renderOutline{ std::make_unique<RenderOutline>(device, shaderStorage, m_virtualResolution) }
 
-        , m_gbufferAlbedo{ device.createTextureRTV(TextureDescription()
-            .width(m_renderWidth)
-            .height(m_renderHeight)
-            .format(Format::Format_R16G16B16A16_FLOAT)
-            .usage(ResourceUsage::GpuRenderTargetReadWrite)
-            .name("GBuffer albedo")
-            .dimension(ResourceDimension::Texture2D)
-            .optimizedClearValue({ 0.0f, 0.0f, 0.0f, 0.0f })
-        ) }
-        , m_gbufferNormal{ device.createTextureRTV(TextureDescription()
-            .width(m_renderWidth)
-            .height(m_renderHeight)
-            .format(Format::Format_R16G16B16A16_FLOAT)
-            .usage(ResourceUsage::GpuRenderTargetReadWrite)
-            .name("GBuffer normal")
-            .dimension(ResourceDimension::Texture2D)
-            .optimizedClearValue({ 0.0f, 0.0f, 0.0f, 1.0f })
-        ) }
-        , m_gbufferMotion{ device.createTextureRTV(TextureDescription()
-            .width(m_renderWidth)
-            .height(m_renderHeight)
-            .format(Format::Format_R16G16_FLOAT)
-            .usage(ResourceUsage::GpuRenderTargetReadWrite)
-            .name("GBuffer motion")
-            .dimension(ResourceDimension::Texture2D)
-            .optimizedClearValue({ 0.0f, 0.0f, 0.0f, 0.0f })
-        ) }
-        , m_gbufferRoughness{ device.createTextureRTV(TextureDescription()
-            .width(m_renderWidth)
-            .height(m_renderHeight)
-            .format(Format::Format_R16_FLOAT)
-            .usage(ResourceUsage::GpuRenderTargetReadWrite)
-            .name("GBuffer roughness")
-            .dimension(ResourceDimension::Texture2D)
-            .optimizedClearValue({ 0.0f, 0.0f, 0.0f, 0.0f })
-        ) }
-        , m_gbufferMetalness{ device.createTextureRTV(TextureDescription()
-            .width(m_renderWidth)
-            .height(m_renderHeight)
-            .format(Format::Format_R16_FLOAT)
-            .usage(ResourceUsage::GpuRenderTargetReadWrite)
-            .name("GBuffer metalness")
-            .dimension(ResourceDimension::Texture2D)
-            .optimizedClearValue({ 0.0f, 0.0f, 0.0f, 0.0f })
-        ) }
-        , m_gbufferOcclusion{ device.createTextureRTV(TextureDescription()
-            .width(m_renderWidth)
-            .height(m_renderHeight)
-            .format(Format::Format_R8_UNORM)
-            .usage(ResourceUsage::GpuRenderTargetReadWrite)
-            .name("GBuffer occlusion")
-            .dimension(ResourceDimension::Texture2D)
-            .optimizedClearValue({ 0.0f, 0.0f, 0.0f, 0.0f })
-        ) }
-
-        , m_objectId{ device.createTextureRTV(TextureDescription()
-            .width(m_renderWidth)
-            .height(m_renderHeight)
-            .format(Format::Format_R32_UINT)
-            .usage(ResourceUsage::GpuRenderTargetReadWrite)
-            .name("GBuffer object ID")
-            .dimension(ResourceDimension::Texture2D)
-            .optimizedClearValue({ 0.0f, 0.0f, 0.0f, 0.0f })
-        ) }
+        , m_gbuffer{ std::make_shared<GBuffer>(device, m_renderWidth, m_renderHeight) }
 
         , m_lightingTarget{ device.createTextureRTV(TextureDescription()
             .width(m_renderWidth)
             .height(m_renderHeight)
-            .format(Format::Format_R16G16B16A16_FLOAT)
+            .format(Format::R16G16B16A16_FLOAT)
             .usage(ResourceUsage::GpuRenderTargetReadWrite)
             .name("FullRes Target 0")
             .dimension(ResourceDimension::Texture2D)
@@ -114,7 +97,7 @@ namespace engine
             device.createTextureRTV(TextureDescription()
                 .width(m_renderWidth)
                 .height(m_renderHeight)
-                .format(Format::Format_R16G16B16A16_FLOAT)
+                .format(Format::R16G16B16A16_FLOAT)
                 .usage(ResourceUsage::GpuRenderTargetReadWrite)
                 .name("FullRes Target 0")
                 .dimension(ResourceDimension::Texture2D)
@@ -122,7 +105,7 @@ namespace engine
             device.createTextureRTV(TextureDescription()
                 .width(m_renderWidth)
                 .height(m_renderHeight)
-                .format(Format::Format_R16G16B16A16_FLOAT)
+                .format(Format::R16G16B16A16_FLOAT)
                 .usage(ResourceUsage::GpuRenderTargetReadWrite)
                 .name("FullRes Target 1")
                 .dimension(ResourceDimension::Texture2D)
@@ -143,7 +126,7 @@ namespace engine
             .width(SSAOWidth)
             .height(SSAOHeight)
 #endif
-            .format(Format::Format_R16_FLOAT)
+            .format(Format::R16_FLOAT)
             .usage(ResourceUsage::GpuRenderTargetReadWrite)
             .name("SSAO Render target")
             .dimension(ResourceDimension::Texture2D)
@@ -151,27 +134,31 @@ namespace engine
         ) }
         , m_ssaoSRV{ device.createTextureSRV(m_ssaoRTV.texture()) }
 
-        , m_gbufferAlbedoSRV{ device.createTextureSRV(m_gbufferAlbedo.texture()) }
-        , m_gbufferNormalSRV{ device.createTextureSRV(m_gbufferNormal.texture()) }
-        , m_gbufferMotionSRV{ device.createTextureSRV(m_gbufferMotion.texture()) }
-        , m_gbufferRoughnessSRV{ device.createTextureSRV(m_gbufferRoughness.texture()) }
-        , m_gbufferMetalnessSRV{ device.createTextureSRV(m_gbufferMetalness.texture()) }
-        , m_gbufferOcclusionSRV{ device.createTextureSRV(m_gbufferOcclusion.texture()) }
-        , m_objectIdSRV{ device.createTextureSRV(m_objectId.texture()) }
-
-        , m_pickBufferUAV{ device.createBufferUAV(BufferDescription()
+        /*, m_pickBufferUAV{ device.createBufferUAV(BufferDescription()
             .elements(1)
-            .elementSize(sizeof(unsigned int))
+            .format(Format::R32_UINT)
             .usage(ResourceUsage::GpuReadWrite)
             .name("Pick buffer")
         ) }
         , m_pickBufferReadBack{ device.createBufferSRV(BufferDescription()
             .elements(1)
             .elementSize(sizeof(unsigned int))
-            .format(Format::Format_R32_UINT)
+            .format(Format::R32_UINT)
             .usage(ResourceUsage::GpuToCpu)
             .name("Pick buffer readback")
+        ) }*/
+
+        , m_dsv{ device.createTextureDSV(TextureDescription()
+            .name("Depth Buffer")
+            .format(Format::D32_FLOAT)
+            .width(virtualResolution.x)
+            .height(virtualResolution.y)
+            .usage(ResourceUsage::DepthStencil)
+            .optimizedDepthClearValue(0.0f)
+            .dimension(ResourceDimension::Texture2D)
         ) }
+        , m_dsvSRV{ device.createTextureSRV(m_dsv) }
+
         , m_selectedObject{ -1 }
     {
         createSSAOSampleKernel();
@@ -179,9 +166,8 @@ namespace engine
         m_ssaoNoiseTexture = device.createTextureSRV(TextureDescription()
             .width(4)
             .height(4)
-            .format(Format::Format_R32G32B32A32_FLOAT)
+            .format(Format::R32G32B32A32_FLOAT)
             .name("SSAO noise texture")
-            .usage(ResourceUsage::CpuToGpu)
             .setInitialData(TextureDescription::InitialData(
                 m_ssaoNoise, 
                 4u * static_cast<uint32_t>(4 * sizeof(float)), 
@@ -191,22 +177,19 @@ namespace engine
             .elementSize(sizeof(Float4))
             .elements(m_ssaoKernel.size())
             .name("SSAO Kernel buffer")
-            .usage(ResourceUsage::CpuToGpu)
             .setInitialData(m_ssaoKernel)
-            .format(Format::Format_R32G32B32A32_FLOAT)
+            .format(Format::R32G32B32A32_FLOAT)
         );
         m_ssaoBlurKernelBuffer = device.createBufferSRV(BufferDescription()
             .elementSize(sizeof(Float))
             .elements(m_ssaoBlurKernel.size())
             .name("SSAO Blur kernel buffer")
-            .usage(ResourceUsage::CpuToGpu)
             .setInitialData(m_ssaoBlurKernel)
-            .format(Format::Format_R32_FLOAT)
+            .format(Format::R32_FLOAT)
         );
 
         m_ssaoPipeline.setPrimitiveTopologyType(PrimitiveTopologyType::TriangleStrip);
         m_ssaoPipeline.setRasterizerState(RasterizerDescription().frontCounterClockwise(false));
-        m_ssaoPipeline.setRenderTargetFormat(Format::Format_R16_FLOAT);
         m_ssaoPipeline.setDepthStencilState(DepthStencilDescription().depthEnable(false));
         m_ssaoPipeline.ps.noiseTexture = m_ssaoNoiseTexture;
         m_ssaoPipeline.ps.ssaoSampler = device.createSampler(SamplerDescription()
@@ -218,7 +201,6 @@ namespace engine
 
         m_ssaoBlurPipeline.setPrimitiveTopologyType(PrimitiveTopologyType::TriangleStrip);
         m_ssaoBlurPipeline.setRasterizerState(RasterizerDescription().frontCounterClockwise(false));
-        m_ssaoBlurPipeline.setRenderTargetFormat(Format::Format_R16_FLOAT);
         m_ssaoBlurPipeline.setDepthStencilState(DepthStencilDescription().depthEnable(false));
         m_ssaoBlurPipeline.ps.imageSampler = device.createSampler(SamplerDescription().filter(engine::Filter::Point).textureAddressMode(TextureAddressMode::Clamp));
 
@@ -237,7 +219,6 @@ namespace engine
 #ifdef EARLYZ_ENABLED
         m_earlyzPipeline.setPrimitiveTopologyType(PrimitiveTopologyType::TriangleList);
         m_earlyzPipeline.setRasterizerState(RasterizerDescription());
-        m_earlyzPipeline.setRenderTargetFormats({}, Format::Format_D32_FLOAT);
         m_earlyzPipeline.setDepthStencilState(DepthStencilDescription()
             .depthEnable(true)
             .depthWriteMask(DepthWriteMask::All)
@@ -247,7 +228,6 @@ namespace engine
 
         m_earlyzAlphaClipped.setPrimitiveTopologyType(PrimitiveTopologyType::TriangleList);
         m_earlyzAlphaClipped.setRasterizerState(RasterizerDescription().cullMode(CullMode::None));
-        m_earlyzAlphaClipped.setRenderTargetFormats({}, Format::Format_D32_FLOAT);
         m_earlyzAlphaClipped.ps.imageSampler = device.createSampler(SamplerDescription().filter(Filter::Point));
         m_earlyzAlphaClipped.setDepthStencilState(DepthStencilDescription()
             .depthEnable(true)
@@ -260,7 +240,6 @@ namespace engine
         // basic
         m_pipeline.setPrimitiveTopologyType(PrimitiveTopologyType::TriangleList);
         m_pipeline.setRasterizerState(RasterizerDescription());
-        m_pipeline.setRenderTargetFormat(Format::Format_R16G16B16A16_FLOAT, Format::Format_D32_FLOAT);
         m_pipeline.ps.tex_sampler = device.createSampler(SamplerDescription().filter(Filter::Bilinear));
         m_pipeline.ps.shadow_sampler = device.createSampler(SamplerDescription()
             .addressU(TextureAddressMode::Mirror)
@@ -277,17 +256,24 @@ namespace engine
         // pbr
         m_pbrPipeline.setPrimitiveTopologyType(PrimitiveTopologyType::TriangleList);
         m_pbrPipeline.setRasterizerState(RasterizerDescription().cullMode(CullMode::Back));
-        m_pbrPipeline.setRenderTargetFormats({
-            Format::Format_R16G16B16A16_FLOAT,
-            Format::Format_R16G16B16A16_FLOAT,
-            Format::Format_R16G16_FLOAT,
-            Format::Format_R16_FLOAT,
-            Format::Format_R16_FLOAT,
-            Format::Format_R8_UNORM,
-            Format::Format_R32_UINT
-        }, Format::Format_D32_FLOAT);
         m_pbrPipeline.ps.tex_sampler = device.createSampler(SamplerDescription().filter(Filter::Bilinear));
         m_pbrPipeline.setDepthStencilState(DepthStencilDescription()
+            .depthEnable(true)
+#ifdef EARLYZ_ENABLED
+            .depthWriteMask(DepthWriteMask::Zero)
+            .depthFunc(ComparisonFunction::Equal)
+#else
+            .depthWriteMask(DepthWriteMask::All)
+            .depthFunc(ComparisonFunction::Greater)
+#endif
+            .frontFace(front)
+            .backFace(back));
+
+
+        m_pbrPipelineAlphaclipped.setPrimitiveTopologyType(PrimitiveTopologyType::TriangleList);
+        m_pbrPipelineAlphaclipped.setRasterizerState(RasterizerDescription().cullMode(CullMode::None));
+        m_pbrPipelineAlphaclipped.ps.tex_sampler = device.createSampler(SamplerDescription().filter(Filter::Bilinear));
+        m_pbrPipelineAlphaclipped.setDepthStencilState(DepthStencilDescription()
             .depthEnable(true)
 #ifdef EARLYZ_ENABLED
             .depthWriteMask(DepthWriteMask::Zero)
@@ -305,7 +291,6 @@ namespace engine
             .cullMode(CullMode::Back)
             .depthBias(16384)
             .fillMode(FillMode::Wireframe));
-        m_wireframePipeline.setRenderTargetFormats({ Format::Format_R16G16B16A16_FLOAT }, Format::Format_D32_FLOAT);
         m_wireframePipeline.ps.tex_sampler = device.createSampler(SamplerDescription().filter(Filter::Bilinear));
         m_wireframePipeline.setDepthStencilState(DepthStencilDescription()
             .depthEnable(true)
@@ -319,169 +304,55 @@ namespace engine
             .frontFace(front)
             .backFace(back));
 
+
+        m_debugBoundingSpheres.setPrimitiveTopologyType(PrimitiveTopologyType::TriangleList);
+        m_debugBoundingSpheres.setRasterizerState(RasterizerDescription()
+            .cullMode(CullMode::Back)
+            .fillMode(FillMode::Wireframe));
+        m_debugBoundingSpheres.setDepthStencilState(DepthStencilDescription()
+            .depthEnable(true)
+            .depthWriteMask(DepthWriteMask::All)
+            .depthFunc(ComparisonFunction::Greater)
+            .frontFace(front)
+            .backFace(back));
+
         // lighting
-        m_lightingPipeline.setPrimitiveTopologyType(PrimitiveTopologyType::TriangleStrip);
-        m_lightingPipeline.setRasterizerState(RasterizerDescription().frontCounterClockwise(false));
-        m_lightingPipeline.setRenderTargetFormat(Format::Format_R16G16B16A16_FLOAT, Format::Format_UNKNOWN);
-        m_lightingPipeline.setDepthStencilState(DepthStencilDescription().depthEnable(false));
-        m_lightingPipeline.ps.tex_sampler = device.createSampler(SamplerDescription().filter(Filter::Point));
-        m_lightingPipeline.ps.depth_sampler = device.createSampler(SamplerDescription().filter(Filter::Point));
-        m_lightingPipeline.ps.point_sampler = device.createSampler(SamplerDescription().filter(Filter::Point));
-        m_lightingPipeline.ps.shadow_sampler = device.createSampler(SamplerDescription()
-            .addressU(TextureAddressMode::Mirror)
-            .addressV(TextureAddressMode::Mirror)
-            .filter(Filter::Comparison));
-        m_lightingPipeline.ps.albedo = m_gbufferAlbedoSRV;
-        m_lightingPipeline.ps.normal = m_gbufferNormalSRV;
-        m_lightingPipeline.ps.roughness = m_gbufferRoughnessSRV;
-        m_lightingPipeline.ps.metalness = m_gbufferMetalnessSRV;
-        m_lightingPipeline.ps.occlusion = m_gbufferOcclusionSRV;
-        
-        m_temporalResolve.setPrimitiveTopologyType(PrimitiveTopologyType::TriangleStrip);
-        m_temporalResolve.setRasterizerState(RasterizerDescription().frontCounterClockwise(false));
-        m_temporalResolve.setRenderTargetFormat(Format::Format_R16G16B16A16_FLOAT, Format::Format_UNKNOWN);
-        m_temporalResolve.setDepthStencilState(DepthStencilDescription().depthEnable(false));
-        m_temporalResolve.ps.pointSampler = device.createSampler(SamplerDescription().textureAddressMode(TextureAddressMode::Clamp).filter(Filter::Point));
-        m_temporalResolve.ps.bilinearSampler = device.createSampler(SamplerDescription().filter(Filter::Bilinear));
-        m_temporalResolve.ps.trilinearSampler = device.createSampler(SamplerDescription().textureAddressMode(TextureAddressMode::Clamp).filter(Filter::Trilinear));
-        m_temporalResolve.ps.anisotropicSampler = device.createSampler(SamplerDescription().textureAddressMode(TextureAddressMode::Clamp).filter(Filter::Anisotropic));
+        for (int i = 0; i < shaders::LightingPS::DrawmodeCount; ++i)
+        {
+            auto lightingPipe = device.createPipeline<shaders::Lighting>(shaderStorage);
+            lightingPipe.setPrimitiveTopologyType(PrimitiveTopologyType::TriangleStrip);
+            lightingPipe.setRasterizerState(RasterizerDescription().frontCounterClockwise(false));
+            lightingPipe.setDepthStencilState(DepthStencilDescription().depthEnable(false));
+            lightingPipe.ps.tex_sampler = device.createSampler(SamplerDescription().filter(Filter::Bilinear));
+            lightingPipe.ps.tri_sampler = device.createSampler(SamplerDescription().filter(Filter::Trilinear));
+            lightingPipe.ps.depth_sampler = device.createSampler(SamplerDescription().filter(Filter::Point));
+            lightingPipe.ps.point_sampler = device.createSampler(SamplerDescription().filter(Filter::Point));
+            lightingPipe.ps.gbufferNormals = m_gbuffer->srv(GBufferType::Normal);
+            lightingPipe.ps.gbufferUV = m_gbuffer->srv(GBufferType::Uv);
+            lightingPipe.ps.gbufferInstanceId = m_gbuffer->srv(GBufferType::InstanceId);
+            lightingPipe.ps.frameSize.x = m_gbuffer->srv(GBufferType::Normal).width();
+            lightingPipe.ps.frameSize.y = m_gbuffer->srv(GBufferType::Normal).height();
+            lightingPipe.ps.instanceMaterials = device.modelResources().gpuBuffers().instanceMaterial();
+            lightingPipe.ps.materialTextures = device.modelResources().textures();
+            lightingPipe.ps.drawmode = static_cast<engine::shaders::LightingPS::Drawmode>(i);
+            lightingPipe.ps.shadow_sampler = device.createSampler(SamplerDescription()
+                .addressU(TextureAddressMode::Mirror)
+                .addressV(TextureAddressMode::Mirror)
+                .filter(Filter::Comparison));
+            m_lightingPipelines.emplace_back(std::move(lightingPipe));
+        }
 
-        /*m_lightingPipeline.setBlendState(BlendDescription().renderTarget(0, RenderTargetBlendDescription()
-            .blendEnable(true)
-            .blendOp(BlendOperation::Add)
-            .blendOpAlpha(BlendOperation::Add)
-
-            .srcBlend(Blend::SrcAlpha)
-            .srcBlendAlpha(Blend::Zero)
-            .dstBlend(Blend::InvSrcAlpha)
-            .dstBlendAlpha(Blend::Zero)
-
-            .renderTargetWriteMask(1 | 2 | 4 | 8)
-        ));*/
-
-        std::vector<InputData> inputData;
-        inputData.emplace_back(InputData{ 1u, 2u });
-        inputData.emplace_back(InputData{ 5u, 10u });
-        inputData.emplace_back(InputData{ 11u, 15u });
-        inputData.emplace_back(InputData{ 13u, 25u });
-        inputData.emplace_back(InputData{ 30u, 54u });
-        inputData.emplace_back(InputData{ 30u, 2u });
-        inputData.emplace_back(InputData{ 12u, 5u });
-        inputData.emplace_back(InputData{ 9u, 3u });
-        inputData.emplace_back(InputData{ 212u, 225u });
-        inputData.emplace_back(InputData{ 119u, 43u });
-
-        inputData.emplace_back(InputData{ 1u, 2u });
-        inputData.emplace_back(InputData{ 5u, 10u });
-        inputData.emplace_back(InputData{ 11u, 15u });
-        inputData.emplace_back(InputData{ 13u, 25u });
-        inputData.emplace_back(InputData{ 30u, 54u });
-        inputData.emplace_back(InputData{ 30u, 2u });
-        inputData.emplace_back(InputData{ 12u, 5u });
-        inputData.emplace_back(InputData{ 9u, 3u });
-        inputData.emplace_back(InputData{ 212u, 225u });
-        inputData.emplace_back(InputData{ 119u, 43u });
-
-        inputData.emplace_back(InputData{ 1u, 2u });
-        inputData.emplace_back(InputData{ 5u, 10u });
-        inputData.emplace_back(InputData{ 11u, 15u });
-        inputData.emplace_back(InputData{ 13u, 25u });
-        inputData.emplace_back(InputData{ 30u, 54u });
-        inputData.emplace_back(InputData{ 30u, 2u });
-        inputData.emplace_back(InputData{ 12u, 5u });
-        inputData.emplace_back(InputData{ 9u, 3u });
-        inputData.emplace_back(InputData{ 212u, 225u });
-        inputData.emplace_back(InputData{ 119u, 43u });
-
-        inputData.emplace_back(InputData{ 1u, 2u });
-        inputData.emplace_back(InputData{ 5u, 10u });
-        inputData.emplace_back(InputData{ 11u, 15u });
-        inputData.emplace_back(InputData{ 13u, 25u });
-        inputData.emplace_back(InputData{ 30u, 54u });
-        inputData.emplace_back(InputData{ 30u, 2u });
-        inputData.emplace_back(InputData{ 12u, 5u });
-        inputData.emplace_back(InputData{ 9u, 3u });
-        inputData.emplace_back(InputData{ 212u, 225u });
-        inputData.emplace_back(InputData{ 119u, 43u });
-
-        inputData.emplace_back(InputData{ 1u, 2u });
-        inputData.emplace_back(InputData{ 5u, 10u });
-        inputData.emplace_back(InputData{ 11u, 15u });
-        inputData.emplace_back(InputData{ 13u, 25u });
-        inputData.emplace_back(InputData{ 30u, 54u });
-        inputData.emplace_back(InputData{ 30u, 2u });
-        inputData.emplace_back(InputData{ 12u, 5u });
-        inputData.emplace_back(InputData{ 9u, 3u });
-        inputData.emplace_back(InputData{ 212u, 225u });
-        inputData.emplace_back(InputData{ 119u, 43u });
-
-        inputData.emplace_back(InputData{ 1u, 2u });
-        inputData.emplace_back(InputData{ 5u, 10u });
-        inputData.emplace_back(InputData{ 11u, 15u });
-        inputData.emplace_back(InputData{ 13u, 25u });
-        inputData.emplace_back(InputData{ 30u, 54u });
-        inputData.emplace_back(InputData{ 30u, 2u });
-        inputData.emplace_back(InputData{ 12u, 5u });
-        inputData.emplace_back(InputData{ 9u, 3u });
-        inputData.emplace_back(InputData{ 212u, 225u });
-        inputData.emplace_back(InputData{ 119u, 43u });
-
-        inputData.emplace_back(InputData{ 1u, 2u });
-        inputData.emplace_back(InputData{ 5u, 10u });
-        inputData.emplace_back(InputData{ 11u, 15u });
-        inputData.emplace_back(InputData{ 13u, 25u });
-        inputData.emplace_back(InputData{ 30u, 54u });
-        inputData.emplace_back(InputData{ 30u, 2u });
-        inputData.emplace_back(InputData{ 12u, 5u });
-        inputData.emplace_back(InputData{ 9u, 3u });
-        inputData.emplace_back(InputData{ 212u, 225u });
-        inputData.emplace_back(InputData{ 119u, 43u });
-
-        inputData.emplace_back(InputData{ 1u, 2u });
-        inputData.emplace_back(InputData{ 5u, 10u });
-        inputData.emplace_back(InputData{ 11u, 15u });
-        inputData.emplace_back(InputData{ 13u, 25u });
-        inputData.emplace_back(InputData{ 30u, 54u });
-        inputData.emplace_back(InputData{ 30u, 2u });
-        inputData.emplace_back(InputData{ 12u, 5u });
-        inputData.emplace_back(InputData{ 9u, 3u });
-        inputData.emplace_back(InputData{ 212u, 225u });
-        inputData.emplace_back(InputData{ 119u, 43u });
-
-        inputData.emplace_back(InputData{ 1u, 2u });
-        inputData.emplace_back(InputData{ 5u, 10u });
-        inputData.emplace_back(InputData{ 11u, 15u });
-        inputData.emplace_back(InputData{ 13u, 25u });
-        inputData.emplace_back(InputData{ 30u, 54u });
-        inputData.emplace_back(InputData{ 30u, 2u });
-        inputData.emplace_back(InputData{ 12u, 5u });
-        inputData.emplace_back(InputData{ 9u, 3u });
-        inputData.emplace_back(InputData{ 212u, 225u });
-        inputData.emplace_back(InputData{ 119u, 43u });
-
-        m_computeInput = device.createBufferSRV(BufferDescription()
-            .name("Compute input")
-            .structured(true)
-            .usage(ResourceUsage::CpuToGpu)
-            .setInitialData(inputData)
-        );
-
-        m_computeOutput = device.createBufferUAV(BufferDescription()
-            .name("Compute output")
-            .append(true)
-            .structured(true)
-            .elements(inputData.size())
-            .elementSize(sizeof(InputData))
-            .usage(ResourceUsage::GpuReadWrite)
-        );
-
-        m_computeResult = device.createBuffer(BufferDescription()
-            .elements(inputData.size())
-            .elementSize(sizeof(InputData))
-            .usage(ResourceUsage::GpuToCpu)
-            //.format(Format::Format_R32_UINT)
-            .name("Compute readback")
-        );
+        for (int i = 0; i < 2; ++i)
+        {
+            auto temporalPipe = device.createPipeline<shaders::TemporalResolve>(shaderStorage);
+            temporalPipe.setPrimitiveTopologyType(PrimitiveTopologyType::TriangleStrip);
+            temporalPipe.setRasterizerState(RasterizerDescription().frontCounterClockwise(false));
+            temporalPipe.setDepthStencilState(DepthStencilDescription().depthEnable(false));
+            temporalPipe.ps.pointSampler = device.createSampler(SamplerDescription().textureAddressMode(TextureAddressMode::Clamp).filter(Filter::Point));
+            temporalPipe.ps.bilinearSampler = device.createSampler(SamplerDescription().filter(Filter::Bilinear));
+            temporalPipe.ps.visualizeMotion = static_cast<bool>(i);
+            m_temporalResolve.emplace_back(std::move(temporalPipe));
+        }
     }
 
     void ModelRenderer::resize(uint32_t width, uint32_t height)
@@ -492,80 +363,24 @@ namespace engine
 
         m_renderOutline = std::make_unique<RenderOutline>(m_device, m_shaderStorage, m_virtualResolution);
 
-        m_gbufferAlbedo = m_device.createTextureRTV(TextureDescription()
-            .width(m_renderWidth)
-            .height(m_renderHeight)
-            .format(Format::Format_R16G16B16A16_FLOAT)
-            .usage(ResourceUsage::GpuRenderTargetReadWrite)
-            .name("GBuffer albedo")
-            .dimension(ResourceDimension::Texture2D)
-            .optimizedClearValue({ 0.0f, 0.0f, 0.0f, 0.0f })
-        );
+        m_gbuffer = nullptr;
+        m_gbuffer = std::make_shared<GBuffer>(m_device, m_renderWidth, m_renderHeight);
 
-        m_gbufferNormal = m_device.createTextureRTV(TextureDescription()
+        m_dsv = m_device.createTextureDSV(TextureDescription()
+            .name("Depth Buffer")
+            .format(Format::D32_FLOAT)
             .width(m_renderWidth)
             .height(m_renderHeight)
-            .format(Format::Format_R16G16B16A16_FLOAT)
-            .usage(ResourceUsage::GpuRenderTargetReadWrite)
-            .name("GBuffer normal")
+            .usage(ResourceUsage::DepthStencil)
+            .optimizedDepthClearValue(0.0f)
             .dimension(ResourceDimension::Texture2D)
-            .optimizedClearValue({ 0.0f, 0.0f, 0.0f, 1.0f })
         );
-
-        m_gbufferMotion = m_device.createTextureRTV(TextureDescription()
-            .width(m_renderWidth)
-            .height(m_renderHeight)
-            .format(Format::Format_R16G16_FLOAT)
-            .usage(ResourceUsage::GpuRenderTargetReadWrite)
-            .name("GBuffer motion")
-            .dimension(ResourceDimension::Texture2D)
-            .optimizedClearValue({ 0.0f, 0.0f, 0.0f, 0.0f })
-        );
-
-        m_gbufferRoughness = m_device.createTextureRTV(TextureDescription()
-            .width(m_renderWidth)
-            .height(m_renderHeight)
-            .format(Format::Format_R16_FLOAT)
-            .usage(ResourceUsage::GpuRenderTargetReadWrite)
-            .name("GBuffer roughness")
-            .dimension(ResourceDimension::Texture2D)
-            .optimizedClearValue({ 0.0f, 0.0f, 0.0f, 0.0f })
-        );
-
-        m_gbufferMetalness = m_device.createTextureRTV(TextureDescription()
-            .width(m_renderWidth)
-            .height(m_renderHeight)
-            .format(Format::Format_R16_FLOAT)
-            .usage(ResourceUsage::GpuRenderTargetReadWrite)
-            .name("GBuffer metalness")
-            .dimension(ResourceDimension::Texture2D)
-            .optimizedClearValue({ 0.0f, 0.0f, 0.0f, 0.0f })
-        );
-
-        m_gbufferOcclusion = m_device.createTextureRTV(TextureDescription()
-            .width(m_renderWidth)
-            .height(m_renderHeight)
-            .format(Format::Format_R8_UNORM)
-            .usage(ResourceUsage::GpuRenderTargetReadWrite)
-            .name("GBuffer occlusion")
-            .dimension(ResourceDimension::Texture2D)
-            .optimizedClearValue({ 0.0f, 0.0f, 0.0f, 0.0f })
-        );
-
-        m_objectId = m_device.createTextureRTV(TextureDescription()
-            .width(m_renderWidth)
-            .height(m_renderHeight)
-            .format(Format::Format_R32_UINT)
-            .usage(ResourceUsage::GpuRenderTargetReadWrite)
-            .name("GBuffer object ID")
-            .dimension(ResourceDimension::Texture2D)
-            .optimizedClearValue({ 0.0f, 0.0f, 0.0f, 0.0f })
-        );
+        m_dsvSRV = m_device.createTextureSRV(m_dsv);
 
         m_lightingTarget = m_device.createTextureRTV(TextureDescription()
             .width(m_renderWidth)
             .height(m_renderHeight)
-            .format(Format::Format_R16G16B16A16_FLOAT)
+            .format(Format::R16G16B16A16_FLOAT)
             .usage(ResourceUsage::GpuRenderTargetReadWrite)
             .name("FullRes Target 0")
             .dimension(ResourceDimension::Texture2D)
@@ -576,7 +391,7 @@ namespace engine
         m_fullResTargetFrame[0] = m_device.createTextureRTV(TextureDescription()
             .width(m_renderWidth)
             .height(m_renderHeight)
-            .format(Format::Format_R16G16B16A16_FLOAT)
+            .format(Format::R16G16B16A16_FLOAT)
             .usage(ResourceUsage::GpuRenderTargetReadWrite)
             .name("FullRes Target 0")
             .dimension(ResourceDimension::Texture2D)
@@ -585,7 +400,7 @@ namespace engine
         m_fullResTargetFrame[1] = m_device.createTextureRTV(TextureDescription()
             .width(m_renderWidth)
             .height(m_renderHeight)
-            .format(Format::Format_R16G16B16A16_FLOAT)
+            .format(Format::R16G16B16A16_FLOAT)
             .usage(ResourceUsage::GpuRenderTargetReadWrite)
             .name("FullRes Target 1")
             .dimension(ResourceDimension::Texture2D)
@@ -605,7 +420,7 @@ namespace engine
             .width(SSAOWidth)
             .height(SSAOHeight)
 #endif
-            .format(Format::Format_R16_FLOAT)
+            .format(Format::R16_FLOAT)
             .usage(ResourceUsage::GpuRenderTargetReadWrite)
             .name("SSAO Render target")
             .dimension(ResourceDimension::Texture2D)
@@ -613,19 +428,14 @@ namespace engine
         );
         m_ssaoSRV = m_device.createTextureSRV(m_ssaoRTV.texture());
 
-        m_gbufferAlbedoSRV = m_device.createTextureSRV(m_gbufferAlbedo.texture());
-        m_gbufferNormalSRV = m_device.createTextureSRV(m_gbufferNormal.texture());
-        m_gbufferMotionSRV = m_device.createTextureSRV(m_gbufferMotion.texture());
-        m_gbufferRoughnessSRV = m_device.createTextureSRV(m_gbufferRoughness.texture());
-        m_gbufferMetalnessSRV = m_device.createTextureSRV(m_gbufferMetalness.texture());
-        m_gbufferOcclusionSRV = m_device.createTextureSRV(m_gbufferOcclusion.texture());
-        m_objectIdSRV = m_device.createTextureSRV(m_objectId.texture());
-
-        m_lightingPipeline.ps.albedo = m_gbufferAlbedoSRV;
-        m_lightingPipeline.ps.normal = m_gbufferNormalSRV;
-        m_lightingPipeline.ps.roughness = m_gbufferRoughnessSRV;
-        m_lightingPipeline.ps.metalness = m_gbufferMetalnessSRV;
-        m_lightingPipeline.ps.occlusion = m_gbufferOcclusionSRV;
+        for (auto&& lightingPipe : m_lightingPipelines)
+        {
+            lightingPipe.ps.gbufferNormals = m_gbuffer->srv(GBufferType::Normal);
+            lightingPipe.ps.gbufferUV = m_gbuffer->srv(GBufferType::Uv);
+            lightingPipe.ps.gbufferInstanceId = m_gbuffer->srv(GBufferType::InstanceId);
+            lightingPipe.ps.instanceMaterials = m_device.modelResources().gpuBuffers().instanceMaterial();
+            lightingPipe.ps.materialTextures = m_device.modelResources().textures();
+        }
     }
 
     void ModelRenderer::clearResources()
@@ -653,34 +463,32 @@ namespace engine
         m_pbrPipeline.vs.tangents = BufferSRV();
         m_pbrPipeline.vs.uv = BufferSRV();
         
-        /*m_pbrPipeline.ps.albedo = TextureSRV();
-        m_pbrPipeline.ps.roughness = TextureSRV();
-        m_pbrPipeline.ps.normal = TextureSRV();
-        m_pbrPipeline.ps.metalness = TextureSRV();
-        m_pbrPipeline.ps.occlusion = TextureSRV();*/
+        m_pbrPipelineAlphaclipped.vs.vertices = BufferSRV();
+        m_pbrPipelineAlphaclipped.vs.normals = BufferSRV();
+        m_pbrPipelineAlphaclipped.vs.tangents = BufferSRV();
+        m_pbrPipelineAlphaclipped.vs.uv = BufferSRV();
 
-        m_lightingPipeline.ps.environmentIrradianceCubemap = TextureSRV();
-        m_lightingPipeline.ps.environmentIrradiance = TextureSRV();
-        m_lightingPipeline.ps.environmentSpecular = TextureSRV();
-        m_lightingPipeline.ps.environmentBrdfLut = TextureSRV();
-
-        m_lightingPipeline.ps.albedo = TextureSRV();
-        m_lightingPipeline.ps.normal = TextureSRV();
-        m_lightingPipeline.ps.roughness = TextureSRV();
-        m_lightingPipeline.ps.metalness = TextureSRV();
-        m_lightingPipeline.ps.occlusion = TextureSRV();
-
-        m_lightingPipeline.ps.shadowMap = TextureSRV();
-        m_lightingPipeline.ps.shadowVP = BufferSRV();
-
-        m_lightingPipeline.ps.lightWorldPosition = BufferSRV();
-        m_lightingPipeline.ps.lightDirection = BufferSRV();
-        m_lightingPipeline.ps.lightColor = BufferSRV();
-        m_lightingPipeline.ps.lightParameters = BufferSRV();
-        m_lightingPipeline.ps.lightType = BufferSRV();
-        m_lightingPipeline.ps.lightIntensity = BufferSRV();
-        m_lightingPipeline.ps.lightRange = BufferSRV();
-        
+        for (auto&& lightingPipe : m_lightingPipelines)
+        {
+            lightingPipe.ps.environmentIrradianceCubemap = TextureSRV();
+            lightingPipe.ps.environmentIrradiance = TextureSRV();
+            lightingPipe.ps.environmentSpecular = TextureSRV();
+            lightingPipe.ps.environmentBrdfLut = TextureSRV();
+            lightingPipe.ps.gbufferNormals = TextureSRV();
+            lightingPipe.ps.gbufferUV = TextureSRV();
+            lightingPipe.ps.gbufferInstanceId = TextureSRV();
+            lightingPipe.ps.instanceMaterials = BufferSRV();
+            lightingPipe.ps.materialTextures = TextureBindlessSRV();
+            lightingPipe.ps.shadowMap = TextureSRV();
+            lightingPipe.ps.shadowVP = BufferSRV();
+            lightingPipe.ps.lightWorldPosition = BufferSRV();
+            lightingPipe.ps.lightDirection = BufferSRV();
+            lightingPipe.ps.lightColor = BufferSRV();
+            lightingPipe.ps.lightParameters = BufferSRV();
+            lightingPipe.ps.lightType = BufferSRV();
+            lightingPipe.ps.lightIntensity = BufferSRV();
+            lightingPipe.ps.lightRange = BufferSRV();
+        }
 
 #ifdef EARLYZ_ENABLED
         m_earlyzPipeline.vs.vertices = BufferSRV();
@@ -693,12 +501,9 @@ namespace engine
     void ModelRenderer::render(
         Device& device,
         TextureRTV& currentRenderTarget,
-        TextureDSV& depthBuffer,
-        TextureSRV& depthView,
+        DepthPyramid& depthPyramid,
         CommandList& cmd,
-        MaterialComponent& defaultMaterial,
         Camera& camera,
-        LightData& lights,
         FlatScene& scene,
         TextureSRV& shadowMap,
         BufferSRV& shadowVP,
@@ -706,45 +511,258 @@ namespace engine
         unsigned int mouseY
         )
     {
+        bool open{ true };
+
+        float w = static_cast<float>(m_device.width());
+        float h = static_cast<float>(m_device.height());
+
+        float logWidth = 150.0f;
+        float logHeight = 70.0f;
+
+        ImGui::SetNextWindowSizeConstraints(ImVec2(10.0f, 10.0f), ImVec2(logWidth, logHeight));
+        if (ImGui::Begin("DebugMenu", &open, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings))
+        {
+            ImGui::SetWindowSize(ImVec2(logWidth, logHeight), ImGuiSetCond_Always);
+            ImGui::SetWindowPos(ImVec2(0.0f, 0.0f));
+
+            if (ImGui::TreeNode("Rendering"))
+            {
+                ImGui::Combo("Mode", &m_currentRenderMode, "Full\0Clusters\0MipAlbedo\0MipRoughness\0MipMetalness\0MipAO\0Albedo\0Roughness\0Metalness\0Occlusion\0Uv\0Normal\0Motion\0");
+                ImGui::TreePop();
+            }
+        }
+        ImGui::End();
+
+        if (scene.selectedCamera == -1 || scene.cameras.size() == 0 || scene.selectedCamera > scene.cameras.size() - 1 || !scene.cameras[scene.selectedCamera])
+            return;
+
+
+        //renderBoxes(scene, { m_clusterRenderer.selectedClusterBoundingBox(device) }, 0x881080FF);
+
+
+        LightData& lights = *scene.lightData;
+
+        auto frameNumber = device.frameNumber();
+
         auto viewMatrix = camera.viewMatrix();
-        auto cameraProjectionMatrix = camera.projectionMatrix(m_virtualResolution);
-        auto jitterMatrix = camera.jitterMatrix(device.frameNumber(), m_virtualResolution);
-        auto jitterValue = camera.jitterValue(device.frameNumber());
+        auto projectionMatrix = camera.projectionMatrix(m_virtualResolution);
+        auto jitterMatrix = camera.jitterMatrix(frameNumber, m_virtualResolution);
+        auto jitterValue = camera.jitterValue(frameNumber);
+
+        // for debugging
+#if 0
+        {
+            cmd.clearDepthStencilView(depthPyramid.dsv(), 0.0f);
+
+            m_culler.frustumCull(cmd, 
+                (scene.cameras.size() == 1) ? camera : *scene.cameras[1], 
+                device.modelResources(), 
+                frameNumber, 
+                m_virtualResolution);
+
+            m_culler.occlusionCull(cmd, 
+                (scene.cameras.size() == 1) ? camera : *scene.cameras[1], 
+                device.modelResources(), 
+                &depthPyramid, 
+                frameNumber, 
+                m_virtualResolution,
+                CullingMode::EmitAll);
+
+            if (scene.cameras.size() > 1)
+            {
+                {
+                    CPU_MARKER("Render PBR geometry");
+                    GPU_MARKER(cmd, "Render PBR geometry");
+                    m_clusterRenderer.render(
+                        cmd,
+                        camera,
+                        device.modelResources(),
+                        m_gbuffer.get(),
+                        &m_dsv,
+                        m_culler.occlusionCulledClusters(),
+                        m_culler.occlusionCullingDrawArguments(),
+                        device.frameNumber(),
+                        m_virtualResolution,
+                        &m_pickBufferUAV,
+                        mouseX, mouseY,
+                        m_previousCameraViewMatrix,
+                        m_previousCameraProjectionMatrix);
+                }
+
+                {
+                    CPU_MARKER("Render PBR geometry to secondary camera");
+                    GPU_MARKER(cmd, "Render PBR geometry to secondary camera");
+                    m_clusterRenderer.render(
+                        cmd,
+                        *scene.cameras[1],
+                        device.modelResources(),
+                        nullptr,
+                        &depthPyramid.dsv(),
+                        m_culler.occlusionCulledClusters(),
+                        m_culler.occlusionCullingDrawArguments(),
+                        device.frameNumber(),
+                        m_virtualResolution,
+                        &m_pickBufferUAV,
+                        mouseX, mouseY,
+                        m_previousCameraViewMatrix,
+                        m_previousCameraProjectionMatrix);
+                }
+            }
+            else
+            {
+                CPU_MARKER("Render PBR geometry");
+                GPU_MARKER(cmd, "Render PBR geometry");
+                m_clusterRenderer.render(
+                    cmd,
+                    camera,
+                    device.modelResources(),
+                    m_gbuffer.get(),
+                    &depthPyramid.dsv(),
+                    m_culler.occlusionCulledClusters(),
+                    m_culler.occlusionCullingDrawArguments(),
+                    device.frameNumber(),
+                    m_virtualResolution,
+                    &m_pickBufferUAV,
+                    mouseX, mouseY,
+                    m_previousCameraViewMatrix,
+                    m_previousCameraProjectionMatrix);
+            }
+        }
+#endif
+
+        depthPyramid.performDownsample(cmd);
+
+        // culling
+        {
+            m_culler.frustumCull(
+                cmd,
+                (scene.cameras.size() == 1) ? camera : *scene.cameras[1],
+                device.modelResources(),
+                frameNumber,
+                m_virtualResolution);
+
+            m_culler.occlusionCull(
+                cmd,
+                (scene.cameras.size() == 1) ? camera : *scene.cameras[1],
+                device.modelResources(),
+                &depthPyramid,
+                frameNumber,
+                m_virtualResolution,
+                CullingMode::EmitVisible);
+        }
+        
+        m_gbuffer->clear(cmd);
+        
+        cmd.clearDepthStencilView(depthPyramid.dsv(), 0.0f);
+
+        TextureDSV* activeDSV;
+        TextureSRV* activeDSVSRV;
+
+        if (scene.cameras.size() > 1)
+        {
+            activeDSV = &m_dsv;
+            activeDSVSRV = &m_dsvSRV;
+        }
+        else
+        {
+            activeDSV = &depthPyramid.dsv();
+            activeDSVSRV = &depthPyramid.srv();
+        }
+        
+        cmd.clearDepthStencilView(*activeDSV, 0.0f);
 
         // Early Z render. Device fast path.
-        renderEarlyZ(device, depthBuffer, cmd, scene, cameraProjectionMatrix, viewMatrix, jitterMatrix);
+        renderEarlyZ(device, depthPyramid.dsv(), cmd, scene, camera, projectionMatrix, viewMatrix, jitterMatrix);
 
         // render models and lighting
         if (!camera.pbrShadingModel())
         {
             // forward renderer
-            renderGeometry(device, currentRenderTarget, depthBuffer, cmd, scene, cameraProjectionMatrix, viewMatrix, camera, lights, defaultMaterial, shadowMap, shadowVP);
+            renderGeometry(device, currentRenderTarget, depthPyramid.dsv(), cmd, scene, projectionMatrix, viewMatrix, camera, lights, shadowMap, shadowVP);
         }
         else
         {
             // deferred physically based renderer
             // render model data to G-Buffer (albedo, normal, roughness, metalness, occlusion)
-            renderGeometryPbr(
-                device, 
-                depthBuffer, 
-                cmd, 
-                scene, 
-                camera,
-                cameraProjectionMatrix, 
-                viewMatrix, 
-                jitterMatrix, 
-                defaultMaterial, 
-                mouseX, mouseY,
-                jitterValue);
+            if (scene.cameras.size() > 1)
+            {
+                {
+                    CPU_MARKER("Render PBR geometry");
+                    GPU_MARKER(cmd, "Render PBR geometry");
+                    m_clusterRenderer.render(
+                        cmd,
+                        camera,
+                        device.modelResources(),
+                        m_gbuffer.get(),
+                        &m_dsv,
+                        m_culler.occlusionCulledClusters(),
+                        m_culler.occlusionCullingDrawArguments(),
+                        device.frameNumber(),
+                        m_virtualResolution,
+                        m_previousCameraViewMatrix,
+                        m_previousCameraProjectionMatrix,
+                        m_currentRenderMode < shaders::LightingPS::DrawmodeCount ? m_currentRenderMode : 0);
+                }
+                
+                {
+                    CPU_MARKER("Render PBR geometry to secondary camera");
+                    GPU_MARKER(cmd, "Render PBR geometry to secondary camera");
+                    m_clusterRenderer.render(
+                        cmd,
+                        *scene.cameras[1],
+                        device.modelResources(),
+                        nullptr,
+                        &depthPyramid.dsv(),
+                        m_culler.occlusionCulledClusters(),
+                        m_culler.occlusionCullingDrawArguments(),
+                        device.frameNumber(),
+                        m_virtualResolution,
+                        m_previousCameraViewMatrix,
+                        m_previousCameraProjectionMatrix,
+                        m_currentRenderMode < shaders::LightingPS::DrawmodeCount ? m_currentRenderMode : 0);
+                }
+            }
+            else
+            {
+                CPU_MARKER("Render PBR geometry");
+                GPU_MARKER(cmd, "Render PBR geometry");
+                m_clusterRenderer.render(
+                    cmd,
+                    camera,
+                    device.modelResources(),
+                    m_gbuffer.get(),
+                    &depthPyramid.dsv(),
+                    m_culler.occlusionCulledClusters(),
+                    m_culler.occlusionCullingDrawArguments(),
+                    device.frameNumber(),
+                    m_virtualResolution,
+                    m_previousCameraViewMatrix,
+                    m_previousCameraProjectionMatrix,
+                    m_currentRenderMode < shaders::LightingPS::DrawmodeCount ? m_currentRenderMode : 0);
+            }
             
+            m_picker.pick(m_gbuffer.get(), cmd, mouseX, mouseY);
+
             // SSAO
-            renderSSAO(device, cmd, depthView, camera);
+            renderSSAO(device, cmd, *activeDSVSRV, camera);
             
             // lighting
-            renderLighting(device, cmd, currentRenderTarget, depthView, camera, shadowMap, shadowVP, cameraProjectionMatrix, viewMatrix, lights);
+            Vector3f probePosition;
+            float probeRange = 100.0f;
+            if (scene.probes.size() > 0)
+            {
+                ProbeComponent& probe = *scene.probes[0];
+                probePosition = probe.position();
+                probeRange = probe.range();
+            }
+
+            renderLighting(device, cmd, currentRenderTarget, *activeDSVSRV, camera, shadowMap, shadowVP, projectionMatrix, viewMatrix, lights, probePosition, probeRange);
 
             // wireframe
-            renderWireframe(device, currentRenderTarget, depthBuffer, cmd, scene, cameraProjectionMatrix, viewMatrix, jitterMatrix, defaultMaterial, mouseX, mouseY);
+            renderWireframe(device, currentRenderTarget, *activeDSV, cmd, scene, projectionMatrix, viewMatrix, jitterMatrix, mouseX, mouseY);
+
+            // render particles
+            //m_particleTest.render(device, cmd, m_lightingTarget, *activeDSVSRV, camera, projectionMatrix, viewMatrix, jitterMatrix, lights, shadowMap, shadowVP);
 
             // render outline
             if (m_selectedObject != -1)
@@ -754,12 +772,14 @@ namespace engine
 
                 for (auto& node : scene.nodes)
                 {
-                    if (node.objectId == m_selectedObject)
+                    //if (node.objectId == m_selectedObject)
+                    if(node.mesh->meshBuffer().modelAllocations && node.mesh->meshBuffer().modelAllocations->subMeshInstance->instanceData.modelResource.gpuIndex == m_selectedObject)
                     {
                         m_renderOutline->render(device,
                             m_lightingTarget,
-                            depthBuffer,
+                            *activeDSVSRV,
                             camera,
+                            device.modelResources(),
                             cmd,
                             node
                         );
@@ -767,12 +787,14 @@ namespace engine
                 }
                 for (auto& node : scene.alphaclippedNodes)
                 {
-                    if (node.objectId == m_selectedObject)
+                    //if (node.objectId == m_selectedObject)
+                    if (node.mesh->meshBuffer().modelAllocations && node.mesh->meshBuffer().modelAllocations->subMeshInstance->instanceData.modelResource.gpuIndex == m_selectedObject)
                     {
                         m_renderOutline->render(device,
                             m_lightingTarget,
-                            depthBuffer,
+                            *activeDSVSRV,
                             camera,
+                            device.modelResources(),
                             cmd,
                             node
                         );
@@ -781,312 +803,80 @@ namespace engine
             }
 
             // remporal resolve
-            renderTemporalResolve(cmd, depthView, camera, jitterValue, m_previousJitter, jitterMatrix);
-        }
-
-        {
-            CPU_MARKER("Pick buffer update");
-            GPU_MARKER(cmd, "Pick buffer update");
-            cmd.copyBuffer(m_pickBufferUAV.buffer(), m_pickBufferReadBack.buffer(), 1);
+            renderTemporalResolve(cmd, *activeDSVSRV, camera, jitterValue, m_previousJitter, jitterMatrix);
         }
 
         m_previousCameraViewMatrix = viewMatrix;
-        m_previousCameraProjectionMatrix = cameraProjectionMatrix;
+        m_previousCameraProjectionMatrix = projectionMatrix;
         m_previousJitterMatrix = jitterMatrix;
         m_previousJitter = jitterValue;
     }
 
+    void ModelRenderer::renderBoundingSpheres(
+        Device& /*device*/,
+        TextureRTV& /*currentRenderTarget*/,
+        TextureDSV& /*depthBuffer*/,
+        CommandList& /*cmd*/,
+        const Matrix4f& /*cameraProjectionMatrix*/,
+        const Matrix4f& /*cameraViewMatrix*/,
+        const Matrix4f& /*jitterMatrix*/)
+    {
+#if 0
+        m_gbuffer->clear(cmd);
+
+        cmd.setRenderTargets({
+            m_gbuffer->rtv() }, depthBuffer);
+            /*m_gbuffer->rtv(GBufferType::Albedo),
+            m_gbuffer->rtv(GBufferType::Normal),
+            m_gbuffer->rtv(GBufferType::MotionVector),
+            m_gbuffer->rtv(GBufferType::Roughness),
+            m_gbuffer->rtv(GBufferType::Metalness),
+            m_gbuffer->rtv(GBufferType::Occlusion),
+            m_gbuffer->rtv(GBufferType::ObjectId) }, depthBuffer);*/
+
+        //m_debugBoundingSpheres.vs.vertices = device.modelResources().vertex();
+        //m_debugBoundingSpheres.vs.indices = device.modelResources().indice();
+        m_debugBoundingSpheres.vs.clusterBindings = device.modelResources().bindings();
+        m_debugBoundingSpheres.vs.transformHistory = device.modelResources().transforms();
+        m_debugBoundingSpheres.vs.boundingBoxes = m_device.modelResources().boundingBoxes();
+
+        m_debugBoundingSpheres.vs.viewMatrix = fromMatrix(cameraViewMatrix);
+        m_debugBoundingSpheres.vs.projectionMatrix = fromMatrix(cameraProjectionMatrix);
+        m_debugBoundingSpheres.vs.jitterMatrix = fromMatrix(jitterMatrix);
+        //m_debugBoundingSpheres.vs.clusterMap = m_occlusionCullingOutputSRV;
+
+        //cmd.bindIndexBuffer(m_occlusionCullingIndexOutputIBV);
+        cmd.bindPipe(m_debugBoundingSpheres);
+        //cmd.drawIndexedIndirect(m_occlusionCullingDrawArgs, 0);
+        cmd.draw(device.modelResources().clusterCount() * 6 * 3 * 2);
+#endif
+    }
+
     void ModelRenderer::renderEarlyZ(
+#ifdef EARLYZ_ENABLED
         Device& device,
         TextureDSV& depthBuffer,
         CommandList& cmd,
         FlatScene& scene,
+        Camera& camera,
         const Matrix4f& cameraProjectionMatrix,
         const Matrix4f& cameraViewMatrix,
         const Matrix4f& jitterMatrix)
+#else
+        Device&,
+        TextureDSV&,
+        CommandList&,
+        FlatScene&,
+        Camera&,
+        const Matrix4f&,
+        const Matrix4f&,
+        const Matrix4f&)
+#endif
     {
         
 #ifdef EARLYZ_ENABLED
         CPU_MARKER("Early Z");
         GPU_MARKER(cmd, "Early Z");
-
-        {
-            // early Z for opaque meshes
-            cmd.setRenderTargets({ TextureRTV() }, depthBuffer);
-            cmd.setViewPorts({ Viewport{ 0.0f, 0.0f, static_cast<float>(depthBuffer.texture().width()), static_cast<float>(depthBuffer.texture().height()), 0.0f, 1.0f } });
-            cmd.setScissorRects({ Rectangle{ 0, 0, depthBuffer.texture().width(), depthBuffer.texture().height() } });
-
-            for (auto& node : scene.nodes)
-            {
-                for (auto&& subMesh : node.mesh->meshBuffers())
-                {
-                    auto transformMatrix = node.transform;
-
-                    m_earlyzPipeline.vs.jitterModelViewProjectionMatrix = fromMatrix(jitterMatrix * (cameraProjectionMatrix * (cameraViewMatrix * transformMatrix)));
-                    m_earlyzPipeline.vs.vertices = subMesh.vertices;
-
-                    cmd.bindPipe(m_earlyzPipeline);
-                    cmd.bindIndexBuffer(subMesh.indices);
-                    cmd.drawIndexed(subMesh.indices.desc().elements, 1, 0, 0, 0);
-                }
-            }
-
-            for (auto& node : scene.alphaclippedNodes)
-            {
-                for (auto&& subMesh : node.mesh->meshBuffers())
-                {
-                    auto transformMatrix = node.transform;
-
-                    m_earlyzAlphaClipped.vs.jitterModelViewProjectionMatrix = fromMatrix(jitterMatrix * (cameraProjectionMatrix * (cameraViewMatrix * transformMatrix)));
-                    m_earlyzAlphaClipped.vs.vertices = subMesh.vertices;
-                    m_earlyzAlphaClipped.vs.uv = subMesh.uv;
-
-                    m_earlyzAlphaClipped.ps.image = (node.material && node.material->hasAlbedo()) ? node.material->albedo() : TextureSRV();
-
-                    cmd.bindPipe(m_earlyzAlphaClipped);
-                    cmd.bindIndexBuffer(subMesh.indices);
-                    cmd.drawIndexed(subMesh.indices.desc().elements, 1, 0, 0, 0);
-                }
-            }
-        }
-#endif
-    }
-
-    void ModelRenderer::renderGeometry(
-        Device& device,
-        TextureRTV& currentRenderTarget,
-        TextureDSV& depthBuffer,
-        CommandList& cmd,
-        FlatScene& scene,
-        Matrix4f cameraProjectionMatrix,
-        Matrix4f cameraViewMatrix,
-        Camera& camera,
-        LightData& lights,
-        MaterialComponent& defaultMaterial,
-        TextureSRV& shadowMap,
-        BufferSRV& /*shadowVP*/)
-    {
-        CPU_MARKER("Render forward geometry");
-        GPU_MARKER(cmd, "Render forward geometry");
-
-        cmd.setRenderTargets({ currentRenderTarget }, depthBuffer);
-        cmd.setViewPorts({ Viewport{ 0.0f, 0.0f, static_cast<float>(currentRenderTarget.width()), static_cast<float>(currentRenderTarget.height()), 0.0f, 1.0f } });
-        cmd.setScissorRects({ Rectangle{ 0, 0, currentRenderTarget.width(), currentRenderTarget.height() } });
-
-        m_pipeline.ps.cameraWorldSpacePosition = Float4(camera.position(), 1.0f);
-        m_pipeline.ps.environmentIrradiance = camera.environmentIrradiance();
-        m_pipeline.ps.environmentSpecular = camera.environmentSpecular();
-        m_pipeline.ps.shadowMap = shadowMap;
-
-        m_pipeline.ps.lightCount.x = static_cast<unsigned int>(lights.count());
-        if (lights.count() > 0)
-        {
-            m_pipeline.ps.lightWorldPosition = lights.worldPositions();
-            m_pipeline.ps.lightDirection = lights.directions();
-            m_pipeline.ps.lightColor = lights.colors();
-            m_pipeline.ps.lightIntensity = lights.intensities();
-            m_pipeline.ps.lightRange = lights.ranges();
-            m_pipeline.ps.lightType = lights.types();
-            m_pipeline.ps.lightParameters = lights.parameters();
-        }
-
-        for (auto& node : scene.nodes)
-        {
-            for (auto&& subMesh : node.mesh->meshBuffers())
-            {
-                auto transformMatrix = node.transform;
-
-                m_pipeline.vs.modelMatrix = fromMatrix(transformMatrix);
-                m_pipeline.vs.modelViewProjectionMatrix = fromMatrix(cameraProjectionMatrix * (cameraViewMatrix * transformMatrix));
-                m_pipeline.vs.vertices = subMesh.vertices;
-                m_pipeline.vs.normals = subMesh.normals;
-                m_pipeline.vs.tangents = subMesh.tangents;
-                m_pipeline.vs.uv = subMesh.uv;
-
-                if (node.material)
-                {
-                    m_pipeline.ps.albedo = (node.material->hasAlbedo()) ? node.material->albedo() : defaultMaterial.albedo();
-                    m_pipeline.ps.roughness = (node.material->hasRoughness()) ? node.material->roughness() : defaultMaterial.roughness();
-                    m_pipeline.ps.normal = (node.material->hasNormal()) ? node.material->normal() : defaultMaterial.normal();
-                    m_pipeline.ps.metalness = (node.material->hasMetalness()) ? node.material->metalness() : defaultMaterial.metalness();
-                    m_pipeline.ps.occlusion = (node.material->hasOcclusion()) ? node.material->occlusion() : defaultMaterial.occlusion();
-                }
-
-                m_pipeline.ps.materialParameters = Float4(
-                    node.material ? node.material->roughnessStrength() : defaultMaterial.roughnessStrength(),
-                    node.material ? node.material->metalnessStrength() : defaultMaterial.metalnessStrength(),
-                    node.material ? node.material->materialScaleX() : defaultMaterial.materialScaleX(),
-                    node.material ? node.material->materialScaleY() : defaultMaterial.materialScaleY());
-
-                m_pipeline.ps.materialParameters2 = Float4(
-                    node.material ? node.material->occlusionStrength() : defaultMaterial.occlusionStrength(),
-                    camera.exposure(),
-                    0.0f,
-                    0.0f
-                );
-
-                cmd.bindPipe(m_pipeline);
-                cmd.bindIndexBuffer(subMesh.indices);
-                cmd.drawIndexed(subMesh.indices.desc().elements, 1, 0, 0, 0);
-            }
-        }
-    }
-
-    unsigned int ModelRenderer::pickedObject(Device& device)
-    {
-        unsigned int res = 0;
-        uint32_t* bufferPtr = reinterpret_cast<uint32_t*>(m_pickBufferReadBack.buffer().map(device));
-        res = *bufferPtr;
-        m_pickBufferReadBack.buffer().unmap(device);
-        return res;
-    }
-
-    bool frustumCull(
-        Camera& camera,
-        std::vector<Vector4f>& frustumPlanes,
-        const SubMesh::BoundingBox& aabb,
-        const Vector3f cameraPosition)
-    {
-#if 0
-        bool allOut = true;
-        for (auto&& plane : frustumPlanes)
-        {
-            if ((plane.xyz().normalize().dot(aabb.min - cameraPosition) >= 0) ||
-                (plane.xyz().normalize().dot(aabb.max - cameraPosition) >= 0))
-            {
-                allOut = false;
-                break;
-            }
-        }
-        return !allOut;
-#endif
-
-#if 1
-        // Jussi Knuuttilas algorithm
-        // works pretty well
-        Vector3f corner[8] =
-        {
-            aabb.min,
-            Vector3f{ aabb.min.x, aabb.max.y, aabb.max.z },
-            Vector3f{ aabb.min.x, aabb.min.y, aabb.max.z },
-            Vector3f{ aabb.min.x, aabb.max.y, aabb.min.z },
-            aabb.max,
-            Vector3f{ aabb.max.x, aabb.min.y, aabb.min.z },
-            Vector3f{ aabb.max.x, aabb.max.y, aabb.min.z },
-            Vector3f{ aabb.max.x, aabb.min.y, aabb.max.z }
-        };
-
-        for (int i = 0; i < 6; ++i)
-        {
-            bool hit = false;
-            for (auto&& c : corner)
-            {
-                if (frustumPlanes[i].xyz().normalize().dot(c - cameraPosition) >= 0)
-                {
-                    hit = true;
-                    break;
-                }
-            }
-            if (!hit)
-                return false;
-        }
-        return true;
-#endif
-
-#if 0
-        enum
-        {
-            INSIDE,
-            OUTSIDE,
-            INTERSECT
-        };
-        float m, n; int i, result = INSIDE;
-
-        //for (i = 0; i < 6; i++)
-        for(auto&& plane : frustumPlanes)
-        {
-            //PLANE *p = f->plane + i;
-
-            m = (p->a * b->v[p->nx].x) + (p->b * b->v[p->ny].y) + (p->c * b->v[p->nz].z);
-            if (m > -p->d) return OUTSIDE;
-
-            n = (p->a * b->v[p->px].x) + (p->b * b->v[p->py].y) + (p->c * b->v[p->pz].z);
-            if (n > -p->d) result = INTERSECT;
-
-        } return result;
-#endif
-
-#if 0
-        // Indexed for the 'index trick' later
-        Vector3f box[] = { 
-            { aabb.min.x, aabb.min.y, aabb.min.z }, 
-            { aabb.max.x, aabb.max.y, aabb.max.z } };
-
-        // We have 6 planes defining the frustum
-        /*static const int NUM_PLANES = 6;
-        const plane3 *planes[NUM_PLANES] =
-        { &f.n, &f.l, &f.r, &f.b, &f.t, &f.f };*/
-
-        // We only need to do 6 point-plane tests
-        for (int i = 0; i < frustumPlanes.size(); ++i)
-        {
-            // This is the current plane
-            const Vector4f& p = frustumPlanes[i];
-
-            // p-vertex selection (with the index trick)
-            // According to the plane normal we can know the
-            // indices of the positive vertex
-            const int px = static_cast<int>(p.x > 0.0f);
-            const int py = static_cast<int>(p.y > 0.0f);
-            const int pz = static_cast<int>(p.z > 0.0f);
-
-            // Dot product
-            // project p-vertex on plane normal
-            // (How far is p-vertex from the origin)
-            const float dp =
-                (p.x*box[px].x) +
-                (p.y*box[py].y) +
-                (p.z*box[pz].z);
-
-            // Doesn't intersect if it is behind the plane
-            if (dp < -p.w) { return false; }
-        }
-        return true;
-#endif
-    }
-
-    void ModelRenderer::renderGeometryPbr(
-        Device& device,
-        TextureDSV& depthBuffer,
-        CommandList& cmd,
-        FlatScene& scene,
-        Camera& camera,
-        const Matrix4f& cameraProjectionMatrix,
-        const Matrix4f& cameraViewMatrix,
-        const Matrix4f& jitterMatrix,
-        MaterialComponent& defaultMaterial,
-        unsigned int mouseX,
-        unsigned int mouseY,
-        const Vector2f& jitter)
-    {
-        CPU_MARKER("Render PBR geometry");
-        GPU_MARKER(cmd, "Render PBR geometry");
-
-        // perform compute test
-        //m_computeOutput.setCounterValue(0);
-        /*m_culling.cs.input = m_computeInput;
-        m_culling.cs.output = m_computeOutput;
-        cmd.bindPipe(m_culling);
-        cmd.dispatch(1, 0, 0);*/
-        
-        /*uint32_t counter = m_computeOutput.getCounterValue();
-        cmd.copyBuffer(m_computeOutput.buffer(), m_computeResult, counter);
-        OutputData* data = reinterpret_cast<OutputData*>(m_computeResult.map(device));
-        for (int i = 0; i < counter; ++i)
-        {
-            LOG("res: %u, %u", data[i].value, data[i].anotherValue);
-        }
-        m_computeResult.unmap(device);*/
 
         std::vector<Vector4f> frustumPlanes;
         Vector3f cameraPosition;
@@ -1107,28 +897,182 @@ namespace engine
             camTemp = scene.cameras[1].get();
         }
 
-        //
         {
-            GPU_MARKER(cmd, "Clear G-buffer");
-            cmd.clearRenderTargetView(m_gbufferAlbedo, { 0.0f, 0.0f, 0.0f, 0.0f });
-            cmd.clearRenderTargetView(m_gbufferNormal, { 0.0f, 0.0f, 0.0f, 1.0f });
-            cmd.clearRenderTargetView(m_gbufferMotion, { 0.0f, 0.0f, 0.0f, 0.0f });
-            cmd.clearRenderTargetView(m_gbufferRoughness, { 0.0f, 0.0f, 0.0f, 0.0f });
-            cmd.clearRenderTargetView(m_gbufferMetalness, { 0.0f, 0.0f, 0.0f, 0.0f });
-            cmd.clearRenderTargetView(m_gbufferOcclusion, { 0.0f, 0.0f, 0.0f, 0.0f });
+            // early Z for opaque meshes
+            cmd.setRenderTargets({}, depthBuffer);
+
+            {
+                m_earlyzPipeline.vs.vertices = device.modelResources().vertex();
+                m_earlyzPipeline.vs.indices = device.modelResources().indice();
+                m_earlyzPipeline.vs.clusterBindings = device.modelResources().bindings();
+                m_earlyzPipeline.vs.transformHistory = device.modelResources().transforms();
+
+                m_earlyzPipeline.vs.viewMatrix = fromMatrix(cameraViewMatrix);
+                m_earlyzPipeline.vs.projectionMatrix = fromMatrix(cameraProjectionMatrix);
+                m_earlyzPipeline.vs.jitterMatrix = fromMatrix(jitterMatrix);
+                m_earlyzPipeline.vs.clusterMap = m_culler.occlusionCulledClusters();
+
+                //cmd.bindIndexBuffer(m_occlusionCullingIndexOutputIBV);
+                cmd.bindPipe(m_earlyzPipeline);
+                //cmd.drawIndexedIndirect(m_occlusionCullingDrawArgs, 0);
+                cmd.drawIndirect(m_culler.occlusionCullingDrawArguments(), 0);
+            }
+
+        }
+#endif
+    }
+
+    void ModelRenderer::renderGeometry(
+        Device& /*device*/,
+        TextureRTV& /*currentRenderTarget*/,
+        TextureDSV& /*depthBuffer*/,
+        CommandList& /*cmd*/,
+        FlatScene& /*scene*/,
+        Matrix4f /*cameraProjectionMatrix*/,
+        Matrix4f /*cameraViewMatrix*/,
+        Camera& /*camera*/,
+        LightData& /*lights*/,
+        TextureSRV& /*shadowMap*/,
+        BufferSRV& /*shadowVP*/)
+    {
+#if 0
+        CPU_MARKER("Render forward geometry");
+        GPU_MARKER(cmd, "Render forward geometry");
+
+        cmd.setRenderTargets({ currentRenderTarget }, depthBuffer);
+
+        m_pipeline.ps.cameraWorldSpacePosition = Float4(camera.position(), 1.0f);
+        m_pipeline.ps.environmentIrradiance = camera.environmentIrradiance();
+        m_pipeline.ps.environmentSpecular = camera.environmentSpecular();
+        m_pipeline.ps.shadowMap = shadowMap;
+
+        m_pipeline.ps.lightCount.x = static_cast<unsigned int>(lights.count());
+        if (lights.count() > 0)
+        {
+            m_pipeline.ps.lightWorldPosition = lights.worldPositions();
+            m_pipeline.ps.lightDirection = lights.directions();
+            m_pipeline.ps.lightColor = lights.colors();
+            m_pipeline.ps.lightIntensity = lights.intensities();
+            m_pipeline.ps.lightRange = lights.ranges();
+            m_pipeline.ps.lightType = lights.types();
+            m_pipeline.ps.lightParameters = lights.parameters();
         }
 
-        cmd.setRenderTargets({ m_gbufferAlbedo, m_gbufferNormal, m_gbufferMotion, m_gbufferRoughness, m_gbufferMetalness, m_gbufferOcclusion, m_objectId }, depthBuffer);
-        cmd.setViewPorts({ Viewport{ 0.0f, 0.0f, static_cast<float>(m_gbufferAlbedo.width()), static_cast<float>(m_gbufferAlbedo.height()), 0.0f, 1.0f } });
-        cmd.setScissorRects({ Rectangle{ 0, 0, m_gbufferAlbedo.width(), m_gbufferAlbedo.height() } });
+        for (auto& node : scene.nodes)
+        {
+            auto& subMesh = node.mesh->meshBuffer();
+            {
+                auto transformMatrix = node.transform;
+
+                m_pipeline.vs.modelMatrix = fromMatrix(transformMatrix);
+                m_pipeline.vs.modelViewProjectionMatrix = fromMatrix(cameraProjectionMatrix * (cameraViewMatrix * transformMatrix));
+                m_pipeline.vs.vertices = subMesh.vertices;
+                m_pipeline.vs.normals = subMesh.normals;
+                m_pipeline.vs.tangents = subMesh.tangents;
+                m_pipeline.vs.uv = subMesh.uv;
+
+                if (node.material)
+                {
+                    if (node.material->hasAlbedo())
+                        m_pipeline.ps.albedo = node.material->albedo();
+
+                    if (node.material->hasRoughness())
+                        m_pipeline.ps.roughness = node.material->roughness();
+
+                    if (node.material->hasNormal())
+                        m_pipeline.ps.normal = node.material->normal();
+
+                    if (node.material->hasMetalness())
+                        m_pipeline.ps.metalness = node.material->metalness();
+
+                    if (node.material->hasOcclusion())
+                    m_pipeline.ps.occlusion = node.material->occlusion();
+                }
+
+                m_pipeline.ps.materialParameters = Float4(
+                    node.material ? node.material->roughnessStrength() : 1.0f,
+                    node.material ? node.material->metalnessStrength() : 0.0f,
+                    node.material ? node.material->materialScaleX() : 1.0f,
+                    node.material ? node.material->materialScaleY() : 1.0f);
+
+                m_pipeline.ps.materialParameters2 = Float4(
+                    node.material ? node.material->occlusionStrength() : 0.0f,
+                    camera.exposure(),
+                    0.0f,
+                    0.0f
+                );
+
+                cmd.bindPipe(m_pipeline);
+                cmd.drawIndexed(subMesh.indices, subMesh.indices.desc().elements, 1, 0, 0, 0);
+            }
+        }
+#endif
+    }
+
+    unsigned int ModelRenderer::pickedObject(Device& device)
+    {
+        return m_picker.selectedInstanceId(device);
+    }
+
+    void ModelRenderer::renderGeometryPbr(
+        Device& /*device*/,
+        TextureDSV* /*depthBuffer*/,
+        CommandList& /*cmd*/,
+        FlatScene& /*scene*/,
+        Camera& /*camera*/,
+        const Matrix4f& /*cameraProjectionMatrix*/,
+        const Matrix4f& /*cameraViewMatrix*/,
+        const Matrix4f& /*jitterMatrix*/,
+        unsigned int /*mouseX*/,
+        unsigned int /*mouseY*/,
+        const Vector2f& /*jitter*/)
+    {
+        
+
+        
+
+#if 0
+        std::vector<Vector4f> frustumPlanes;
+        Vector3f cameraPosition;
+        Camera* camTemp;
+
+        auto tempFrustumPlanes = extractFrustumPlanes(camera.projectionMatrix() * camera.viewMatrix());
+
+        if (scene.cameras.size() == 1)
+        {
+            frustumPlanes = tempFrustumPlanes;
+            cameraPosition = camera.position();
+            camTemp = &camera;
+        }
+        else if (scene.cameras.size() == 2)
+        {
+            frustumPlanes = extractFrustumPlanes(scene.cameras[1]->projectionMatrix() * scene.cameras[1]->viewMatrix());
+            cameraPosition = scene.cameras[1]->position();
+            camTemp = scene.cameras[1].get();
+        }
+
+        //m_gbuffer->clear(cmd);
+
+        cmd.setRenderTargets({ 
+            m_gbuffer->rtv(GBufferType::Albedo),
+            m_gbuffer->rtv(GBufferType::Normal),
+            m_gbuffer->rtv(GBufferType::MotionVector),
+            m_gbuffer->rtv(GBufferType::Roughness),
+            m_gbuffer->rtv(GBufferType::Metalness),
+            m_gbuffer->rtv(GBufferType::Occlusion),
+            m_gbuffer->rtv(GBufferType::ObjectId) }, depthBuffer);
 
         m_pbrPipeline.ps.mouseX.x = mouseX;
         m_pbrPipeline.ps.mouseY.x = mouseY;
         m_pbrPipeline.ps.pick = m_pickBufferUAV;
 
+        m_pbrPipelineAlphaclipped.ps.mouseX.x = mouseX;
+        m_pbrPipelineAlphaclipped.ps.mouseY.x = mouseY;
+        m_pbrPipelineAlphaclipped.ps.pick = m_pickBufferUAV;
+
         {
             CPU_MARKER("Update material textures");
-            for (auto& node : scene.nodes)
+            /*for (auto& node : scene.nodes)
             {
                 if (node.material)
                 {
@@ -1146,9 +1090,49 @@ namespace engine
                     if (node.material->hasOcclusion() && m_pbrPipeline.ps.materialTextures.id(node.material->occlusionKey()) == -1)
                         m_pbrPipeline.ps.materialTextures.push(node.material->occlusionKey(), node.material->occlusion());
                 }
-            }
+            }*/
         }
 
+        {
+            CPU_MARKER("Render opaque models");
+            GPU_MARKER(cmd, "Render opaque models");
+
+            m_clusterRenderer.vs.vertices = device.modelResources().vertex();
+            m_clusterRenderer.vs.normals = device.modelResources().normal();
+            m_clusterRenderer.vs.tangents = device.modelResources().tangent();
+            m_clusterRenderer.vs.indices = device.modelResources().indice();
+            m_clusterRenderer.vs.uv = device.modelResources().uv();
+
+            m_clusterRenderer.vs.clusterBindings = device.modelResources().bindings();
+            m_clusterRenderer.vs.clusterMaterials = device.modelResources().material();
+            m_clusterRenderer.vs.transformHistory = device.modelResources().transforms();
+
+            m_clusterRenderer.vs.viewMatrix = fromMatrix(cameraViewMatrix);
+            m_clusterRenderer.vs.projectionMatrix = fromMatrix(cameraProjectionMatrix);
+            m_clusterRenderer.vs.previousViewMatrix = fromMatrix(m_previousCameraViewMatrix);
+            m_clusterRenderer.vs.previousProjectionMatrix = fromMatrix(m_previousCameraProjectionMatrix);
+            m_clusterRenderer.vs.jitterMatrix = fromMatrix(jitterMatrix);
+            m_clusterRenderer.vs.clusterMap = m_culler.occlusionCulledClusters();
+
+            m_clusterRenderer.ps.clusterBindings = device.modelResources().bindings();
+            m_clusterRenderer.ps.clusterMaterials = device.modelResources().material();
+            m_clusterRenderer.ps.materialTextures = device.modelResources().textures();
+            
+            m_clusterRenderer.ps.mouseX.x = mouseX;
+            m_clusterRenderer.ps.mouseY.x = mouseY;
+            m_clusterRenderer.ps.materialIdToObjectId = device.modelResources().materialToObjectId();
+            m_clusterRenderer.ps.pick = m_pickBufferUAV;
+
+            /*cmd.bindPipe(m_clusterRenderer);
+            cmd.draw(device.modelResources().clusterCount() * ClusterMaxSize);*/
+            //cmd.bindIndexBuffer(m_occlusionCullingIndexOutputIBV);
+            cmd.bindPipe(m_clusterRenderer);
+            //cmd.drawIndexedIndirect(m_occlusionCullingDrawArgs, 0);
+            cmd.drawIndirect(m_culler.occlusionCullingDrawArguments(), 0);
+        }
+
+
+#if 0
         {
             CPU_MARKER("Render opaque models");
             GPU_MARKER(cmd, "Render opaque models");
@@ -1158,14 +1142,11 @@ namespace engine
             // model render pass
             for (auto& node : scene.nodes)
             {
-                int subMeshIndex = 0;
-                for (auto&& subMesh : node.mesh->meshBuffers())
+                auto& subMesh = node.mesh->meshBuffer();
                 {
-                    auto objectBounds = node.mesh->subMeshes()[subMeshIndex].boundingBox;
-                    objectBounds.max = node.transform * objectBounds.max;
-                    objectBounds.min = node.transform * objectBounds.min;
+                    auto objectBounds = node.mesh->subMesh().boundingBox;
 
-                    if (frustumCull(*camTemp, frustumPlanes, objectBounds, camTemp->position()))
+                    if (frustumCull(*camTemp, frustumPlanes, objectBounds, camTemp->position(), node.transform))
                     {
                         const auto& transformMatrix = node.transform;
                         const auto& previousTransformMatrix = node.previousTransform;
@@ -1186,25 +1167,25 @@ namespace engine
 
                         if (node.material)
                         {
-                            m_pbrPipeline.ps.albedoId.x = node.material->hasAlbedo() ? m_pbrPipeline.ps.materialTextures.id(node.material->albedoKey()) : 0;
+                            /*m_pbrPipeline.ps.albedoId.x = node.material->hasAlbedo() ? m_pbrPipeline.ps.materialTextures.id(node.material->albedoKey()) : 0;
                             m_pbrPipeline.ps.normalId.x = node.material->hasNormal() ? m_pbrPipeline.ps.materialTextures.id(node.material->normalKey()) : 0;
                             m_pbrPipeline.ps.roughnessId.x = node.material->hasRoughness() ? m_pbrPipeline.ps.materialTextures.id(node.material->roughnessKey()) : 0;
                             m_pbrPipeline.ps.metalnessId.x = node.material->hasMetalness() ? m_pbrPipeline.ps.materialTextures.id(node.material->metalnessKey()) : 0;
-                            m_pbrPipeline.ps.occlusionId.x = node.material->hasOcclusion() ? m_pbrPipeline.ps.materialTextures.id(node.material->occlusionKey()) : 0;
+                            m_pbrPipeline.ps.occlusionId.x = node.material->hasOcclusion() ? m_pbrPipeline.ps.materialTextures.id(node.material->occlusionKey()) : 0;*/
 
-                            /*m_pbrPipeline.ps.albedo = node.material->hasAlbedo() ? node.material->albedo() : TextureSRV();
+                            m_pbrPipeline.ps.albedo = node.material->hasAlbedo() ? node.material->albedo() : TextureSRV();
                             m_pbrPipeline.ps.normal = node.material->hasNormal() ? node.material->normal() : TextureSRV();
                             m_pbrPipeline.ps.roughness = node.material->hasRoughness() ? node.material->roughness() : TextureSRV();
                             m_pbrPipeline.ps.metalness = node.material->hasMetalness() ? node.material->metalness() : TextureSRV();
-                            m_pbrPipeline.ps.occlusion = node.material->hasOcclusion() ? node.material->occlusion() : TextureSRV();*/
+                            m_pbrPipeline.ps.occlusion = node.material->hasOcclusion() ? node.material->occlusion() : TextureSRV();
 
                             auto color = node.material->color();
                             m_pbrPipeline.ps.color = Vector4f(color.x, color.y, color.z, 1.0f);
                         }
 
-                        m_pbrPipeline.ps.roughnessStrength = node.material ? node.material->roughnessStrength() : defaultMaterial.roughnessStrength();
-                        m_pbrPipeline.ps.metalnessStrength = node.material ? node.material->metalnessStrength() : defaultMaterial.metalnessStrength();
-                        m_pbrPipeline.ps.occlusionStrength = node.material ? node.material->occlusionStrength() : defaultMaterial.occlusionStrength();
+                        m_pbrPipeline.ps.roughnessStrength = node.material ? node.material->roughnessStrength() : 1.0f;
+                        m_pbrPipeline.ps.metalnessStrength = node.material ? node.material->metalnessStrength() : 0.0f;
+                        m_pbrPipeline.ps.occlusionStrength = node.material ? node.material->occlusionStrength() : 0.0f;
 
                         m_pbrPipeline.ps.hasAlbedo.x = static_cast<unsigned int>(node.material && node.material->hasAlbedo());
                         m_pbrPipeline.ps.hasNormal.x = static_cast<unsigned int>(node.material && node.material->hasNormal());
@@ -1213,15 +1194,14 @@ namespace engine
                         m_pbrPipeline.ps.hasOcclusion.x = static_cast<unsigned int>(node.material && node.material->hasOcclusion());
 
                         m_pbrPipeline.ps.materialScale = Float2(
-                            node.material ? node.material->materialScaleX() : defaultMaterial.materialScaleX(),
-                            node.material ? node.material->materialScaleY() : defaultMaterial.materialScaleY());
+                            node.material ? node.material->materialScaleX() : 1.0f,
+                            node.material ? node.material->materialScaleY() : 1.0f);
                         m_pbrPipeline.ps.objectId.x = node.objectId;
                         m_pbrPipeline.ps.jitter = Float2{ jitter.x, jitter.y };
 
 
                         cmd.bindPipe(m_pbrPipeline);
-                        cmd.bindIndexBuffer(subMesh.indices);
-                        cmd.drawIndexed(subMesh.indices.desc().elements, 1, 0, 0, 0);
+                        cmd.drawIndexed(subMesh.indices, subMesh.indices.desc().elements, 1, 0, 0, 0);
 
                         /*int processedIndexes = 0;
                         while (processedIndexes < subMesh.indices.desc().elements)
@@ -1242,11 +1222,9 @@ namespace engine
 #if 0
                         uint32_t facesProcessed = 0;
                         uint32_t clusterId = 0;
-                        for (auto&& cluster : node.mesh->subMeshes()[subMeshIndex].clusterIndexCount)
+                        for (auto&& cluster : node.mesh->subMesh().clusterIndexCount)
                         {
-                            auto clusterBounds = node.mesh->subMeshes()[subMeshIndex].clusterBounds[clusterId];
-                            clusterBounds.max = node.transform * clusterBounds.max;
-                            clusterBounds.min = node.transform * clusterBounds.min;
+                            auto clusterBounds = node.mesh->subMesh().clusterBounds[clusterId];
 
                             /*{
                                 Vector3f corner[8] =
@@ -1294,7 +1272,8 @@ namespace engine
                                 *camTemp,
                                 frustumPlanes,
                                 clusterBounds,
-                                cameraPosition))
+                                cameraPosition,
+                                node.transform))
                             {
                                 m_pbrPipeline.ps.color = Vector4f(randomFloat(gen), randomFloat(gen), randomFloat(gen), 1.0f);
 
@@ -1307,10 +1286,11 @@ namespace engine
                         }
 #endif
                     }
-                    ++subMeshIndex;
                 }
             }
         }
+
+
 #if 1
         {
             CPU_MARKER("Render alphaclipped models");
@@ -1318,89 +1298,97 @@ namespace engine
 
             for (auto& node : scene.alphaclippedNodes)
             {
-                for (auto&& subMesh : node.mesh->meshBuffers())
+                auto& subMesh = node.mesh->meshBuffer();
                 {
-                    const auto& transformMatrix = node.transform;
-                    const auto& previousTransformMatrix = node.previousTransform;
+                    auto objectBounds = node.mesh->subMesh().boundingBox;
 
-                    const auto cameraTransform = cameraViewMatrix * transformMatrix;
-
-                    m_pbrPipeline.vs.vertices = subMesh.vertices;
-                    m_pbrPipeline.vs.normals = subMesh.normals;
-                    m_pbrPipeline.vs.tangents = subMesh.tangents;
-                    m_pbrPipeline.vs.uv = subMesh.uv;
-                    m_pbrPipeline.vs.modelMatrix = fromMatrix(transformMatrix);
-                    m_pbrPipeline.vs.modelViewProjectionMatrix = fromMatrix(cameraProjectionMatrix * cameraTransform);
-                    m_pbrPipeline.vs.previousModelViewProjectionMatrix = fromMatrix(m_previousCameraProjectionMatrix * (m_previousCameraViewMatrix * previousTransformMatrix));
-                    m_pbrPipeline.vs.jitterModelViewProjectionMatrix = fromMatrix(jitterMatrix * (cameraProjectionMatrix * cameraTransform));
-
-                    node.transform = node.previousTransform;
-
-                    if (node.material)
+                    if (frustumCull(*camTemp, frustumPlanes, objectBounds, camTemp->position(), node.transform))
                     {
-                        m_pbrPipeline.ps.albedoId.x = node.material->hasAlbedo() ? m_pbrPipeline.ps.materialTextures.id(node.material->albedoKey()) : 0;
-                        m_pbrPipeline.ps.normalId.x = node.material->hasNormal() ? m_pbrPipeline.ps.materialTextures.id(node.material->normalKey()) : 0;
-                        m_pbrPipeline.ps.roughnessId.x = node.material->hasRoughness() ? m_pbrPipeline.ps.materialTextures.id(node.material->roughnessKey()) : 0;
-                        m_pbrPipeline.ps.metalnessId.x = node.material->hasMetalness() ? m_pbrPipeline.ps.materialTextures.id(node.material->metalnessKey()) : 0;
-                        m_pbrPipeline.ps.occlusionId.x = node.material->hasOcclusion() ? m_pbrPipeline.ps.materialTextures.id(node.material->occlusionKey()) : 0;
+                        const auto& transformMatrix = node.transform;
+                        const auto& previousTransformMatrix = node.previousTransform;
 
-                        /*m_pbrPipeline.ps.albedo = node.material->hasAlbedo() ? node.material->albedo() : TextureSRV();
-                        m_pbrPipeline.ps.normal = node.material->hasNormal() ? node.material->normal() : TextureSRV();
-                        m_pbrPipeline.ps.roughness = node.material->hasRoughness() ? node.material->roughness() : TextureSRV();
-                        m_pbrPipeline.ps.metalness = node.material->hasMetalness() ? node.material->metalness() : TextureSRV();
-                        m_pbrPipeline.ps.occlusion = node.material->hasOcclusion() ? node.material->occlusion() : TextureSRV();*/
+                        const auto cameraTransform = cameraViewMatrix * transformMatrix;
+
+                        m_pbrPipelineAlphaclipped.vs.vertices = subMesh.vertices;
+                        m_pbrPipelineAlphaclipped.vs.normals = subMesh.normals;
+                        m_pbrPipelineAlphaclipped.vs.tangents = subMesh.tangents;
+                        m_pbrPipelineAlphaclipped.vs.uv = subMesh.uv;
+                        m_pbrPipelineAlphaclipped.vs.modelMatrix = fromMatrix(transformMatrix);
+                        m_pbrPipelineAlphaclipped.vs.modelViewProjectionMatrix = fromMatrix(cameraProjectionMatrix * cameraTransform);
+                        m_pbrPipelineAlphaclipped.vs.previousModelViewProjectionMatrix = fromMatrix(m_previousCameraProjectionMatrix * (m_previousCameraViewMatrix * previousTransformMatrix));
+                        m_pbrPipelineAlphaclipped.vs.jitterModelViewProjectionMatrix = fromMatrix(jitterMatrix * (cameraProjectionMatrix * cameraTransform));
+
+                        node.transform = node.previousTransform;
+
+                        if (node.material)
+                        {
+                            /*m_pbrPipeline.ps.albedoId.x = node.material->hasAlbedo() ? m_pbrPipeline.ps.materialTextures.id(node.material->albedoKey()) : 0;
+                            m_pbrPipeline.ps.normalId.x = node.material->hasNormal() ? m_pbrPipeline.ps.materialTextures.id(node.material->normalKey()) : 0;
+                            m_pbrPipeline.ps.roughnessId.x = node.material->hasRoughness() ? m_pbrPipeline.ps.materialTextures.id(node.material->roughnessKey()) : 0;
+                            m_pbrPipeline.ps.metalnessId.x = node.material->hasMetalness() ? m_pbrPipeline.ps.materialTextures.id(node.material->metalnessKey()) : 0;
+                            m_pbrPipeline.ps.occlusionId.x = node.material->hasOcclusion() ? m_pbrPipeline.ps.materialTextures.id(node.material->occlusionKey()) : 0;*/
+
+                            m_pbrPipelineAlphaclipped.ps.albedo = node.material->hasAlbedo() ? node.material->albedo() : TextureSRV();
+                            m_pbrPipelineAlphaclipped.ps.normal = node.material->hasNormal() ? node.material->normal() : TextureSRV();
+                            m_pbrPipelineAlphaclipped.ps.roughness = node.material->hasRoughness() ? node.material->roughness() : TextureSRV();
+                            m_pbrPipelineAlphaclipped.ps.metalness = node.material->hasMetalness() ? node.material->metalness() : TextureSRV();
+                            m_pbrPipelineAlphaclipped.ps.occlusion = node.material->hasOcclusion() ? node.material->occlusion() : TextureSRV();
+                        }
+
+                        m_pbrPipelineAlphaclipped.ps.roughnessStrength = node.material ? node.material->roughnessStrength() : 1.0f;
+                        m_pbrPipelineAlphaclipped.ps.metalnessStrength = node.material ? node.material->metalnessStrength() : 0.0f;
+                        m_pbrPipelineAlphaclipped.ps.occlusionStrength = node.material ? node.material->occlusionStrength() : 0.0f;
+
+                        m_pbrPipelineAlphaclipped.ps.hasAlbedo.x = static_cast<unsigned int>(node.material && node.material->hasAlbedo());
+                        m_pbrPipelineAlphaclipped.ps.hasNormal.x = static_cast<unsigned int>(node.material && node.material->hasNormal());
+                        m_pbrPipelineAlphaclipped.ps.hasRoughness.x = static_cast<unsigned int>(node.material && node.material->hasRoughness());
+                        m_pbrPipelineAlphaclipped.ps.hasMetalness.x = static_cast<unsigned int>(node.material && node.material->hasMetalness());
+                        m_pbrPipelineAlphaclipped.ps.hasOcclusion.x = static_cast<unsigned int>(node.material && node.material->hasOcclusion());
+
+                        m_pbrPipelineAlphaclipped.ps.materialScale = Float2(
+                            node.material ? node.material->materialScaleX() : 1.0f,
+                            node.material ? node.material->materialScaleY() : 1.0f);
+                        m_pbrPipelineAlphaclipped.ps.objectId.x = node.objectId;
+
+                        cmd.bindPipe(m_pbrPipelineAlphaclipped);
+                        cmd.bindIndexBuffer(subMesh.indices);
+                        cmd.drawIndexed(subMesh.indices.desc().elements, 1, 0, 0, 0);
                     }
-
-                    m_pbrPipeline.ps.roughnessStrength = node.material ? node.material->roughnessStrength() : defaultMaterial.roughnessStrength();
-                    m_pbrPipeline.ps.metalnessStrength = node.material ? node.material->metalnessStrength() : defaultMaterial.metalnessStrength();
-                    m_pbrPipeline.ps.occlusionStrength = node.material ? node.material->occlusionStrength() : defaultMaterial.occlusionStrength();
-
-                    m_pbrPipeline.ps.hasAlbedo.x = static_cast<unsigned int>(node.material && node.material->hasAlbedo());
-                    m_pbrPipeline.ps.hasNormal.x = static_cast<unsigned int>(node.material && node.material->hasNormal());
-                    m_pbrPipeline.ps.hasRoughness.x = static_cast<unsigned int>(node.material && node.material->hasRoughness());
-                    m_pbrPipeline.ps.hasMetalness.x = static_cast<unsigned int>(node.material && node.material->hasMetalness());
-                    m_pbrPipeline.ps.hasOcclusion.x = static_cast<unsigned int>(node.material && node.material->hasOcclusion());
-
-                    m_pbrPipeline.ps.materialScale = Float2(
-                        node.material ? node.material->materialScaleX() : defaultMaterial.materialScaleX(),
-                        node.material ? node.material->materialScaleY() : defaultMaterial.materialScaleY());
-                    m_pbrPipeline.ps.objectId.x = node.objectId;
-
-                    cmd.bindPipe(m_pbrPipeline);
-                    cmd.bindIndexBuffer(subMesh.indices);
-                    cmd.drawIndexed(subMesh.indices.desc().elements, 1, 0, 0, 0);
                 }
             }
         }
 #endif
+
+#endif
+
+#endif
     }
 
     void ModelRenderer::renderWireframe(
-        Device& device,
-        TextureRTV& currentRenderTarget,
-        TextureDSV& depthBuffer,
-        CommandList& cmd,
-        FlatScene& scene,
-        const Matrix4f& cameraProjectionMatrix,
-        const Matrix4f& cameraViewMatrix,
-        const Matrix4f& jitterMatrix,
-        MaterialComponent& defaultMaterial,
-        unsigned int mouseX,
-        unsigned int mouseY)
+        Device& /*device*/,
+        TextureRTV& /*currentRenderTarget*/,
+        TextureDSV& /*depthBuffer*/,
+        CommandList& /*cmd*/,
+        FlatScene& /*scene*/,
+        const Matrix4f& /*cameraProjectionMatrix*/,
+        const Matrix4f& /*cameraViewMatrix*/,
+        const Matrix4f& /*jitterMatrix*/,
+        unsigned int /*mouseX*/,
+        unsigned int /*mouseY*/)
     {
+        return;
+#if 0
         CPU_MARKER("Wireframe");
         GPU_MARKER(cmd, "Wireframe");
 
         cmd.setRenderTargets({ m_lightingTarget }, depthBuffer);
-        cmd.setViewPorts({ Viewport{ 0.0f, 0.0f, static_cast<float>(m_lightingTarget.width()), static_cast<float>(m_lightingTarget.height()), 0.0f, 1.0f } });
-        cmd.setScissorRects({ Rectangle{ 0, 0, m_lightingTarget.width(), m_lightingTarget.height() } });
 
         // model render pass
         for (auto& node : scene.nodes)
         {
             if (node.objectId == m_selectedObject)
             {
-                for (auto&& subMesh : node.mesh->meshBuffers())
+                auto& subMesh = node.mesh->meshBuffer();
                 {
                     const auto& transformMatrix = node.transform;
                     const auto& previousTransformMatrix = node.previousTransform;
@@ -1428,7 +1416,7 @@ namespace engine
         {
             if (node.objectId == m_selectedObject)
             {
-                for (auto&& subMesh : node.mesh->meshBuffers())
+                auto& subMesh = node.mesh->meshBuffer();
                 {
                     const auto& transformMatrix = node.transform;
                     const auto& previousTransformMatrix = node.previousTransform;
@@ -1452,6 +1440,7 @@ namespace engine
                 }
             }
         }
+#endif
     }
 
 
@@ -1465,57 +1454,77 @@ namespace engine
         BufferSRV& shadowVP,
         Matrix4f cameraProjectionMatrix,
         Matrix4f cameraViewMatrix,
-        LightData& lights)
+        LightData& lights,
+        Vector3f probePosition,
+        float probeRange)
     {
         CPU_MARKER("Lighting");
         GPU_MARKER(cmd, "Lighting");
 
         // lighting phase
         cmd.setRenderTargets({ m_lightingTarget });
-        cmd.setViewPorts({ Viewport{ 0.0f, 0.0f, static_cast<float>(m_lightingTarget.width()), static_cast<float>(m_lightingTarget.height()), 0.0f, 1.0f } });
-        cmd.setScissorRects({ Rectangle{ 0, 0, m_lightingTarget.width(), m_lightingTarget.height() } });
 
-        m_lightingPipeline.ps.cameraWorldSpacePosition = camera.position();
-        m_lightingPipeline.ps.environmentStrength = camera.environmentMapStrength();
+        auto currentRenderMode = m_currentRenderMode < shaders::LightingPS::DrawmodeCount ? m_currentRenderMode : 0;
+        engine::Pipeline<shaders::Lighting>* pipe = &m_lightingPipelines[currentRenderMode];
+
+        pipe->ps.cameraWorldSpacePosition = camera.position();
+        pipe->ps.environmentStrength = camera.environmentMapStrength();
         if (camera.environmentIrradiance().valid() && camera.environmentIrradiance().texture().arraySlices() == 1)
         {
-            m_lightingPipeline.ps.environmentIrradiance = camera.environmentIrradiance();
-            m_lightingPipeline.ps.environmentIrradianceCubemap = TextureSRV();
-            m_lightingPipeline.ps.hasEnvironmentIrradianceCubemap.x = static_cast<unsigned int>(false);
-            m_lightingPipeline.ps.hasEnvironmentIrradianceEquirect.x = static_cast<unsigned int>(true);
+            pipe->ps.environmentIrradiance = camera.environmentIrradiance();
+            pipe->ps.environmentIrradianceCubemap = TextureSRV();
+            pipe->ps.hasEnvironmentIrradianceCubemap.x = static_cast<unsigned int>(false);
+            pipe->ps.hasEnvironmentIrradianceEquirect.x = static_cast<unsigned int>(true);
         }
         else
         {
-            m_lightingPipeline.ps.environmentIrradiance = TextureSRV();
-            m_lightingPipeline.ps.environmentIrradianceCubemap = camera.environmentIrradiance();
-            m_lightingPipeline.ps.hasEnvironmentIrradianceCubemap.x = static_cast<unsigned int>(true);
-            m_lightingPipeline.ps.hasEnvironmentIrradianceEquirect.x = static_cast<unsigned int>(false);
+            pipe->ps.environmentIrradiance = TextureSRV();
+            pipe->ps.environmentIrradianceCubemap = camera.environmentIrradiance();
+            pipe->ps.hasEnvironmentIrradianceCubemap.x = static_cast<unsigned int>(true);
+            pipe->ps.hasEnvironmentIrradianceEquirect.x = static_cast<unsigned int>(false);
         }
-        m_lightingPipeline.ps.environmentSpecular = camera.environmentSpecular();
-        m_lightingPipeline.ps.environmentBrdfLut = camera.environmentBrdfLUT();
-        m_lightingPipeline.ps.hasEnvironmentSpecular.x = camera.environmentSpecular().valid();
-        m_lightingPipeline.ps.shadowSize = Float2{ 1.0f / static_cast<float>(ShadowMapWidth), 1.0f / static_cast<float>(ShadowMapHeight) };
-        m_lightingPipeline.ps.shadowMap = shadowMap;
-        m_lightingPipeline.ps.shadowVP = shadowVP;
-        m_lightingPipeline.ps.depth = depthView;
-        m_lightingPipeline.ps.cameraInverseProjectionMatrix = fromMatrix(cameraProjectionMatrix.inverse());
-        m_lightingPipeline.ps.cameraInverseViewMatrix = fromMatrix(cameraViewMatrix.inverse());
-        m_lightingPipeline.ps.ssao = m_blurTargetSRV;
+        pipe->ps.environmentSpecular = camera.environmentSpecular();
+        pipe->ps.environmentBrdfLut = camera.environmentBrdfLUT();
+        pipe->ps.hasEnvironmentSpecular.x = camera.environmentSpecular().valid();
+        pipe->ps.shadowSize = Float2{ 1.0f / static_cast<float>(ShadowMapWidth), 1.0f / static_cast<float>(ShadowMapHeight) };
+        pipe->ps.shadowMap = shadowMap;
+        pipe->ps.shadowVP = shadowVP;
+        pipe->ps.depth = depthView;
+        pipe->ps.cameraInverseProjectionMatrix = fromMatrix(cameraProjectionMatrix.inverse());
+        pipe->ps.cameraInverseViewMatrix = fromMatrix(cameraViewMatrix.inverse());
+        pipe->ps.ssao = m_blurTargetSRV;
 
-        m_lightingPipeline.ps.lightCount.x = static_cast<unsigned int>(lights.count());
+        pipe->ps.frameSize.x = m_gbuffer->srv(GBufferType::Normal).width();
+        pipe->ps.frameSize.y = m_gbuffer->srv(GBufferType::Normal).height();
+
+        pipe->ps.gbufferNormals = m_gbuffer->srv(GBufferType::Normal);
+        pipe->ps.gbufferUV = m_gbuffer->srv(GBufferType::Uv);
+        pipe->ps.gbufferInstanceId = m_gbuffer->srv(GBufferType::InstanceId);
+
+        pipe->ps.instanceMaterials = m_device.modelResources().gpuBuffers().instanceMaterial();
+        //pipe->ps.objectIdToMaterialId = m_device.modelResources().gpuBuffers().objectIdToMaterial();
+        pipe->ps.materialTextures = m_device.modelResources().textures();
+
+        pipe->ps.probePositionRange = Float4{ probePosition.x, probePosition.y, probePosition.z, probeRange };
+        pipe->ps.probeBBmin = Float4{ probePosition.x - probeRange, probePosition.y - probeRange, probePosition.z - probeRange, 0.0f };
+        pipe->ps.probeBBmax = Float4{ probePosition.x + probeRange, probePosition.y + probeRange, probePosition.z + probeRange, 0.0f };
+
+        pipe->ps.usingProbe.x = 0;
+
+        pipe->ps.lightCount.x = static_cast<unsigned int>(lights.count());
         if (lights.count() > 0)
         {
-            m_lightingPipeline.ps.lightWorldPosition = lights.worldPositions();
-            m_lightingPipeline.ps.lightDirection = lights.directions();
-            m_lightingPipeline.ps.lightColor = lights.colors();
-            m_lightingPipeline.ps.lightIntensity = lights.intensities();
-            m_lightingPipeline.ps.lightRange = lights.ranges();
-            m_lightingPipeline.ps.lightType = lights.types();
-            m_lightingPipeline.ps.lightParameters = lights.parameters();
+            pipe->ps.lightWorldPosition = lights.worldPositions();
+            pipe->ps.lightDirection = lights.directions();
+            pipe->ps.lightColor = lights.colors();
+            pipe->ps.lightIntensity = lights.intensities();
+            pipe->ps.lightRange = lights.ranges();
+            pipe->ps.lightType = lights.types();
+            pipe->ps.lightParameters = lights.parameters();
         }
-        m_lightingPipeline.ps.exposure = camera.exposure();
+        pipe->ps.exposure = camera.exposure();
 
-        cmd.bindPipe(m_lightingPipeline);
+        cmd.bindPipe(m_lightingPipelines[currentRenderMode]);
         cmd.draw(4u);
     }
 
@@ -1533,21 +1542,21 @@ namespace engine
         m_lastResolvedIndex = m_currentFullResIndex;
         TextureRTV& target = m_fullResTargetFrame[m_currentFullResIndex];
         cmd.setRenderTargets({ target });
-        cmd.setViewPorts({ Viewport{ 0.0f, 0.0f, static_cast<float>(target.width()), static_cast<float>(target.height()), 0.0f, 1.0f } });
-        cmd.setScissorRects({ Rectangle{ 0, 0, target.width(), target.height() } });
 
-        m_temporalResolve.ps.currentFrame = m_lightingTargetSRV;
-        m_temporalResolve.ps.history = m_fullResTargetFrameSRV[previousFrameIndex()];
-        m_temporalResolve.ps.depth = depthView;
-        m_temporalResolve.ps.motion = m_gbufferMotionSRV;
-        m_temporalResolve.ps.textureSize = Float2(static_cast<float>(target.width()), static_cast<float>(target.height()));
-        m_temporalResolve.ps.texelSize = Float2(1.0f / static_cast<float>(m_virtualResolution.x), 1.0f / static_cast<float>(m_virtualResolution.y));
-        m_temporalResolve.ps.nearFar = Float2(camera.nearPlane(), camera.farPlane());
-        m_temporalResolve.ps.jitter = jitterValue;
-        m_temporalResolve.ps.previousJitter = previousJitterValue;
-        m_temporalResolve.ps.inverseJitterMatrix = fromMatrix(jitterMatrix.inverse());
+        auto temporalPipe = m_currentRenderMode >= shaders::LightingPS::DrawmodeCount ? &m_temporalResolve[1] : &m_temporalResolve[0];
 
-        cmd.bindPipe(m_temporalResolve);
+        temporalPipe->ps.currentFrame = m_lightingTargetSRV;
+        temporalPipe->ps.history = m_fullResTargetFrameSRV[previousFrameIndex()];
+        temporalPipe->ps.depth = depthView;
+        temporalPipe->ps.gbufferMotion = m_gbuffer->srv(GBufferType::Motion);
+        temporalPipe->ps.textureSize = Float2(static_cast<float>(target.width()), static_cast<float>(target.height()));
+        temporalPipe->ps.texelSize = Float2(1.0f / static_cast<float>(m_virtualResolution.x), 1.0f / static_cast<float>(m_virtualResolution.y));
+        temporalPipe->ps.nearFar = Float2(camera.nearPlane(), camera.farPlane());
+        temporalPipe->ps.jitter = jitterValue;
+        temporalPipe->ps.previousJitter = previousJitterValue;
+        temporalPipe->ps.inverseJitterMatrix = fromMatrix(jitterMatrix.inverse());
+
+        cmd.bindPipe(*temporalPipe);
         cmd.draw(4u);
 
         ++m_currentFullResIndex;
@@ -1566,10 +1575,7 @@ namespace engine
 
         //cmd.clearRenderTargetView(m_ssaoRTV, Color4f{0.0f, 0.0f, 0.0f, 0.0f}); 
         cmd.setRenderTargets({ m_ssaoRTV });
-#ifdef SCALEAOSIZE
-        cmd.setViewPorts({ Viewport{ 0.0f, 0.0f, static_cast<float>(m_ssaoRTV.width()), static_cast<float>(m_ssaoRTV.height()), 0.0f, 1.0f } });
-        cmd.setScissorRects({ Rectangle{ 0, 0, m_ssaoRTV.width(), m_ssaoRTV.height() } });
-#else
+#ifndef SCALEAOSIZE
         cmd.setViewPorts({ Viewport{ 0.0f, 0.0f, static_cast<float>(SSAOWidth), static_cast<float>(SSAOHeight), 0.0f, 1.0f } });
         cmd.setScissorRects({ Rectangle{ 0, 0, static_cast<unsigned int>(SSAOWidth), static_cast<unsigned int>(SSAOHeight) } });
 #endif
@@ -1582,7 +1588,7 @@ namespace engine
         m_ssaoPipeline.vs.bottomRightViewRay = Float4{ viewCornerRays.bottomRight, 0.0f };
 
         m_ssaoPipeline.ps.depthTexture = depthView;
-        m_ssaoPipeline.ps.normalTexture = m_gbufferNormalSRV;
+        m_ssaoPipeline.ps.normalTexture = m_gbuffer->srv(GBufferType::Normal);
         m_ssaoPipeline.ps.noiseTexture = m_ssaoNoiseTexture;
         m_ssaoPipeline.ps.samples = m_ssaoKernelBuffer;
 
@@ -1612,7 +1618,7 @@ namespace engine
                 .width(SSAOWidth)
                 .height(SSAOHeight)
 #endif
-                .format(engine::Format::Format_R16_FLOAT)
+                .format(engine::Format::R16_FLOAT)
                 .usage(ResourceUsage::GpuRenderTargetReadWrite)
                 .name("ssao blur target")
                 .dimension(ResourceDimension::Texture2D)
@@ -1633,10 +1639,7 @@ namespace engine
 #endif
 
             cmd.setRenderTargets({ m_blurTarget });
-#ifdef SCALEAOSIZE
-            cmd.setViewPorts({ Viewport{ 0.0f, 0.0f, static_cast<float>(m_ssaoRTV.width()), static_cast<float>(m_ssaoRTV.height()), 0.0f, 1.0f } });
-            cmd.setScissorRects({ Rectangle{ 0, 0, m_ssaoRTV.width(), m_ssaoRTV.height() } });
-#else
+#ifndef SCALEAOSIZE
             cmd.setViewPorts({ Viewport{ 0.0f, 0.0f, static_cast<float>(SSAOWidth), static_cast<float>(SSAOHeight), 0.0f, 1.0f } });
             cmd.setScissorRects({ Rectangle{ 0, 0, static_cast<unsigned int>(SSAOWidth), static_cast<unsigned int>(SSAOHeight) } });
 #endif

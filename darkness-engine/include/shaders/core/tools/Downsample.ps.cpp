@@ -9,10 +9,17 @@ namespace engine
 {
     namespace shaders
     {
+#pragma warning( push )
+#pragma warning( disable : 4702 )
         std::shared_ptr<const ShaderBinary> DownsamplePS::load(const Device& device, ShaderStorage& storage) const
         {
-            return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/dx12/core/tools/Downsample.ps.cso", "C:/work/darkness/darkness-engine/data/shaders/dx12/core/tools/Downsample.ps.support");
+            
+            return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/tools/Downsample.ps.spv", "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/tools/Downsample.ps.support", -1, {});
+            
+            ASSERT(false, "Could not load the permutation necessary. This is a bug.");
+            return {};
         }
+#pragma warning( pop )
 
         DownsamplePS::DownsamplePS()
             : m_constantRange{
@@ -29,7 +36,262 @@ namespace engine
             
             
             }
+            , m_inputParameters
+            {
+            
+            ShaderInputParameter{"position", "SV_Position0", "float4"}
+            
+            ,
+            
+            
+            ShaderInputParameter{"uv", "TEXCOORD0", "float2"}
+            
+            
+            }
         {}
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        DownsamplePS::DownsamplePS(const DownsamplePS& cl)
+            : m_constantRange{
+            
+            
+                ConstantRange{
+                    tools::ByteRange(
+                        reinterpret_cast<const uint8_t*>(static_cast<const Constants*>(this)),
+                        reinterpret_cast<const uint8_t*>(static_cast<const Constants*>(this)) + sizeof(Constants)),
+                    nullptr,
+                    "Constants"
+                }
+                
+            
+            
+            }
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = cl.m_constantRange[i].buffer;
+            }
+
+            
+            image = cl.image;
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+            imageSampler = cl.imageSampler;
+            
+
+            
+
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        DownsamplePS::DownsamplePS(DownsamplePS&& cl)
+            : m_constantRange{
+            
+            
+                ConstantRange{
+                    tools::ByteRange(
+                        reinterpret_cast<const uint8_t*>(static_cast<const Constants*>(this)),
+                        reinterpret_cast<const uint8_t*>(static_cast<const Constants*>(this)) + sizeof(Constants)),
+                    nullptr,
+                    "Constants"
+                }
+                
+            
+            
+            }
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = std::move(cl.m_constantRange[i].buffer);
+            }
+
+            
+            image = std::move(cl.image);
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+            imageSampler = std::move(cl.imageSampler);
+            
+
+            
+
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        DownsamplePS& DownsamplePS::operator=(const DownsamplePS& cl)
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = cl.m_constantRange[i].buffer;
+            }
+
+            
+            image = cl.image;
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+            imageSampler = cl.imageSampler;
+            
+
+            
+
+            return *this;
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        DownsamplePS& DownsamplePS::operator=(DownsamplePS&& cl)
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = std::move(cl.m_constantRange[i].buffer);
+            }
+
+            
+            image = std::move(cl.image);
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+            imageSampler = std::move(cl.imageSampler);
+            
+
+            
+
+            return *this;
+        }
+#pragma warning( pop )
+
+        std::vector<std::string> DownsamplePS::textureSrvNames() const
+        {
+            return {
+                
+                "image"
+                
+                
+            };
+        }
+
+        std::vector<std::string> DownsamplePS::textureUavNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> DownsamplePS::bufferSrvNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> DownsamplePS::bufferUavNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> DownsamplePS::samplerNames() const
+        {
+            return {
+                
+                "imageSampler"
+                
+                
+            };
+        }
+
+        std::vector<std::string> DownsamplePS::srvNames() const
+        {
+            return {
+                
+                "image"
+                
+                
+            };
+        }
+
+        std::vector<std::string> DownsamplePS::uavNames() const
+        {
+            return {
+                
+            };
+        }
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        engine::ResourceDimension DownsamplePS::textureDimension(const std::string& name) const
+        {
+            
+            if("image" == name) return engine::ResourceDimension::Texture2D;
+            
+            return engine::ResourceDimension::Unknown;
+        }
+#pragma warning( pop )
 
         std::vector<TextureSRV> DownsamplePS::texture_srvs() const
         {
@@ -103,10 +365,16 @@ namespace engine
             return result;
         }
 
+        const std::vector<ShaderInputParameter>& DownsamplePS::inputParameters() const
+        {
+            return m_inputParameters;
+        }
+
 // warning C4172: returning address of local variable or temporary
 // this will never happen as the name will always match the correct resource
 #pragma warning( push )
 #pragma warning( disable : 4172 )
+#pragma warning( disable : 4100 )
 
         bool DownsamplePS::hasTextureSrv(const std::string& name) const
         {
@@ -190,6 +458,34 @@ namespace engine
             
             ASSERT(false, "Tried to look for non-existing resource");
             return BufferUAV();
+        }
+
+        void DownsamplePS::textureSrv(const std::string& name, TextureSRV& texture)
+        {
+            
+            
+            if(name == std::string("image")) { image = texture; return; }
+            
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void DownsamplePS::textureUav(const std::string& name, TextureUAV& texture)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void DownsamplePS::bufferSrv(const std::string& name, BufferSRV& buffer)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void DownsamplePS::bufferUav(const std::string& name, BufferUAV& buffer)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
         }
 
         const Sampler& DownsamplePS::sampler(const std::string& name) const

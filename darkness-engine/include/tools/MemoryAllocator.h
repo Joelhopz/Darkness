@@ -6,6 +6,7 @@
 #include <vector>
 #include <functional>
 #include <map>
+#include <unordered_map>
 
 namespace tools
 {
@@ -20,11 +21,12 @@ namespace tools
         void* allocate(size_t bytes, size_t align) override;
         void free(void* ptr) override;
         size_t offset(void* ptr) const override;
+        void* ptrFromOffset(size_t offset) const override;
 
     public:
         // for testing purposes
         std::vector<std::vector<ByteRange>>& reservedAllocations() { return m_reservedAllocations; }
-        std::vector<std::map<const uint8_t*, ByteRange>>& freeAllocations() { return m_freeAllocations; }
+        std::vector<std::unordered_map<uintptr_t, ByteRange>>& freeAllocations() { return m_freeAllocations; }
 
     private:
         ByteRange m_originalRange;
@@ -36,7 +38,7 @@ namespace tools
         size_t bestOptionalAlignment(size_t size);
 
         std::vector<std::vector<ByteRange>> m_reservedAllocations;
-        std::vector<std::map<const uint8_t*, ByteRange>> m_freeAllocations;
+        std::vector<std::unordered_map<uintptr_t, ByteRange>> m_freeAllocations;
 
         std::map<const void*, short> m_reserveInfo;
     };

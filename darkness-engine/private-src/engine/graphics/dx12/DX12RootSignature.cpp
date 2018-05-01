@@ -94,10 +94,10 @@ namespace engine
 
             ASSERT(static_cast<int>(m_numInitializedStaticSamplers) == m_samplerCount);
 
-            D3D12_ROOT_PARAMETER* parameters = nullptr;
+            D3D12_ROOT_PARAMETER1* parameters = nullptr;
             if (m_parameterCount > 0)
             {
-                parameters = new D3D12_ROOT_PARAMETER[static_cast<size_t>(m_parameterCount)];
+                parameters = new D3D12_ROOT_PARAMETER1[static_cast<size_t>(m_parameterCount)];
                 for (size_t i = 0; i < static_cast<size_t>(m_parameterCount); ++i)
                 {
                     parameters[i] = RootParameterImplGet::impl(m_parameters[i]).native();
@@ -114,9 +114,9 @@ namespace engine
                 }
             }
 
-            D3D12_ROOT_SIGNATURE_DESC rootDesc;
+            D3D12_ROOT_SIGNATURE_DESC1 rootDesc;
             rootDesc.NumParameters = static_cast<UINT>(m_parameterCount);
-            rootDesc.pParameters = (const D3D12_ROOT_PARAMETER*)parameters;
+            rootDesc.pParameters = (const D3D12_ROOT_PARAMETER1*)parameters;
             rootDesc.NumStaticSamplers = static_cast<UINT>(m_samplerCount);
             rootDesc.pStaticSamplers = (const D3D12_STATIC_SAMPLER_DESC*)samplers;
             rootDesc.Flags = dxSignatureFlags(flags) | D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
@@ -126,7 +126,7 @@ namespace engine
 
             for (int param = 0; param < m_parameterCount; ++param)
             {
-                const D3D12_ROOT_PARAMETER& rootParam = rootDesc.pParameters[param];
+                const D3D12_ROOT_PARAMETER1& rootParam = rootDesc.pParameters[param];
                 m_descriptorTableSize[param] = 0;
 
                 if (rootParam.ParameterType == D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE)
@@ -150,11 +150,16 @@ namespace engine
 
             tools::ComPtr<ID3DBlob> pOutBlob, pErrorBlob;
 
-            ASSERT(SUCCEEDED(D3D12SerializeRootSignature(&rootDesc, D3D_ROOT_SIGNATURE_VERSION_1,
-                pOutBlob.GetAddressOf(), pErrorBlob.GetAddressOf())));
+            D3D12_VERSIONED_ROOT_SIGNATURE_DESC vdesc;
+            vdesc.Desc_1_1 = rootDesc;
+            vdesc.Version = D3D_ROOT_SIGNATURE_VERSION_1_1;
 
-            ASSERT(SUCCEEDED(implementation::DeviceImplGet::impl(m_device).device()->CreateRootSignature(1, pOutBlob->GetBufferPointer(), pOutBlob->GetBufferSize(),
-                DARKNESS_IID_PPV_ARGS(&m_signature))));
+            auto serializeRes = D3D12SerializeVersionedRootSignature(&vdesc, pOutBlob.GetAddressOf(), pErrorBlob.GetAddressOf());
+            ASSERT(SUCCEEDED(serializeRes));
+
+            auto createRootSignatureRes = implementation::DeviceImplGet::impl(m_device).device()->CreateRootSignature(1, pOutBlob->GetBufferPointer(), pOutBlob->GetBufferSize(),
+                DARKNESS_IID_PPV_ARGS(&m_signature));
+            ASSERT(SUCCEEDED(createRootSignatureRes));
         }
 
         size_t RootSignatureImpl::rootParameterCount() const

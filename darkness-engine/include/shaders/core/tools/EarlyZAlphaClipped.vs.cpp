@@ -9,10 +9,17 @@ namespace engine
 {
     namespace shaders
     {
+#pragma warning( push )
+#pragma warning( disable : 4702 )
         std::shared_ptr<const ShaderBinary> EarlyZAlphaClippedVS::load(const Device& device, ShaderStorage& storage) const
         {
-            return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/dx12/core/tools/EarlyZAlphaClipped.vs.cso", "C:/work/darkness/darkness-engine/data/shaders/dx12/core/tools/EarlyZAlphaClipped.vs.support");
+            
+            return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/tools/EarlyZAlphaClipped.vs.spv", "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/tools/EarlyZAlphaClipped.vs.support", -1, {});
+            
+            ASSERT(false, "Could not load the permutation necessary. This is a bug.");
+            return {};
         }
+#pragma warning( pop )
 
         EarlyZAlphaClippedVS::EarlyZAlphaClippedVS()
             : m_constantRange{
@@ -29,7 +36,262 @@ namespace engine
             
             
             }
+            , m_inputParameters
+            {
+            
+            ShaderInputParameter{"id", "SV_VertexID", "uint"}
+            
+            
+            }
         {}
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        EarlyZAlphaClippedVS::EarlyZAlphaClippedVS(const EarlyZAlphaClippedVS& cl)
+            : m_constantRange{
+            
+            
+                ConstantRange{
+                    tools::ByteRange(
+                        reinterpret_cast<const uint8_t*>(static_cast<const ConstData*>(this)),
+                        reinterpret_cast<const uint8_t*>(static_cast<const ConstData*>(this)) + sizeof(ConstData)),
+                    nullptr,
+                    "ConstData"
+                }
+                
+            
+            
+            }
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = cl.m_constantRange[i].buffer;
+            }
+
+            
+
+            
+
+            
+            vertices = cl.vertices;
+            
+            uv = cl.uv;
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        EarlyZAlphaClippedVS::EarlyZAlphaClippedVS(EarlyZAlphaClippedVS&& cl)
+            : m_constantRange{
+            
+            
+                ConstantRange{
+                    tools::ByteRange(
+                        reinterpret_cast<const uint8_t*>(static_cast<const ConstData*>(this)),
+                        reinterpret_cast<const uint8_t*>(static_cast<const ConstData*>(this)) + sizeof(ConstData)),
+                    nullptr,
+                    "ConstData"
+                }
+                
+            
+            
+            }
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = std::move(cl.m_constantRange[i].buffer);
+            }
+
+            
+
+            
+
+            
+            vertices = std::move(cl.vertices);
+            
+            uv = std::move(cl.uv);
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        EarlyZAlphaClippedVS& EarlyZAlphaClippedVS::operator=(const EarlyZAlphaClippedVS& cl)
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = cl.m_constantRange[i].buffer;
+            }
+
+            
+
+            
+
+            
+            vertices = cl.vertices;
+            
+            uv = cl.uv;
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            return *this;
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        EarlyZAlphaClippedVS& EarlyZAlphaClippedVS::operator=(EarlyZAlphaClippedVS&& cl)
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = std::move(cl.m_constantRange[i].buffer);
+            }
+
+            
+
+            
+
+            
+            vertices = std::move(cl.vertices);
+            
+            uv = std::move(cl.uv);
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            return *this;
+        }
+#pragma warning( pop )
+
+        std::vector<std::string> EarlyZAlphaClippedVS::textureSrvNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> EarlyZAlphaClippedVS::textureUavNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> EarlyZAlphaClippedVS::bufferSrvNames() const
+        {
+            return {
+                
+                "vertices"
+                
+                ,
+                
+                
+                "uv"
+                
+                
+            };
+        }
+
+        std::vector<std::string> EarlyZAlphaClippedVS::bufferUavNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> EarlyZAlphaClippedVS::samplerNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> EarlyZAlphaClippedVS::srvNames() const
+        {
+            return {
+                
+                "vertices"
+                
+                ,
+                
+                
+                "uv"
+                
+                
+            };
+        }
+
+        std::vector<std::string> EarlyZAlphaClippedVS::uavNames() const
+        {
+            return {
+                
+            };
+        }
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        engine::ResourceDimension EarlyZAlphaClippedVS::textureDimension(const std::string& name) const
+        {
+            
+            return engine::ResourceDimension::Unknown;
+        }
+#pragma warning( pop )
 
         std::vector<TextureSRV> EarlyZAlphaClippedVS::texture_srvs() const
         {
@@ -103,10 +365,16 @@ namespace engine
             return result;
         }
 
+        const std::vector<ShaderInputParameter>& EarlyZAlphaClippedVS::inputParameters() const
+        {
+            return m_inputParameters;
+        }
+
 // warning C4172: returning address of local variable or temporary
 // this will never happen as the name will always match the correct resource
 #pragma warning( push )
 #pragma warning( disable : 4172 )
+#pragma warning( disable : 4100 )
 
         bool EarlyZAlphaClippedVS::hasTextureSrv(const std::string& name) const
         {
@@ -194,6 +462,36 @@ namespace engine
             
             ASSERT(false, "Tried to look for non-existing resource");
             return BufferUAV();
+        }
+
+        void EarlyZAlphaClippedVS::textureSrv(const std::string& name, TextureSRV& texture)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void EarlyZAlphaClippedVS::textureUav(const std::string& name, TextureUAV& texture)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void EarlyZAlphaClippedVS::bufferSrv(const std::string& name, BufferSRV& buffer)
+        {
+            
+            
+            if(name == std::string("vertices")) { vertices = buffer; return; }
+            
+            if(name == std::string("uv")) { uv = buffer; return; }
+            
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void EarlyZAlphaClippedVS::bufferUav(const std::string& name, BufferUAV& buffer)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
         }
 
         const Sampler& EarlyZAlphaClippedVS::sampler(const std::string& name) const

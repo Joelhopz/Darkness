@@ -6,7 +6,7 @@ using namespace engine;
 
 TEST(TestTexture, TestClearRenderTargetTexture)
 {
-	GlobalEnvironment& env = *envPtr;
+    GlobalEnvironment& env = *envPtr;
 
     // start drawing
     auto cmdBuffer = env.device().createCommandList();
@@ -16,7 +16,7 @@ TEST(TestTexture, TestClearRenderTargetTexture)
         Color4f(0.0f, 1.0f, 0.0f, 1.0f));
     cmdBuffer.end();
 
-	env.submit(std::move(cmdBuffer));
-	env.present();
-	env.device().queue().waitForIdle();
+    env.submit(std::move(cmdBuffer));
+    env.present();
+    env.device().queue().waitForIdle();
 }

@@ -15,7 +15,9 @@ namespace tools
         m_reservedAllocations.resize(alignToIndex(m_biggestAlignment)+1);
 
         auto alignIndex = alignToIndex(m_biggestAlignment);
-        m_freeAllocations[alignIndex][roundUpToMultiple(range.start, m_biggestAlignment)] = ByteRange{
+        std::unordered_map<uintptr_t, ByteRange>& freerange = m_freeAllocations[alignIndex];
+        const uintptr_t key = static_cast<const uintptr_t>(roundUpToMultiple(range.start, m_biggestAlignment));
+        freerange[key] = tools::ByteRange{
             roundUpToMultiple(range.start, m_biggestAlignment),
             roundDownToMultiple(range.stop, m_biggestAlignment)
         };
@@ -36,17 +38,17 @@ namespace tools
             if (freeSize > 0)
             {
                 // 1. if there is a free allocation that's alignment is the same as the size of the block, return it
-                if (size == alignment && (*free.begin()).second.size() == size)
+                if (size == alignment && (*free.begin()).second.sizeBytes() == size)
                 {
                     return alignment;
                 }
 
                 // 2. the smallest free block that can fit size
-                auto firstEntrySize = (*free.begin()).second.size();
+                auto firstEntrySize = (*free.begin()).second.sizeBytes();
                 if (firstEntrySize < bestSize && firstEntrySize >= size)
                 {
                     bestAlignmentSoFar = alignment;
-                    bestSize = (*free.begin()).second.size();
+                    bestSize = (*free.begin()).second.sizeBytes();
                     canFit = true;
                 }
 
@@ -74,9 +76,9 @@ namespace tools
     struct MatchBlockWithEnoughSpace
     {
         MatchBlockWithEnoughSpace(size_t space) : m_space(space) {}
-        bool operator()(const std::pair<const uint8_t*, ByteRange>& v) const
+        bool operator()(const std::pair<const uintptr_t, ByteRange>& v) const
         {
-            return v.second.size() >= m_space;
+            return v.second.sizeBytes() >= m_space;
         }
     private:
         const size_t m_space;
@@ -87,13 +89,13 @@ namespace tools
         auto index = alignToIndex(align);
         auto alignedBytes = roundUpToMultiple(bytes, align);
 
-        std::map<const uint8_t*, ByteRange>& map = m_freeAllocations[index];
+        std::unordered_map<uintptr_t, ByteRange>& map = m_freeAllocations[index];
         auto block = std::find_if(map.begin(), map.end(), MatchBlockWithEnoughSpace(alignedBytes));
         if (block != map.end())
         {
             // we found a good block on this alignment request
             ByteRange newRange = block->second;
-            if (alignedBytes == newRange.size())
+            if (alignedBytes == newRange.sizeBytes())
             {
                 map.erase(newRange.start);
             }
@@ -117,7 +119,7 @@ namespace tools
         {
             auto higherBlock = getClosestRange(bytes, align << 1);
 
-            if (higherBlock.size() > alignedBytes)
+            if (higherBlock.sizeBytes() > alignedBytes)
             {
                 ByteRange leftOver = higherBlock;
                 higherBlock.stop = higherBlock.start + alignedBytes;
@@ -188,18 +190,18 @@ namespace tools
         auto index = alignToIndex(align);
         m_reservedAllocations[index].emplace_back(closestRange);
         //m_reserveInfo[closestRange.start] = static_cast<short>(index);
-        return const_cast<void*>(static_cast<const void*>(closestRange.start));
+        return const_cast<void*>(reinterpret_cast<const void*>(closestRange.start));
     }
 
     struct MatchRangeStart
     {
-        MatchRangeStart(const uint8_t* ptr) : m_ptr(ptr) {}
+        MatchRangeStart(const uintptr_t ptr) : m_ptr(ptr) {}
         bool operator()(ByteRange& v) const
         {
             return v.start == m_ptr;
         }
     private:
-        const uint8_t* m_ptr;
+        const uintptr_t m_ptr;
     };
 
     void MemoryAllocator::free(void* ptr)
@@ -211,7 +213,7 @@ namespace tools
         bool foundAllocation = false;
         for (auto&& alignList : m_reservedAllocations)
         {
-            auto block = std::find_if(alignList.begin(), alignList.end(), MatchRangeStart(static_cast<const uint8_t*>(ptr)));
+            auto block = std::find_if(alignList.begin(), alignList.end(), MatchRangeStart(reinterpret_cast<uintptr_t>(ptr)));
             //ASSERT(block != m_reservedAllocations[info].end(), "MemoryAllocator internal error");
             if (block != alignList.end())
             {
@@ -228,23 +230,28 @@ namespace tools
 
     size_t MemoryAllocator::offset(void* ptr) const
     {
-        return reinterpret_cast<size_t>(ptr) - reinterpret_cast<size_t>(m_originalRange.start);
+        return reinterpret_cast<uintptr_t>(ptr) - m_originalRange.start;
+    }
+
+    void* MemoryAllocator::ptrFromOffset(size_t offset) const
+    {
+        return reinterpret_cast<void*>(m_originalRange.start + static_cast<uintptr_t>(offset));
     }
 
     struct MatchRangeStop
     {
-        MatchRangeStop(const uint8_t* ptr) : m_ptr(ptr) {}
-        bool operator()(const std::pair<const uint8_t*, ByteRange>& v) const
+        MatchRangeStop(const uintptr_t ptr) : m_ptr(ptr) {}
+        bool operator()(const std::pair<const uintptr_t, ByteRange>& v) const
         {
             return v.second.stop == m_ptr;
         }
     private:
-        const uint8_t* m_ptr;
+        const uintptr_t m_ptr;
     };
 
     void MemoryAllocator::insertBack(ByteRange&& range, size_t slot)
     {
-        std::map<const uint8_t*, ByteRange>& map = m_freeAllocations[slot];
+        std::unordered_map<uintptr_t, ByteRange>& map = m_freeAllocations[slot];
         auto afterBlock = map.find(range.stop);
         if (afterBlock != map.end())
         {

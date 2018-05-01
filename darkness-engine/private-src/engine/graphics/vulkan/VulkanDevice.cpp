@@ -341,7 +341,7 @@ namespace engine
             std::set<std::string> requiredExtensionSet(m_requiredExtensions.begin(), m_requiredExtensions.end());
 
             for (const auto& extension : availableExtensions) {
-                OutputDebugStringA(extension.extensionName);
+                LOG("Device extension: %s", extension.extensionName);
                 requiredExtensionSet.erase(extension.extensionName);
             }
 

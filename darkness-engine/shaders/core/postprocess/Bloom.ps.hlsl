@@ -14,8 +14,13 @@ sampler framebufferSampler;
 float4 main(PSInput input) : SV_Target
 {
     float3 hdrColor = framebuffer.SampleLevel(framebufferSampler, input.uv, 0).xyz;
-    float3 blurColor = blur.SampleLevel(framebufferSampler, input.uv, 0).xyz;
+    float3 blurColor0 = blur.Sample(framebufferSampler, input.uv, 0).xyz;
+    //float3 blurColor1 = blur.SampleLevel(framebufferSampler, input.uv, 1).xyz;
+    //float3 blurColor2 = blur.SampleLevel(framebufferSampler, input.uv, 2).xyz;
+    //float3 blurColor3 = blur.SampleLevel(framebufferSampler, input.uv, 3).xyz;
+    //float3 blurColor4 = blur.SampleLevel(framebufferSampler, input.uv, 4).xyz;
 
-    //return float4(JimHejlRichardBurgessDawsonTonemap(hdrColor + blurColor), 1.0f);
-    return float4(ACESFitted(linearTosRGB(hdrColor + blurColor)), 1.0f);
+    //return float4(linearTosRGB(hdrColor + blurColor), 1.0f);
+    return float4(JimHejlRichardBurgessDawsonTonemap(hdrColor + blurColor0), 1.0f);
+    //return float4(ACESFitted(linearTosRGB(hdrColor + blurColor)), 1.0f);
 }

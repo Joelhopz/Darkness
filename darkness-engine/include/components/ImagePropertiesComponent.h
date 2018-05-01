@@ -19,8 +19,9 @@ namespace engine
         ImagePropertiesComponent(const std::string& path)
             : m_path{ path }
             , m_settings{ pathReplaceExtension(path, "json") }
-            , m_image{ engine::image::Image::createImage(path) }
-            , m_size{ this, "size", m_settings.get<int>("size", static_cast<int>(m_image->width())), [this]() { m_settings.set<int>("size", m_size.value<int>()); } }
+            , m_image{ engine::image::Image::createImage(path, image::ImageType::DDS) }
+            , m_size{ this, "size", 
+                m_image ? m_settings.get<int>("size", static_cast<int>(m_image->width())) : 0, [this]() { m_settings.set<int>("size", m_size.value<int>()); } }
             , m_textureType{ this, "type", textureTypeFromString(m_settings.get<std::string>("textureType")), [this]() 
             {
                 m_settings.set<std::string>("textureType", textureTypeToString(m_textureType.value<TextureType>()));
@@ -42,8 +43,8 @@ namespace engine
                 }
             }
         {
-            ASSERT(m_settings.get<std::string>("sourcePath") != "", "There should be no way to get ImageProperties open without settings file");
-            ASSERT(m_settings.get<std::string>("destinationPath") != "", "There should be no way to get ImageProperties open without settings file");
+            //ASSERT(m_settings.get<std::string>("sourcePath") != "", "There should be no way to get ImageProperties open without settings file");
+            //ASSERT(m_settings.get<std::string>("destinationPath") != "", "There should be no way to get ImageProperties open without settings file");
             m_name = "ImagePropertiesComponent";
         }
 

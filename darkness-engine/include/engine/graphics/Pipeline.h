@@ -309,7 +309,6 @@ namespace engine
     public:
         PipelineAbs(
             Device& device,
-            shaders::PipelineConfiguration* configuration,
             ShaderStorage& storage);
 
         void setBlendState(const BlendDescription& desc);
@@ -317,13 +316,6 @@ namespace engine
         void setDepthStencilState(const DepthStencilDescription& desc);
         void setSampleMask(unsigned int mask);
         void setPrimitiveTopologyType(PrimitiveTopologyType type, bool adjacency = false);
-        void setRenderTargetFormat(Format RTVFormat, Format DSVFormat = Format::Format_UNKNOWN, unsigned int msaaCount = 1, unsigned int msaaQuality = 0);
-        
-        void setRenderTargetFormats(
-            std::vector<Format> RTVFormats, 
-            Format DSVFormat, 
-            unsigned int msaaCount = 1, 
-            unsigned int msaaQuality = 0);
 
         void setInputLayout(unsigned int numElements, const InputElementDescription* inputElementDescs);
         void setPrimitiveRestart(IndexBufferStripCutValue value);
@@ -332,11 +324,18 @@ namespace engine
         void setSampler(const Sampler& sampler);
         void setDepthBufferView(std::shared_ptr<TextureDSV> view);
 
-        void setRenderTarget(TextureRTV rtv);
-
         void configure(implementation::CommandListImpl& commandList, shaders::PipelineConfiguration* configuration);
     protected:
         friend class CommandList;
+
+        void setRenderTargetFormat(Format RTVFormat, Format DSVFormat = Format::UNKNOWN, unsigned int msaaCount = 1, unsigned int msaaQuality = 0);
+
+        void setRenderTargetFormats(
+            std::vector<Format> RTVFormats,
+            Format DSVFormat = Format::UNKNOWN,
+            unsigned int msaaCount = 1,
+            unsigned int msaaQuality = 0);
+
         std::shared_ptr<implementation::PipelineImpl> m_impl;
     };
 
@@ -347,7 +346,7 @@ namespace engine
         Pipeline(
             Device& device,
             ShaderStorage& storage)
-            : PipelineAbs(device, this, storage)
+            : PipelineAbs(device, storage)
         {}
     };
 }

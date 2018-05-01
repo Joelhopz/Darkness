@@ -52,8 +52,8 @@ namespace engine
         std::string name() const;
         void name(const std::string& name);
 
-        void parentNode(std::shared_ptr<SceneNode> node);
-        std::shared_ptr<SceneNode> parentNode() const;
+        void parentNode(SceneNode* node);
+        SceneNode* parentNode() const;
 
         virtual void start() {};
 
@@ -61,6 +61,6 @@ namespace engine
 
         virtual std::shared_ptr<engine::EngineComponent> clone() const = 0;
     private:
-        std::shared_ptr<SceneNode> m_parentNode;
+        SceneNode* m_parentNode;
     };
 }

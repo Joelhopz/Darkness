@@ -11,7 +11,6 @@ namespace engine
 {
     namespace image
     {
-
         class Dds : public ImageIf
         {
         public:
@@ -38,7 +37,9 @@ namespace engine
             void save() override;
             const uint8_t* data() const override;
             size_t bytes() const override;
-            
+
+            void flipVertical() override;
+            void convert() override;
         private:
             bool readHeader(std::fstream& file);
             void createHeader(unsigned int width, unsigned int height, Format format);

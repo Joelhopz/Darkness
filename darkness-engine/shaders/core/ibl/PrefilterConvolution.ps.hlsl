@@ -82,11 +82,10 @@ float3 importanceSampleGGX(float2 Xi, float3 N, float roughness)
 float4 main(PSInput input) : SV_Target
 {
     float3 N = normalize(input.pos.xyz);
-    N = float3(-N.x, N.y, N.z);
     float3 R = N;
     float3 V = R;
 
-    const uint sampleCount = 1024u;
+    const uint sampleCount = 8192u;
     float totalWeight = 0.0;
     float3 prefilteredColor = float3(0.0, 0.0, 0.0);
     for (uint i = 0u; i < sampleCount; ++i)
@@ -98,7 +97,6 @@ float4 main(PSInput input) : SV_Target
         float NdotL = max(dot(N, L), 0.0);
         if (NdotL > 0.0)
         {
-            L = float3(L.x, -L.y, L.z);
             prefilteredColor += environmentMap.Sample(environmentSampler, L).rgb * NdotL;
             totalWeight += NdotL;
         }

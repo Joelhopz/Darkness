@@ -2,6 +2,7 @@
 #include "components/ImagePropertiesComponent.h"
 #include "components/ModelPropertiesComponent.h"
 #include "components/RigidBodyComponent.h"
+#include "components/TerrainComponent.h"
 #include "tools/AssetTools.h"
 #include "../assets/AssetTools.h"
 
@@ -326,6 +327,7 @@ void Inspector::ShowContextMenu(const QPoint& point)
     QMenu myMenu;
     myMenu.addAction("RigidBody");
     myMenu.addAction("CollisionShape");
+    myMenu.addAction("Terrain");
 
     QAction* selectedItem = myMenu.exec(globalPos);
     if (selectedItem)
@@ -337,6 +339,10 @@ void Inspector::ShowContextMenu(const QPoint& point)
         else if (selectedItem->text().startsWith("CollisionShape"))
         {
             m_selectedNode->addComponent(std::make_shared<engine::CollisionShapeComponent>());
+        }
+        else if (selectedItem->text().startsWith("Terrain"))
+        {
+            m_selectedNode->addComponent(std::make_shared<engine::TerrainComponent>());
         }
     }
     else

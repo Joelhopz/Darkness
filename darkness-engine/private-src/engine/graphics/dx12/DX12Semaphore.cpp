@@ -11,11 +11,11 @@ namespace engine
         SemaphoreImpl::SemaphoreImpl(const Device& device)
             : m_fenceValue{ 0 }
         {
-            ASSERT(SUCCEEDED(DeviceImplGet::impl(device).device()->CreateFence(
+            auto createRes = DeviceImplGet::impl(device).device()->CreateFence(
                 0,
                 D3D12_FENCE_FLAG_NONE,
-                __uuidof(ID3D12Fence),
-                (void**)m_fence.GetAddressOf())));
+                DARKNESS_IID_PPV_ARGS(m_fence.GetAddressOf()));
+            ASSERT(SUCCEEDED(createRes));
 
             m_fenceEvent = CreateEventEx(NULL, FALSE, FALSE, EVENT_ALL_ACCESS);
             ASSERT(m_fenceEvent);
@@ -44,7 +44,8 @@ namespace engine
         {
             if (m_fence->GetCompletedValue() < m_fenceValue)
             {
-                ASSERT(SUCCEEDED(m_fence->SetEventOnCompletion(m_fenceValue, m_fenceEvent)));
+                auto res = m_fence->SetEventOnCompletion(m_fenceValue, m_fenceEvent);
+                ASSERT(SUCCEEDED(res));
                 WaitForSingleObject(m_fenceEvent, INFINITE);
             }
         }

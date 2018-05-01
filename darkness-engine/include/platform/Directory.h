@@ -14,5 +14,6 @@ namespace engine
         void create() const;
         void remove(bool removeFiles = false) const;
         std::vector<std::string> files() const;
+        std::vector<std::string> directories() const;
     };
 }

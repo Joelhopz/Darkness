@@ -36,15 +36,14 @@ vector<TestUniform> generateTestData()
 
 TEST(TestBuffer, DISABLED_GeneriBufferMap)
 {
-	GlobalEnvironment& env = *envPtr;
+    GlobalEnvironment& env = *envPtr;
 
     vector<TestUniform> testData = generateTestData();
 
     auto genericBuffer = env.device().createBuffer(BufferDescription()
-        .usage(ResourceUsage::CpuToGpu)
         .elements(testData.size())
         .elementSize(sizeof(TestUniform))
-		.name("genericBuffertest")
+        .name("genericBuffertest")
         .setInitialData(BufferDescription::InitialData(testData))
     );
 
@@ -60,21 +59,20 @@ TEST(TestBuffer, DISABLED_GeneriBufferMap)
 
 TEST(TestBuffer, GeneriBufferCopy)
 {
-	GlobalEnvironment& env = *envPtr;
+    GlobalEnvironment& env = *envPtr;
     vector<TestUniform> testData = generateTestData();
 
     auto srcBuffer = env.device().createBuffer(BufferDescription()
-        .usage(ResourceUsage::CpuToGpu)
         .elements(testData.size())
         .elementSize(sizeof(TestUniform))
-		.name("GenericBufferCopy_srcBuffer")
+        .name("GenericBufferCopy_srcBuffer")
         .setInitialData(BufferDescription::InitialData(testData))
     );
 
     auto dstBuffer = env.device().createBuffer(BufferDescription()
         .usage(ResourceUsage::GpuToCpu)
         .elements(testData.size())
-		.name("GenericBufferCopy_dstBuffer")
+        .name("GenericBufferCopy_dstBuffer")
         .elementSize(sizeof(TestUniform))
     );
 }

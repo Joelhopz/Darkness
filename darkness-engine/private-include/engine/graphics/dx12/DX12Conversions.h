@@ -57,6 +57,7 @@ namespace engine
         D3D12_RESOURCE_BARRIER_FLAGS dxFlags(ResourceBarrierFlags flags);
         D3D12_RESOURCE_STATES dxResourceStates(ResourceState state);
         DXGI_FORMAT dxFormat(Format format);
+        DXGI_FORMAT dxTypelessFormat(Format format);
         D3D12_VIEWPORT dxViewport(Viewport viewPort);
         D3D12_RECT dxRect(Rectangle rect);
         D3D12_RESOURCE_DIMENSION dxResourceDimension(ResourceDimension dim);

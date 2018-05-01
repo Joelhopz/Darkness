@@ -9,42 +9,56 @@ namespace tools
     {
     public:
         ByteRange()
-            : start{ nullptr }
-            , stop{ nullptr }
+            : start{ 0 }
+            , stop{ 0 }
             , elementSize{ 0 }
         {}
+
+        ByteRange(uintptr_t& _start, uintptr_t& _stop)
+            : start{ _start }
+            , stop{ _stop }
+            , elementSize{ sizeof(uintptr_t) }
+        {}
+
         template<typename T>
         ByteRange(std::vector<T>& range)
-            : start{ reinterpret_cast<const uint8_t*>(range.data()) }
+            : start{ reinterpret_cast<const uintptr_t>(range.data()) }
             , stop{ start + (range.size() * sizeof(T)) }
             , elementSize{ sizeof(T) }
         {}
 
         template<typename T>
-        ByteRange(T* start, T* stop)
-            : start{ reinterpret_cast<const uint8_t*>(start) }
-            , stop{ reinterpret_cast<const uint8_t*>(stop) }
+        ByteRange(const std::vector<T>& range)
+            : start{ reinterpret_cast<const uintptr_t>(range.data()) }
+            , stop{ start + (range.size() * sizeof(T)) }
             , elementSize{ sizeof(T) }
         {}
 
         template<typename T>
-        ByteRange(T& start, T& stop)
-            : start{ reinterpret_cast<const uint8_t*>(start) }
-            , stop{ reinterpret_cast<const uint8_t*>(stop) }
+        ByteRange(T* _start, T* _stop)
+            : start{ reinterpret_cast<const uintptr_t>(_start) }
+            , stop{ reinterpret_cast<const uintptr_t>(_stop) }
             , elementSize{ sizeof(T) }
         {}
 
         template<typename T>
-        ByteRange(const T* start, const T* stop)
-            : start{ reinterpret_cast<const uint8_t*>(start) }
-            , stop{ reinterpret_cast<const uint8_t*>(stop) }
+        ByteRange(T& _start, T& _stop)
+            : start{ reinterpret_cast<const uintptr_t>(_start) }
+            , stop{ reinterpret_cast<const uintptr_t>(_stop) }
             , elementSize{ sizeof(T) }
         {}
 
         template<typename T>
-        ByteRange(const T& start, const T& stop)
-            : start{ reinterpret_cast<const uint8_t*>(start) }
-            , stop{ reinterpret_cast<const uint8_t*>(stop) }
+        ByteRange(const T* _start, const T* _stop)
+            : start{ reinterpret_cast<const uintptr_t>(_start) }
+            , stop{ reinterpret_cast<const uintptr_t>(_stop) }
+            , elementSize{ sizeof(T) }
+        {}
+
+        template<typename T>
+        ByteRange(const T& _start, const T& _stop)
+            : start{ static_cast<const uintptr_t>(_start) }
+            , stop{ static_cast<const uintptr_t>(_stop) }
             , elementSize{ sizeof(T) }
         {}
 
@@ -53,6 +67,7 @@ namespace tools
             , stop{ range.stop }
             , elementSize{ range.elementSize }
         {}
+
         ByteRange& operator=(const ByteRange& range)
         {
             start = range.start;
@@ -60,12 +75,18 @@ namespace tools
             elementSize = range.elementSize;
             return *this;
         }
-        size_t size() const
+
+        size_t sizeBytes() const
         {
             return stop - start;
         }
-        const uint8_t* start;
-        const uint8_t* stop;
+        size_t length() const
+        {
+            return (stop - start) / elementSize;
+        }
+
+        uintptr_t start;
+        uintptr_t stop;
         size_t elementSize;
     };
 }

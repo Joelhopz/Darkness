@@ -142,7 +142,7 @@ namespace engine
             m_widget->resize(m_parent->width(), 15);
             m_widget->setMaximumHeight(15);
             m_widget->setMinimumWidth(15);
-			std::static_pointer_cast<StringWidget>(m_widget)->setPaths(m_contentPath, m_processedContentPath);
+            std::static_pointer_cast<StringWidget>(m_widget)->setPaths(m_contentPath, m_processedContentPath);
         }
         else
         {

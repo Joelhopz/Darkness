@@ -173,14 +173,14 @@ namespace engine
         return m_impl->description();
     }
 
-    void BufferUAV::setCounterValue(uint32_t value)
+    /*void BufferUAV::setCounterValue(uint32_t value)
     {
         m_impl->setCounterValue(value);
     }
     uint32_t BufferUAV::getCounterValue()
     {
         return m_impl->getCounterValue();
-    }
+    }*/
 
     namespace implementation
     {
@@ -413,14 +413,14 @@ namespace engine
         return{ m_impl->description() };
     }
 
-    ResourceState Texture::state() const
+    ResourceState Texture::state(int slice, int mip) const
     {
-        return m_impl->state();
+        return m_impl->state(slice, mip);
     }
 
-    void Texture::state(ResourceState state)
+    void Texture::state(int slice, int mip, ResourceState state)
     {
-        m_impl->state(state);
+        m_impl->state(slice, mip, state);
     }
 
     namespace implementation
@@ -450,6 +450,26 @@ namespace engine
         return m_impl.get();
     }
 
+    Format TextureSRV::format() const
+    {
+        return m_impl->format();
+    }
+
+    uint32_t TextureSRV::width() const
+    {
+        return m_impl->width();
+    }
+
+    uint32_t TextureSRV::height() const
+    {
+        return m_impl->height();
+    }
+
+    uint32_t TextureSRV::depth() const
+    {
+        return m_impl->depth();
+    }
+
     Texture& TextureSRV::texture()
     {
         return m_impl->texture();
@@ -458,6 +478,11 @@ namespace engine
     const Texture& TextureSRV::texture() const
     {
         return m_impl->texture();
+    }
+
+    const SubResource& TextureSRV::subResource() const
+    {
+        return m_impl->subResource();
     }
 
     bool TextureSRV::valid() const { return m_impl.get(); };
@@ -493,6 +518,26 @@ namespace engine
 
     bool TextureUAV::valid() const { return m_impl.get(); };
 
+    Format TextureUAV::format() const
+    {
+        return m_impl->format();
+    }
+
+    uint32_t TextureUAV::width() const
+    {
+        return m_impl->width();
+    }
+
+    uint32_t TextureUAV::height() const
+    {
+        return m_impl->height();
+    }
+
+    uint32_t TextureUAV::depth() const
+    {
+        return m_impl->depth();
+    }
+
     Texture& TextureUAV::texture()
     {
         return m_impl->texture();
@@ -501,6 +546,11 @@ namespace engine
     const Texture& TextureUAV::texture() const
     {
         return m_impl->texture();
+    }
+
+    const SubResource& TextureUAV::subResource() const
+    {
+        return m_impl->subResource();
     }
 
     namespace implementation
@@ -531,6 +581,21 @@ namespace engine
         return m_impl.get();
     }
 
+    Format TextureDSV::format() const
+    {
+        return m_impl->format();
+    }
+
+    uint32_t TextureDSV::width() const
+    {
+        return m_impl->width();
+    }
+
+    uint32_t TextureDSV::height() const
+    {
+        return m_impl->height();
+    }
+
     bool TextureDSV::valid() const { return m_impl.get(); };
 
     Texture& TextureDSV::texture()
@@ -541,6 +606,11 @@ namespace engine
     const Texture& TextureDSV::texture() const
     {
         return m_impl->texture();
+    }
+
+    const SubResource& TextureDSV::subResource() const
+    {
+        return m_impl->subResource();
     }
 
     namespace implementation
@@ -573,19 +643,29 @@ namespace engine
 
     bool TextureRTV::valid() const { return m_impl.get(); };
 
+    Format TextureRTV::format() const
+    {
+        return m_impl->format();
+    }
+
     uint32_t TextureRTV::width() const
     {
-        return m_impl->description().width;
+        return m_impl->width();
     }
 
     uint32_t TextureRTV::height() const
     {
-        return m_impl->description().height;
+        return m_impl->height();
     }
 
     Texture& TextureRTV::texture()
     {
         return m_impl->texture();
+    }
+
+    const SubResource& TextureRTV::subResource() const
+    {
+        return m_impl->subResource();
     }
 
     const Texture& TextureRTV::texture() const

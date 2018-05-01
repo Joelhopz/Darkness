@@ -9,16 +9,224 @@ namespace engine
 {
     namespace shaders
     {
+#pragma warning( push )
+#pragma warning( disable : 4702 )
         std::shared_ptr<const ShaderBinary> TemporalResolveVS::load(const Device& device, ShaderStorage& storage) const
         {
-            return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/dx12/core/temporal/TemporalResolve.vs.cso", "C:/work/darkness/darkness-engine/data/shaders/dx12/core/temporal/TemporalResolve.vs.support");
+            
+            return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/temporal/TemporalResolve.vs.spv", "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/temporal/TemporalResolve.vs.support", -1, {});
+            
+            ASSERT(false, "Could not load the permutation necessary. This is a bug.");
+            return {};
         }
+#pragma warning( pop )
 
         TemporalResolveVS::TemporalResolveVS()
             : m_constantRange{
             
             }
+            , m_inputParameters
+            {
+            
+            ShaderInputParameter{"id", "SV_VertexID", "uint"}
+            
+            
+            }
         {}
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        TemporalResolveVS::TemporalResolveVS(const TemporalResolveVS& cl)
+            : m_constantRange{
+            
+            }
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = cl.m_constantRange[i].buffer;
+            }
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        TemporalResolveVS::TemporalResolveVS(TemporalResolveVS&& cl)
+            : m_constantRange{
+            
+            }
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = std::move(cl.m_constantRange[i].buffer);
+            }
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        TemporalResolveVS& TemporalResolveVS::operator=(const TemporalResolveVS& cl)
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = cl.m_constantRange[i].buffer;
+            }
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            return *this;
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        TemporalResolveVS& TemporalResolveVS::operator=(TemporalResolveVS&& cl)
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = std::move(cl.m_constantRange[i].buffer);
+            }
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            return *this;
+        }
+#pragma warning( pop )
+
+        std::vector<std::string> TemporalResolveVS::textureSrvNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> TemporalResolveVS::textureUavNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> TemporalResolveVS::bufferSrvNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> TemporalResolveVS::bufferUavNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> TemporalResolveVS::samplerNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> TemporalResolveVS::srvNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> TemporalResolveVS::uavNames() const
+        {
+            return {
+                
+            };
+        }
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        engine::ResourceDimension TemporalResolveVS::textureDimension(const std::string& name) const
+        {
+            
+            return engine::ResourceDimension::Unknown;
+        }
+#pragma warning( pop )
 
         std::vector<TextureSRV> TemporalResolveVS::texture_srvs() const
         {
@@ -88,10 +296,16 @@ namespace engine
             return result;
         }
 
+        const std::vector<ShaderInputParameter>& TemporalResolveVS::inputParameters() const
+        {
+            return m_inputParameters;
+        }
+
 // warning C4172: returning address of local variable or temporary
 // this will never happen as the name will always match the correct resource
 #pragma warning( push )
 #pragma warning( disable : 4172 )
+#pragma warning( disable : 4100 )
 
         bool TemporalResolveVS::hasTextureSrv(const std::string& name) const
         {
@@ -167,6 +381,30 @@ namespace engine
             
             ASSERT(false, "Tried to look for non-existing resource");
             return BufferUAV();
+        }
+
+        void TemporalResolveVS::textureSrv(const std::string& name, TextureSRV& texture)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void TemporalResolveVS::textureUav(const std::string& name, TextureUAV& texture)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void TemporalResolveVS::bufferSrv(const std::string& name, BufferSRV& buffer)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void TemporalResolveVS::bufferUav(const std::string& name, BufferUAV& buffer)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
         }
 
         const Sampler& TemporalResolveVS::sampler(const std::string& name) const

@@ -1,5 +1,6 @@
+#include "../VertexPacking.hlsli"
 
-Buffer<float3> vertices;
+Buffer<uint2> vertices;
 
 cbuffer ConstData
 {
@@ -29,7 +30,7 @@ static const float4 randomColors[10] =
 VSOutput main(uint id : SV_VertexID)
 {
     VSOutput output;
-    output.position = mul(jitterModelViewProjectionMatrix, float4(vertices[id], 1.0f));
+    output.position = mul(jitterModelViewProjectionMatrix, float4(unpackVertex(vertices[id]), 1.0f));
     output.color = randomColors[(id / 32) % 10];
     return output;
 }

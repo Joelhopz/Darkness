@@ -9,10 +9,17 @@ namespace engine
 {
     namespace shaders
     {
+#pragma warning( push )
+#pragma warning( disable : 4702 )
         std::shared_ptr<const ShaderBinary> MeshRendererPS::load(const Device& device, ShaderStorage& storage) const
         {
-            return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/dx12/core/forward/MeshRenderer.ps.cso", "C:/work/darkness/darkness-engine/data/shaders/dx12/core/forward/MeshRenderer.ps.support");
+            
+            return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/forward/MeshRenderer.ps.spv", "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/forward/MeshRenderer.ps.support", -1, {});
+            
+            ASSERT(false, "Could not load the permutation necessary. This is a bug.");
+            return {};
         }
+#pragma warning( pop )
 
         MeshRendererPS::MeshRendererPS()
             : m_constantRange{
@@ -29,7 +36,559 @@ namespace engine
             
             
             }
+            , m_inputParameters
+            {
+            
+            ShaderInputParameter{"position", "SV_Position0", "float4"}
+            
+            ,
+            
+            
+            ShaderInputParameter{"shadowPosition", "POSITION", "float4"}
+            
+            ,
+            
+            
+            ShaderInputParameter{"uv", "TEXCOORD0", "float4"}
+            
+            ,
+            
+            
+            ShaderInputParameter{"normal", "NORMAL0", "float4"}
+            
+            ,
+            
+            
+            ShaderInputParameter{"pos", "TEXCOORD1", "float4"}
+            
+            ,
+            
+            
+            ShaderInputParameter{"tangent", "TEXCOORD2", "float4"}
+            
+            
+            }
         {}
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        MeshRendererPS::MeshRendererPS(const MeshRendererPS& cl)
+            : m_constantRange{
+            
+            
+                ConstantRange{
+                    tools::ByteRange(
+                        reinterpret_cast<const uint8_t*>(static_cast<const ConstData*>(this)),
+                        reinterpret_cast<const uint8_t*>(static_cast<const ConstData*>(this)) + sizeof(ConstData)),
+                    nullptr,
+                    "ConstData"
+                }
+                
+            
+            
+            }
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = cl.m_constantRange[i].buffer;
+            }
+
+            
+            environmentIrradiance = cl.environmentIrradiance;
+            
+            environmentSpecular = cl.environmentSpecular;
+            
+            albedo = cl.albedo;
+            
+            normal = cl.normal;
+            
+            roughness = cl.roughness;
+            
+            metalness = cl.metalness;
+            
+            occlusion = cl.occlusion;
+            
+            shadowMap = cl.shadowMap;
+            
+
+            
+
+            
+            lightWorldPosition = cl.lightWorldPosition;
+            
+            lightDirection = cl.lightDirection;
+            
+            lightColor = cl.lightColor;
+            
+            lightParameters = cl.lightParameters;
+            
+            lightType = cl.lightType;
+            
+            lightIntensity = cl.lightIntensity;
+            
+            lightRange = cl.lightRange;
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+            tex_sampler = cl.tex_sampler;
+            
+            shadow_sampler = cl.shadow_sampler;
+            
+
+            
+
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        MeshRendererPS::MeshRendererPS(MeshRendererPS&& cl)
+            : m_constantRange{
+            
+            
+                ConstantRange{
+                    tools::ByteRange(
+                        reinterpret_cast<const uint8_t*>(static_cast<const ConstData*>(this)),
+                        reinterpret_cast<const uint8_t*>(static_cast<const ConstData*>(this)) + sizeof(ConstData)),
+                    nullptr,
+                    "ConstData"
+                }
+                
+            
+            
+            }
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = std::move(cl.m_constantRange[i].buffer);
+            }
+
+            
+            environmentIrradiance = std::move(cl.environmentIrradiance);
+            
+            environmentSpecular = std::move(cl.environmentSpecular);
+            
+            albedo = std::move(cl.albedo);
+            
+            normal = std::move(cl.normal);
+            
+            roughness = std::move(cl.roughness);
+            
+            metalness = std::move(cl.metalness);
+            
+            occlusion = std::move(cl.occlusion);
+            
+            shadowMap = std::move(cl.shadowMap);
+            
+
+            
+
+            
+            lightWorldPosition = std::move(cl.lightWorldPosition);
+            
+            lightDirection = std::move(cl.lightDirection);
+            
+            lightColor = std::move(cl.lightColor);
+            
+            lightParameters = std::move(cl.lightParameters);
+            
+            lightType = std::move(cl.lightType);
+            
+            lightIntensity = std::move(cl.lightIntensity);
+            
+            lightRange = std::move(cl.lightRange);
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+            tex_sampler = std::move(cl.tex_sampler);
+            
+            shadow_sampler = std::move(cl.shadow_sampler);
+            
+
+            
+
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        MeshRendererPS& MeshRendererPS::operator=(const MeshRendererPS& cl)
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = cl.m_constantRange[i].buffer;
+            }
+
+            
+            environmentIrradiance = cl.environmentIrradiance;
+            
+            environmentSpecular = cl.environmentSpecular;
+            
+            albedo = cl.albedo;
+            
+            normal = cl.normal;
+            
+            roughness = cl.roughness;
+            
+            metalness = cl.metalness;
+            
+            occlusion = cl.occlusion;
+            
+            shadowMap = cl.shadowMap;
+            
+
+            
+
+            
+            lightWorldPosition = cl.lightWorldPosition;
+            
+            lightDirection = cl.lightDirection;
+            
+            lightColor = cl.lightColor;
+            
+            lightParameters = cl.lightParameters;
+            
+            lightType = cl.lightType;
+            
+            lightIntensity = cl.lightIntensity;
+            
+            lightRange = cl.lightRange;
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+            tex_sampler = cl.tex_sampler;
+            
+            shadow_sampler = cl.shadow_sampler;
+            
+
+            
+
+            return *this;
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        MeshRendererPS& MeshRendererPS::operator=(MeshRendererPS&& cl)
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = std::move(cl.m_constantRange[i].buffer);
+            }
+
+            
+            environmentIrradiance = std::move(cl.environmentIrradiance);
+            
+            environmentSpecular = std::move(cl.environmentSpecular);
+            
+            albedo = std::move(cl.albedo);
+            
+            normal = std::move(cl.normal);
+            
+            roughness = std::move(cl.roughness);
+            
+            metalness = std::move(cl.metalness);
+            
+            occlusion = std::move(cl.occlusion);
+            
+            shadowMap = std::move(cl.shadowMap);
+            
+
+            
+
+            
+            lightWorldPosition = std::move(cl.lightWorldPosition);
+            
+            lightDirection = std::move(cl.lightDirection);
+            
+            lightColor = std::move(cl.lightColor);
+            
+            lightParameters = std::move(cl.lightParameters);
+            
+            lightType = std::move(cl.lightType);
+            
+            lightIntensity = std::move(cl.lightIntensity);
+            
+            lightRange = std::move(cl.lightRange);
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+            tex_sampler = std::move(cl.tex_sampler);
+            
+            shadow_sampler = std::move(cl.shadow_sampler);
+            
+
+            
+
+            return *this;
+        }
+#pragma warning( pop )
+
+        std::vector<std::string> MeshRendererPS::textureSrvNames() const
+        {
+            return {
+                
+                "environmentIrradiance"
+                
+                ,
+                
+                
+                "environmentSpecular"
+                
+                ,
+                
+                
+                "albedo"
+                
+                ,
+                
+                
+                "normal"
+                
+                ,
+                
+                
+                "roughness"
+                
+                ,
+                
+                
+                "metalness"
+                
+                ,
+                
+                
+                "occlusion"
+                
+                ,
+                
+                
+                "shadowMap"
+                
+                
+            };
+        }
+
+        std::vector<std::string> MeshRendererPS::textureUavNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> MeshRendererPS::bufferSrvNames() const
+        {
+            return {
+                
+                "lightWorldPosition"
+                
+                ,
+                
+                
+                "lightDirection"
+                
+                ,
+                
+                
+                "lightColor"
+                
+                ,
+                
+                
+                "lightParameters"
+                
+                ,
+                
+                
+                "lightType"
+                
+                ,
+                
+                
+                "lightIntensity"
+                
+                ,
+                
+                
+                "lightRange"
+                
+                
+            };
+        }
+
+        std::vector<std::string> MeshRendererPS::bufferUavNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> MeshRendererPS::samplerNames() const
+        {
+            return {
+                
+                "tex_sampler"
+                
+                ,
+                
+                
+                "shadow_sampler"
+                
+                
+            };
+        }
+
+        std::vector<std::string> MeshRendererPS::srvNames() const
+        {
+            return {
+                
+                "environmentIrradiance"
+                
+                ,
+                
+                
+                "environmentSpecular"
+                
+                ,
+                
+                
+                "albedo"
+                
+                ,
+                
+                
+                "normal"
+                
+                ,
+                
+                
+                "roughness"
+                
+                ,
+                
+                
+                "metalness"
+                
+                ,
+                
+                
+                "occlusion"
+                
+                ,
+                
+                
+                "shadowMap"
+                
+                ,
+                
+                
+                "lightWorldPosition"
+                
+                ,
+                
+                
+                "lightDirection"
+                
+                ,
+                
+                
+                "lightColor"
+                
+                ,
+                
+                
+                "lightParameters"
+                
+                ,
+                
+                
+                "lightType"
+                
+                ,
+                
+                
+                "lightIntensity"
+                
+                ,
+                
+                
+                "lightRange"
+                
+                
+            };
+        }
+
+        std::vector<std::string> MeshRendererPS::uavNames() const
+        {
+            return {
+                
+            };
+        }
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        engine::ResourceDimension MeshRendererPS::textureDimension(const std::string& name) const
+        {
+            
+            if("environmentIrradiance" == name) return engine::ResourceDimension::Texture2D;
+            
+            if("environmentSpecular" == name) return engine::ResourceDimension::Texture2D;
+            
+            if("albedo" == name) return engine::ResourceDimension::Texture2D;
+            
+            if("normal" == name) return engine::ResourceDimension::Texture2D;
+            
+            if("roughness" == name) return engine::ResourceDimension::Texture2D;
+            
+            if("metalness" == name) return engine::ResourceDimension::Texture2D;
+            
+            if("occlusion" == name) return engine::ResourceDimension::Texture2D;
+            
+            if("shadowMap" == name) return engine::ResourceDimension::Texture2D;
+            
+            return engine::ResourceDimension::Unknown;
+        }
+#pragma warning( pop )
 
         std::vector<TextureSRV> MeshRendererPS::texture_srvs() const
         {
@@ -133,10 +692,16 @@ namespace engine
             return result;
         }
 
+        const std::vector<ShaderInputParameter>& MeshRendererPS::inputParameters() const
+        {
+            return m_inputParameters;
+        }
+
 // warning C4172: returning address of local variable or temporary
 // this will never happen as the name will always match the correct resource
 #pragma warning( push )
 #pragma warning( disable : 4172 )
+#pragma warning( disable : 4100 )
 
         bool MeshRendererPS::hasTextureSrv(const std::string& name) const
         {
@@ -280,6 +845,64 @@ namespace engine
             
             ASSERT(false, "Tried to look for non-existing resource");
             return BufferUAV();
+        }
+
+        void MeshRendererPS::textureSrv(const std::string& name, TextureSRV& texture)
+        {
+            
+            
+            if(name == std::string("environmentIrradiance")) { environmentIrradiance = texture; return; }
+            
+            if(name == std::string("environmentSpecular")) { environmentSpecular = texture; return; }
+            
+            if(name == std::string("albedo")) { albedo = texture; return; }
+            
+            if(name == std::string("normal")) { normal = texture; return; }
+            
+            if(name == std::string("roughness")) { roughness = texture; return; }
+            
+            if(name == std::string("metalness")) { metalness = texture; return; }
+            
+            if(name == std::string("occlusion")) { occlusion = texture; return; }
+            
+            if(name == std::string("shadowMap")) { shadowMap = texture; return; }
+            
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void MeshRendererPS::textureUav(const std::string& name, TextureUAV& texture)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void MeshRendererPS::bufferSrv(const std::string& name, BufferSRV& buffer)
+        {
+            
+            
+            if(name == std::string("lightWorldPosition")) { lightWorldPosition = buffer; return; }
+            
+            if(name == std::string("lightDirection")) { lightDirection = buffer; return; }
+            
+            if(name == std::string("lightColor")) { lightColor = buffer; return; }
+            
+            if(name == std::string("lightParameters")) { lightParameters = buffer; return; }
+            
+            if(name == std::string("lightType")) { lightType = buffer; return; }
+            
+            if(name == std::string("lightIntensity")) { lightIntensity = buffer; return; }
+            
+            if(name == std::string("lightRange")) { lightRange = buffer; return; }
+            
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void MeshRendererPS::bufferUav(const std::string& name, BufferUAV& buffer)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
         }
 
         const Sampler& MeshRendererPS::sampler(const std::string& name) const

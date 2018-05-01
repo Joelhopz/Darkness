@@ -12,11 +12,11 @@ struct PSInput
 };
 
 Texture2D<float4> materialTextures[];
-/*Texture2D<float4> albedo;
-Texture2D<float4> normal;
-Texture2D<float4> roughness;
-Texture2D<float4> metalness;
-Texture2D<float4> occlusion;*/
+//Texture2D<float4> albedo;
+//Texture2D<float4> normal;
+//Texture2D<float4> roughness;
+//Texture2D<float4> metalness;
+//Texture2D<float4> occlusion;
 
 RWBuffer<uint> pick;
 
@@ -73,11 +73,13 @@ PsOutput main(PSInput input) : SV_Target
     float4 albedoSample = color;
     if (hasAlbedo)
         albedoSample = materialTextures[albedoId].Sample(tex_sampler, uv);
-        //albedoSample = albedo.Sample(tex_sampler, uv);
+        //albedoSample = albedo.Sample(tex_sampler, float2(uv.x, uv.y));
 
     if (albedoSample.w - 0.8 < 0.0)
         albedoSample.xyz = materialTextures[albedoId].SampleLevel(tex_sampler, float2(0.55, 0.55), 0).xyz;
         //albedoSample.xyz = albedo.SampleLevel(tex_sampler, float2(0.55, 0.55), 0).xyz;
+
+    //albedoSample.xyz = float3(1.0f, 0.0f, 1.0f);
 
     // create tangent frame
     float3x3 TBN = float3x3(normalize(input.tangent.xyz), normalize(-cross(input.tangent.xyz, input.normal.xyz)), normalize(input.normal.xyz));
@@ -106,7 +108,7 @@ PsOutput main(PSInput input) : SV_Target
     // create normal from normal map sample
     float3 normal = input.normal.xyz;
     if(hasNormal)
-        normal = createNormal(TBN, normalSample);
+        normal = createNormal(TBN, normalSample.xyz);
     
     // occlusion
     float occlusion = 1.0f;
@@ -121,7 +123,7 @@ PsOutput main(PSInput input) : SV_Target
     if(hasMetalness)
         metalnessValue = metalnessSample * metalnessStrength;
 
-    roughnessValue = min(max(roughnessValue, 0.05f), 0.999);
+    roughnessValue = min(max(roughnessValue, 0.0f), 1.0);
     metalnessValue = min(max(metalnessValue, 0.0f), 1.0);
 
     PsOutput output;

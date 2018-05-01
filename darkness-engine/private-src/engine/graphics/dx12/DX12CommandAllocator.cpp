@@ -1,5 +1,6 @@
 #include "engine/graphics/dx12/DX12CommandAllocator.h"
 #include "engine/graphics/dx12/DX12Headers.h"
+#include "engine/graphics/dx12/DX12Conversions.h"
 
 #include "engine/graphics/Device.h"
 #include "engine/graphics/dx12/DX12Device.h"
@@ -10,12 +11,12 @@ namespace engine
 {
     namespace implementation
     {
-        CommandAllocatorImpl::CommandAllocatorImpl(const DeviceImpl& device)
+        CommandAllocatorImpl::CommandAllocatorImpl(const DeviceImpl& device, CommandListType type)
+            : m_type{ type }
         {
             auto res = device.device()->CreateCommandAllocator(
-                D3D12_COMMAND_LIST_TYPE_DIRECT,
-                __uuidof(ID3D12CommandAllocator),
-                (void**)&m_commandAllocator);
+                dxCommandListType(type),
+                DARKNESS_IID_PPV_ARGS(m_commandAllocator.GetAddressOf()));
             ASSERT(SUCCEEDED(res));
         }
 
@@ -28,6 +29,11 @@ namespace engine
         {
             auto res = m_commandAllocator->Reset();
             ASSERT(SUCCEEDED(res));
+        }
+
+        CommandListType CommandAllocatorImpl::type() const
+        {
+            return m_type;
         }
     }
 }

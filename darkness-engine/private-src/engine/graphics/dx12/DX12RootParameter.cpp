@@ -12,7 +12,7 @@ namespace engine
     namespace implementation
     {
         RootParameterImpl::RootParameterImpl()
-            : m_parameter{ new D3D12_ROOT_PARAMETER() }
+            : m_parameter{ new D3D12_ROOT_PARAMETER1() }
         {
         }
 
@@ -42,7 +42,7 @@ namespace engine
             return static_cast<ShaderVisibility>(ShaderVisibilityBits::Vertex);
         }
 
-        D3D12_ROOT_PARAMETER& RootParameterImpl::native()
+        D3D12_ROOT_PARAMETER1& RootParameterImpl::native()
         {
             return *m_parameter;
         }
@@ -91,7 +91,7 @@ namespace engine
             m_parameter->ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
             m_parameter->ShaderVisibility = dxShaderVisibility(visibility);
             m_parameter->DescriptorTable.NumDescriptorRanges = rangeCount;
-            m_parameter->DescriptorTable.pDescriptorRanges = new D3D12_DESCRIPTOR_RANGE[rangeCount];
+            m_parameter->DescriptorTable.pDescriptorRanges = new D3D12_DESCRIPTOR_RANGE1[rangeCount];
         }
 
         void RootParameterImpl::setTableRange(
@@ -101,11 +101,12 @@ namespace engine
             unsigned int count, 
             unsigned int space)
         {
-            D3D12_DESCRIPTOR_RANGE* range = const_cast<D3D12_DESCRIPTOR_RANGE*>(m_parameter->DescriptorTable.pDescriptorRanges + rangeIndex);
+            D3D12_DESCRIPTOR_RANGE1* range = const_cast<D3D12_DESCRIPTOR_RANGE1*>(m_parameter->DescriptorTable.pDescriptorRanges + rangeIndex);
             range->RangeType = dxRangeType(type);
             range->NumDescriptors = count;
             range->BaseShaderRegister = reg;
             range->RegisterSpace = space;
+            range->Flags = D3D12_DESCRIPTOR_RANGE_FLAG_DESCRIPTORS_VOLATILE;
             range->OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
         }
     }

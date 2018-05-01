@@ -36,8 +36,7 @@ namespace engine
 
             auto res = device.device()->CreateDescriptorHeap(
                 m_desc.get(),
-                __uuidof(ID3D12DescriptorHeap),
-                (void**)&m_heap);
+                DARKNESS_IID_PPV_ARGS(m_heap.GetAddressOf()));
             ASSERT(SUCCEEDED(res));
 
             m_descriptorSize = device.device()->GetDescriptorHandleIncrementSize(type);
@@ -45,7 +44,12 @@ namespace engine
             m_gpuHandle = m_heap->GetGPUDescriptorHandleForHeapStart();
 
             m_allocator = std::make_shared<tools::MemoryAllocator>(
-                ByteRange(m_cpuHandle.ptr, m_cpuHandle.ptr + (m_descriptorSize * m_numdescriptors)), 4);
+                ByteRange(m_cpuHandle.ptr, m_cpuHandle.ptr + (m_descriptorSize * m_numdescriptors)), 1);
+        }
+
+        D3D12_CPU_DESCRIPTOR_HANDLE DescriptorHeapImpl::getCpuHeapStart()
+        {
+            return m_cpuHandle;
         }
 
         DescriptorHandle DescriptorHeapImpl::getDescriptor(size_t count)
@@ -61,7 +65,7 @@ namespace engine
         void DescriptorHeapImpl::reset()
         {
             m_allocator = std::make_shared<tools::MemoryAllocator>(
-                ByteRange(m_cpuHandle.ptr, m_cpuHandle.ptr + (m_descriptorSize * m_numdescriptors)), 4);
+                ByteRange(m_cpuHandle.ptr, m_cpuHandle.ptr + (m_descriptorSize * m_numdescriptors)), 1);
         }
 
         ID3D12DescriptorHeap* DescriptorHeapImpl::native()

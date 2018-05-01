@@ -254,6 +254,78 @@
     <Filter Include="external\winpixeventruntime">
       <UniqueIdentifier>{d856fa3c-b424-4e1f-8669-cf02c281fe01}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\engine\rendering\tools">
+      <UniqueIdentifier>{77c1570c-afbb-4006-b2ad-98ed1f7598a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\engine\rendering\tools">
+      <UniqueIdentifier>{e2495ebf-8a97-4755-a752-cd2f8822c731}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\core\lsao">
+      <UniqueIdentifier>{b0eaab6c-dd34-4fe7-b856-3441ead60a3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\shaders\core\lsao">
+      <UniqueIdentifier>{6a33d287-278b-478e-b9be-0c3ce906f82a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\core\tools\cleartexture">
+      <UniqueIdentifier>{d4249f0e-8d0a-4ef7-8fc7-94d2b0387763}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\shaders\core\tools\cleartexture">
+      <UniqueIdentifier>{5f30e1b8-8fae-4e20-9711-0444648a992f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\core\tools\copytexture">
+      <UniqueIdentifier>{b9718a74-ed84-4528-9024-8f2f85a9d3ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\shaders\core\tools\copytexture">
+      <UniqueIdentifier>{2ea2dcff-820d-4c2c-8ea1-2e3a2ad57ae3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\core\particle">
+      <UniqueIdentifier>{2a6eeafb-5503-47b0-8002-058114c1d187}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\shaders\core\particle">
+      <UniqueIdentifier>{88615ecc-4872-4952-98db-307cacf98161}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\core\shared_types">
+      <UniqueIdentifier>{f02dfb9d-feb4-4019-83de-bbc36517da0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\platform\network">
+      <UniqueIdentifier>{040098df-1405-487c-8cda-9b3faead4025}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\platform\network">
+      <UniqueIdentifier>{7182fb1d-7bbc-4228-8d52-59f2dd134b99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\engine\resources">
+      <UniqueIdentifier>{e2915573-d608-4e75-8345-84d337388bfc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\engine\resources">
+      <UniqueIdentifier>{c223aff9-1084-4c19-aae5-0ba9305cdf9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\engine\input">
+      <UniqueIdentifier>{33b0f7d1-f5c4-4ee9-88f1-bfd6660ba046}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\engine\input">
+      <UniqueIdentifier>{7c03445d-1326-490a-8b86-957d1bcf2736}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="protocols">
+      <UniqueIdentifier>{baff83a1-2988-4783-94d2-1d2fb2a090c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="protocols\network">
+      <UniqueIdentifier>{6ea98c4e-d3c7-4bcb-b676-c5a476d80559}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\protocols">
+      <UniqueIdentifier>{1cf00341-9aef-47fc-81f4-71ea4dac3b7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\protocols\network">
+      <UniqueIdentifier>{17855cfe-c9ee-4d09-b0a5-2bdddad67adc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\engine\network">
+      <UniqueIdentifier>{ea65e6e3-4ead-4cef-bfe1-77643f6e4438}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\engine\network">
+      <UniqueIdentifier>{e0bc1d4d-9b9b-482f-911c-f5e6f451047c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\core\terrain">
+      <UniqueIdentifier>{5c0ca869-f8c5-4546-8de4-d10f7fcf42ef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\engine\graphics\CommandList.h">
@@ -727,9 +799,6 @@
     <ClInclude Include="..\..\include\engine\rendering\DebugView.h">
       <Filter>include\engine\rendering</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\rendering\SSAORenderer.h">
-      <Filter>include\engine\rendering</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\engine\rendering\ModelTransparentRenderer.h">
       <Filter>include\engine\rendering</Filter>
     </ClInclude>
@@ -1093,12 +1162,6 @@
     <ClInclude Include="..\..\include\tools\RingBuffer.h">
       <Filter>include\tools</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\shaders\core\culling\Culling.cs.h">
-      <Filter>include\shaders\core\culling</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\shaders\core\culling\Culling.h">
-      <Filter>include\shaders\core\culling</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\external\winpixeventruntime\Include\WinPixEventRuntime\pix3.h">
       <Filter>external\winpixeventruntime</Filter>
     </ClInclude>
@@ -1110,6 +1173,495 @@
     </ClInclude>
     <ClInclude Include="..\..\external\winpixeventruntime\Include\WinPixEventRuntime\PIXEventsGenerated.h">
       <Filter>external\winpixeventruntime</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\components\ProbeComponent.h">
+      <Filter>include\components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\rendering\GBuffer.h">
+      <Filter>include\engine\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\rendering\ViewportRenderer.h">
+      <Filter>include\engine\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\image\Bmp.h">
+      <Filter>include\tools\image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\image\BmpBoilerplate.h">
+      <Filter>include\tools\image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\image\Color.h">
+      <Filter>include\tools\image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tests\Mrt.h">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tests\Mrt.ps.h">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tests\Mrt.vs.h">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tests\MrtVisualize.ps.h">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tests\MrtVisualize.vs.h">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tests\MrtVisualize.h">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tests\RtvClearTest.ps.h">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tests\RtvClearTest.vs.h">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tests\RtvClearTest.h">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tests\Texture2DArrayVisualizer.vs.h">
+      <Filter>shaders\core\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tests\Texture2DArrayVisualizer.h">
+      <Filter>shaders\core\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tests\Texture2DArrayVisualizer.ps.h">
+      <Filter>shaders\core\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\AddTextures.ps.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\AddTextures.vs.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\AddTextures.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\rendering\tools\ExtractBrightness.h">
+      <Filter>include\engine\rendering\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\rendering\tools\CombineTextures.h">
+      <Filter>include\engine\rendering\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\rendering\tools\DownsampleTool.h">
+      <Filter>include\engine\rendering\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\rendering\tools\GaussianBlurTool.h">
+      <Filter>include\engine\rendering\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\CopyTexture.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\CopyTexture.ps.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\CopyTexture.vs.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\rendering\LineSweepAO.h">
+      <Filter>include\engine\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\lsao\LSAO.cs.h">
+      <Filter>include\shaders\core\lsao</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\lsao\LSAO.h">
+      <Filter>include\shaders\core\lsao</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\rendering\ModelResources.h">
+      <Filter>include\engine\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\model\ClusterRender.vs.h">
+      <Filter>include\shaders\core\model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\model\ClusterRender.h">
+      <Filter>include\shaders\core\model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\model\ClusterRender.ps.h">
+      <Filter>include\shaders\core\model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\culling\FrustumCulling.cs.h">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\culling\FrustumCulling.h">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\culling\OcclusionCulling.cs.h">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\culling\OcclusionCulling.h">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\culling\CreateOcclusionCullingArgs.cs.h">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\culling\CreateOcclusionCullingArgs.h">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\culling\CreateDrawArguments.cs.h">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\culling\CreateDrawArguments.h">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\DebugBoundingSpheres.ps.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\DebugBoundingSpheres.vs.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\DebugBoundingSpheres.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\rendering\Culler.h">
+      <Filter>include\engine\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\rendering\ClusterRenderer.h">
+      <Filter>include\engine\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\rendering\DepthPyramid.h">
+      <Filter>include\engine\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\DepthDownsample.cs.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\DepthDownsample.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\DepthDownsampleSingle.cs.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\DepthDownsampleSingle.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1df.cs.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1df.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1df2.cs.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1df2.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1df3.cs.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1df3.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1df4.cs.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1df4.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1du.cs.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1du.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1du2.cs.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1du2.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1du3.cs.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1du3.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1du4.cs.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1du4.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2df.cs.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2df.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2df2.cs.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2df2.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2df3.cs.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2df3.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2df4.cs.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2df4.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2du.cs.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2du.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2du2.cs.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2du2.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2du3.cs.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2du3.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2du4.cs.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2du4.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3df.cs.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3df.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3df2.cs.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3df2.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3df3.cs.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3df3.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3df4.cs.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3df4.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3du.cs.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3du.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3du2.cs.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3du2.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3du3.cs.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3du3.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3du4.cs.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3du4.h">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\copytexture\CopyTexture1df.h">
+      <Filter>include\shaders\core\tools\copytexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\copytexture\CopyTexture2df.cs.h">
+      <Filter>include\shaders\core\tools\copytexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\copytexture\CopyTexture2df.h">
+      <Filter>include\shaders\core\tools\copytexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\copytexture\CopyTexture3df.cs.h">
+      <Filter>include\shaders\core\tools\copytexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\copytexture\CopyTexture3df.h">
+      <Filter>include\shaders\core\tools\copytexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\copytexture\CopyTexture1df.cs.h">
+      <Filter>include\shaders\core\tools\copytexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\rendering\ModelResourceAllocator.h">
+      <Filter>include\engine\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\rendering\GpuBuffers.h">
+      <Filter>include\engine\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\rendering\ResidencyManager.h">
+      <Filter>include\engine\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\rendering\ParticleTest.h">
+      <Filter>include\engine\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\particle\Particle.h">
+      <Filter>include\shaders\core\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\particle\Particle.ps.h">
+      <Filter>include\shaders\core\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\particle\Particle.vs.h">
+      <Filter>include\shaders\core\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\HLSLTypeConversions.h">
+      <Filter>include\engine\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\culling\ClusterGather.cs.h">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\culling\ClusterGather.h">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tests\DispatchBasic.cs.h">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tests\DispatchBasic.h">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\outline\CreateOutlineIndirectIndexedDrawArgs.cs.h">
+      <Filter>include\shaders\core\outline</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\outline\CreateOutlineIndirectIndexedDrawArgs.h">
+      <Filter>include\shaders\core\outline</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\CycleTransforms.cs.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\CycleTransforms.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\platform\network\Socket.h">
+      <Filter>include\platform\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\platform\network\SocketServer.h">
+      <Filter>include\platform\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\platform\network\SocketClient.h">
+      <Filter>include\platform\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\platform\network\SocketCallbacks.h">
+      <Filter>include\platform\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\ArgParser.h">
+      <Filter>include\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\platform\network\SocketSystemInitialization.h">
+      <Filter>include\platform\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\platform\network\SocketErrorCodes.h">
+      <Filter>include\platform\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\resources\ResourceHost.h">
+      <Filter>include\engine\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\Process.h">
+      <Filter>include\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\resources\ResourceMessages.h">
+      <Filter>include\engine\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\ProcessorInfo.h">
+      <Filter>include\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\platform\network\PrefixLengthMessageParser.h">
+      <Filter>include\platform\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\resources\ResourceDiscoveryServer.h">
+      <Filter>include\engine\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\resources\ResourceDiscoveryClient.h">
+      <Filter>include\engine\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\Clusterize.h">
+      <Filter>include\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\tools\Octree.h">
+      <Filter>include\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\input\InputManager.h">
+      <Filter>include\engine\input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\rendering\DebugMenu.h">
+      <Filter>include\engine\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\rendering\Picker.h">
+      <Filter>include\engine\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\Pick.cs.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\tools\Pick.h">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\resources\ResourceDropHandler.h">
+      <Filter>include\engine\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\resources\ResourceCommon.h">
+      <Filter>include\engine\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\protocols\network\ResourceProtocols.pb.h">
+      <Filter>include\protocols\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\network\MqMessage.h">
+      <Filter>include\engine\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\network\Beacon.h">
+      <Filter>include\engine\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\protocols\network\BeaconProtocols.pb.h">
+      <Filter>include\protocols\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\network\NetworkCommunication.h">
+      <Filter>include\engine\network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\platform\Uuid.h">
+      <Filter>include\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\rendering\PrefixSumClusters.h">
+      <Filter>include\engine\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\culling\PrefixSumBucketResults.cs.h">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\culling\PrefixSumBucketResults.h">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\culling\PrefixSumBuckets.cs.h">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\culling\PrefixSumBuckets.h">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\culling\PrefixSumAddBuckets.cs.h">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\culling\PrefixSumAddBuckets.h">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\components\TerrainComponent.h">
+      <Filter>include\components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\model\ClusterShadowRenderer.ps.h">
+      <Filter>include\shaders\core\model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\model\ClusterShadowRenderer.vs.h">
+      <Filter>include\shaders\core\model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\shaders\core\model\ClusterShadowRenderer.h">
+      <Filter>include\shaders\core\model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1444,9 +1996,6 @@
       <Filter>src\components</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\rendering\DebugView.cpp">
-      <Filter>src\engine\rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\engine\rendering\SSAORenderer.cpp">
       <Filter>src\engine\rendering</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\rendering\ModelTransparentRenderer.cpp">
@@ -1791,14 +2340,488 @@
     <ClCompile Include="..\..\src\tools\RingBuffer.cpp">
       <Filter>src\tools</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\include\shaders\core\culling\Culling.cs.cpp">
-      <Filter>include\shaders\core\culling</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\include\shaders\core\culling\Culling.cpp">
-      <Filter>include\shaders\core\culling</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\tools\Debug.cpp">
       <Filter>src\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\components\ProbeComponent.cpp">
+      <Filter>src\components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\rendering\GBuffer.cpp">
+      <Filter>src\engine\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\rendering\ViewportRenderer.cpp">
+      <Filter>src\engine\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tools\image\Bmp.cpp">
+      <Filter>src\tools\image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tools\image\Color.cpp">
+      <Filter>src\tools\image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tests\Mrt.cpp">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tests\Mrt.ps.cpp">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tests\Mrt.vs.cpp">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tests\MrtVisualize.ps.cpp">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tests\MrtVisualize.vs.cpp">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tests\MrtVisualize.cpp">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tests\RtvClearTest.ps.cpp">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tests\RtvClearTest.vs.cpp">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tests\RtvClearTest.cpp">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tests\Texture2DArrayVisualizer.vs.cpp">
+      <Filter>shaders\core\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tests\Texture2DArrayVisualizer.cpp">
+      <Filter>shaders\core\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tests\Texture2DArrayVisualizer.ps.cpp">
+      <Filter>shaders\core\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\vulkan\VulkanCommon.cpp">
+      <Filter>private-src\engine\graphics\vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\AddTextures.ps.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\AddTextures.vs.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\AddTextures.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\rendering\tools\ExtractBrightness.cpp">
+      <Filter>src\engine\rendering\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\rendering\tools\CombineTextures.cpp">
+      <Filter>src\engine\rendering\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\rendering\tools\DownsampleTool.cpp">
+      <Filter>src\engine\rendering\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\rendering\tools\GaussianBlurTool.cpp">
+      <Filter>src\engine\rendering\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\CopyTexture.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\CopyTexture.ps.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\CopyTexture.vs.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\rendering\LineSweepAO.cpp">
+      <Filter>src\engine\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\lsao\LSAO.cs.cpp">
+      <Filter>include\shaders\core\lsao</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\lsao\LSAO.cpp">
+      <Filter>include\shaders\core\lsao</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\rendering\ModelResources.cpp">
+      <Filter>src\engine\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\model\ClusterRender.vs.cpp">
+      <Filter>include\shaders\core\model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\model\ClusterRender.cpp">
+      <Filter>include\shaders\core\model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\model\ClusterRender.ps.cpp">
+      <Filter>include\shaders\core\model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\culling\OcclusionCulling.cpp">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\culling\OcclusionCulling.cs.cpp">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\culling\FrustumCulling.cpp">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\culling\FrustumCulling.cs.cpp">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\culling\CreateOcclusionCullingArgs.cs.cpp">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\culling\CreateOcclusionCullingArgs.cpp">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\culling\CreateDrawArguments.cs.cpp">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\culling\CreateDrawArguments.cpp">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\DebugBoundingSpheres.vs.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\DebugBoundingSpheres.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\DebugBoundingSpheres.ps.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\rendering\Culler.cpp">
+      <Filter>src\engine\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\rendering\ClusterRenderer.cpp">
+      <Filter>src\engine\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\engine\rendering\DepthPyramid.cpp">
+      <Filter>src\engine\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\DepthDownsample.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\DepthDownsample.cs.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\DepthDownsampleSingle.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\DepthDownsampleSingle.cs.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1df2.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1df2.cs.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1df3.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1df3.cs.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1df4.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1df4.cs.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1du.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1du.cs.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1du2.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1du2.cs.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1du3.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1du3.cs.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1du4.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1du4.cs.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2df.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2df.cs.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2df2.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2df2.cs.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2df3.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2df3.cs.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2df4.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2df4.cs.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2du.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2du.cs.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2du2.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2du2.cs.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2du3.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2du3.cs.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2du4.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2du4.cs.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3df.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3df.cs.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3df2.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3df2.cs.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3df3.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3df3.cs.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3df4.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3df4.cs.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3du.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3du.cs.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3du2.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3du2.cs.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3du3.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3du3.cs.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3du4.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3du4.cs.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1df.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1df.cs.cpp">
+      <Filter>include\shaders\core\tools\cleartexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\copytexture\CopyTexture2df.cpp">
+      <Filter>include\shaders\core\tools\copytexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\copytexture\CopyTexture2df.cs.cpp">
+      <Filter>include\shaders\core\tools\copytexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\copytexture\CopyTexture3df.cpp">
+      <Filter>include\shaders\core\tools\copytexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\copytexture\CopyTexture3df.cs.cpp">
+      <Filter>include\shaders\core\tools\copytexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\copytexture\CopyTexture1df.cpp">
+      <Filter>include\shaders\core\tools\copytexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\copytexture\CopyTexture1df.cs.cpp">
+      <Filter>include\shaders\core\tools\copytexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\rendering\ModelResourceAllocator.cpp">
+      <Filter>src\engine\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\rendering\GpuBuffers.cpp">
+      <Filter>src\engine\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\rendering\ResidencyManager.cpp">
+      <Filter>src\engine\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\engine\rendering\ParticleTest.cpp">
+      <Filter>src\engine\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\particle\Particle.ps.cpp">
+      <Filter>include\shaders\core\particle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\particle\Particle.vs.cpp">
+      <Filter>include\shaders\core\particle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\particle\Particle.cpp">
+      <Filter>include\shaders\core\particle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\culling\ClusterGather.cpp">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\culling\ClusterGather.cs.cpp">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tests\DispatchBasic.cs.cpp">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tests\DispatchBasic.cpp">
+      <Filter>include\shaders\core\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\outline\CreateOutlineIndirectIndexedDrawArgs.cpp">
+      <Filter>include\shaders\core\outline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\outline\CreateOutlineIndirectIndexedDrawArgs.cs.cpp">
+      <Filter>include\shaders\core\outline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\CycleTransforms.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\CycleTransforms.cs.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\platform\network\Socket.cpp">
+      <Filter>src\platform\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\platform\network\SocketServer.cpp">
+      <Filter>src\platform\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\platform\network\SocketClient.cpp">
+      <Filter>src\platform\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tools\ArgParser.cpp">
+      <Filter>src\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\platform\network\SocketSystemInitialization.cpp">
+      <Filter>src\platform\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\platform\network\SocketErrorCodes.cpp">
+      <Filter>src\platform\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\resources\ResourceHost.cpp">
+      <Filter>src\engine\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tools\Process.cpp">
+      <Filter>src\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tools\ProcessorInfo.cpp">
+      <Filter>src\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\resources\ResourceMessages.cpp">
+      <Filter>src\engine\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\platform\network\PrefixLengthMessageParser.cpp">
+      <Filter>src\platform\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\resources\ResourceDiscoveryServer.cpp">
+      <Filter>src\engine\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\resources\ResourceDiscoveryClient.cpp">
+      <Filter>src\engine\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tools\Clusterize.cpp">
+      <Filter>src\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tools\Octree.cpp">
+      <Filter>src\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\input\InputManager.cpp">
+      <Filter>src\engine\input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\engine\rendering\DebugMenu.cpp">
+      <Filter>src\engine\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\rendering\Picker.cpp">
+      <Filter>src\engine\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\Pick.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\tools\Pick.cs.cpp">
+      <Filter>include\shaders\core\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\resources\ResourceDropHandler.cpp">
+      <Filter>src\engine\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\protocols\network\ResourceProtocols.pb.cc">
+      <Filter>include\protocols\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\network\MqMessage.cpp">
+      <Filter>src\engine\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\network\Beacon.cpp">
+      <Filter>src\engine\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\protocols\network\BeaconProtocols.pb.cc">
+      <Filter>include\protocols\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\network\NetworkCommunication.cpp">
+      <Filter>src\engine\network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\platform\Uuid.cpp">
+      <Filter>src\platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\rendering\PrefixSumClusters.cpp">
+      <Filter>src\engine\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\culling\PrefixSumBucketResults.cpp">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\culling\PrefixSumBucketResults.cs.cpp">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\culling\PrefixSumBuckets.cpp">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\culling\PrefixSumBuckets.cs.cpp">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\culling\PrefixSumAddBuckets.cpp">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\culling\PrefixSumAddBuckets.cs.cpp">
+      <Filter>include\shaders\core\culling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\components\TerrainComponent.cpp">
+      <Filter>src\components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\model\ClusterShadowRenderer.ps.cpp">
+      <Filter>include\shaders\core\model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\model\ClusterShadowRenderer.vs.cpp">
+      <Filter>include\shaders\core\model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\shaders\core\model\ClusterShadowRenderer.cpp">
+      <Filter>include\shaders\core\model</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2057,8 +3080,244 @@
     <None Include="..\..\shaders\core\transparent\MeshTransparentComposite.vs.hlsl">
       <Filter>shaders\core\transparent</Filter>
     </None>
-    <None Include="..\..\shaders\core\culling\Culling.cs.hlsl">
+    <None Include="..\..\shaders\core\tests\RtvClearTest.ps.hlsl">
+      <Filter>shaders\core\tests</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tests\RtvClearTest.vs.hlsl">
+      <Filter>shaders\core\tests</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tests\Texture2DArrayVisualizer.ps.hlsl">
+      <Filter>shaders\core\tests</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tests\Texture2DArrayVisualizer.vs.hlsl">
+      <Filter>shaders\core\tests</Filter>
+    </None>
+    <None Include="..\..\shaders\core\Cluster.hlsli">
+      <Filter>shaders\core</Filter>
+    </None>
+    <None Include="..\..\shaders\core\culling\FrustumCulling.cs.hlsl">
       <Filter>shaders\core\culling</Filter>
     </None>
+    <None Include="..\..\shaders\core\Debug.hlsli">
+      <Filter>shaders\core</Filter>
+    </None>
+    <None Include="..\..\shaders\core\GBuffer.hlsli">
+      <Filter>shaders\core</Filter>
+    </None>
+    <None Include="..\..\shaders\core\CppSharedShaderTypes.hlsli">
+      <Filter>shaders\core</Filter>
+    </None>
+    <None Include="..\..\shaders\core\shared_types\BoundingBox.hlsli">
+      <Filter>shaders\core\shared_types</Filter>
+    </None>
+    <None Include="..\..\shaders\core\shared_types\SubMeshData.hlsli">
+      <Filter>shaders\core\shared_types</Filter>
+    </None>
+    <None Include="..\..\shaders\core\shared_types\ClusterData.hlsli">
+      <Filter>shaders\core\shared_types</Filter>
+    </None>
+    <None Include="..\..\shaders\core\shared_types\ClusterInstanceData.hlsli">
+      <Filter>shaders\core\shared_types</Filter>
+    </None>
+    <None Include="..\..\shaders\core\shared_types\InstanceMaterial.hlsli">
+      <Filter>shaders\core\shared_types</Filter>
+    </None>
+    <None Include="..\..\shaders\core\shared_types\TransformHistory.hlsli">
+      <Filter>shaders\core\shared_types</Filter>
+    </None>
+    <None Include="..\..\shaders\core\shared_types\FrustumCullingOutput.hlsli">
+      <Filter>shaders\core\shared_types</Filter>
+    </None>
+    <None Include="..\..\shaders\core\shared_types\SubMeshAdjacency.hlsli">
+      <Filter>shaders\core\shared_types</Filter>
+    </None>
+    <None Include="..\..\shaders\core\VertexPacking.hlsli">
+      <Filter>shaders\core</Filter>
+    </None>
+    <None Include="..\..\protocols\network\ResourceProtocols.proto">
+      <Filter>protocols\network</Filter>
+    </None>
+    <None Include="..\..\tools\codegen\ProtoGenerator.py">
+      <Filter>tools\codegen</Filter>
+    </None>
+    <None Include="..\..\protocols\network\BeaconProtocols.proto">
+      <Filter>protocols\network</Filter>
+    </None>
+    <None Include="..\..\shaders\core\culling\BlellochScan.hlsli">
+      <Filter>shaders\core\culling</Filter>
+    </None>
+    <None Include="..\..\shaders\core\culling\PrefixSumAddBuckets.cs.hlsl">
+      <Filter>shaders\core\culling</Filter>
+    </None>
+    <None Include="..\..\shaders\core\culling\PrefixSumBucketResults.cs.hlsl">
+      <Filter>shaders\core\culling</Filter>
+    </None>
+    <None Include="..\..\shaders\core\culling\PrefixSumBuckets.cs.hlsl">
+      <Filter>shaders\core\culling</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tools\Pick.cs.hlsl">
+      <Filter>shaders\core\tools</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tests\MrtVisualize.ps.hlsl">
+      <Filter>shaders\core\tests</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tests\MrtVisualize.vs.hlsl">
+      <Filter>shaders\core\tests</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tests\Mrt.ps.hlsl">
+      <Filter>shaders\core\tests</Filter>
+    </None>
+    <None Include="..\..\shaders\core\tests\Mrt.vs.hlsl">
+      <Filter>shaders\core\tests</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\..\shaders\core\tools\AddTextures.vs.hlsl">
+      <Filter>shaders\core\tools</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\AddTextures.ps.hlsl">
+      <Filter>shaders\core\tools</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\CopyTexture.vs.hlsl">
+      <Filter>shaders\core\tools</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\CopyTexture.ps.hlsl">
+      <Filter>shaders\core\tools</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\lsao\LSAO.cs.hlsl">
+      <Filter>shaders\core\lsao</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\model\ClusterRender.vs.hlsl">
+      <Filter>shaders\core\model</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\model\ClusterRender.ps.hlsl">
+      <Filter>shaders\core\model</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\culling\OcclusionCulling.cs.hlsl">
+      <Filter>shaders\core\culling</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\culling\CreateOcclusionCullingArgs.cs.hlsl">
+      <Filter>shaders\core\culling</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\culling\CreateDrawArguments.cs.hlsl">
+      <Filter>shaders\core\culling</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\DebugBoundingSpheres.vs.hlsl">
+      <Filter>shaders\core\tools</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\DebugBoundingSpheres.ps.hlsl">
+      <Filter>shaders\core\tools</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\DepthDownsample.cs.hlsl">
+      <Filter>shaders\core\tools</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\DepthDownsampleSingle.cs.hlsl">
+      <Filter>shaders\core\tools</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture1df.cs.hlsl">
+      <Filter>shaders\core\tools\cleartexture</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture1du.cs.hlsl">
+      <Filter>shaders\core\tools\cleartexture</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture2du.cs.hlsl">
+      <Filter>shaders\core\tools\cleartexture</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture3df.cs.hlsl">
+      <Filter>shaders\core\tools\cleartexture</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture3du.cs.hlsl">
+      <Filter>shaders\core\tools\cleartexture</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture2df.cs.hlsl">
+      <Filter>shaders\core\tools\cleartexture</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture3df2.cs.hlsl">
+      <Filter>shaders\core\tools\cleartexture</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture3df4.cs.hlsl">
+      <Filter>shaders\core\tools\cleartexture</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture1df2.cs.hlsl">
+      <Filter>shaders\core\tools\cleartexture</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture1df4.cs.hlsl">
+      <Filter>shaders\core\tools\cleartexture</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture2df2.cs.hlsl">
+      <Filter>shaders\core\tools\cleartexture</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture2df4.cs.hlsl">
+      <Filter>shaders\core\tools\cleartexture</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture1df3.cs.hlsl">
+      <Filter>shaders\core\tools\cleartexture</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture2df3.cs.hlsl">
+      <Filter>shaders\core\tools\cleartexture</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture3df3.cs.hlsl">
+      <Filter>shaders\core\tools\cleartexture</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture2du3.cs.hlsl">
+      <Filter>shaders\core\tools\cleartexture</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture2du4.cs.hlsl">
+      <Filter>shaders\core\tools\cleartexture</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture3du2.cs.hlsl">
+      <Filter>shaders\core\tools\cleartexture</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture3du3.cs.hlsl">
+      <Filter>shaders\core\tools\cleartexture</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture3du4.cs.hlsl">
+      <Filter>shaders\core\tools\cleartexture</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture1du2.cs.hlsl">
+      <Filter>shaders\core\tools\cleartexture</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture1du3.cs.hlsl">
+      <Filter>shaders\core\tools\cleartexture</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture1du4.cs.hlsl">
+      <Filter>shaders\core\tools\cleartexture</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture2du2.cs.hlsl">
+      <Filter>shaders\core\tools\cleartexture</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\copytexture\CopyTexture1df.cs.hlsl">
+      <Filter>shaders\core\tools\copytexture</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\copytexture\CopyTexture2df.cs.hlsl">
+      <Filter>shaders\core\tools\copytexture</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\copytexture\CopyTexture3df.cs.hlsl">
+      <Filter>shaders\core\tools\copytexture</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\particle\Particle.vs.hlsl">
+      <Filter>shaders\core\particle</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\particle\Particle.ps.hlsl">
+      <Filter>shaders\core\particle</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\culling\ClusterGather.cs.hlsl">
+      <Filter>shaders\core\culling</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tests\DispatchBasic.cs.hlsl">
+      <Filter>shaders\core\tests</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\outline\CreateOutlineIndirectIndexedDrawArgs.cs.hlsl">
+      <Filter>shaders\core\outline</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\CycleTransforms.cs.hlsl">
+      <Filter>shaders\core\tools</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\model\ClusterShadowRenderer.ps.hlsl">
+      <Filter>shaders\core\model</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\model\ClusterShadowRenderer.vs.hlsl">
+      <Filter>shaders\core\model</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

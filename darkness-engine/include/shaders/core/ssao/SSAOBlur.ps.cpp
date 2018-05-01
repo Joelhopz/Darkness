@@ -9,10 +9,17 @@ namespace engine
 {
     namespace shaders
     {
+#pragma warning( push )
+#pragma warning( disable : 4702 )
         std::shared_ptr<const ShaderBinary> SSAOBlurPS::load(const Device& device, ShaderStorage& storage) const
         {
-            return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/dx12/core/ssao/SSAOBlur.ps.cso", "C:/work/darkness/darkness-engine/data/shaders/dx12/core/ssao/SSAOBlur.ps.support");
+            
+            return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/ssao/SSAOBlur.ps.spv", "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/ssao/SSAOBlur.ps.support", -1, {});
+            
+            ASSERT(false, "Could not load the permutation necessary. This is a bug.");
+            return {};
         }
+#pragma warning( pop )
 
         SSAOBlurPS::SSAOBlurPS()
             : m_constantRange{
@@ -29,7 +36,278 @@ namespace engine
             
             
             }
+            , m_inputParameters
+            {
+            
+            ShaderInputParameter{"position", "SV_Position0", "float4"}
+            
+            ,
+            
+            
+            ShaderInputParameter{"uv", "TEXCOORD0", "float2"}
+            
+            
+            }
         {}
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        SSAOBlurPS::SSAOBlurPS(const SSAOBlurPS& cl)
+            : m_constantRange{
+            
+            
+                ConstantRange{
+                    tools::ByteRange(
+                        reinterpret_cast<const uint8_t*>(static_cast<const Constants*>(this)),
+                        reinterpret_cast<const uint8_t*>(static_cast<const Constants*>(this)) + sizeof(Constants)),
+                    nullptr,
+                    "Constants"
+                }
+                
+            
+            
+            }
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = cl.m_constantRange[i].buffer;
+            }
+
+            
+            image = cl.image;
+            
+
+            
+
+            
+            blurKernel = cl.blurKernel;
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+            imageSampler = cl.imageSampler;
+            
+
+            
+
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        SSAOBlurPS::SSAOBlurPS(SSAOBlurPS&& cl)
+            : m_constantRange{
+            
+            
+                ConstantRange{
+                    tools::ByteRange(
+                        reinterpret_cast<const uint8_t*>(static_cast<const Constants*>(this)),
+                        reinterpret_cast<const uint8_t*>(static_cast<const Constants*>(this)) + sizeof(Constants)),
+                    nullptr,
+                    "Constants"
+                }
+                
+            
+            
+            }
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = std::move(cl.m_constantRange[i].buffer);
+            }
+
+            
+            image = std::move(cl.image);
+            
+
+            
+
+            
+            blurKernel = std::move(cl.blurKernel);
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+            imageSampler = std::move(cl.imageSampler);
+            
+
+            
+
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        SSAOBlurPS& SSAOBlurPS::operator=(const SSAOBlurPS& cl)
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = cl.m_constantRange[i].buffer;
+            }
+
+            
+            image = cl.image;
+            
+
+            
+
+            
+            blurKernel = cl.blurKernel;
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+            imageSampler = cl.imageSampler;
+            
+
+            
+
+            return *this;
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        SSAOBlurPS& SSAOBlurPS::operator=(SSAOBlurPS&& cl)
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = std::move(cl.m_constantRange[i].buffer);
+            }
+
+            
+            image = std::move(cl.image);
+            
+
+            
+
+            
+            blurKernel = std::move(cl.blurKernel);
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+            imageSampler = std::move(cl.imageSampler);
+            
+
+            
+
+            return *this;
+        }
+#pragma warning( pop )
+
+        std::vector<std::string> SSAOBlurPS::textureSrvNames() const
+        {
+            return {
+                
+                "image"
+                
+                
+            };
+        }
+
+        std::vector<std::string> SSAOBlurPS::textureUavNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> SSAOBlurPS::bufferSrvNames() const
+        {
+            return {
+                
+                "blurKernel"
+                
+                
+            };
+        }
+
+        std::vector<std::string> SSAOBlurPS::bufferUavNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> SSAOBlurPS::samplerNames() const
+        {
+            return {
+                
+                "imageSampler"
+                
+                
+            };
+        }
+
+        std::vector<std::string> SSAOBlurPS::srvNames() const
+        {
+            return {
+                
+                "image"
+                
+                ,
+                
+                
+                "blurKernel"
+                
+                
+            };
+        }
+
+        std::vector<std::string> SSAOBlurPS::uavNames() const
+        {
+            return {
+                
+            };
+        }
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        engine::ResourceDimension SSAOBlurPS::textureDimension(const std::string& name) const
+        {
+            
+            if("image" == name) return engine::ResourceDimension::Texture2D;
+            
+            return engine::ResourceDimension::Unknown;
+        }
+#pragma warning( pop )
 
         std::vector<TextureSRV> SSAOBlurPS::texture_srvs() const
         {
@@ -105,10 +383,16 @@ namespace engine
             return result;
         }
 
+        const std::vector<ShaderInputParameter>& SSAOBlurPS::inputParameters() const
+        {
+            return m_inputParameters;
+        }
+
 // warning C4172: returning address of local variable or temporary
 // this will never happen as the name will always match the correct resource
 #pragma warning( push )
 #pragma warning( disable : 4172 )
+#pragma warning( disable : 4100 )
 
         bool SSAOBlurPS::hasTextureSrv(const std::string& name) const
         {
@@ -200,6 +484,38 @@ namespace engine
             
             ASSERT(false, "Tried to look for non-existing resource");
             return BufferUAV();
+        }
+
+        void SSAOBlurPS::textureSrv(const std::string& name, TextureSRV& texture)
+        {
+            
+            
+            if(name == std::string("image")) { image = texture; return; }
+            
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void SSAOBlurPS::textureUav(const std::string& name, TextureUAV& texture)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void SSAOBlurPS::bufferSrv(const std::string& name, BufferSRV& buffer)
+        {
+            
+            
+            if(name == std::string("blurKernel")) { blurKernel = buffer; return; }
+            
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void SSAOBlurPS::bufferUav(const std::string& name, BufferUAV& buffer)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
         }
 
         const Sampler& SSAOBlurPS::sampler(const std::string& name) const

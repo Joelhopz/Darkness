@@ -15,12 +15,20 @@ namespace engine
 {
     namespace implementation
     {
-        ShaderBinaryImpl::ShaderBinaryImpl(const Device&, const std::string& binaryPath, const std::string& supportPath, platform::FileWatcher& watcher)
+        ShaderBinaryImpl::ShaderBinaryImpl(
+            const Device&, 
+            const std::string& binaryPath, 
+            const std::string& supportPath, 
+            int permutationId,
+            const std::vector<std::string>& defines,
+            platform::FileWatcher& watcher)
             : m_buffer{ nullptr }
             , m_shaderBinary{ new D3D12_SHADER_BYTECODE() }
             , m_shaderSupport{ supportPath }
             , m_watchHandle{ watcher.addWatch(m_shaderSupport.file, [this](const std::string& changedPath)->std::string { return this->onFileChange(changedPath); }) }
             , m_change{}
+            , m_permutationId{ permutationId }
+            , m_defines{ defines }
         {
             // read binary
             readFile(binaryPath);
@@ -28,8 +36,10 @@ namespace engine
 
         std::string ShaderBinaryImpl::onFileChange(const std::string& /*path*/)
         {
-            auto res = recompile(m_shaderSupport);
-            readFile(m_shaderSupport.binaryFile);
+            auto res = recompile(m_shaderSupport, m_permutationId, m_defines);
+            auto binFile = permutationName(m_shaderSupport.binaryFile, m_permutationId);
+
+            readFile(binFile);
             for (auto&& change : m_change)
             {
                 change.second();

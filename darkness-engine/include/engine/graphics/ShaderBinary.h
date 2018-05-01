@@ -16,6 +16,8 @@ namespace engine
             const Device& device, 
             const std::string& binaryPath, 
             const std::string& supportPath,
+            int permutationId,
+            const std::vector<std::string>& defines,
             platform::FileWatcher& watcher);
 
         void registerForChange(void* client, std::function<void(void)> change) const;

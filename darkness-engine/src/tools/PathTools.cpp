@@ -3,10 +3,11 @@
 
 #include <experimental/filesystem>
 using namespace std::experimental;
+using namespace std;
 
 namespace engine
 {
-    std::vector<char> pathDelimiters()
+    vector<char> pathDelimiters()
     {
         return { '\\','/' };
     }
@@ -16,7 +17,7 @@ namespace engine
         return pathDelimiters()[0];
     }
 
-    char pathPreferredDelim(const std::string& path)
+    char pathPreferredDelim(const string& path)
     {
         auto delims = pathDelimiters();
         char pathDelim = delims[0];
@@ -24,7 +25,7 @@ namespace engine
         for (auto&& delim : delims)
         {
             auto index = path.find(delim);
-            if (index != std::string::npos)
+            if (index != string::npos)
             {
                 if (index < lowestDelimIndex)
                 {
@@ -36,7 +37,7 @@ namespace engine
         return pathDelim;
     }
 
-    std::wstring toWideString(const std::string& str)
+    wstring toWideString(const string& str)
     {
 #ifdef _WIN32
         auto lastError = GetLastError();
@@ -58,7 +59,7 @@ namespace engine
             }
         }
 
-        std::vector<wchar_t> wstring(wideCharacters);
+        vector<wchar_t> wstring(wideCharacters);
 
         // convert
         auto charactersWritten = MultiByteToWideChar(
@@ -87,7 +88,7 @@ namespace engine
 #endif
     }
 
-    std::string toUtf8String(const std::wstring& str)
+    string toUtf8String(const wstring& str)
     {
 #ifdef _WIN32
         auto lastError = GetLastError();
@@ -116,7 +117,7 @@ namespace engine
             }
         }
 
-        std::vector<char> utf8str(utf8Characters);
+        vector<char> utf8str(utf8Characters);
 
         // convert
         auto charactersWritten = WideCharToMultiByte(
@@ -144,12 +145,12 @@ namespace engine
 #endif
     }
 
-    bool pathExists(const std::string& path)
+    bool pathExists(const string& path)
     {
         return filesystem::exists(path);
     }
 
-    bool pathIsFolder(const std::string& path)
+    bool pathIsFolder(const string& path)
     {
 #ifdef _WIN32
         if (pathExists(path))
@@ -176,12 +177,12 @@ namespace engine
 #endif
     }
 
-    bool pathIsFile(const std::string& path)
+    bool pathIsFile(const string& path)
     {
         return !pathIsFolder(path);
     }
 
-    bool pathStartsWithDelimiter(const std::string& path)
+    bool pathStartsWithDelimiter(const string& path)
     {
         for (auto&& delim : pathDelimiters())
         {
@@ -191,7 +192,7 @@ namespace engine
         return false;
     }
 
-    bool pathEndsWithDelimiter(const std::string& path)
+    bool pathEndsWithDelimiter(const string& path)
     {
         for (auto&& delim : pathDelimiters())
         {
@@ -201,29 +202,32 @@ namespace engine
         return false;
     }
 
-    std::string pathRemoveTrailingDelimiter(const std::string& path)
+    string pathRemoveTrailingDelimiter(const string& path)
     {
+        if (!pathEndsWithDelimiter(path))
+            return path;
+
         auto delim = pathPreferredDelim(path);
         auto tokens = tokenize(path, pathDelimiters());
         if (tokens.size() > 0)
             return pathJoin(tokens, delim);
         else
-            return tokens[0];
+            return "";
     }
 
-    std::string pathExtractFolder(const std::string& filepath, bool withLastDelimiter)
+    string pathExtractFolder(const string& filepath, bool withLastDelimiter)
     {
         auto delims = pathDelimiters();
         auto tokens = tokenize(filepath, delims);
-        std::string res = "";
+        string res = "";
 
         auto prefDelim = pathPreferredDelim(filepath);
 
-        std::string joined = "";
+        string joined = "";
         if (pathIsFile(filepath))
-            joined = pathJoin(std::vector<std::string>(tokens.begin(), tokens.end() - 1), prefDelim);
+            joined = pathJoin(vector<string>(tokens.begin(), tokens.end() - 1), prefDelim);
         else
-            joined = pathJoin(std::vector<std::string>(tokens.begin(), tokens.end()), prefDelim);
+            joined = pathJoin(vector<string>(tokens.begin(), tokens.end()), prefDelim);
 
         if (pathStartsWithDelimiter(filepath))
             res += prefDelim + joined;
@@ -234,21 +238,27 @@ namespace engine
         return res;
     }
 
-    std::string pathExtractFilename(const std::string& filepath)
+    std::string pathExtractFolderName(const std::string& filepath)
+    {
+        auto folder = pathExtractFolder(filepath);
+        return pathSplit(folder).back();
+    }
+
+    string pathExtractFilename(const string& filepath)
     {
         auto delims = pathDelimiters();
         auto tokens = tokenize(filepath, delims);
         return tokens.back();
     }
 
-    std::string pathExtractFilenameWithoutExtension(const std::string& filepath)
+    string pathExtractFilenameWithoutExtension(const string& filepath)
     {
         auto filename = pathExtractFilename(filepath);
         auto ext = pathExtractExtension(filename);
         return filename.substr(0, filename.length() - ext.length() - 1);
     }
 
-    std::string pathExtractExtension(const std::string& filepath)
+    string pathExtractExtension(const string& filepath)
     {
         auto filename = pathExtractFilename(filepath);
         auto tokens = tokenize(filename, { '.' });
@@ -258,13 +268,13 @@ namespace engine
             return tokens.back();
     }
 
-    std::string pathJoin(const std::string& pathA, const std::string& pathB, bool withLastDelimiter)
+    string pathJoin(const string& pathA, const string& pathB, bool withLastDelimiter)
     {
         auto delim = pathPreferredDelim(pathA);
         return pathJoin(pathA, pathB, delim, withLastDelimiter);
     }
 
-    std::string pathJoin(const std::string& pathA, const std::string& pathB, char delimiter, bool withLastDelimiter)
+    string pathJoin(const string& pathA, const string& pathB, char delimiter, bool withLastDelimiter)
     {
         auto pathASplit = pathSplit(pathA);
         auto pathBSplit = pathSplit(pathB);
@@ -278,7 +288,7 @@ namespace engine
             return pathJoin({ pAjoin, pBjoin }, delimiter, withLastDelimiter);
     }
 
-    std::string pathJoin(std::vector<std::string> parts, char delimiter, bool withLastDelimiter)
+    string pathJoin(vector<string> parts, char delimiter, bool withLastDelimiter)
     {
         if (parts.size() == 0)
             return "";
@@ -291,7 +301,7 @@ namespace engine
                 return parts[0];
         }
 
-        std::string result = "";
+        string result = "";
         if (pathStartsWithDelimiter(parts[0]))
             result += delimiter;
 
@@ -313,12 +323,12 @@ namespace engine
         return result;
     }
 
-    std::vector<std::string> pathSplit(const std::string& path)
+    vector<string> pathSplit(const string& path)
     {
         return tokenize(path, pathDelimiters());
     }
 
-    std::string pathReplaceExtension(const std::string& path, const std::string& newExtension)
+    string pathReplaceExtension(const string& path, const string& newExtension)
     {
         auto folder = pathExtractFolder(path);
         auto filename = pathExtractFilename(path);
@@ -327,4 +337,93 @@ namespace engine
         return pathJoin(folder, filenameWithoutExt + newExtension);
     }
 
+    string pathCommonAncestor(const string& pathA, const string& pathB, bool withLastDelimiter)
+    {
+        vector<string> common;
+        auto a = pathSplit(pathA);
+        auto b = pathSplit(pathB);
+        int i = 0;
+        while (i < a.size() && i < b.size() && a[i] == b[i])
+        {
+            common.emplace_back(a[i]);
+            ++i;
+        }
+        return pathJoin(common, pathPreferredDelim(pathA), withLastDelimiter);
+    }
+
+    std::string pathSubtractCommon(const std::string& pathA, const std::string& pathB)
+    {
+        vector<string> common;
+        auto a = pathSplit(pathA);
+        auto b = pathSplit(pathB);
+        int i = 0;
+        while (i < a.size() && i < b.size() && a[i] == b[i])
+        {
+            ++i;
+        }
+
+        if (a.size() > i)
+        {
+            vector<string> rest(a.begin() + i, a.end());
+            return pathJoin(rest, pathPreferredDelim(pathA));
+        }
+        if (b.size() > i)
+        {
+            vector<string> rest(b.begin() + i, b.end());
+            return pathJoin(rest, pathPreferredDelim(pathB));
+        }
+        return "";
+    }
+
+    std::string pathClean(const std::string& path)
+    {
+        auto delim = pathPreferredDelim(path);
+        auto tokens = tokenize(path, pathDelimiters());
+        bool done = false;
+        while (!done)
+        {
+            done = true;
+            int removeIndex = -1;
+            for (int i = 0; i < tokens.size(); ++i)
+            {
+                if (tokens[i] == ".." && i > 0)
+                {
+                    removeIndex = i - 1;
+                    break;
+                }
+            }
+            if (removeIndex != -1)
+            {
+                done = false;
+                tokens.erase(tokens.begin() + removeIndex, tokens.begin() + removeIndex + 2);
+            }
+        }
+        return pathJoin(tokens, delim);
+    }
+
+    string getWorkingDirectory(bool withLastDelimiter)
+    {
+#ifdef _WIN32
+#ifdef UNICODE
+        wchar_t path[1024];
+        memset(&path[0], 0, 1024 * sizeof(wchar_t));
+        DWORD res = GetCurrentDirectoryW(1024, &path[0]);
+        ASSERT(res != 0, "Could not get current directory");
+        wstring temp(path);
+        auto pathRes = toUtf8String(temp);
+        if (withLastDelimiter && !pathEndsWithDelimiter(pathRes))
+            pathRes += pathPreferredDelim(pathRes);
+        return pathRes;
+#else
+        char_t path[1024];
+        memset(&path[0], 0, 1024);
+        DWORD res = GetCurrentDirectory(1024, &path[0]);
+        ASSERT(res != 0, "Could not get current directory");
+        string temp(path);
+        return temp;
+#endif
+#else
+        ASSERT(false, "getWorkingDirectory is not implemented on this platform");
+#endif
+    }
 }

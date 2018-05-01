@@ -121,13 +121,16 @@
     <ClInclude Include="..\..\include\components\MeshRendererComponent.h" />
     <ClInclude Include="..\..\include\components\ModelPropertiesComponent.h" />
     <ClInclude Include="..\..\include\components\PostprocessComponent.h" />
+    <ClInclude Include="..\..\include\components\ProbeComponent.h" />
     <ClInclude Include="..\..\include\components\RigidBodyComponent.h" />
+    <ClInclude Include="..\..\include\components\TerrainComponent.h" />
     <ClInclude Include="..\..\include\components\Transform.h" />
     <ClInclude Include="..\..\include\engine\EngineComponent.h" />
     <ClInclude Include="..\..\include\engine\ComponentRegister.h" />
     <ClInclude Include="..\..\include\engine\Drawer.h" />
     <ClInclude Include="..\..\include\engine\Engine.h" />
     <ClInclude Include="..\..\include\engine\graphics\Barrier.h" />
+    <ClInclude Include="..\..\include\engine\graphics\HLSLTypeConversions.h" />
     <ClInclude Include="..\..\include\engine\graphics\ResourceCache.h" />
     <ClInclude Include="..\..\include\engine\graphics\Resources.h" />
     <ClInclude Include="..\..\include\engine\graphics\CommandList.h" />
@@ -151,22 +154,49 @@
     <ClInclude Include="..\..\include\engine\graphics\SwapChain.h" />
     <ClInclude Include="..\..\include\engine\graphics\Viewport.h" />
     <ClInclude Include="..\..\include\engine\InputEvents.h" />
+    <ClInclude Include="..\..\include\engine\input\InputManager.h" />
+    <ClInclude Include="..\..\include\engine\network\Beacon.h" />
+    <ClInclude Include="..\..\include\engine\network\MqMessage.h" />
+    <ClInclude Include="..\..\include\engine\network\NetworkCommunication.h" />
+    <ClInclude Include="..\..\include\engine\rendering\ClusterRenderer.h" />
+    <ClInclude Include="..\..\include\engine\rendering\Culler.h" />
+    <ClInclude Include="..\..\include\engine\rendering\DebugMenu.h" />
     <ClInclude Include="..\..\include\engine\rendering\DebugView.h" />
+    <ClInclude Include="..\..\include\engine\rendering\DepthPyramid.h" />
+    <ClInclude Include="..\..\include\engine\rendering\GBuffer.h" />
+    <ClInclude Include="..\..\include\engine\rendering\GpuBuffers.h" />
     <ClInclude Include="..\..\include\engine\rendering\ImguiRenderer.h" />
     <ClInclude Include="..\..\include\engine\rendering\LightData.h" />
     <ClInclude Include="..\..\include\engine\rendering\LogWindow.h" />
     <ClInclude Include="..\..\include\engine\rendering\Material.h" />
     <ClInclude Include="..\..\include\engine\rendering\Mesh.h" />
     <ClInclude Include="..\..\include\engine\rendering\ModelRenderer.h" />
+    <ClInclude Include="..\..\include\engine\rendering\ModelResourceAllocator.h" />
+    <ClInclude Include="..\..\include\engine\rendering\ModelResources.h" />
     <ClInclude Include="..\..\include\engine\rendering\ModelTransparentRenderer.h" />
+    <ClInclude Include="..\..\include\engine\rendering\ParticleTest.h" />
+    <ClInclude Include="..\..\include\engine\rendering\Picker.h" />
     <ClInclude Include="..\..\include\engine\rendering\Postprocess.h" />
+    <ClInclude Include="..\..\include\engine\rendering\PrefixSumClusters.h" />
     <ClInclude Include="..\..\include\engine\rendering\RenderCubemap.h" />
     <ClInclude Include="..\..\include\engine\rendering\Rendering.h" />
     <ClInclude Include="..\..\include\engine\rendering\RenderOutline.h" />
+    <ClInclude Include="..\..\include\engine\rendering\ResidencyManager.h" />
     <ClInclude Include="..\..\include\engine\rendering\ShadowRenderer.h" />
-    <ClInclude Include="..\..\include\engine\rendering\SSAORenderer.h" />
+    <ClInclude Include="..\..\include\engine\rendering\LineSweepAO.h" />
     <ClInclude Include="..\..\include\engine\rendering\SubMesh.h" />
+    <ClInclude Include="..\..\include\engine\rendering\tools\CombineTextures.h" />
+    <ClInclude Include="..\..\include\engine\rendering\tools\DownsampleTool.h" />
+    <ClInclude Include="..\..\include\engine\rendering\tools\ExtractBrightness.h" />
+    <ClInclude Include="..\..\include\engine\rendering\tools\GaussianBlurTool.h" />
+    <ClInclude Include="..\..\include\engine\rendering\ViewportRenderer.h" />
     <ClInclude Include="..\..\include\engine\RenderSetup.h" />
+    <ClInclude Include="..\..\include\engine\resources\ResourceCommon.h" />
+    <ClInclude Include="..\..\include\engine\resources\ResourceDiscoveryClient.h" />
+    <ClInclude Include="..\..\include\engine\resources\ResourceDiscoveryServer.h" />
+    <ClInclude Include="..\..\include\engine\resources\ResourceDropHandler.h" />
+    <ClInclude Include="..\..\include\engine\resources\ResourceHost.h" />
+    <ClInclude Include="..\..\include\engine\resources\ResourceMessages.h" />
     <ClInclude Include="..\..\include\engine\Scene.h" />
     <ClInclude Include="..\..\include\platform\Directory.h" />
     <ClInclude Include="..\..\include\platform\dirent.h" />
@@ -174,15 +204,39 @@
     <ClInclude Include="..\..\include\platform\File.h" />
     <ClInclude Include="..\..\include\platform\FileWatcher.h" />
     <ClInclude Include="..\..\include\platform\FileWatcherWin.h" />
+    <ClInclude Include="..\..\include\platform\network\PrefixLengthMessageParser.h" />
+    <ClInclude Include="..\..\include\platform\network\Socket.h" />
+    <ClInclude Include="..\..\include\platform\network\SocketCallbacks.h" />
+    <ClInclude Include="..\..\include\platform\network\SocketClient.h" />
+    <ClInclude Include="..\..\include\platform\network\SocketErrorCodes.h" />
+    <ClInclude Include="..\..\include\platform\network\SocketServer.h" />
+    <ClInclude Include="..\..\include\platform\network\SocketSystemInitialization.h" />
     <ClInclude Include="..\..\include\platform\Platform.h" />
+    <ClInclude Include="..\..\include\platform\Uuid.h" />
     <ClInclude Include="..\..\include\platform\window\Window.h" />
     <ClInclude Include="..\..\include\plugins\Component.h" />
     <ClInclude Include="..\..\include\plugins\PluginIf.h" />
     <ClInclude Include="..\..\include\plugins\PluginManager.h" />
     <ClInclude Include="..\..\include\plugins\TypeFactory.h" />
     <ClInclude Include="..\..\include\plugins\TypeFactoryIf.h" />
-    <ClInclude Include="..\..\include\shaders\core\culling\Culling.cs.h" />
-    <ClInclude Include="..\..\include\shaders\core\culling\Culling.h" />
+    <ClInclude Include="..\..\include\protocols\network\BeaconProtocols.pb.h" />
+    <ClInclude Include="..\..\include\protocols\network\ResourceProtocols.pb.h" />
+    <ClInclude Include="..\..\include\shaders\core\culling\ClusterGather.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\culling\ClusterGather.h" />
+    <ClInclude Include="..\..\include\shaders\core\culling\CreateDrawArguments.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\culling\CreateDrawArguments.h" />
+    <ClInclude Include="..\..\include\shaders\core\culling\CreateOcclusionCullingArgs.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\culling\CreateOcclusionCullingArgs.h" />
+    <ClInclude Include="..\..\include\shaders\core\culling\FrustumCulling.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\culling\FrustumCulling.h" />
+    <ClInclude Include="..\..\include\shaders\core\culling\OcclusionCulling.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\culling\OcclusionCulling.h" />
+    <ClInclude Include="..\..\include\shaders\core\culling\PrefixSumAddBuckets.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\culling\PrefixSumAddBuckets.h" />
+    <ClInclude Include="..\..\include\shaders\core\culling\PrefixSumBucketResults.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\culling\PrefixSumBucketResults.h" />
+    <ClInclude Include="..\..\include\shaders\core\culling\PrefixSumBuckets.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\culling\PrefixSumBuckets.h" />
     <ClInclude Include="..\..\include\shaders\core\forward\MeshRenderer.h" />
     <ClInclude Include="..\..\include\shaders\core\forward\MeshRenderer.ps.h" />
     <ClInclude Include="..\..\include\shaders\core\forward\MeshRenderer.vs.h" />
@@ -204,13 +258,26 @@
     <ClInclude Include="..\..\include\shaders\core\lighting\Lighting.h" />
     <ClInclude Include="..\..\include\shaders\core\lighting\Lighting.ps.h" />
     <ClInclude Include="..\..\include\shaders\core\lighting\Lighting.vs.h" />
+    <ClInclude Include="..\..\include\shaders\core\lsao\LSAO.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\lsao\LSAO.h" />
+    <ClInclude Include="..\..\include\shaders\core\model\ClusterRender.h" />
+    <ClInclude Include="..\..\include\shaders\core\model\ClusterRender.ps.h" />
+    <ClInclude Include="..\..\include\shaders\core\model\ClusterRender.vs.h" />
+    <ClInclude Include="..\..\include\shaders\core\model\ClusterShadowRenderer.h" />
+    <ClInclude Include="..\..\include\shaders\core\model\ClusterShadowRenderer.ps.h" />
+    <ClInclude Include="..\..\include\shaders\core\model\ClusterShadowRenderer.vs.h" />
     <ClInclude Include="..\..\include\shaders\core\model\MeshRendererPbr.h" />
     <ClInclude Include="..\..\include\shaders\core\model\MeshRendererPbr.ps.h" />
     <ClInclude Include="..\..\include\shaders\core\model\MeshRendererPbr.vs.h" />
+    <ClInclude Include="..\..\include\shaders\core\outline\CreateOutlineIndirectIndexedDrawArgs.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\outline\CreateOutlineIndirectIndexedDrawArgs.h" />
     <ClInclude Include="..\..\include\shaders\core\outline\Outline.gs.h" />
     <ClInclude Include="..\..\include\shaders\core\outline\Outline.h" />
     <ClInclude Include="..\..\include\shaders\core\outline\Outline.ps.h" />
     <ClInclude Include="..\..\include\shaders\core\outline\Outline.vs.h" />
+    <ClInclude Include="..\..\include\shaders\core\particle\Particle.h" />
+    <ClInclude Include="..\..\include\shaders\core\particle\Particle.ps.h" />
+    <ClInclude Include="..\..\include\shaders\core\particle\Particle.vs.h" />
     <ClInclude Include="..\..\include\shaders\core\postprocess\Bloom.h" />
     <ClInclude Include="..\..\include\shaders\core\postprocess\Bloom.ps.h" />
     <ClInclude Include="..\..\include\shaders\core\postprocess\Bloom.vs.h" />
@@ -235,6 +302,8 @@
     <ClInclude Include="..\..\include\shaders\core\temporal\TemporalResolve.h" />
     <ClInclude Include="..\..\include\shaders\core\temporal\TemporalResolve.ps.h" />
     <ClInclude Include="..\..\include\shaders\core\temporal\TemporalResolve.vs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tests\DispatchBasic.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tests\DispatchBasic.h" />
     <ClInclude Include="..\..\include\shaders\core\tests\DrawWithConstants.h" />
     <ClInclude Include="..\..\include\shaders\core\tests\DrawWithConstants.ps.h" />
     <ClInclude Include="..\..\include\shaders\core\tests\DrawWithConstants.vs.h" />
@@ -250,12 +319,93 @@
     <ClInclude Include="..\..\include\shaders\core\tests\HLSLTest.h" />
     <ClInclude Include="..\..\include\shaders\core\tests\HLSLTest.ps.h" />
     <ClInclude Include="..\..\include\shaders\core\tests\HLSLTest.vs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tests\Mrt.h" />
+    <ClInclude Include="..\..\include\shaders\core\tests\Mrt.ps.h" />
+    <ClInclude Include="..\..\include\shaders\core\tests\Mrt.vs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tests\MrtVisualize.h" />
+    <ClInclude Include="..\..\include\shaders\core\tests\MrtVisualize.ps.h" />
+    <ClInclude Include="..\..\include\shaders\core\tests\MrtVisualize.vs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tests\RtvClearTest.h" />
+    <ClInclude Include="..\..\include\shaders\core\tests\RtvClearTest.ps.h" />
+    <ClInclude Include="..\..\include\shaders\core\tests\RtvClearTest.vs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tests\Texture2DArrayVisualizer.h" />
+    <ClInclude Include="..\..\include\shaders\core\tests\Texture2DArrayVisualizer.ps.h" />
+    <ClInclude Include="..\..\include\shaders\core\tests\Texture2DArrayVisualizer.vs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\AddTextures.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\AddTextures.ps.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\AddTextures.vs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1df.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1df.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1df2.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1df2.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1df3.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1df3.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1df4.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1df4.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1du.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1du.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1du2.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1du2.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1du3.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1du3.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1du4.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1du4.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2df.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2df.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2df2.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2df2.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2df3.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2df3.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2df4.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2df4.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2du.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2du.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2du2.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2du2.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2du3.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2du3.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2du4.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2du4.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3df.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3df.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3df2.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3df2.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3df3.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3df3.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3df4.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3df4.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3du.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3du.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3du2.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3du2.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3du3.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3du3.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3du4.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3du4.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\CopyTexture.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\CopyTexture.ps.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\CopyTexture.vs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\copytexture\CopyTexture1df.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\copytexture\CopyTexture1df.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\copytexture\CopyTexture2df.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\copytexture\CopyTexture2df.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\copytexture\CopyTexture3df.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\copytexture\CopyTexture3df.h" />
     <ClInclude Include="..\..\include\shaders\core\tools\Cubemap.h" />
     <ClInclude Include="..\..\include\shaders\core\tools\Cubemap.ps.h" />
     <ClInclude Include="..\..\include\shaders\core\tools\Cubemap.vs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\CycleTransforms.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\CycleTransforms.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\DebugBoundingSpheres.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\DebugBoundingSpheres.ps.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\DebugBoundingSpheres.vs.h" />
     <ClInclude Include="..\..\include\shaders\core\tools\DebugViewer.h" />
     <ClInclude Include="..\..\include\shaders\core\tools\DebugViewer.ps.h" />
     <ClInclude Include="..\..\include\shaders\core\tools\DebugViewer.vs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\DepthDownsample.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\DepthDownsample.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\DepthDownsampleSingle.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\DepthDownsampleSingle.h" />
     <ClInclude Include="..\..\include\shaders\core\tools\Downsample.h" />
     <ClInclude Include="..\..\include\shaders\core\tools\Downsample.ps.h" />
     <ClInclude Include="..\..\include\shaders\core\tools\Downsample.vs.h" />
@@ -271,6 +421,8 @@
     <ClInclude Include="..\..\include\shaders\core\tools\GaussianBlur.h" />
     <ClInclude Include="..\..\include\shaders\core\tools\GaussianBlur.ps.h" />
     <ClInclude Include="..\..\include\shaders\core\tools\GaussianBlur.vs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\Pick.cs.h" />
+    <ClInclude Include="..\..\include\shaders\core\tools\Pick.h" />
     <ClInclude Include="..\..\include\shaders\core\tools\Wireframe.h" />
     <ClInclude Include="..\..\include\shaders\core\tools\Wireframe.ps.h" />
     <ClInclude Include="..\..\include\shaders\core\tools\Wireframe.vs.h" />
@@ -278,7 +430,9 @@
     <ClInclude Include="..\..\include\shaders\core\transparent\MeshTransparentComposite.ps.h" />
     <ClInclude Include="..\..\include\shaders\core\transparent\MeshTransparentComposite.vs.h" />
     <ClInclude Include="..\..\include\tools\Allocator.h" />
+    <ClInclude Include="..\..\include\tools\ArgParser.h" />
     <ClInclude Include="..\..\include\tools\ByteRange.h" />
+    <ClInclude Include="..\..\include\tools\Clusterize.h" />
     <ClInclude Include="..\..\include\tools\Codegen.h" />
     <ClInclude Include="..\..\include\tools\CompressedFile.h" />
     <ClInclude Include="..\..\include\tools\CompressedFileBzip2.h" />
@@ -287,6 +441,9 @@
     <ClInclude Include="..\..\include\tools\ComPtr.h" />
     <ClInclude Include="..\..\include\tools\hash\Hash.h" />
     <ClInclude Include="..\..\include\tools\hash\SpookyHashV2.h" />
+    <ClInclude Include="..\..\include\tools\image\Bmp.h" />
+    <ClInclude Include="..\..\include\tools\image\BmpBoilerplate.h" />
+    <ClInclude Include="..\..\include\tools\image\Color.h" />
     <ClInclude Include="..\..\include\tools\image\Dds.h" />
     <ClInclude Include="..\..\include\tools\image\DdsBoilerplate.h" />
     <ClInclude Include="..\..\include\tools\image\Image.h" />
@@ -296,7 +453,10 @@
     <ClInclude Include="..\..\include\tools\Measure.h" />
     <ClInclude Include="..\..\include\tools\MemoryAllocator.h" />
     <ClInclude Include="..\..\include\tools\MeshTools.h" />
+    <ClInclude Include="..\..\include\tools\Octree.h" />
     <ClInclude Include="..\..\include\tools\PathTools.h" />
+    <ClInclude Include="..\..\include\tools\Process.h" />
+    <ClInclude Include="..\..\include\tools\ProcessorInfo.h" />
     <ClInclude Include="..\..\include\tools\Recompile.h" />
     <ClInclude Include="..\..\include\tools\RefCounted.h" />
     <ClInclude Include="..\..\include\tools\RingBuffer.h" />
@@ -820,6 +980,30 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\..\private-include\platform\window\WindowsWindow.h" />
+    <None Include="..\..\protocols\network\BeaconProtocols.proto" />
+    <None Include="..\..\protocols\network\ResourceProtocols.proto" />
+    <None Include="..\..\shaders\core\Cluster.hlsli" />
+    <None Include="..\..\shaders\core\CppSharedShaderTypes.hlsli" />
+    <None Include="..\..\shaders\core\culling\BlellochScan.hlsli" />
+    <None Include="..\..\shaders\core\Debug.hlsli">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\shaders\core\GBuffer.hlsli" />
+    <None Include="..\..\shaders\core\shared_types\BoundingBox.hlsli" />
+    <None Include="..\..\shaders\core\shared_types\ClusterData.hlsli" />
+    <None Include="..\..\shaders\core\shared_types\ClusterInstanceData.hlsli" />
+    <None Include="..\..\shaders\core\shared_types\FrustumCullingOutput.hlsli" />
+    <None Include="..\..\shaders\core\shared_types\InstanceMaterial.hlsli" />
+    <None Include="..\..\shaders\core\shared_types\SubMeshAdjacency.hlsli" />
+    <None Include="..\..\shaders\core\shared_types\SubMeshData.hlsli" />
+    <None Include="..\..\shaders\core\shared_types\TransformHistory.hlsli" />
     <None Include="..\..\shaders\core\tests\IncludeTest.h" />
     <None Include="..\..\shaders\core\tests\PreprocessorTest.h" />
     <ClInclude Include="..\..\shaders\ShaderTypes.h" />
@@ -845,6 +1029,8 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\..\tools\Settings.h" />
+    <None Include="..\..\shaders\core\VertexPacking.hlsli" />
+    <None Include="..\..\tools\codegen\ProtoGenerator.py" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\external\entityx-master\entityx\Entity.cc" />
@@ -892,8 +1078,27 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\..\include\shaders\core\culling\Culling.cpp" />
-    <ClCompile Include="..\..\include\shaders\core\culling\Culling.cs.cpp" />
+    <ClCompile Include="..\..\include\engine\rendering\DebugMenu.cpp" />
+    <ClCompile Include="..\..\include\engine\rendering\DepthPyramid.cpp" />
+    <ClCompile Include="..\..\include\engine\rendering\ParticleTest.cpp" />
+    <ClCompile Include="..\..\include\protocols\network\BeaconProtocols.pb.cc" />
+    <ClCompile Include="..\..\include\protocols\network\ResourceProtocols.pb.cc" />
+    <ClCompile Include="..\..\include\shaders\core\culling\ClusterGather.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\culling\ClusterGather.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\culling\CreateDrawArguments.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\culling\CreateDrawArguments.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\culling\CreateOcclusionCullingArgs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\culling\CreateOcclusionCullingArgs.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\culling\FrustumCulling.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\culling\FrustumCulling.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\culling\OcclusionCulling.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\culling\OcclusionCulling.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\culling\PrefixSumAddBuckets.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\culling\PrefixSumAddBuckets.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\culling\PrefixSumBucketResults.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\culling\PrefixSumBucketResults.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\culling\PrefixSumBuckets.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\culling\PrefixSumBuckets.cs.cpp" />
     <ClCompile Include="..\..\include\shaders\core\forward\MeshRenderer.cpp" />
     <ClCompile Include="..\..\include\shaders\core\forward\MeshRenderer.ps.cpp" />
     <ClCompile Include="..\..\include\shaders\core\forward\MeshRenderer.vs.cpp" />
@@ -915,13 +1120,26 @@
     <ClCompile Include="..\..\include\shaders\core\lighting\Lighting.cpp" />
     <ClCompile Include="..\..\include\shaders\core\lighting\Lighting.ps.cpp" />
     <ClCompile Include="..\..\include\shaders\core\lighting\Lighting.vs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\lsao\LSAO.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\lsao\LSAO.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\model\ClusterRender.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\model\ClusterRender.ps.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\model\ClusterRender.vs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\model\ClusterShadowRenderer.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\model\ClusterShadowRenderer.ps.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\model\ClusterShadowRenderer.vs.cpp" />
     <ClCompile Include="..\..\include\shaders\core\model\MeshRendererPbr.cpp" />
     <ClCompile Include="..\..\include\shaders\core\model\MeshRendererPbr.ps.cpp" />
     <ClCompile Include="..\..\include\shaders\core\model\MeshRendererPbr.vs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\outline\CreateOutlineIndirectIndexedDrawArgs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\outline\CreateOutlineIndirectIndexedDrawArgs.cs.cpp" />
     <ClCompile Include="..\..\include\shaders\core\outline\Outline.cpp" />
     <ClCompile Include="..\..\include\shaders\core\outline\Outline.gs.cpp" />
     <ClCompile Include="..\..\include\shaders\core\outline\Outline.ps.cpp" />
     <ClCompile Include="..\..\include\shaders\core\outline\Outline.vs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\particle\Particle.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\particle\Particle.ps.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\particle\Particle.vs.cpp" />
     <ClCompile Include="..\..\include\shaders\core\postprocess\Bloom.cpp" />
     <ClCompile Include="..\..\include\shaders\core\postprocess\Bloom.ps.cpp" />
     <ClCompile Include="..\..\include\shaders\core\postprocess\Bloom.vs.cpp" />
@@ -946,6 +1164,8 @@
     <ClCompile Include="..\..\include\shaders\core\temporal\TemporalResolve.cpp" />
     <ClCompile Include="..\..\include\shaders\core\temporal\TemporalResolve.ps.cpp" />
     <ClCompile Include="..\..\include\shaders\core\temporal\TemporalResolve.vs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tests\DispatchBasic.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tests\DispatchBasic.cs.cpp" />
     <ClCompile Include="..\..\include\shaders\core\tests\DrawWithConstants.cpp" />
     <ClCompile Include="..\..\include\shaders\core\tests\DrawWithConstants.ps.cpp" />
     <ClCompile Include="..\..\include\shaders\core\tests\DrawWithConstants.vs.cpp" />
@@ -961,12 +1181,93 @@
     <ClCompile Include="..\..\include\shaders\core\tests\HLSLTest.cpp" />
     <ClCompile Include="..\..\include\shaders\core\tests\HLSLTest.ps.cpp" />
     <ClCompile Include="..\..\include\shaders\core\tests\HLSLTest.vs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tests\Mrt.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tests\Mrt.ps.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tests\Mrt.vs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tests\MrtVisualize.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tests\MrtVisualize.ps.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tests\MrtVisualize.vs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tests\RtvClearTest.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tests\RtvClearTest.ps.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tests\RtvClearTest.vs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tests\Texture2DArrayVisualizer.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tests\Texture2DArrayVisualizer.ps.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tests\Texture2DArrayVisualizer.vs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\AddTextures.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\AddTextures.ps.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\AddTextures.vs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1df.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1df.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1df2.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1df2.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1df3.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1df3.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1df4.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1df4.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1du.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1du.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1du2.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1du2.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1du3.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1du3.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1du4.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture1du4.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2df.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2df.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2df2.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2df2.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2df3.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2df3.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2df4.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2df4.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2du.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2du.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2du2.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2du2.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2du3.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2du3.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2du4.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture2du4.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3df.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3df.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3df2.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3df2.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3df3.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3df3.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3df4.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3df4.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3du.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3du.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3du2.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3du2.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3du3.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3du3.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3du4.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\cleartexture\ClearTexture3du4.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\CopyTexture.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\CopyTexture.ps.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\CopyTexture.vs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\copytexture\CopyTexture1df.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\copytexture\CopyTexture1df.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\copytexture\CopyTexture2df.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\copytexture\CopyTexture2df.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\copytexture\CopyTexture3df.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\copytexture\CopyTexture3df.cs.cpp" />
     <ClCompile Include="..\..\include\shaders\core\tools\Cubemap.cpp" />
     <ClCompile Include="..\..\include\shaders\core\tools\Cubemap.ps.cpp" />
     <ClCompile Include="..\..\include\shaders\core\tools\Cubemap.vs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\CycleTransforms.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\CycleTransforms.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\DebugBoundingSpheres.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\DebugBoundingSpheres.ps.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\DebugBoundingSpheres.vs.cpp" />
     <ClCompile Include="..\..\include\shaders\core\tools\DebugViewer.cpp" />
     <ClCompile Include="..\..\include\shaders\core\tools\DebugViewer.ps.cpp" />
     <ClCompile Include="..\..\include\shaders\core\tools\DebugViewer.vs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\DepthDownsample.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\DepthDownsample.cs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\DepthDownsampleSingle.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\DepthDownsampleSingle.cs.cpp" />
     <ClCompile Include="..\..\include\shaders\core\tools\Downsample.cpp" />
     <ClCompile Include="..\..\include\shaders\core\tools\Downsample.ps.cpp" />
     <ClCompile Include="..\..\include\shaders\core\tools\Downsample.vs.cpp" />
@@ -982,6 +1283,8 @@
     <ClCompile Include="..\..\include\shaders\core\tools\GaussianBlur.cpp" />
     <ClCompile Include="..\..\include\shaders\core\tools\GaussianBlur.ps.cpp" />
     <ClCompile Include="..\..\include\shaders\core\tools\GaussianBlur.vs.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\Pick.cpp" />
+    <ClCompile Include="..\..\include\shaders\core\tools\Pick.cs.cpp" />
     <ClCompile Include="..\..\include\shaders\core\tools\Wireframe.cpp" />
     <ClCompile Include="..\..\include\shaders\core\tools\Wireframe.ps.cpp" />
     <ClCompile Include="..\..\include\shaders\core\tools\Wireframe.vs.cpp" />
@@ -997,7 +1300,11 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\..\private-src\engine\graphics\dx12\DX12Common.cpp" />
+    <ClCompile Include="..\..\private-src\engine\graphics\dx12\DX12Common.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\private-src\engine\graphics\dx12\DX12Resources.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">false</ExcludedFromBuild>
@@ -1128,6 +1435,7 @@
     <ClCompile Include="..\..\private-src\engine\graphics\dx12\DX12Semaphore.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\private-src\engine\graphics\dx12\DX12ShaderBinary.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
@@ -1156,6 +1464,12 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\private-src\engine\graphics\vulkan\VulkanCommon.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\private-src\engine\graphics\vulkan\VulkanResources.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
@@ -1352,7 +1666,9 @@
     <ClCompile Include="..\..\src\components\MeshRendererComponent.cpp" />
     <ClCompile Include="..\..\src\components\ModelPropertiesComponent.cpp" />
     <ClCompile Include="..\..\src\components\PostprocessComponent.cpp" />
+    <ClCompile Include="..\..\src\components\ProbeComponent.cpp" />
     <ClCompile Include="..\..\src\components\RigidBodyComponent.cpp" />
+    <ClCompile Include="..\..\src\components\TerrainComponent.cpp" />
     <ClCompile Include="..\..\src\engine\EngineComponent.cpp" />
     <ClCompile Include="..\..\src\engine\ComponentRegister.cpp" />
     <ClCompile Include="..\..\src\engine\Engine.cpp" />
@@ -1374,37 +1690,71 @@
     <ClCompile Include="..\..\src\engine\graphics\ShaderStorage.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\ShaderSupport.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\SwapChain.cpp" />
+    <ClCompile Include="..\..\src\engine\input\InputManager.cpp" />
+    <ClCompile Include="..\..\src\engine\network\Beacon.cpp" />
+    <ClCompile Include="..\..\src\engine\network\MqMessage.cpp" />
+    <ClCompile Include="..\..\src\engine\network\NetworkCommunication.cpp" />
+    <ClCompile Include="..\..\src\engine\rendering\ClusterRenderer.cpp" />
+    <ClCompile Include="..\..\src\engine\rendering\Culler.cpp" />
     <ClCompile Include="..\..\src\engine\rendering\DebugView.cpp" />
+    <ClCompile Include="..\..\src\engine\rendering\GBuffer.cpp" />
+    <ClCompile Include="..\..\src\engine\rendering\GpuBuffers.cpp" />
     <ClCompile Include="..\..\src\engine\rendering\ImguiRenderer.cpp" />
     <ClCompile Include="..\..\src\engine\rendering\LightData.cpp" />
     <ClCompile Include="..\..\src\engine\rendering\LogWindow.cpp" />
     <ClCompile Include="..\..\src\engine\rendering\Material.cpp" />
     <ClCompile Include="..\..\src\engine\rendering\Mesh.cpp" />
     <ClCompile Include="..\..\src\engine\rendering\ModelRenderer.cpp" />
+    <ClCompile Include="..\..\src\engine\rendering\ModelResourceAllocator.cpp" />
+    <ClCompile Include="..\..\src\engine\rendering\ModelResources.cpp" />
     <ClCompile Include="..\..\src\engine\rendering\ModelTransparentRenderer.cpp" />
+    <ClCompile Include="..\..\src\engine\rendering\Picker.cpp" />
     <ClCompile Include="..\..\src\engine\rendering\Postprocess.cpp" />
+    <ClCompile Include="..\..\src\engine\rendering\PrefixSumClusters.cpp" />
     <ClCompile Include="..\..\src\engine\rendering\RenderCubemap.cpp" />
     <ClCompile Include="..\..\src\engine\rendering\RenderOutline.cpp" />
+    <ClCompile Include="..\..\src\engine\rendering\ResidencyManager.cpp" />
     <ClCompile Include="..\..\src\engine\rendering\ShadowRenderer.cpp" />
-    <ClCompile Include="..\..\src\engine\rendering\SSAORenderer.cpp" />
+    <ClCompile Include="..\..\src\engine\rendering\LineSweepAO.cpp" />
     <ClCompile Include="..\..\src\engine\rendering\SubMesh.cpp" />
+    <ClCompile Include="..\..\src\engine\rendering\tools\CombineTextures.cpp" />
+    <ClCompile Include="..\..\src\engine\rendering\tools\DownsampleTool.cpp" />
+    <ClCompile Include="..\..\src\engine\rendering\tools\ExtractBrightness.cpp" />
+    <ClCompile Include="..\..\src\engine\rendering\tools\GaussianBlurTool.cpp" />
+    <ClCompile Include="..\..\src\engine\rendering\ViewportRenderer.cpp" />
     <ClCompile Include="..\..\src\engine\RenderSetup.cpp" />
+    <ClCompile Include="..\..\src\engine\resources\ResourceDiscoveryClient.cpp" />
+    <ClCompile Include="..\..\src\engine\resources\ResourceDiscoveryServer.cpp" />
+    <ClCompile Include="..\..\src\engine\resources\ResourceDropHandler.cpp" />
+    <ClCompile Include="..\..\src\engine\resources\ResourceHost.cpp" />
+    <ClCompile Include="..\..\src\engine\resources\ResourceMessages.cpp" />
     <ClCompile Include="..\..\src\engine\Scene.cpp" />
     <ClCompile Include="..\..\src\platform\Directory.cpp" />
     <ClCompile Include="..\..\src\platform\Environment.cpp" />
     <ClCompile Include="..\..\src\platform\File.cpp" />
     <ClCompile Include="..\..\src\platform\FileWatcher.cpp" />
     <ClCompile Include="..\..\src\platform\FileWatcherWin.cpp" />
+    <ClCompile Include="..\..\src\platform\network\PrefixLengthMessageParser.cpp" />
+    <ClCompile Include="..\..\src\platform\network\Socket.cpp" />
+    <ClCompile Include="..\..\src\platform\network\SocketClient.cpp" />
+    <ClCompile Include="..\..\src\platform\network\SocketErrorCodes.cpp" />
+    <ClCompile Include="..\..\src\platform\network\SocketServer.cpp" />
+    <ClCompile Include="..\..\src\platform\network\SocketSystemInitialization.cpp" />
+    <ClCompile Include="..\..\src\platform\Uuid.cpp" />
     <ClCompile Include="..\..\src\platform\window\Window.cpp" />
     <ClCompile Include="..\..\src\plugins\PluginAbs.cpp" />
     <ClCompile Include="..\..\src\plugins\PluginManager.cpp" />
     <ClCompile Include="..\..\src\plugins\TypeFactory.cpp" />
+    <ClCompile Include="..\..\src\tools\ArgParser.cpp" />
+    <ClCompile Include="..\..\src\tools\Clusterize.cpp" />
     <ClCompile Include="..\..\src\tools\CompressedFile.cpp" />
     <ClCompile Include="..\..\src\tools\CompressedFileBzip2.cpp" />
     <ClCompile Include="..\..\src\tools\CompressedFileZstd.cpp" />
     <ClCompile Include="..\..\src\tools\Debug.cpp" />
     <ClCompile Include="..\..\src\tools\hash\Hash.cpp" />
     <ClCompile Include="..\..\src\tools\hash\SpookyHashV2.cpp" />
+    <ClCompile Include="..\..\src\tools\image\Bmp.cpp" />
+    <ClCompile Include="..\..\src\tools\image\Color.cpp" />
     <ClCompile Include="..\..\src\tools\image\Dds.cpp" />
     <ClCompile Include="..\..\src\tools\image\Image.cpp" />
     <ClCompile Include="..\..\src\tools\AssetTools.cpp" />
@@ -1412,7 +1762,10 @@
     <ClCompile Include="..\..\src\tools\Measure.cpp" />
     <ClCompile Include="..\..\src\tools\MemoryAllocator.cpp" />
     <ClCompile Include="..\..\src\tools\MeshTools.cpp" />
+    <ClCompile Include="..\..\src\tools\Octree.cpp" />
     <ClCompile Include="..\..\src\tools\PathTools.cpp" />
+    <ClCompile Include="..\..\src\tools\Process.cpp" />
+    <ClCompile Include="..\..\src\tools\ProcessorInfo.cpp" />
     <ClCompile Include="..\..\src\tools\Recompile.cpp" />
     <ClCompile Include="..\..\src\tools\RingBuffer.cpp" />
     <ClCompile Include="..\..\src\tools\Serialization.cpp" />
@@ -1778,7 +2131,567 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\shaders\core\culling\Culling.cs.hlsl">
+    <None Include="..\..\shaders\core\culling\FrustumCulling.cs.hlsl">
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\shaders\core\tests\Mrt.ps.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\..\shaders\core\tests\Mrt.vs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\shaders\core\tests\MrtVisualize.ps.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\..\shaders\core\tests\MrtVisualize.vs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\shaders\core\tests\RtvClearTest.ps.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\..\shaders\core\tests\RtvClearTest.vs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\shaders\core\tests\Texture2DArrayVisualizer.ps.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\..\shaders\core\tests\Texture2DArrayVisualizer.vs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\..\shaders\core\culling\ClusterGather.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\culling\CreateDrawArguments.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\culling\CreateOcclusionCullingArgs.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\culling\OcclusionCulling.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <None Include="..\..\shaders\core\culling\PrefixSumAddBuckets.cs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\..\shaders\core\culling\PrefixSumBucketResults.cs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\..\shaders\core\culling\PrefixSumBuckets.cs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <FxCompile Include="..\..\shaders\core\lsao\LSAO.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\model\ClusterRender.ps.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\model\ClusterRender.vs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\model\ClusterShadowRenderer.ps.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\model\ClusterShadowRenderer.vs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\outline\CreateOutlineIndirectIndexedDrawArgs.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\particle\Particle.ps.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\particle\Particle.vs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tests\DispatchBasic.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\AddTextures.ps.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\AddTextures.vs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture1df.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture1df2.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture1df3.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture1df4.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture1du.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture1du2.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture1du3.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture1du4.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture2df.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture2df2.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture2df3.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture2df4.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture2du.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture2du2.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture2du3.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture2du4.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture3df.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture3df2.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture3df3.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture3df4.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture3du.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture3du2.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture3du3.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\cleartexture\ClearTexture3du4.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\CopyTexture.ps.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\CopyTexture.vs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\copytexture\CopyTexture1df.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\copytexture\CopyTexture2df.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\copytexture\CopyTexture3df.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\CycleTransforms.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\DebugBoundingSpheres.ps.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\DebugBoundingSpheres.vs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\DepthDownsample.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\core\tools\DepthDownsampleSingle.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <None Include="..\..\shaders\core\tools\Pick.cs.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|x64'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">
+      </ExcludedFromBuild>
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
@@ -1786,7 +2699,7 @@
     <ProjectGuid>{5214C556-A443-4D25-A803-5B5EFCA0E522}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>DarknessEngine</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
     <ProjectName>DarknessEngine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -1920,14 +2833,14 @@
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>GRAPHICS_API_DX12;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions);VULKAN</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..;$(ProjectDir)..\..\include;$(ProjectDir)..\..\private-include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\external;$(ProjectDir)..\..\external\bzip2-1.0.6;$(ProjectDir)..\..\external\zstd\lib\common;$(ProjectDir)..\..\external\rapidjson\include;$(ProjectDir)..\..\external\SPIRV-Cross;$(ProjectDir)..\..\external\SPIRV-Cross\include;$(ProjectDir)..\..\external\bullet3-2.86.1\src;$(ProjectDir)..\..\external\entityx-master\entityx;$(ProjectDir)..\..\external\ck\include;C:\VulkanSDK\1.0.61.1\Include;C:\Program Files (x86)\Windows Kits\10\Include\10.0.15063.0\um;C:\Program Files (x86)\Windows Kits\10\Include\10.0.15063.0\shared;$(ProjectDir)..\..\external\winpixeventruntime\Include\WinPixEventRuntime</AdditionalIncludeDirectories>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..;$(ProjectDir)..\..\include;$(ProjectDir)..\..\private-include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\external;$(ProjectDir)..\..\external\bzip2-1.0.6;$(ProjectDir)..\..\external\zstd\lib\common;$(ProjectDir)..\..\external\rapidjson\include;$(ProjectDir)..\..\external\SPIRV-Cross;$(ProjectDir)..\..\external\SPIRV-Cross\include;$(ProjectDir)..\..\external\bullet3-2.86.1\src;$(ProjectDir)..\..\external\entityx-master\entityx;$(ProjectDir)..\..\external\ck\include;$(ProjectDir)..\..\external\protobuf-3.5.1\src;$(ProjectDir)..\..\darkness-engine\external\libzmq\include;C:\VulkanSDK\1.0.61.1\Include;C:\Program Files (x86)\Windows Kits\10\Include\10.0.16299.0\um;C:\Program Files (x86)\Windows Kits\10\Include\10.0.16299.0\shared;$(ProjectDir)..\..\external\winpixeventruntime\Include\WinPixEventRuntime;$(ProjectDir)..\..\external\gainput-master\lib\include;$(ProjectDir)..\..\external\libzmq\include</AdditionalIncludeDirectories>
+      <TreatWarningAsError>false</TreatWarningAsError>
       <DisableSpecificWarnings>4514;4625;4626;4710;4711;4820;4571;4996</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <MinimalRebuild>false</MinimalRebuild>
+      <MinimalRebuild>true</MinimalRebuild>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -1939,21 +2852,21 @@
       <ObjectFileOutput>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\shaders\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
     <PreBuildEvent>
-      <Command>python $(ProjectDir)..\..\tools\codegen\ShaderBuild.py -g dx12</Command>
+      <Command>python $(ProjectDir)..\..\tools\codegen\ShaderBuild.py -g dx12 &amp;&amp; python $(ProjectDir)..\..\tools\codegen\ProtoGenerator.py</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug Vulkan|Win32'">
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>VULKAN;VK_USE_PLATFORM_WIN32_KHR;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions);VULKAN</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..;$(ProjectDir)..\..\include;$(ProjectDir)..\..\private-include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\external;$(ProjectDir)..\..\external\bzip2-1.0.6;$(ProjectDir)..\..\external\zstd\lib\common;$(ProjectDir)..\..\external\rapidjson\include;$(ProjectDir)..\..\external\SPIRV-Cross;$(ProjectDir)..\..\external\SPIRV-Cross\include;$(ProjectDir)..\..\external\bullet3-2.86.1\src;$(ProjectDir)..\..\external\entityx-master\entityx;$(ProjectDir)..\..\external\ck\include;C:\VulkanSDK\1.0.61.1\Include;C:\Program Files (x86)\Windows Kits\10\Include\10.0.15063.0\um;C:\Program Files (x86)\Windows Kits\10\Include\10.0.15063.0\shared</AdditionalIncludeDirectories>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..;$(ProjectDir)..\..\include;$(ProjectDir)..\..\private-include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\external;$(ProjectDir)..\..\external\bzip2-1.0.6;$(ProjectDir)..\..\external\zstd\lib\common;$(ProjectDir)..\..\external\rapidjson\include;$(ProjectDir)..\..\external\SPIRV-Cross;$(ProjectDir)..\..\external\SPIRV-Cross\include;$(ProjectDir)..\..\external\bullet3-2.86.1\src;$(ProjectDir)..\..\external\entityx-master\entityx;$(ProjectDir)..\..\external\ck\include;$(ProjectDir)..\..\external\protobuf-3.5.1\src;$(ProjectDir)..\..\darkness-engine\external\libzmq\include;C:\VulkanSDK\1.0.61.1\Include;C:\Program Files (x86)\Windows Kits\10\Include\10.0.16299.0\um;C:\Program Files (x86)\Windows Kits\10\Include\10.0.16299.0\shared;;$(ProjectDir)..\..\external\gainput-master\lib\include;$(ProjectDir)..\..\external\libzmq\include</AdditionalIncludeDirectories>
+      <TreatWarningAsError>false</TreatWarningAsError>
       <DisableSpecificWarnings>4514;4625;4626;4710;4711;4820;4571;4996</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <MinimalRebuild>false</MinimalRebuild>
+      <MinimalRebuild>true</MinimalRebuild>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -1965,21 +2878,21 @@
       <ObjectFileOutput>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\shaders\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
     <PreBuildEvent>
-      <Command>python $(ProjectDir)..\..\tools\codegen\ShaderBuild.py -g vulkan</Command>
+      <Command>python $(ProjectDir)..\..\tools\codegen\ShaderBuild.py -g vulkan &amp;&amp; python $(ProjectDir)..\..\tools\codegen\ProtoGenerator.py</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug DX12|x64'">
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <WarningLevel>Level2</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>USE_PIX;GRAPHICS_API_DX12;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..;$(ProjectDir)..\..\include;$(ProjectDir)..\..\private-include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\external;$(ProjectDir)..\..\external\bzip2-1.0.6;$(ProjectDir)..\..\external\zstd\lib\common;$(ProjectDir)..\..\external\rapidjson\include;$(ProjectDir)..\..\external\SPIRV-Cross;$(ProjectDir)..\..\external\SPIRV-Cross\include;$(ProjectDir)..\..\external\bullet3-2.86.1\src;$(ProjectDir)..\..\external\entityx-master\entityx;$(ProjectDir)..\..\external\ck\include;C:\VulkanSDK\1.0.61.1\Include;C:\Program Files (x86)\Windows Kits\10\Include\10.0.15063.0\um;C:\Program Files (x86)\Windows Kits\10\Include\10.0.15063.0\shared;$(ProjectDir)..\..\external\winpixeventruntime\Include\WinPixEventRuntime</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;ZMQ_STATIC;USE_PIX;GRAPHICS_API_DX12;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..;$(ProjectDir)..\..\include;$(ProjectDir)..\..\private-include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\external;$(ProjectDir)..\..\external\bzip2-1.0.6;$(ProjectDir)..\..\external\zstd\lib\common;$(ProjectDir)..\..\external\rapidjson\include;$(ProjectDir)..\..\external\SPIRV-Cross;$(ProjectDir)..\..\external\SPIRV-Cross\include;$(ProjectDir)..\..\external\bullet3-2.86.1\src;$(ProjectDir)..\..\external\entityx-master\entityx;$(ProjectDir)..\..\external\ck\include;$(ProjectDir)..\..\external\protobuf-3.5.1\src;$(ProjectDir)..\..\darkness-engine\external\libzmq\include;C:\VulkanSDK\1.0.61.1\Include;C:\Program Files (x86)\Windows Kits\10\Include\10.0.16299.0\um;C:\Program Files (x86)\Windows Kits\10\Include\10.0.16299.0\shared;$(ProjectDir)..\..\external\winpixeventruntime\Include\WinPixEventRuntime;$(ProjectDir)..\..\external\gainput-master\lib\include;$(ProjectDir)..\..\external\libzmq\include</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
       <DisableSpecificWarnings>4514;4625;4626;4710;4711;4820;4571;4996</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <MinimalRebuild>false</MinimalRebuild>
+      <MinimalRebuild>true</MinimalRebuild>
       <EnablePREfast>false</EnablePREfast>
       <BrowseInformation>false</BrowseInformation>
     </ClCompile>
@@ -2000,7 +2913,7 @@
       <ObjectFileOutput>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\shaders\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
     <PreBuildEvent>
-      <Command>python $(ProjectDir)..\..\tools\codegen\ShaderBuild.py -g dx12</Command>
+      <Command>python $(ProjectDir)..\..\tools\codegen\ShaderBuild.py -g dx12 &amp;&amp; python $(ProjectDir)..\..\tools\codegen\ProtoGenerator.py</Command>
     </PreBuildEvent>
     <Bscmake>
       <PreserveSbr>false</PreserveSbr>
@@ -2010,14 +2923,14 @@
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <WarningLevel>Level2</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>VULKAN;VK_USE_PLATFORM_WIN32_KHR;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..;$(ProjectDir)..\..\include;$(ProjectDir)..\..\private-include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\external;$(ProjectDir)..\..\external\bzip2-1.0.6;$(ProjectDir)..\..\external\zstd\lib\common;$(ProjectDir)..\..\external\rapidjson\include;$(ProjectDir)..\..\external\SPIRV-Cross;$(ProjectDir)..\..\external\SPIRV-Cross\include;$(ProjectDir)..\..\external\bullet3-2.86.1\src;$(ProjectDir)..\..\external\entityx-master\entityx;$(ProjectDir)..\..\external\ck\include;C:\VulkanSDK\1.0.61.1\Include;C:\Program Files (x86)\Windows Kits\10\Include\10.0.15063.0\um;C:\Program Files (x86)\Windows Kits\10\Include\10.0.15063.0\shared</AdditionalIncludeDirectories>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;ZMQ_STATIC;VULKAN;VK_USE_PLATFORM_WIN32_KHR;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..;$(ProjectDir)..\..\include;$(ProjectDir)..\..\private-include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\external;$(ProjectDir)..\..\external\bzip2-1.0.6;$(ProjectDir)..\..\external\zstd\lib\common;$(ProjectDir)..\..\external\rapidjson\include;$(ProjectDir)..\..\external\SPIRV-Cross;$(ProjectDir)..\..\external\SPIRV-Cross\include;$(ProjectDir)..\..\external\bullet3-2.86.1\src;$(ProjectDir)..\..\external\entityx-master\entityx;$(ProjectDir)..\..\external\ck\include;$(ProjectDir)..\..\external\protobuf-3.5.1\src;$(ProjectDir)..\..\darkness-engine\external\libzmq\include;C:\VulkanSDK\1.0.61.1\Include;C:\Program Files (x86)\Windows Kits\10\Include\10.0.16299.0\um;C:\Program Files (x86)\Windows Kits\10\Include\10.0.16299.0\shared;;$(ProjectDir)..\..\external\gainput-master\lib\include;$(ProjectDir)..\..\external\libzmq\include</AdditionalIncludeDirectories>
+      <TreatWarningAsError>false</TreatWarningAsError>
       <DisableSpecificWarnings>4514;4625;4626;4710;4711;4820;4571;4996</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <MinimalRebuild>false</MinimalRebuild>
+      <MinimalRebuild>true</MinimalRebuild>
       <EnablePREfast>true</EnablePREfast>
     </ClCompile>
     <Link>
@@ -2037,22 +2950,23 @@
       <ObjectFileOutput>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\shaders\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
     <PreBuildEvent>
-      <Command>python $(ProjectDir)..\..\tools\codegen\ShaderBuild.py -g vulkan</Command>
+      <Command>python $(ProjectDir)..\..\tools\codegen\ShaderBuild.py -g vulkan &amp;&amp; python $(ProjectDir)..\..\tools\codegen\ProtoGenerator.py</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release DX12|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>GRAPHICS_API_DX12;WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions);VULKAN</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..;$(ProjectDir)..\..\include;$(ProjectDir)..\..\private-include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\external;$(ProjectDir)..\..\external\bzip2-1.0.6;$(ProjectDir)..\..\external\zstd\lib\common;$(ProjectDir)..\..\external\rapidjson\include;$(ProjectDir)..\..\external\SPIRV-Cross;$(ProjectDir)..\..\external\SPIRV-Cross\include;$(ProjectDir)..\..\external\bullet3-2.86.1\src;$(ProjectDir)..\..\external\entityx-master\entityx;$(ProjectDir)..\..\external\ck\include;C:\VulkanSDK\1.0.61.1\Include;C:\Program Files (x86)\Windows Kits\10\Include\10.0.15063.0\um;C:\Program Files (x86)\Windows Kits\10\Include\10.0.15063.0\shared;$(ProjectDir)..\..\external\winpixeventruntime\Include\WinPixEventRuntime</AdditionalIncludeDirectories>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..;$(ProjectDir)..\..\include;$(ProjectDir)..\..\private-include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\external;$(ProjectDir)..\..\external\bzip2-1.0.6;$(ProjectDir)..\..\external\zstd\lib\common;$(ProjectDir)..\..\external\rapidjson\include;$(ProjectDir)..\..\external\SPIRV-Cross;$(ProjectDir)..\..\external\SPIRV-Cross\include;$(ProjectDir)..\..\external\bullet3-2.86.1\src;$(ProjectDir)..\..\external\entityx-master\entityx;$(ProjectDir)..\..\external\ck\include;$(ProjectDir)..\..\external\protobuf-3.5.1\src;$(ProjectDir)..\..\darkness-engine\external\libzmq\include;C:\VulkanSDK\1.0.61.1\Include;C:\Program Files (x86)\Windows Kits\10\Include\10.0.16299.0\um;C:\Program Files (x86)\Windows Kits\10\Include\10.0.16299.0\shared;$(ProjectDir)..\..\external\winpixeventruntime\Include\WinPixEventRuntime;$(ProjectDir)..\..\external\gainput-master\lib\include;$(ProjectDir)..\..\external\libzmq\include</AdditionalIncludeDirectories>
+      <TreatWarningAsError>false</TreatWarningAsError>
       <DisableSpecificWarnings>4514;4625;4626;4710;4711;4820;4571;4996</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>true</MinimalRebuild>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -2066,22 +2980,23 @@
       <ObjectFileOutput>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\shaders\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
     <PreBuildEvent>
-      <Command>python $(ProjectDir)..\..\tools\codegen\ShaderBuild.py -g dx12</Command>
+      <Command>python $(ProjectDir)..\..\tools\codegen\ShaderBuild.py -g dx12 &amp;&amp; python $(ProjectDir)..\..\tools\codegen\ProtoGenerator.py</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>VULKAN;VK_USE_PLATFORM_WIN32_KHR;WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions);VULKAN</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..;$(ProjectDir)..\..\include;$(ProjectDir)..\..\private-include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\external;$(ProjectDir)..\..\external\bzip2-1.0.6;$(ProjectDir)..\..\external\zstd\lib\common;$(ProjectDir)..\..\external\rapidjson\include;$(ProjectDir)..\..\external\SPIRV-Cross;$(ProjectDir)..\..\external\SPIRV-Cross\include;$(ProjectDir)..\..\external\bullet3-2.86.1\src;$(ProjectDir)..\..\external\entityx-master\entityx;$(ProjectDir)..\..\external\ck\include;C:\VulkanSDK\1.0.61.1\Include;C:\Program Files (x86)\Windows Kits\10\Include\10.0.15063.0\um;C:\Program Files (x86)\Windows Kits\10\Include\10.0.15063.0\shared</AdditionalIncludeDirectories>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..;$(ProjectDir)..\..\include;$(ProjectDir)..\..\private-include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\external;$(ProjectDir)..\..\external\bzip2-1.0.6;$(ProjectDir)..\..\external\zstd\lib\common;$(ProjectDir)..\..\external\rapidjson\include;$(ProjectDir)..\..\external\SPIRV-Cross;$(ProjectDir)..\..\external\SPIRV-Cross\include;$(ProjectDir)..\..\external\bullet3-2.86.1\src;$(ProjectDir)..\..\external\entityx-master\entityx;$(ProjectDir)..\..\external\ck\include;$(ProjectDir)..\..\external\protobuf-3.5.1\src;$(ProjectDir)..\..\darkness-engine\external\libzmq\include;C:\VulkanSDK\1.0.61.1\Include;C:\Program Files (x86)\Windows Kits\10\Include\10.0.16299.0\um;C:\Program Files (x86)\Windows Kits\10\Include\10.0.16299.0\shared;;$(ProjectDir)..\..\external\gainput-master\lib\include;$(ProjectDir)..\..\external\libzmq\include</AdditionalIncludeDirectories>
+      <TreatWarningAsError>false</TreatWarningAsError>
       <DisableSpecificWarnings>4514;4625;4626;4710;4711;4820;4571;4996</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>true</MinimalRebuild>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -2095,22 +3010,23 @@
       <ObjectFileOutput>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\shaders\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
     <PreBuildEvent>
-      <Command>python $(ProjectDir)..\..\tools\codegen\ShaderBuild.py -g vulkan</Command>
+      <Command>python $(ProjectDir)..\..\tools\codegen\ShaderBuild.py -g vulkan &amp;&amp; python $(ProjectDir)..\..\tools\codegen\ProtoGenerator.py</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release DX12|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>USE_PIX;GRAPHICS_API_DX12;_DX11_1_;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..;$(ProjectDir)..\..\include;$(ProjectDir)..\..\private-include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\external;$(ProjectDir)..\..\external\bzip2-1.0.6;$(ProjectDir)..\..\external\zstd\lib\common;$(ProjectDir)..\..\external\rapidjson\include;$(ProjectDir)..\..\external\SPIRV-Cross;$(ProjectDir)..\..\external\SPIRV-Cross\include;$(ProjectDir)..\..\external\bullet3-2.86.1\src;$(ProjectDir)..\..\external\entityx-master\entityx;$(ProjectDir)..\..\external\ck\include;C:\VulkanSDK\1.0.61.1\Include;C:\Program Files (x86)\Windows Kits\10\Include\10.0.15063.0\um;C:\Program Files (x86)\Windows Kits\10\Include\10.0.15063.0\shared;$(ProjectDir)..\..\external\winpixeventruntime\Include\WinPixEventRuntime</AdditionalIncludeDirectories>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;ZMQ_STATIC;USE_PIX;GRAPHICS_API_DX12;_DX11_1_;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..;$(ProjectDir)..\..\include;$(ProjectDir)..\..\private-include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\external;$(ProjectDir)..\..\external\bzip2-1.0.6;$(ProjectDir)..\..\external\zstd\lib\common;$(ProjectDir)..\..\external\rapidjson\include;$(ProjectDir)..\..\external\SPIRV-Cross;$(ProjectDir)..\..\external\SPIRV-Cross\include;$(ProjectDir)..\..\external\bullet3-2.86.1\src;$(ProjectDir)..\..\external\entityx-master\entityx;$(ProjectDir)..\..\external\ck\include;$(ProjectDir)..\..\external\protobuf-3.5.1\src;$(ProjectDir)..\..\darkness-engine\external\libzmq\include;C:\VulkanSDK\1.0.61.1\Include;C:\Program Files (x86)\Windows Kits\10\Include\10.0.16299.0\um;C:\Program Files (x86)\Windows Kits\10\Include\10.0.16299.0\shared;$(ProjectDir)..\..\external\winpixeventruntime\Include\WinPixEventRuntime;$(ProjectDir)..\..\external\gainput-master\lib\include;$(ProjectDir)..\..\external\libzmq\include</AdditionalIncludeDirectories>
+      <TreatWarningAsError>false</TreatWarningAsError>
       <DisableSpecificWarnings>4514;4625;4626;4710;4711;4820;4571;4996</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>true</MinimalRebuild>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -2124,22 +3040,23 @@
       <ObjectFileOutput>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\shaders\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
     <PreBuildEvent>
-      <Command>python $(ProjectDir)..\..\tools\codegen\ShaderBuild.py -g dx12</Command>
+      <Command>python $(ProjectDir)..\..\tools\codegen\ShaderBuild.py -g dx12 &amp;&amp; python $(ProjectDir)..\..\tools\codegen\ProtoGenerator.py</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release Vulkan|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>VULKAN;VK_USE_PLATFORM_WIN32_KHR;NDEBUG;_WINDOWS;%(PreprocessorDefinitions);VULKAN</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..;$(ProjectDir)..\..\include;$(ProjectDir)..\..\private-include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\external;$(ProjectDir)..\..\external\bzip2-1.0.6;$(ProjectDir)..\..\external\zstd\lib\common;$(ProjectDir)..\..\external\rapidjson\include;$(ProjectDir)..\..\external\SPIRV-Cross;$(ProjectDir)..\..\external\SPIRV-Cross\include;$(ProjectDir)..\..\external\bullet3-2.86.1\src;$(ProjectDir)..\..\external\entityx-master\entityx;$(ProjectDir)..\..\external\ck\include;C:\VulkanSDK\1.0.61.1\Include;C:\Program Files (x86)\Windows Kits\10\Include\10.0.15063.0\um;C:\Program Files (x86)\Windows Kits\10\Include\10.0.15063.0\shared</AdditionalIncludeDirectories>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;ZMQ_STATIC;VULKAN;VK_USE_PLATFORM_WIN32_KHR;NDEBUG;_WINDOWS;%(PreprocessorDefinitions);VULKAN</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..;$(ProjectDir)..\..\include;$(ProjectDir)..\..\private-include;$(ProjectDir)..\..\..\darkness-shared\include;$(ProjectDir)..\..\external;$(ProjectDir)..\..\external\bzip2-1.0.6;$(ProjectDir)..\..\external\zstd\lib\common;$(ProjectDir)..\..\external\rapidjson\include;$(ProjectDir)..\..\external\SPIRV-Cross;$(ProjectDir)..\..\external\SPIRV-Cross\include;$(ProjectDir)..\..\external\bullet3-2.86.1\src;$(ProjectDir)..\..\external\entityx-master\entityx;$(ProjectDir)..\..\external\ck\include;$(ProjectDir)..\..\external\protobuf-3.5.1\src;$(ProjectDir)..\..\darkness-engine\external\libzmq\include;C:\VulkanSDK\1.0.61.1\Include;C:\Program Files (x86)\Windows Kits\10\Include\10.0.16299.0\um;C:\Program Files (x86)\Windows Kits\10\Include\10.0.16299.0\shared;;$(ProjectDir)..\..\external\gainput-master\lib\include;$(ProjectDir)..\..\external\libzmq\include</AdditionalIncludeDirectories>
+      <TreatWarningAsError>false</TreatWarningAsError>
       <DisableSpecificWarnings>4514;4625;4626;4710;4711;4820;4571;4996</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>true</MinimalRebuild>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -2153,7 +3070,7 @@
       <ObjectFileOutput>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\shaders\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
     <PreBuildEvent>
-      <Command>python $(ProjectDir)..\..\tools\codegen\ShaderBuild.py -g vulkan</Command>
+      <Command>python $(ProjectDir)..\..\tools\codegen\ShaderBuild.py -g vulkan &amp;&amp; python $(ProjectDir)..\..\tools\codegen\ProtoGenerator.py</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

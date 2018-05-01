@@ -3,6 +3,10 @@ from optparse import OptionParser
 import subprocess
 from ShaderCompiler import stage_from_filename
 from CodeGenerator import class_name_from_filename
+from CodeGenerator import parsePermutations
+from CodeGenerator import optionPermute
+from CodeGenerator import enumPermute
+from CodeGenerator import permute
 from jinja2 import Template
 import sys
 import json
@@ -94,14 +98,72 @@ class ShaderBuilder:
 
 					changed = False
 
+					# we need to know the permutations so we can check for changed binary files
+					permutations = parsePermutations(file)
+					p = permute(permutations)
+
+					binary_file_for_check = binary_file
+
+					binary_file_exists = False
+					forceRebuild = False
+
+					if len(p) > 0:
+						found_all_permutation_binaries = True
+						for combination in p:
+
+							binpath = binary_file
+							base_directory = os.path.dirname(os.path.normpath(binpath))
+							base_filename_ext = os.path.basename(os.path.normpath(binpath))
+							base_filename, base_file_extension = os.path.splitext(base_filename_ext)
+							base_directory_and_file = os.path.join(base_directory, base_filename)
+							binary_file_perm = base_directory_and_file + '_' + str(combination['id']) + base_file_extension
+
+							permutation_exists = os.path.exists(binary_file_perm)
+							if permutation_exists:
+								permutation_modified = os.path.getmtime(binary_file_perm)
+								if permutation_modified < src_file_modified:
+									forceRebuild = True
+							else:
+								found_all_permutation_binaries = False
+						binary_file_exists = found_all_permutation_binaries
+
+
 					# compile shader
-					binary_file_exists = os.path.exists(binary_file)
 					binary_file_modified = src_file_modified
-					if binary_file_exists:
-						binary_file_modified = os.path.getmtime(binary_file)
-					if not binary_file_exists or binary_file_modified < src_file_modified:
+					if len(p) == 0:
+						binary_file_exists = os.path.exists(binary_file_for_check)
+						if binary_file_exists:
+							binary_file_modified = os.path.getmtime(binary_file_for_check)
+
+					if not binary_file_exists or binary_file_modified < src_file_modified or forceRebuild:
 						changed = True
-						printStdout(subprocess.Popen([sys.executable, self.shader_compiler_path, '-g', graphics_api, '-i', file, '-o', binary_file], stdout = subprocess.PIPE))
+						
+						if len(p) > 0:
+							for combination in p:
+								flags = []
+								# combination['id'] == 001
+								for perm in combination['list']:
+									if perm['type'] == 'option' and perm['value'] == 'true':
+										flags.append(perm['flag'])
+									if perm['type'] == 'enum':
+										flags.append(perm['flag'])
+								flagStr = ''
+								flagLen = len(flags)
+								for i in range(flagLen):
+									flagStr += '-D'+str(flags[i])
+									if i < flagLen-1:
+										flagStr += ' '
+
+								binpath = binary_file
+								base_directory = os.path.dirname(os.path.normpath(binpath))
+								base_filename_ext = os.path.basename(os.path.normpath(binpath))
+								base_filename, base_file_extension = os.path.splitext(base_filename_ext)
+								base_directory_and_file = os.path.join(base_directory, base_filename)
+								binary_file_perm = base_directory_and_file + '_' + str(combination['id']) + base_file_extension
+
+								printStdout(subprocess.Popen([sys.executable, self.shader_compiler_path, '-g', graphics_api, '-i', file, '-o', binary_file_perm, '', flagStr], stdout = subprocess.PIPE))
+						else:
+							printStdout(subprocess.Popen([sys.executable, self.shader_compiler_path, '-g', graphics_api, '-i', file, '-o', binary_file], stdout = subprocess.PIPE))
 
 					# generate shader interface
 					interface_file_exists = os.path.exists(interface_file)

@@ -46,6 +46,7 @@ namespace engine
         m_transforms.clear();
         m_positions.clear();
         m_directions.clear();
+        m_ranges.clear();
         m_types.clear();
         m_shadowCaster.clear();
 
@@ -75,6 +76,7 @@ namespace engine
             m_transforms.emplace_back(light.transform);
             m_positions.emplace_back(light.position);
             m_directions.emplace_back(light.direction);
+            m_ranges.emplace_back(light.range);
             m_types.emplace_back(static_cast<unsigned int>(light.type));
             m_shadowCaster.emplace_back(light.shadowCaster);
         }
@@ -87,37 +89,37 @@ namespace engine
             {
                 m_lightWorlPositions = std::make_shared<BufferSRV>(device.createBufferSRV(BufferDescription()
                     .name("lightPositions")
-                    .format(Format::Format_R32G32B32A32_FLOAT)
+                    .format(Format::R32G32B32A32_FLOAT)
                     .setInitialData(BufferDescription::InitialData(positions))));
 
                 m_lightDirections = std::make_shared<BufferSRV>(device.createBufferSRV(BufferDescription()
                     .name("lightDirections")
-                    .format(Format::Format_R32G32B32A32_FLOAT)
+                    .format(Format::R32G32B32A32_FLOAT)
                     .setInitialData(BufferDescription::InitialData(directions))));
 
                 m_lightColors = std::make_shared<BufferSRV>(device.createBufferSRV(BufferDescription()
                     .name("lightColors")
-                    .format(Format::Format_R32G32B32A32_FLOAT)
+                    .format(Format::R32G32B32A32_FLOAT)
                     .setInitialData(BufferDescription::InitialData(colors))));
 
                 m_lightIntensities = std::make_shared<BufferSRV>(device.createBufferSRV(BufferDescription()
                     .name("lightIntensities")
-                    .format(Format::Format_R32_FLOAT)
+                    .format(Format::R32_FLOAT)
                     .setInitialData(BufferDescription::InitialData(intensities))));
 
                 m_lightRanges = std::make_shared<BufferSRV>(device.createBufferSRV(BufferDescription()
                     .name("lightRanges")
-                    .format(Format::Format_R32_FLOAT)
+                    .format(Format::R32_FLOAT)
                     .setInitialData(BufferDescription::InitialData(ranges))));
 
                 m_lightTypes = std::make_shared<BufferSRV>(device.createBufferSRV(BufferDescription()
                     .name("lightTypes")
-                    .format(Format::Format_R32_UINT)
+                    .format(Format::R32_UINT)
                     .setInitialData(BufferDescription::InitialData(types))));
 
                 m_lightParameters = std::make_shared<BufferSRV>(device.createBufferSRV(BufferDescription()
                     .name("lightParameters")
-                    .format(Format::Format_R32G32B32A32_FLOAT)
+                    .format(Format::R32G32B32A32_FLOAT)
                     .setInitialData(BufferDescription::InitialData(parameters))));
 
                 m_saved.push(*m_lightWorlPositions);

@@ -9,10 +9,13 @@ CompressedFileBzip2::CompressedFileBzip2()
     , m_mode{ 0 }
     , m_eof{ false }
     , m_filePosition{ 0 }
+    , m_memoryFile{ false }
 {}
 
 void CompressedFileBzip2::open(const std::string& filename, int mode)
 {
+    m_fileContents = make_unique<std::vector<char>>();
+    m_fileContentsActive = m_fileContents.get();
     m_filename = filename;
     m_mode = mode;
     m_file.open(filename, mode);
@@ -22,21 +25,34 @@ void CompressedFileBzip2::open(const std::string& filename, int mode)
     }
 }
 
+void CompressedFileBzip2::open(std::vector<char>& memory, int mode)
+{
+    m_fileContentsActive = &memory;
+    m_mode = mode;
+    m_memoryFile = true;
+    if (((mode & ios::in) == ios::in) && memory.size() > 0)
+    {
+        decode();
+    }
+}
+
 bool CompressedFileBzip2::is_open() const
 {
+    if (m_memoryFile)
+        return true;
     return m_file.is_open();
 }
 
 void CompressedFileBzip2::read(char* buffer, streamsize count)
 {
     streamsize bytesToRead = count;
-    if (count > static_cast<streamsize>(m_fileContents.size() - m_filePosition))
+    if (count > static_cast<streamsize>(m_fileContentsActive->size() - m_filePosition))
     {
         m_eof = true;
-        bytesToRead = static_cast<streamsize>(m_fileContents.size() - m_filePosition);
+        bytesToRead = static_cast<streamsize>(m_fileContentsActive->size() - m_filePosition);
     }
     if (bytesToRead > 0)
-        memcpy(buffer, &m_fileContents[m_filePosition], static_cast<size_t>(bytesToRead));
+        memcpy(buffer, &(*m_fileContentsActive)[m_filePosition], static_cast<size_t>(bytesToRead));
     m_filePosition += static_cast<size_t>(bytesToRead);
 }
 
@@ -45,11 +61,11 @@ void CompressedFileBzip2::write(const char* buffer, streamsize count)
     if (count == 0)
         return;
 
-    if (m_fileContents.size() < m_filePosition + count)
+    if (m_fileContentsActive->size() < m_filePosition + count)
     {
-        m_fileContents.resize(m_filePosition + static_cast<size_t>(count));
+        m_fileContentsActive->resize(m_filePosition + static_cast<size_t>(count));
     }
-    memcpy(&m_fileContents[m_filePosition], buffer, static_cast<size_t>(count));
+    memcpy(&(*m_fileContentsActive)[m_filePosition], buffer, static_cast<size_t>(count));
     m_filePosition += static_cast<size_t>(count);
 }
 
@@ -61,8 +77,8 @@ void CompressedFileBzip2::seekg(std::streampos off, std::ios_base::seekdir way)
         m_filePosition = static_cast<size_t>(off);
     else if (way == ios::end)
     {
-        if (static_cast<size_t>(off) < m_fileContents.size())
-            m_filePosition = m_fileContents.size() - static_cast<size_t>(off);
+        if (static_cast<size_t>(off) < m_fileContentsActive->size())
+            m_filePosition = m_fileContentsActive->size() - static_cast<size_t>(off);
         else
             m_filePosition = 0;
     }
@@ -84,7 +100,8 @@ void CompressedFileBzip2::close()
     {
         encode();
     }
-    m_file.close();
+    if(!m_memoryFile)
+        m_file.close();
 }
 
 bool CompressedFileBzip2::eof() const
@@ -94,9 +111,16 @@ bool CompressedFileBzip2::eof() const
 
 void CompressedFileBzip2::decode()
 {
-    m_file.seekg(0, ios::end);
-    size_t fileSize = static_cast<size_t>(m_file.tellg());
-    m_file.seekg(0, ios::beg);
+    //m_fileContentsActive
+    size_t fileSize = 0;
+    if (!m_memoryFile)
+    {
+        m_file.seekg(0, ios::end);
+        fileSize = static_cast<size_t>(m_file.tellg());
+        m_file.seekg(0, ios::beg);
+    }
+    else
+        fileSize = m_fileContentsActive->size();
 
     m_filePosition = 0;
     vector<char> decodedBuffer(CompressionBufferSize, 0);
@@ -122,7 +146,12 @@ void CompressedFileBzip2::decode()
         size_t bytesRemaining = static_cast<size_t>(fileSize - m_filePosition);
         size_t bytesToRead = BlockSize > bytesRemaining ? bytesRemaining : BlockSize;
         if (bytesToRead > 0)
-            m_file.read(&encodedBuffer[0], static_cast<streamsize>(bytesToRead));
+        {
+            if (!m_memoryFile)
+                m_file.read(&encodedBuffer[0], static_cast<streamsize>(bytesToRead));
+            else
+                memcpy(&encodedBuffer[0], &(*m_fileContentsActive)[m_filePosition], bytesToRead);
+        }
         m_filePosition += bytesToRead;
 
         stream.avail_in = static_cast<unsigned int>(bytesToRead);
@@ -149,7 +178,7 @@ void CompressedFileBzip2::decode()
 
     ret = BZ2_bzDecompressEnd(&stream);
 
-    m_fileContents.swap(result);
+    m_fileContentsActive->swap(result);
     m_filePosition = 0;
 }
 
@@ -165,15 +194,17 @@ void CompressedFileBzip2::encode()
     BZ2_bzCompressInit(&stream, 9, 0, 0);
     stream.avail_in = 0;
 
+    vector<char> tempStorage;
+
     int ret = BZ_RUN_OK;
     do
     {
         const size_t BlockSize = buffer.size();
-        size_t bytesRemaining = static_cast<size_t>(m_fileContents.size() - m_filePosition);
+        size_t bytesRemaining = static_cast<size_t>(m_fileContentsActive->size() - m_filePosition);
         size_t bytesToWrite = BlockSize > bytesRemaining ? bytesRemaining : BlockSize;
 
         stream.avail_in = static_cast<unsigned int>(bytesToWrite);
-        stream.next_in = bytesToWrite > 0 ? &m_fileContents[m_filePosition] : nullptr;
+        stream.next_in = bytesToWrite > 0 ? &(*m_fileContentsActive)[m_filePosition] : nullptr;
 
         do
         {
@@ -186,7 +217,14 @@ void CompressedFileBzip2::encode()
             if (stream.avail_out < BlockSize)
             {
                 unsigned int availableBytes = static_cast<unsigned int>(BlockSize) - stream.avail_out;
-                m_file.write(&buffer[0], availableBytes);
+                if(!m_memoryFile)
+                    m_file.write(&buffer[0], availableBytes);
+                else
+                {
+                    auto currentSize = tempStorage.size();
+                    tempStorage.resize(tempStorage.size() + availableBytes);
+                    memcpy(&tempStorage[currentSize], &buffer[0], availableBytes);
+                }
             }
         } while (stream.avail_in > 0);
         ASSERT(stream.avail_in == 0);
@@ -195,4 +233,6 @@ void CompressedFileBzip2::encode()
     } while (ret != BZ_STREAM_END);
 
     ret = BZ2_bzCompressEnd(&stream);
+
+    m_fileContentsActive->swap(tempStorage);
 }

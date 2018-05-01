@@ -5,6 +5,13 @@
 #include "engine/graphics/Rect.h"
 #include "engine/graphics/Barrier.h"
 #include "engine/graphics/Common.h"
+#include "engine/graphics/CommandList.h"
+#include "engine/graphics/Device.h"
+#include "external/imgui/imgui.h"
+#include "engine/InputEvents.h"
+#include "engine/Scene.h"
+#include "components/Camera.h"
+#include "engine/primitives/BoundingSphere.h"
 
 #include <math.h>
 #include <algorithm>
@@ -17,7 +24,6 @@ namespace engine
         , m_pipeline{ device.createPipeline<shaders::ImguiRender>(shaderStorage) }
     {
         m_pipeline.setPrimitiveTopologyType(PrimitiveTopologyType::TriangleList);
-        m_pipeline.setRenderTargetFormat(Format::Format_R8G8B8A8_UNORM, Format::Format_D32_FLOAT);
         m_pipeline.setRasterizerState(RasterizerDescription()
             .depthClipEnable(true)
             .cullMode(CullMode::None)
@@ -62,18 +68,17 @@ namespace engine
         style.Colors[ImGuiCol_FrameBgActive] =    { color3.x, color3.y, color3.z, color3.w };
 
         m_fontAtlas = device.createTextureSRV(TextureDescription()
-            .usage(ResourceUsage::CpuToGpu)
             .name("ImGui font atlas")
             .width(pixelsWidth)
             .height(pixelsHeight)
-            .format(Format::Format_R8_UNORM)
+            .format(Format::R8_UNORM)
             .arraySlices(1)
             .mipLevels(1)
             .setInitialData(TextureDescription::InitialData(
-                tools::ByteRange(pixels, pixels + formatBytes(Format::Format_R8_UNORM, pixelsWidth, pixelsHeight)),
-                static_cast<uint32_t>(formatBytes(Format::Format_R8_UNORM, pixelsWidth, 1)),
+                tools::ByteRange(pixels, pixels + formatBytes(Format::R8_UNORM, pixelsWidth, pixelsHeight)),
+                static_cast<uint32_t>(formatBytes(Format::R8_UNORM, pixelsWidth, 1)),
                 static_cast<uint32_t>(formatBytes(
-                    Format::Format_R8_UNORM, 
+                    Format::R8_UNORM, 
                     static_cast<unsigned int>(pixelsWidth), 
                     static_cast<unsigned int>(pixelsHeight)))))
         );
@@ -148,7 +153,6 @@ namespace engine
             m_vbvs.emplace_back(m_vbv);
             m_vbv = device.createBufferVBV(BufferDescription()
                 .name("ImGui vbv")
-                .usage(ResourceUsage::CpuToGpu)
                 .structured(true)
                 .setInitialData(BufferDescription::InitialData(
                     tools::ByteRange(vbv.begin(), vbv.end()), 1)));
@@ -169,7 +173,6 @@ namespace engine
             m_ibvs.emplace_back(m_ibv);
             m_ibv = device.createBufferIBV(BufferDescription()
                 .name("ImGui ibv")
-                .usage(ResourceUsage::CpuToGpu)
                 .setInitialData(BufferDescription::InitialData(
                     tools::ByteRange(ibv.begin(), ibv.end()), 1)));
             //cmd.transition(m_ibv, ResourceState::CopyDest, ResourceState::IndexBuffer);
@@ -190,8 +193,97 @@ namespace engine
             m_ibvs.erase(m_ibvs.begin());
     }
 
-    void ImguiRenderer::render(const FlatScene& scene)
+    void renderBoxes(const FlatScene& scene, const std::vector<BoundingBox>& boxes, uint32_t color)
     {
+        if (scene.selectedCamera == -1 || scene.cameras.size() == 0 || scene.selectedCamera > scene.cameras.size() - 1 || !scene.cameras[scene.selectedCamera])
+            return;
+
+        auto frustumPlanes = extractFrustumPlanes(scene.cameras[scene.selectedCamera]->projectionMatrix() * scene.cameras[scene.selectedCamera]->viewMatrix());
+
+        ImGuiIO& io = ImGui::GetIO();
+        ImGui::Begin("hud", NULL, io.DisplaySize, 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoBringToFrontOnFocus);
+
+        ImDrawList* drawList = ImGui::GetWindowDrawList();
+
+        ImGui::End();
+
+        auto cam = scene.cameras[scene.selectedCamera];
+        if (!cam)
+            return;
+
+        auto modelTrans =
+            Matrix4f::translate({ 0.0f, 0.0f, 0.0f }) *
+            Matrix4f::rotation({ 0.0f, 0.0f, 0.0f }) *
+            Matrix4f::scale({ 1.0f, 1.0f, 1.0f });
+        auto viewMat = cam->viewMatrix();
+        auto projMat = cam->projectionMatrix();
+
+        auto mvp = projMat * viewMat * modelTrans;
+
+        ImU32 spotColor = color;// 0x881080FF;
+        float spotThickness = 0.7f;
+
+        for (auto&& box : boxes)
+        {
+            drawCube3d(*cam, frustumPlanes, mvp, drawList, box, spotColor, spotThickness);
+        }
+    }
+
+    void ImguiRenderer::renderSpheres(const FlatScene& scene, const std::vector<BoundingSphere>& spheres, uint32_t color)
+    {
+        if (scene.selectedCamera == -1 || scene.cameras.size() == 0 || scene.selectedCamera > scene.cameras.size() - 1 || !scene.cameras[scene.selectedCamera])
+            return;
+
+        auto frustumPlanes = extractFrustumPlanes(scene.cameras[scene.selectedCamera]->projectionMatrix() * scene.cameras[scene.selectedCamera]->viewMatrix());
+
+        ImGuiIO& io = ImGui::GetIO();
+        ImGui::Begin("hud", NULL, io.DisplaySize, 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoBringToFrontOnFocus);
+
+        ImDrawList* drawList = ImGui::GetWindowDrawList();
+
+        ImGui::End();
+
+        auto cam = scene.cameras[scene.selectedCamera];
+        if (!cam)
+            return;
+
+        auto modelTrans =
+            Matrix4f::translate({ 0.0f, 0.0f, 0.0f }) *
+            Matrix4f::rotation({ 0.0f, 0.0f, 0.0f }) *
+            Matrix4f::scale({ 1.0f, 1.0f, 1.0f });
+        auto viewMat = cam->viewMatrix();
+        auto projMat = cam->projectionMatrix();
+
+        auto mvp = projMat * viewMat * modelTrans;
+
+        ImU32 spotColor = color;// 0x881080FF;
+        float spotThickness = 0.7f;
+
+        for (auto&& sphere : spheres)
+        {
+            int sectorCount = 50;
+            int vertRotationCount = 8;
+            float currentRotation = 0;
+            float rotationInc = 180.0f / vertRotationCount;
+
+            auto sphereModelTrans =
+                Matrix4f::translate(sphere.position()) *
+                Matrix4f::rotation({ 0.0f, 0.0f, 0.0f }) *
+                Matrix4f::scale({ 1.0f, 1.0f, 1.0f });
+
+            // small circle at the center
+            float distance = (cam->position() - sphere.position()).magnitude();
+            drawCircle3d(*cam, frustumPlanes, mvp, sphereModelTrans, drawList, 0.01f * distance, sectorCount, spotColor, spotThickness, 0.0f, 360.0f, CirclePlane::XZ);
+            drawCircle3d(*cam, frustumPlanes, mvp, sphereModelTrans, drawList, 0.01f * distance, sectorCount, spotColor, spotThickness, 0.0f, 360.0f, CirclePlane::YZ);
+            drawCircle3d(*cam, frustumPlanes, mvp, sphereModelTrans, drawList, 0.01f * distance, sectorCount, spotColor, spotThickness, 0.0f, 360.0f, CirclePlane::XY);
+        }
+    }
+
+    void ImguiRenderer::render(Device& device, const FlatScene& scene)
+    {
+        if (scene.selectedCamera == -1 || scene.cameras.size() == 0 || scene.selectedCamera > scene.cameras.size() - 1 || !scene.cameras[scene.selectedCamera])
+            return;
+
         auto frustumPlanes = extractFrustumPlanes(scene.cameras[scene.selectedCamera]->projectionMatrix() * scene.cameras[scene.selectedCamera]->viewMatrix());
 
         ImGuiIO& io = ImGui::GetIO();
@@ -214,7 +306,13 @@ namespace engine
 
         auto mvp = projMat * viewMat * modelTrans;
 
+        //ImU32 gridColor = 0x88333333;
+        //float gridThickness = 0.8f;
+        ImU32 gridAxisColor = 0xff333333;
+        float gridAxisThickness = 1.0f;
+
         // draw grid lines
+#if 0
         constexpr float gridXInc = 1.0f;
         constexpr float gridZInc = 1.0f;
         constexpr int gridXCount = 40;
@@ -226,10 +324,8 @@ namespace engine
         float startZ = -(gridHeight / 2.0f);
         float origX = startX;
         float origZ = startZ;
-        ImU32 gridColor = 0x88333333;
-        float gridThickness = 0.8f;
-        ImU32 gridAxisColor = 0xff333333;
-        float gridAxisThickness = 1.0f;
+        
+        
 
         for (int x = 0; x < gridXCount+1; ++x)
         {
@@ -253,167 +349,286 @@ namespace engine
             startX += gridXInc;
             startZ += gridZInc;
         }
-
-        // light UI
-        for (auto&& light : scene.lights)
+#endif
+        /*
+        std::vector<BoundingBox> boxes;
+        auto& meshes = device.resourceCache().meshes();
+        for (auto&& mesh : meshes)
         {
-            if (light.type == LightType::Spot)
+            for (auto&& submesh : mesh.second->subMeshes())
             {
-                ImU32 spotColor = 0x881080FF;
-                float spotThickness = 0.7f;
-                int sectorCount = 50;
-
-                // light direction line
-                Vector3f wstart = light.position;
-                Vector3f wstop = light.position - (light.direction * light.light->range());
-                drawLine3d(*cam, frustumPlanes, mvp, drawList, wstart, wstop, spotColor, spotThickness);
-                
-                // full circle at edge of outer angle
-                float outDist = cos(light.outerCone * DEG_TO_RAD) * light.light->range();
-                float radius = tan(light.outerCone * DEG_TO_RAD) * outDist;
-                Matrix4f spotMat = Matrix4f::translate(light.direction.invert() * outDist) * light.transform;
-                drawCircle3d(*cam, frustumPlanes, mvp, spotMat, drawList, radius, sectorCount, spotColor, spotThickness);
-
-                // full circle at edge of inner angle
-                float innerCone = min(light.innerCone, light.outerCone);
-                float innerDist = cos(innerCone * DEG_TO_RAD) * light.light->range();
-                float innerRadius = tan(innerCone * DEG_TO_RAD) * innerDist;
-                Matrix4f innerSpotMat = Matrix4f::translate(light.direction.invert() * innerDist) * light.transform;
-                drawCircle3d(*cam, frustumPlanes, mvp, innerSpotMat, drawList, innerRadius, sectorCount, spotColor, spotThickness);
-
-                // horizontal curve
-                Matrix4f spotCurveMat = light.transform;
-                drawCircle3d(*cam, frustumPlanes, mvp, spotCurveMat, drawList, light.light->range(), sectorCount, spotColor, spotThickness,
-                    -light.outerCone - 90.0f, light.outerCone - 90.0f, 
-                    CirclePlane::XZ);
-
-                // vertical curve
-                drawCircle3d(*cam, frustumPlanes, mvp, spotCurveMat, drawList, light.light->range(), sectorCount, spotColor, spotThickness,
-                    -light.outerCone - 90.0f, light.outerCone - 90.0f, 
-                    CirclePlane::YZ);
-
-                // edge lines
-                Vector4f pointR = spotMat * Vector4f{radius, 0.0f, 0.0f, 1.0f };
-                drawLine3d(*cam, frustumPlanes, mvp, drawList, light.position, pointR.xyz(), spotColor, spotThickness);
-
-                Vector4f pointL = spotMat * Vector4f{ -radius, 0.0f, 0.0f, 1.0f };
-                drawLine3d(*cam, frustumPlanes, mvp, drawList, light.position, pointL.xyz(), spotColor, spotThickness);
-
-                Vector4f pointT = spotMat * Vector4f{ 0.0f, radius, 0.0f, 1.0f };
-                drawLine3d(*cam, frustumPlanes, mvp, drawList, light.position, pointT.xyz(), spotColor, spotThickness);
-
-                Vector4f pointB = spotMat * Vector4f{ 0.0f, -radius, 0.0f, 1.0f };
-                drawLine3d(*cam, frustumPlanes, mvp, drawList, light.position, pointB.xyz(), spotColor, spotThickness);
-            }
-
-            else if (light.type == LightType::Point)
-            {
-                ImU32 spotColor = 0x881080FF;
-                float spotThickness = 0.7f;
-                int sectorCount = 50;
-                int vertRotationCount = 8;
-                float currentRotation = 0;
-                float rotationInc = 180.0f / vertRotationCount;
-                for (int i = 0; i < vertRotationCount; ++i)
-                {
-                    Matrix4f rot = Matrix4f::rotation({ 0.0f, currentRotation, 0.0f });
-                    Matrix4f circleRotation = rot * light.transform;
-                    drawCircle3d(*cam, frustumPlanes, mvp, circleRotation, drawList, light.light->range(), sectorCount, spotColor, spotThickness, 0.0f, 360.0f, CirclePlane::XY);
-                    currentRotation += rotationInc;
-                }
-                drawCircle3d(*cam, frustumPlanes, mvp, light.transform, drawList, light.light->range(), sectorCount, spotColor, spotThickness, 0.0f, 360.0f, CirclePlane::XZ);
-                drawCircle3d(*cam, frustumPlanes, mvp, light.transform, drawList, light.light->range(), sectorCount, spotColor, spotThickness, 0.0f, 360.0f, CirclePlane::YZ);
-            }
-
-            else if (light.type == LightType::Directional)
-            {
-                ImU32 spotColor = 0x881080FF;
-                float spotThickness = 0.7f;
-                int sectorCount = 20;
-
-                // light direction line
-                Vector3f wstart = light.position;
-                Vector3f wstop = light.position - (light.direction * 4.0f);
-                drawLine3d(*cam, frustumPlanes, mvp, drawList, wstart, wstop, spotColor, spotThickness * 2.0f);
-
-                int vertRotationCount = 8;
-                float currentRotation = 0;
-                float rotationInc = 360.0f / vertRotationCount;
-                float radius = 1.0f;
-                for (int i = 0; i < vertRotationCount; ++i)
-                {
-                    Vector4f point{
-                        radius * cosf(currentRotation),
-                        radius * sinf(currentRotation),
-                        0.0f,
-                        1.0f };
-                    point = light.transform * point;
-                    
-                    Vector3f pointEnd = point.xyz() - (light.direction * 2.0f);
-                    drawLine3d(*cam, frustumPlanes, mvp, drawList, point.xyz(), pointEnd, spotColor, spotThickness);
-
-                    currentRotation += rotationInc;
-                }
-
-                drawCircle3d(*cam, frustumPlanes, mvp, light.transform, drawList, 1.0f, sectorCount, spotColor, spotThickness);
+                renderBoxes(scene, submesh.out_clusterBounds, 0xff880000);
             }
         }
+        */
 
 #if 0
-        gridAxisColor = 0xffaa3333;
-        for (auto&& camera : scene.cameras)
+        // bounding boxes
+        auto lineDraw = [cam, frustumPlanes, mvp, drawList](const Vector3f& a, const Vector3f& b)
         {
-            auto cornerRays = camera->viewRays();
-            drawLine3d(*cam, frustumPlanes, mvp, drawList, 
-                camera->position() + (cornerRays.topLeft * camera->nearPlane()), 
-                camera->position() + (cornerRays.topLeft * camera->farPlane()),
-                gridAxisColor, gridAxisThickness);
-            drawLine3d(*cam, frustumPlanes, mvp, drawList,
-                camera->position() + (cornerRays.topRight * camera->nearPlane()),
-                camera->position() + (cornerRays.topRight * camera->farPlane()),
-                gridAxisColor, gridAxisThickness);
-            drawLine3d(*cam, frustumPlanes, mvp, drawList,
-                camera->position() + (cornerRays.bottomLeft * camera->nearPlane()),
-                camera->position() + (cornerRays.bottomLeft * camera->farPlane()),
-                gridAxisColor, gridAxisThickness);
-            drawLine3d(*cam, frustumPlanes, mvp, drawList,
-                camera->position() + (cornerRays.bottomRight * camera->nearPlane()),
-                camera->position() + (cornerRays.bottomRight * camera->farPlane()),
-                gridAxisColor, gridAxisThickness);
+            drawLine3d(*cam, frustumPlanes, mvp, drawList, a, b, 0xff880000, 1.0f);
+        };
 
-            drawLine3d(*cam, frustumPlanes, mvp, drawList,
-                camera->position() + (cornerRays.topLeft * camera->nearPlane()),
-                camera->position() + (cornerRays.topRight * camera->nearPlane()),
-                gridAxisColor, gridAxisThickness);
-            drawLine3d(*cam, frustumPlanes, mvp, drawList,
-                camera->position() + (cornerRays.topRight * camera->nearPlane()),
-                camera->position() + (cornerRays.bottomRight * camera->nearPlane()),
-                gridAxisColor, gridAxisThickness);
-            drawLine3d(*cam, frustumPlanes, mvp, drawList,
-                camera->position() + (cornerRays.bottomRight * camera->nearPlane()),
-                camera->position() + (cornerRays.bottomLeft * camera->nearPlane()),
-                gridAxisColor, gridAxisThickness);
-            drawLine3d(*cam, frustumPlanes, mvp, drawList,
-                camera->position() + (cornerRays.bottomLeft * camera->nearPlane()),
-                camera->position() + (cornerRays.topLeft * camera->nearPlane()),
-                gridAxisColor, gridAxisThickness);
+        for (auto& node : scene.nodes)
+        {
+            auto& subMesh = node.mesh->meshBuffer();
+            {
+                auto objectBounds = node.mesh->meshBuffer().modelAllocations->boundingBox;
+                Vector3f corner[8] =
+                {
+                    node.transform * objectBounds.min,
+                    node.transform * Vector3f{ objectBounds.min.x, objectBounds.max.y, objectBounds.min.z },
+                    node.transform * Vector3f{ objectBounds.min.x, objectBounds.max.y, objectBounds.max.z },
+                    node.transform * Vector3f{ objectBounds.min.x, objectBounds.min.y, objectBounds.max.z },
+                    node.transform * Vector3f{ objectBounds.max.x, objectBounds.min.y, objectBounds.min.z },
+                    node.transform * Vector3f{ objectBounds.max.x, objectBounds.max.y, objectBounds.min.z },
+                    node.transform * Vector3f{ objectBounds.max.x, objectBounds.max.y, objectBounds.max.z },
+                    node.transform * Vector3f{ objectBounds.max.x, objectBounds.min.y, objectBounds.max.z }
+                };
 
-            drawLine3d(*cam, frustumPlanes, mvp, drawList,
-                camera->position() + (cornerRays.topLeft * camera->farPlane()),
-                camera->position() + (cornerRays.topRight * camera->farPlane()),
-                gridAxisColor, gridAxisThickness);
-            drawLine3d(*cam, frustumPlanes, mvp, drawList,
-                camera->position() + (cornerRays.topRight * camera->farPlane()),
-                camera->position() + (cornerRays.bottomRight * camera->farPlane()),
-                gridAxisColor, gridAxisThickness);
-            drawLine3d(*cam, frustumPlanes, mvp, drawList,
-                camera->position() + (cornerRays.bottomRight * camera->farPlane()),
-                camera->position() + (cornerRays.bottomLeft * camera->farPlane()),
-                gridAxisColor, gridAxisThickness);
-            drawLine3d(*cam, frustumPlanes, mvp, drawList,
-                camera->position() + (cornerRays.bottomLeft * camera->farPlane()),
-                camera->position() + (cornerRays.topLeft * camera->farPlane()),
-                gridAxisColor, gridAxisThickness);
+                lineDraw(corner[0], corner[1]);
+                lineDraw(corner[1], corner[2]);
+                lineDraw(corner[2], corner[3]);
+                lineDraw(corner[3], corner[0]);
+
+                lineDraw(corner[4], corner[5]);
+                lineDraw(corner[5], corner[6]);
+                lineDraw(corner[6], corner[7]);
+                lineDraw(corner[7], corner[4]);
+
+                lineDraw(corner[0], corner[4]);
+                lineDraw(corner[1], corner[5]);
+                lineDraw(corner[2], corner[6]);
+                lineDraw(corner[3], corner[7]);
+            }
+        }
+#endif
+
+        // light UI
+#if 1
+        for (auto&& light : scene.lights)
+        {
+            if (light.node->id() == scene.selectedObject)
+            {
+                if (light.type == LightType::Spot)
+                {
+                    ImU32 spotColor = 0x881080FF;
+                    float spotThickness = 0.7f;
+                    int sectorCount = 50;
+
+                    // light direction line
+                    Vector3f wstart = light.position;
+                    Vector3f wstop = light.position - (light.direction * light.light->range());
+                    drawLine3d(*cam, frustumPlanes, mvp, drawList, wstart, wstop, spotColor, spotThickness);
+
+                    // full circle at edge of outer angle
+                    float outDist = cos(light.outerCone * DEG_TO_RAD) * light.light->range();
+                    float radius = tan(light.outerCone * DEG_TO_RAD) * outDist;
+                    Matrix4f spotMat = Matrix4f::translate(light.direction.invert() * outDist) * light.transform;
+                    drawCircle3d(*cam, frustumPlanes, mvp, spotMat, drawList, radius, sectorCount, spotColor, spotThickness);
+
+                    // full circle at edge of inner angle
+                    float innerCone = min(light.innerCone, light.outerCone);
+                    float innerDist = cos(innerCone * DEG_TO_RAD) * light.light->range();
+                    float innerRadius = tan(innerCone * DEG_TO_RAD) * innerDist;
+                    Matrix4f innerSpotMat = Matrix4f::translate(light.direction.invert() * innerDist) * light.transform;
+                    drawCircle3d(*cam, frustumPlanes, mvp, innerSpotMat, drawList, innerRadius, sectorCount, spotColor, spotThickness);
+
+                    // horizontal curve
+                    Matrix4f spotCurveMat = light.transform;
+                    drawCircle3d(*cam, frustumPlanes, mvp, spotCurveMat, drawList, light.light->range(), sectorCount, spotColor, spotThickness,
+                        -light.outerCone - 90.0f, light.outerCone - 90.0f,
+                        CirclePlane::XZ);
+
+                    // vertical curve
+                    drawCircle3d(*cam, frustumPlanes, mvp, spotCurveMat, drawList, light.light->range(), sectorCount, spotColor, spotThickness,
+                        -light.outerCone - 90.0f, light.outerCone - 90.0f,
+                        CirclePlane::YZ);
+
+                    // edge lines
+                    Vector4f pointR = spotMat * Vector4f{ radius, 0.0f, 0.0f, 1.0f };
+                    drawLine3d(*cam, frustumPlanes, mvp, drawList, light.position, pointR.xyz(), spotColor, spotThickness);
+
+                    Vector4f pointL = spotMat * Vector4f{ -radius, 0.0f, 0.0f, 1.0f };
+                    drawLine3d(*cam, frustumPlanes, mvp, drawList, light.position, pointL.xyz(), spotColor, spotThickness);
+
+                    Vector4f pointT = spotMat * Vector4f{ 0.0f, radius, 0.0f, 1.0f };
+                    drawLine3d(*cam, frustumPlanes, mvp, drawList, light.position, pointT.xyz(), spotColor, spotThickness);
+
+                    Vector4f pointB = spotMat * Vector4f{ 0.0f, -radius, 0.0f, 1.0f };
+                    drawLine3d(*cam, frustumPlanes, mvp, drawList, light.position, pointB.xyz(), spotColor, spotThickness);
+                }
+
+                else if (light.type == LightType::Point)
+                {
+                    ImU32 spotColor = 0x881080FF;
+                    ImU32 spotColorDistant = 0x440840AA;
+                    float spotThickness = 0.7f;
+                    int sectorCount = 50;
+                    int vertRotationCount = 8;
+                    float currentRotation = 0;
+                    float rotationInc = 180.0f / vertRotationCount;
+                    for (int i = 0; i < vertRotationCount; ++i)
+                    {
+                        Matrix4f rot = Matrix4f::rotation({ 0.0f, currentRotation, 0.0f });
+                        Matrix4f circleRotation = light.transform * rot;
+                        drawCircle3d(*cam, frustumPlanes, mvp, circleRotation, drawList, light.light->range(), sectorCount, spotColorDistant, spotThickness, 0.0f, 360.0f, CirclePlane::XY);
+                        currentRotation += rotationInc;
+                    }
+                    drawCircle3d(*cam, frustumPlanes, mvp, light.transform, drawList, light.light->range(), sectorCount, spotColorDistant, spotThickness, 0.0f, 360.0f, CirclePlane::XZ);
+                    drawCircle3d(*cam, frustumPlanes, mvp, light.transform, drawList, light.light->range(), sectorCount, spotColorDistant, spotThickness, 0.0f, 360.0f, CirclePlane::YZ);
+
+                    // small circle at the center
+                    float distance = (cam->position() - light.position).magnitude();
+                    drawCircle3d(*cam, frustumPlanes, mvp, light.transform, drawList, 0.01f * distance, sectorCount, spotColor, spotThickness, 0.0f, 360.0f, CirclePlane::XZ);
+                    drawCircle3d(*cam, frustumPlanes, mvp, light.transform, drawList, 0.01f * distance, sectorCount, spotColor, spotThickness, 0.0f, 360.0f, CirclePlane::YZ);
+                }
+
+                else if (light.type == LightType::Directional)
+                {
+                    ImU32 spotColor = 0x881080FF;
+                    float spotThickness = 0.7f;
+                    int sectorCount = 20;
+
+                    // light direction line
+                    Vector3f wstart = light.position;
+                    Vector3f wstop = light.position - (light.direction * 4.0f);
+                    drawLine3d(*cam, frustumPlanes, mvp, drawList, wstart, wstop, spotColor, spotThickness * 2.0f);
+
+                    int vertRotationCount = 8;
+                    float currentRotation = 0;
+                    float rotationInc = 360.0f / vertRotationCount;
+                    float radius = 1.0f;
+                    for (int i = 0; i < vertRotationCount; ++i)
+                    {
+                        Vector4f point{
+                            radius * cosf(currentRotation),
+                            radius * sinf(currentRotation),
+                            0.0f,
+                            1.0f };
+                        point = light.transform * point;
+
+                        Vector3f pointEnd = point.xyz() - (light.direction * 2.0f);
+                        drawLine3d(*cam, frustumPlanes, mvp, drawList, point.xyz(), pointEnd, spotColor, spotThickness);
+
+                        currentRotation += rotationInc;
+                    }
+
+                    drawCircle3d(*cam, frustumPlanes, mvp, light.transform, drawList, 1.0f, sectorCount, spotColor, spotThickness);
+                }
+            }
+        }
+#endif
+
+        // cameras
+#if 1
+        gridAxisColor = 0xffaa3333;
+        for(int i = 0; i < scene.cameras.size(); ++i)
+        {
+            auto& camera = scene.cameras[i];
+
+            if ((scene.cameraNodes[i]->id() == scene.selectedObject) && 
+                (scene.selectedCamera != scene.selectedObject))
+            {
+                auto cornerRays = camera->viewRays();
+                drawLine3d(*cam, frustumPlanes, mvp, drawList,
+                    camera->position() + (cornerRays.topLeft * camera->nearPlane()),
+                    camera->position() + (cornerRays.topLeft * camera->farPlane()),
+                    gridAxisColor, gridAxisThickness);
+                drawLine3d(*cam, frustumPlanes, mvp, drawList,
+                    camera->position() + (cornerRays.topRight * camera->nearPlane()),
+                    camera->position() + (cornerRays.topRight * camera->farPlane()),
+                    gridAxisColor, gridAxisThickness);
+                drawLine3d(*cam, frustumPlanes, mvp, drawList,
+                    camera->position() + (cornerRays.bottomLeft * camera->nearPlane()),
+                    camera->position() + (cornerRays.bottomLeft * camera->farPlane()),
+                    gridAxisColor, gridAxisThickness);
+                drawLine3d(*cam, frustumPlanes, mvp, drawList,
+                    camera->position() + (cornerRays.bottomRight * camera->nearPlane()),
+                    camera->position() + (cornerRays.bottomRight * camera->farPlane()),
+                    gridAxisColor, gridAxisThickness);
+
+                drawLine3d(*cam, frustumPlanes, mvp, drawList,
+                    camera->position() + (cornerRays.topLeft * camera->nearPlane()),
+                    camera->position() + (cornerRays.topRight * camera->nearPlane()),
+                    gridAxisColor, gridAxisThickness);
+                drawLine3d(*cam, frustumPlanes, mvp, drawList,
+                    camera->position() + (cornerRays.topRight * camera->nearPlane()),
+                    camera->position() + (cornerRays.bottomRight * camera->nearPlane()),
+                    gridAxisColor, gridAxisThickness);
+                drawLine3d(*cam, frustumPlanes, mvp, drawList,
+                    camera->position() + (cornerRays.bottomRight * camera->nearPlane()),
+                    camera->position() + (cornerRays.bottomLeft * camera->nearPlane()),
+                    gridAxisColor, gridAxisThickness);
+                drawLine3d(*cam, frustumPlanes, mvp, drawList,
+                    camera->position() + (cornerRays.bottomLeft * camera->nearPlane()),
+                    camera->position() + (cornerRays.topLeft * camera->nearPlane()),
+                    gridAxisColor, gridAxisThickness);
+
+                drawLine3d(*cam, frustumPlanes, mvp, drawList,
+                    camera->position() + (cornerRays.topLeft * camera->farPlane()),
+                    camera->position() + (cornerRays.topRight * camera->farPlane()),
+                    gridAxisColor, gridAxisThickness);
+                drawLine3d(*cam, frustumPlanes, mvp, drawList,
+                    camera->position() + (cornerRays.topRight * camera->farPlane()),
+                    camera->position() + (cornerRays.bottomRight * camera->farPlane()),
+                    gridAxisColor, gridAxisThickness);
+                drawLine3d(*cam, frustumPlanes, mvp, drawList,
+                    camera->position() + (cornerRays.bottomRight * camera->farPlane()),
+                    camera->position() + (cornerRays.bottomLeft * camera->farPlane()),
+                    gridAxisColor, gridAxisThickness);
+                drawLine3d(*cam, frustumPlanes, mvp, drawList,
+                    camera->position() + (cornerRays.bottomLeft * camera->farPlane()),
+                    camera->position() + (cornerRays.topLeft * camera->farPlane()),
+                    gridAxisColor, gridAxisThickness);
+            }
+        }
+#endif
+
+        // probes
+#if 1
+        auto lineDraw = [cam, frustumPlanes, mvp, drawList](const Vector3f& a, const Vector3f& b)
+        {
+            drawLine3d(*cam, frustumPlanes, mvp, drawList, a, b, 0xff880000, 1.0f);
+        };
+        for (int i = 0; i < scene.probes.size(); ++i)
+        {
+            auto& probe = scene.probes[i];
+
+            if (scene.probeNodes[i]->id() == scene.selectedObject)
+            {
+                auto position = probe->position();
+                auto range = probe->range();
+                Vector3f bbmin{ position.x - range, position.y - range, position.z - range };
+                Vector3f bbmax{ position.x + range, position.y + range, position.z + range };
+
+                Vector3f corner[8] =
+                {
+                    bbmin,
+                    Vector3f{ bbmin.x, bbmax.y, bbmin.z },
+                    Vector3f{ bbmin.x, bbmax.y, bbmax.z },
+                    Vector3f{ bbmin.x, bbmin.y, bbmax.z },
+                    Vector3f{ bbmax.x, bbmin.y, bbmin.z },
+                    Vector3f{ bbmax.x, bbmax.y, bbmin.z },
+                    Vector3f{ bbmax.x, bbmax.y, bbmax.z },
+                    Vector3f{ bbmax.x, bbmin.y, bbmax.z }
+                };
+
+                lineDraw(corner[0], corner[1]);
+                lineDraw(corner[1], corner[2]);
+                lineDraw(corner[2], corner[3]);
+                lineDraw(corner[3], corner[0]);
+
+                lineDraw(corner[4], corner[5]);
+                lineDraw(corner[5], corner[6]);
+                lineDraw(corner[6], corner[7]);
+                lineDraw(corner[7], corner[4]);
+
+                lineDraw(corner[0], corner[4]);
+                lineDraw(corner[1], corner[5]);
+                lineDraw(corner[2], corner[6]);
+                lineDraw(corner[3], corner[7]);
+            }
         }
 #endif
     }
@@ -434,18 +649,7 @@ namespace engine
             1.0f / static_cast<float>(currentRenderTarget.height()),
         };
 
-        cmd.setRenderTargets({ currentRenderTarget }, currentDepthTarget);
-
-        cmd.setViewPorts({ Viewport{
-            0.0f,
-            0.0f,
-            static_cast<float>(device.width()),
-            static_cast<float>(device.height()),
-            0.0f, 1.0f } });
-        cmd.setScissorRects({ Rectangle{
-            0, 0,
-            static_cast<unsigned int>(device.width()),
-            static_cast<unsigned int>(device.height()) } });
+        cmd.setRenderTargets({ currentRenderTarget });
 
         for (int i = 0; i < drawData->CmdListsCount; ++i)
         {
@@ -454,7 +658,6 @@ namespace engine
             recreateBuffersIfNeeded(device, cmd, list->VtxBuffer, list->IdxBuffer);
 
             cmd.bindVertexBuffer(m_vbv);
-            cmd.bindIndexBuffer(m_ibv);
 
             unsigned int indexOffset = 0;
             for (auto &d : list->CmdBuffer)
@@ -473,7 +676,7 @@ namespace engine
 
                     cmd.bindPipe(m_pipeline);
 
-                    cmd.drawIndexed(d.ElemCount, 1, indexOffset, 0, 0);
+                    cmd.drawIndexed(m_ibv, d.ElemCount, 1, indexOffset, 0, 0);
                 }
 
                 indexOffset += d.ElemCount;

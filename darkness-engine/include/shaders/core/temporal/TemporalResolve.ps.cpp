@@ -9,10 +9,39 @@ namespace engine
 {
     namespace shaders
     {
+#pragma warning( push )
+#pragma warning( disable : 4702 )
         std::shared_ptr<const ShaderBinary> TemporalResolvePS::load(const Device& device, ShaderStorage& storage) const
         {
-            return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/dx12/core/temporal/TemporalResolve.ps.cso", "C:/work/darkness/darkness-engine/data/shaders/dx12/core/temporal/TemporalResolve.ps.support");
+            
+            if((true)
+            
+            && (visualizeMotion == false)
+            
+            )
+            {
+                return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/temporal/TemporalResolve.ps_000.spv", "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/temporal/TemporalResolve.ps.support", 1-1, {
+                    
+                    });
+            }
+            
+            if((true)
+            
+            && (visualizeMotion == true)
+            
+            )
+            {
+                return storage.loadShader(device, "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/temporal/TemporalResolve.ps_001.spv", "C:/work/darkness/darkness-engine/data/shaders/vulkan/core/temporal/TemporalResolve.ps.support", 2-1, {
+                    
+                    "OPTION_VISUALIZE_MOTION"
+                    
+                    });
+            }
+            
+            ASSERT(false, "Could not load the permutation necessary. This is a bug.");
+            return {};
         }
+#pragma warning( pop )
 
         TemporalResolvePS::TemporalResolvePS()
             : m_constantRange{
@@ -29,7 +58,343 @@ namespace engine
             
             
             }
+            , m_inputParameters
+            {
+            
+            ShaderInputParameter{"position", "SV_Position0", "float4"}
+            
+            ,
+            
+            
+            ShaderInputParameter{"uv", "TEXCOORD0", "float2"}
+            
+            
+            }
         {}
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        TemporalResolvePS::TemporalResolvePS(const TemporalResolvePS& cl)
+            : m_constantRange{
+            
+            
+                ConstantRange{
+                    tools::ByteRange(
+                        reinterpret_cast<const uint8_t*>(static_cast<const Constants*>(this)),
+                        reinterpret_cast<const uint8_t*>(static_cast<const Constants*>(this)) + sizeof(Constants)),
+                    nullptr,
+                    "Constants"
+                }
+                
+            
+            
+            }
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = cl.m_constantRange[i].buffer;
+            }
+
+            
+            currentFrame = cl.currentFrame;
+            
+            history = cl.history;
+            
+            depth = cl.depth;
+            
+            gbufferMotion = cl.gbufferMotion;
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+            pointSampler = cl.pointSampler;
+            
+            bilinearSampler = cl.bilinearSampler;
+            
+
+            
+            visualizeMotion = cl.visualizeMotion;
+            
+
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        TemporalResolvePS::TemporalResolvePS(TemporalResolvePS&& cl)
+            : m_constantRange{
+            
+            
+                ConstantRange{
+                    tools::ByteRange(
+                        reinterpret_cast<const uint8_t*>(static_cast<const Constants*>(this)),
+                        reinterpret_cast<const uint8_t*>(static_cast<const Constants*>(this)) + sizeof(Constants)),
+                    nullptr,
+                    "Constants"
+                }
+                
+            
+            
+            }
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = std::move(cl.m_constantRange[i].buffer);
+            }
+
+            
+            currentFrame = std::move(cl.currentFrame);
+            
+            history = std::move(cl.history);
+            
+            depth = std::move(cl.depth);
+            
+            gbufferMotion = std::move(cl.gbufferMotion);
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+            pointSampler = std::move(cl.pointSampler);
+            
+            bilinearSampler = std::move(cl.bilinearSampler);
+            
+
+            
+            visualizeMotion = std::move(cl.visualizeMotion);
+            
+
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        TemporalResolvePS& TemporalResolvePS::operator=(const TemporalResolvePS& cl)
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = cl.m_constantRange[i].buffer;
+            }
+
+            
+            currentFrame = cl.currentFrame;
+            
+            history = cl.history;
+            
+            depth = cl.depth;
+            
+            gbufferMotion = cl.gbufferMotion;
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+            pointSampler = cl.pointSampler;
+            
+            bilinearSampler = cl.bilinearSampler;
+            
+
+            
+            visualizeMotion = cl.visualizeMotion;
+            
+
+            return *this;
+        }
+#pragma warning( pop )
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        TemporalResolvePS& TemporalResolvePS::operator=(TemporalResolvePS&& cl)
+        {
+            for (int i = 0; i < m_constantRange.size(); ++i)
+            {
+                m_constantRange[i].buffer = std::move(cl.m_constantRange[i].buffer);
+            }
+
+            
+            currentFrame = std::move(cl.currentFrame);
+            
+            history = std::move(cl.history);
+            
+            depth = std::move(cl.depth);
+            
+            gbufferMotion = std::move(cl.gbufferMotion);
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+            pointSampler = std::move(cl.pointSampler);
+            
+            bilinearSampler = std::move(cl.bilinearSampler);
+            
+
+            
+            visualizeMotion = std::move(cl.visualizeMotion);
+            
+
+            return *this;
+        }
+#pragma warning( pop )
+
+        std::vector<std::string> TemporalResolvePS::textureSrvNames() const
+        {
+            return {
+                
+                "currentFrame"
+                
+                ,
+                
+                
+                "history"
+                
+                ,
+                
+                
+                "depth"
+                
+                ,
+                
+                
+                "gbufferMotion"
+                
+                
+            };
+        }
+
+        std::vector<std::string> TemporalResolvePS::textureUavNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> TemporalResolvePS::bufferSrvNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> TemporalResolvePS::bufferUavNames() const
+        {
+            return {
+                
+            };
+        }
+
+        std::vector<std::string> TemporalResolvePS::samplerNames() const
+        {
+            return {
+                
+                "pointSampler"
+                
+                ,
+                
+                
+                "bilinearSampler"
+                
+                
+            };
+        }
+
+        std::vector<std::string> TemporalResolvePS::srvNames() const
+        {
+            return {
+                
+                "currentFrame"
+                
+                ,
+                
+                
+                "history"
+                
+                ,
+                
+                
+                "depth"
+                
+                ,
+                
+                
+                "gbufferMotion"
+                
+                
+            };
+        }
+
+        std::vector<std::string> TemporalResolvePS::uavNames() const
+        {
+            return {
+                
+            };
+        }
+
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+        engine::ResourceDimension TemporalResolvePS::textureDimension(const std::string& name) const
+        {
+            
+            if("currentFrame" == name) return engine::ResourceDimension::Texture2D;
+            
+            if("history" == name) return engine::ResourceDimension::Texture2D;
+            
+            if("depth" == name) return engine::ResourceDimension::Texture2D;
+            
+            if("gbufferMotion" == name) return engine::ResourceDimension::Texture2D;
+            
+            return engine::ResourceDimension::Unknown;
+        }
+#pragma warning( pop )
 
         std::vector<TextureSRV> TemporalResolvePS::texture_srvs() const
         {
@@ -41,7 +406,7 @@ namespace engine
             
             result.emplace_back(depth);
             
-            result.emplace_back(motion);
+            result.emplace_back(gbufferMotion);
             
             return result;
         }
@@ -108,17 +473,19 @@ namespace engine
             
             result.emplace_back(bilinearSampler);
             
-            result.emplace_back(trilinearSampler);
-            
-            result.emplace_back(anisotropicSampler);
-            
             return result;
+        }
+
+        const std::vector<ShaderInputParameter>& TemporalResolvePS::inputParameters() const
+        {
+            return m_inputParameters;
         }
 
 // warning C4172: returning address of local variable or temporary
 // this will never happen as the name will always match the correct resource
 #pragma warning( push )
 #pragma warning( disable : 4172 )
+#pragma warning( disable : 4100 )
 
         bool TemporalResolvePS::hasTextureSrv(const std::string& name) const
         {
@@ -130,7 +497,7 @@ namespace engine
             
             if(name == std::string("depth")) return true;
             
-            if(name == std::string("motion")) return true;
+            if(name == std::string("gbufferMotion")) return true;
             
             
             return false;
@@ -188,7 +555,7 @@ namespace engine
             
             if(name == std::string("depth")) return depth;
             
-            if(name == std::string("motion")) return motion;
+            if(name == std::string("gbufferMotion")) return gbufferMotion;
             
             
             ASSERT(false, "Tried to look for non-existing resource");
@@ -216,6 +583,40 @@ namespace engine
             return BufferUAV();
         }
 
+        void TemporalResolvePS::textureSrv(const std::string& name, TextureSRV& texture)
+        {
+            
+            
+            if(name == std::string("currentFrame")) { currentFrame = texture; return; }
+            
+            if(name == std::string("history")) { history = texture; return; }
+            
+            if(name == std::string("depth")) { depth = texture; return; }
+            
+            if(name == std::string("gbufferMotion")) { gbufferMotion = texture; return; }
+            
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void TemporalResolvePS::textureUav(const std::string& name, TextureUAV& texture)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void TemporalResolvePS::bufferSrv(const std::string& name, BufferSRV& buffer)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
+        void TemporalResolvePS::bufferUav(const std::string& name, BufferUAV& buffer)
+        {
+            
+            ASSERT(false, "Tried to set non-existing resource");
+        }
+
         const Sampler& TemporalResolvePS::sampler(const std::string& name) const
         {
             
@@ -223,10 +624,6 @@ namespace engine
             if(name == std::string("pointSampler")) return pointSampler;
             
             if(name == std::string("bilinearSampler")) return bilinearSampler;
-            
-            if(name == std::string("trilinearSampler")) return trilinearSampler;
-            
-            if(name == std::string("anisotropicSampler")) return anisotropicSampler;
             
             
             ASSERT(false, "Tried to look for non-existing resource");

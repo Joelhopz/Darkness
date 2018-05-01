@@ -5,6 +5,8 @@
 namespace engine
 {
     static const int MaxNumberOfDescriptorsPerHeap = 256;
+    constexpr int ShadowMapWidth = 1024;
+    constexpr int ShadowMapHeight = 1024;
 
     enum class ShaderVisibilityBits
     {
@@ -39,11 +41,10 @@ namespace engine
 
     enum class CommandListType
     {
-        Graphics,
+        Direct,
+        Bundle,
         Compute,
-        Transfer
-        // Bundle
-        // Sparse binding
+        Copy
     };
 
     enum class BufferUsageFlagBits
@@ -106,5 +107,29 @@ namespace engine
         int32_t mipCount = AllMipLevels;
         uint32_t firstArraySlice = 0;
         int32_t arraySliceCount = AllArraySlices;
+    };
+
+    struct DispatchIndirectArgs
+    {
+        uint32_t threadGroupX;
+        uint32_t threadGroupY;
+        uint32_t threadGroupZ;
+    };
+
+    struct DrawIndirectArgs
+    {
+        uint32_t VertexCountPerInstance;
+        uint32_t InstanceCount;
+        uint32_t StartVertexLocation;
+        uint32_t StartInstanceLocation;
+    };
+
+    struct DrawIndexIndirectArgs
+    {
+        uint32_t IndexCountPerInstance;
+        uint32_t InstanceCount;
+        uint32_t StartIndexLocation;
+        int BaseVertexLocation;
+        uint32_t StartInstanceLocation;
     };
 }

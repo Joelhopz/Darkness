@@ -62,6 +62,32 @@ namespace engine
             ASSERT(result == VK_SUCCESS);
         }
 
+        VkAccessFlags vulkanAccessFlags(ResourceState state)
+        {
+            switch (state)
+            {
+            case ResourceState::Common: return VK_ACCESS_SHADER_READ_BIT;
+            case ResourceState::VertexAndConstantBuffer: return VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT | VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_UNIFORM_READ_BIT;
+            case ResourceState::IndexBuffer: return VK_ACCESS_INDEX_READ_BIT;
+            case ResourceState::RenderTarget: return VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+            case ResourceState::UnorderedAccess: return VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
+            case ResourceState::DepthWrite: return VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+            case ResourceState::DepthRead: return VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
+            case ResourceState::NonPixelShaderResource: return VK_ACCESS_HOST_READ_BIT | VK_ACCESS_HOST_WRITE_BIT;
+            case ResourceState::PixelShaderResource: return VK_ACCESS_SHADER_READ_BIT;
+            case ResourceState::StreamOut: return VK_ACCESS_HOST_WRITE_BIT | VK_ACCESS_TRANSFER_READ_BIT;
+            case ResourceState::IndirectArgument: return VK_ACCESS_INDEX_READ_BIT;
+            case ResourceState::CopyDest: return VK_ACCESS_TRANSFER_WRITE_BIT;
+            case ResourceState::CopySource: return VK_ACCESS_TRANSFER_READ_BIT;
+            case ResourceState::ResolveDest: return VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+            case ResourceState::ResolveSource: return VK_ACCESS_COLOR_ATTACHMENT_READ_BIT;
+            case ResourceState::GenericRead: return VK_ACCESS_COLOR_ATTACHMENT_READ_BIT;
+            case ResourceState::Present: return VK_ACCESS_COLOR_ATTACHMENT_READ_BIT;
+            case ResourceState::Predication: return VK_ACCESS_COLOR_ATTACHMENT_READ_BIT;
+            }
+            return VK_ACCESS_SHADER_READ_BIT;
+        }
+
         void CommandListImpl::transition(Texture& resource, ResourceState state)
         {
             TextureImpl* impl = TextureImplGet::impl(resource);
@@ -75,6 +101,8 @@ namespace engine
             barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
             barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
             barrier.image = TextureImplGet::impl(resource)->native();
+            barrier.srcAccessMask = vulkanAccessFlags(impl->state());
+            barrier.dstAccessMask = vulkanAccessFlags(state);
             barrier.subresourceRange.aspectMask = vulkanFormatAspects(resource.format());
             barrier.subresourceRange.baseMipLevel = 0;
             barrier.subresourceRange.levelCount = 1;
@@ -107,32 +135,6 @@ namespace engine
         void CommandListImpl::transition(TextureDSV& resource, ResourceState state)
         {
             transition(resource.texture(), state);
-        }
-
-        VkAccessFlags vulkanAccessFlags(ResourceState state)
-        {
-            switch (state)
-            {
-            case ResourceState::Common: return VK_ACCESS_SHADER_READ_BIT;
-            case ResourceState::VertexAndConstantBuffer: return VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT | VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_UNIFORM_READ_BIT;
-            case ResourceState::IndexBuffer: return VK_ACCESS_INDEX_READ_BIT;
-            case ResourceState::RenderTarget: return VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-            case ResourceState::UnorderedAccess: return VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
-            case ResourceState::DepthWrite: return VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
-            case ResourceState::DepthRead: return VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
-            case ResourceState::NonPixelShaderResource: return VK_ACCESS_HOST_READ_BIT | VK_ACCESS_HOST_WRITE_BIT;
-            case ResourceState::PixelShaderResource: return VK_ACCESS_SHADER_READ_BIT;
-            case ResourceState::StreamOut: return VK_ACCESS_HOST_WRITE_BIT | VK_ACCESS_TRANSFER_READ_BIT;
-            case ResourceState::IndirectArgument: return VK_ACCESS_INDEX_READ_BIT;
-            case ResourceState::CopyDest: return VK_ACCESS_TRANSFER_WRITE_BIT;
-            case ResourceState::CopySource: return VK_ACCESS_TRANSFER_READ_BIT;
-            case ResourceState::ResolveDest: return VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-            case ResourceState::ResolveSource: return VK_ACCESS_COLOR_ATTACHMENT_READ_BIT;
-            case ResourceState::GenericRead: return VK_ACCESS_COLOR_ATTACHMENT_READ_BIT;
-            case ResourceState::Present: return VK_ACCESS_COLOR_ATTACHMENT_READ_BIT;
-            case ResourceState::Predication: return VK_ACCESS_COLOR_ATTACHMENT_READ_BIT;
-            }
-            return VK_ACCESS_SHADER_READ_BIT;
         }
 
         void CommandListImpl::transition(Buffer& resource, ResourceState state)
@@ -297,6 +299,7 @@ namespace engine
                 VK_PIPELINE_BIND_POINT_GRAPHICS,
                 *pipelineImpl.m_pipeline);
 
+            beginRenderPass(pipelineImpl, 0);
             /*bindDescriptorSets(
                 pipelineImpl,
                 tools::make_impl<DescriptorHandleImpl>(
@@ -672,6 +675,11 @@ namespace engine
                 TextureImplGet::impl(dst)->native(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                 1, &region
             );
+        }
+
+        void CommandListImpl::copyTexture(const Texture& src, Buffer& dst)
+        {
+
         }
     }
 }

@@ -18,6 +18,8 @@
 // short hash ... it could be used on any message, 
 // but it's used by Spooky just for short messages.
 //
+#pragma warning( push )
+#pragma warning( disable : 4127 )
 void SpookyHash::Short(
     const void *message,
     size_t length,
@@ -119,11 +121,13 @@ void SpookyHash::Short(
     *hash1 = a;
     *hash2 = b;
 }
-
+#pragma warning( pop )
 
 
 
 // do the whole hash in one call
+#pragma warning( push )
+#pragma warning( disable : 4127 )
 void SpookyHash::Hash128(
     const void *message,
     size_t length,
@@ -184,7 +188,7 @@ void SpookyHash::Hash128(
     *hash1 = h0;
     *hash2 = h1;
 }
-
+#pragma warning( pop )
 
 
 // init spooky state
@@ -198,6 +202,8 @@ void SpookyHash::Init(uint64 seed1, uint64 seed2)
 
 
 // add a message fragment to the state
+#pragma warning( push )
+#pragma warning( disable : 4127 )
 void SpookyHash::Update(const void *message, size_t length)
 {
     uint64 h0, h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11;
@@ -299,7 +305,7 @@ void SpookyHash::Update(const void *message, size_t length)
     m_state[10] = h10;
     m_state[11] = h11;
 }
-
+#pragma warning( pop )
 
 // report the hash for the concatenation of all message fragments so far
 void SpookyHash::Final(uint64 *hash1, uint64 *hash2)

@@ -3,6 +3,7 @@
 #include "engine/primitives/Matrix4.h"
 #include "components/MeshRendererComponent.h"
 #include "components/MaterialComponent.h"
+#include "components/ProbeComponent.h"
 #include "plugins/PluginManager.h"
 #include "engine/graphics/Barrier.h"
 #include "external/imgui/imgui.h"
@@ -13,6 +14,7 @@
 #include <chrono>
 #include <algorithm>
 
+#include "btBulletDynamicsCommon.h"
 #include "entityx.h"
 
 using namespace engine;
@@ -21,51 +23,31 @@ Engine::Engine(
     std::shared_ptr<platform::Window> window,
     const std::string& shaderRootPath)
     : m_window{ window }
-    , m_renderSetup{ std::make_unique<RenderSetup>(window) }
+    , m_renderSetup{ std::make_unique<RenderSetup>(window, [this](const std::vector<std::string>& messages)
+        {
+            m_logWindow.pushMessages(messages);
+        }) }
     , m_shaderRootPath{ shaderRootPath }
     , m_cameraSizeRefresh{ true }
     , m_virtualResolution{ m_renderSetup->device().width(), m_renderSetup->device().height() }
-    , m_modelRenderer{std::make_unique<ModelRenderer>( m_renderSetup->device(), m_renderSetup->shaderStorage(), m_virtualResolution) }
-    , m_modelTransparentRenderer{ std::make_unique<ModelTransparentRenderer>(m_renderSetup->device(), m_renderSetup->shaderStorage()) }
-    , m_shadowRenderer{ std::make_unique<ShadowRenderer>(m_renderSetup->device(), m_renderSetup->shaderStorage()) }
-    , m_renderCubemap{ std::make_unique<RenderCubemap>(m_renderSetup->device(), m_renderSetup->shaderStorage()) }
-    , m_postProcess{ std::make_unique<Postprocess>(m_renderSetup->device(), m_renderSetup->shaderStorage()) }
+    , m_viewportRenderer{ std::make_unique<ViewportRenderer>(m_renderSetup->device(), m_renderSetup->shaderStorage(), m_virtualResolution.x, m_virtualResolution.y) }
     , m_imguiRenderer{ std::make_unique<ImguiRenderer>( m_renderSetup->device(), m_renderSetup->shaderStorage() ) }
     , m_debugViewer{ std::make_unique<DebugView>(m_renderSetup->device(), m_renderSetup->shaderStorage()) }
-    , m_defaultMaterial{ std::make_unique<MaterialComponent>( 
-        "C:\\work\\darkness\\darkness-engine\\data\\default\\default_albedo.png",
-        "C:\\work\\darkness\\darkness-engine\\data\\default\\default_specular.png",
-        "C:\\work\\darkness\\darkness-engine\\data\\default\\default_normal.png",
-        "C:\\work\\darkness\\darkness-engine\\data\\default\\default_metalness.png",
-        "C:\\work\\darkness\\darkness-engine\\data\\default\\default_metalness.png"
-        ) }
-    , m_lightData{ std::make_unique<LightData>() }
-    
-    , m_rtv{ m_renderSetup->device().createTextureRTV(TextureDescription()
-        .width(m_virtualResolution.x)
-        .height(m_virtualResolution.y)
-        .format(engine::Format::Format_R16G16B16A16_FLOAT)
-        .usage(ResourceUsage::GpuRenderTargetReadWrite)
-        .name("main render target")
-        .dimension(ResourceDimension::Texture2D)
-        .optimizedClearValue({ 0.0f, 0.0f, 0.0f, 1.0f })
-        ) }
-    , m_srv{ m_renderSetup->device().createTextureSRV(m_rtv.texture()) }
-    , m_dsv{ m_renderSetup->device().createTextureDSV(TextureDescription()
-        .name("Depth Buffer")
-        .format(Format::Format_D32_FLOAT)
-        .width(m_virtualResolution.x)
-        .height(m_virtualResolution.y)
-        .usage(ResourceUsage::DepthStencil)
-        .optimizedDepthClearValue(0.0f)
-        .dimension(ResourceDimension::Texture2D)
-        ) }
-    , m_dsvSRV{ m_renderSetup->device().createTextureSRV(m_dsv) }
+    , m_cycleTransforms{ std::make_unique<engine::Pipeline<engine::shaders::CycleTransforms>>(m_renderSetup->device().createPipeline<shaders::CycleTransforms>(m_renderSetup->shaderStorage())) }
+    , m_lightData{ std::make_shared<LightData>() }
+    , m_inputManager{ m_renderSetup->device().width(), m_renderSetup->device().height() }
     , m_cameraTransform{ std::make_shared<engine::Transform>() }
     , m_camera{ m_cameraTransform }
     , m_cameraInputActive{ false }
     , m_lastEnvironmentMap{ "" }
     , m_simulating{ false }
+    , m_lastPickedObject{ -1 }
+    , m_updateEnvironmentOnNextFrame{ -1 }
+    , m_collisionShapes{ std::shared_ptr<void>(static_cast<void*>(new btAlignedObjectArray<btCollisionShape*>()), [](void* ptr)
+        {
+            auto p = reinterpret_cast<btAlignedObjectArray<btCollisionShape*>*>(ptr);
+            delete p;
+        }) }
 {
     entityx::EntityX ex;
     entityx::Entity entity = ex.entities.create();
@@ -74,18 +56,18 @@ Engine::Engine(
     entity.destroy();
 
     ///collision configuration contains default setup for memory, collision setup. Advanced users can create their own configuration.
-    m_collisionConfiguration = std::make_unique<btDefaultCollisionConfiguration>();
+    m_collisionConfiguration = std::make_shared<btDefaultCollisionConfiguration>();
 
     ///use the default collision dispatcher. For parallel processing you can use a diffent dispatcher (see Extras/BulletMultiThreaded)
-    m_dispatcher = std::make_unique<btCollisionDispatcher>(m_collisionConfiguration.get());
+    m_dispatcher = std::make_shared<btCollisionDispatcher>(m_collisionConfiguration.get());
 
     ///btDbvtBroadphase is a good general purpose broadphase. You can also try out btAxis3Sweep.
-    m_overlappingPairCache = std::make_unique<btDbvtBroadphase>();
+    m_overlappingPairCache = std::make_shared<btDbvtBroadphase>();
 
     ///the default constraint solver. For parallel processing you can use a different solver (see Extras/BulletMultiThreaded)
-    m_solver = std::make_unique<btSequentialImpulseConstraintSolver>();
+    m_solver = std::make_shared<btSequentialImpulseConstraintSolver>();
 
-    m_dynamicsWorld = std::make_unique<btDiscreteDynamicsWorld>(m_dispatcher.get(), m_overlappingPairCache.get(), m_solver.get(), m_collisionConfiguration.get());
+    m_dynamicsWorld = std::make_shared<btDiscreteDynamicsWorld>(m_dispatcher.get(), m_overlappingPairCache.get(), m_solver.get(), m_collisionConfiguration.get());
 
     m_dynamicsWorld->setGravity(btVector3(0.0f, -9.81f, 0.0f));
 
@@ -93,8 +75,10 @@ Engine::Engine(
 
     //keep track of the shapes, we release memory at exit.
     //make sure to re-use collision shapes among rigid bodies whenever possible!
-    m_collisionShapes = std::make_unique<btAlignedObjectArray<btCollisionShape*>>();
-
+    btAlignedObjectArray<btCollisionShape*>* collisionShapes = reinterpret_cast<btAlignedObjectArray<btCollisionShape*>*>(m_collisionShapes.get());
+    
+    /*ProcessResourcePackage package;
+    m_resourceHost.processResources(package);*/
 
     ///create a few basic rigid bodies
 
@@ -103,7 +87,7 @@ Engine::Engine(
     {
         btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(50.), btScalar(50.), btScalar(50.)));
 
-        m_collisionShapes->push_back(groundShape);
+        collisionShapes->push_back(groundShape);
 
         btTransform groundTransform;
         groundTransform.setIdentity();
@@ -128,7 +112,7 @@ Engine::Engine(
     }
 
 
-    m_defaultMaterial->gpuRefresh(m_renderSetup->device());
+    //m_defaultMaterial->gpuRefresh(m_renderSetup->device());
 
     m_camera.width(m_window->width());
     m_camera.height(m_window->height());
@@ -173,13 +157,14 @@ void Engine::playClicked(bool value)
 float Engine::delta()
 {
     auto now = std::chrono::high_resolution_clock::now();
-    auto duration = static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(now - m_lastUpdate).count()) / 1000000.0;
+    auto duration = static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(now - m_lastUpdate).count()) / 1000000000.0;
     m_lastUpdate = now;
-    //m_physicsSystem->DoFrameDynamics(min(duration, 0.3));
-    if(m_simulating)
-        m_dynamicsWorld->stepSimulation(1.f / 60.f, 10);
 
-    return 1.0f / 60.0f;
+    if(m_simulating)
+        m_dynamicsWorld->stepSimulation(static_cast<float>(duration), 10);
+
+    //return 1.0f / 60.0f;
+    return static_cast<float>(duration);
 }
 
 void Engine::resetCameraSize()
@@ -191,7 +176,26 @@ void Engine::resetCameraSize()
         camera->height(m_renderSetup->window().height());
     }
 }
-static Matrix4f id = Matrix4f::identity();
+
+std::shared_ptr<engine::SceneNode> Engine::grabSelected()
+{
+    std::shared_ptr<engine::SceneNode> res = m_lastPickedNode;
+    m_lastPickedNode = nullptr;
+    return res;
+}
+
+void Engine::setSelected(std::shared_ptr<engine::SceneNode> node)
+{
+    auto mesh = node->getComponent<MeshRendererComponent>();
+    if (mesh)
+    {
+        auto id = mesh->meshBuffer().modelAllocations->subMeshInstance->instanceData.modelResource.gpuIndex;
+        m_viewportRenderer->setSelectedObject(id);
+        m_selectedObject = id;
+    }
+    else
+        m_selectedObject = node->id();
+}
 
 void Engine::render()
 {
@@ -200,6 +204,12 @@ void Engine::render()
 
     float deltaTime = delta();
     auto& flatScene = m_scene.flatten(m_simulating);
+    
+    if ((flatScene.nodes.size() == 0) &&
+        (flatScene.alphaclippedNodes.size() == 0) &&
+        (flatScene.cameras.size() == 0))
+        return;
+
 
     {
         CPU_MARKER("Cpu/Gpu refresh");
@@ -217,24 +227,50 @@ void Engine::render()
                 }
             }
 
+            if (node.mesh)
+            {
+                node.mesh->cpuRefresh(device);
+                node.mesh->gpuRefresh(device);
+            }
+
             if (node.material)
             {
                 node.material->cpuRefresh(device);
                 node.material->gpuRefresh(device);
             }
 
+            //if (node.objectId == m_lastPickedObject)
+            if(node.mesh->meshBuffer().modelAllocations && node.mesh->meshBuffer().modelAllocations->subMeshInstance->instanceData.modelResource.gpuIndex == m_lastPickedObject)
+            {
+                m_selectedObject = m_lastPickedObject;
+                m_lastPickedObject = -1;
+                m_lastPickedNode = m_scene.find(node.objectId);
+            }
+        }
+        for (auto&& node : flatScene.alphaclippedNodes)
+        {
             if (node.mesh)
             {
                 node.mesh->cpuRefresh(device);
                 node.mesh->gpuRefresh(device);
             }
+
+            if (node.material)
+            {
+                node.material->cpuRefresh(device);
+                node.material->gpuRefresh(device);
+            }
         }
     }
+
+    flatScene.selectedObject = m_selectedObject;
 
     if (flatScene.selectedCamera != -1 && flatScene.cameras.size() > 0)
     {
         CPU_MARKER("Update camera and inputs");
         m_cameraInput.setCamera(flatScene.cameras[flatScene.selectedCamera]);
+
+        m_inputManager.setCamera(flatScene.cameras[flatScene.selectedCamera].get());
 
         if (m_cameraSizeRefresh)
         {
@@ -272,9 +308,23 @@ void Engine::render()
         }
     }
 
+    m_inputManager.update();
+
+    flatScene.lightData = m_lightData;
+
+    if (m_updateEnvironmentOnNextFrame >= 0)
+        --m_updateEnvironmentOnNextFrame;
+
     auto cmd = device.createCommandList();
 
     {
+        CPU_MARKER("Stream resources");
+        GPU_MARKER(cmd, "Stream resources");
+        device.modelResources().streamResources(cmd);
+    }
+
+    {
+        CPU_MARKER("Render");
         GPU_MARKER(cmd, "Render");
 
         // Clear render targets
@@ -288,31 +338,48 @@ void Engine::render()
 
         // update environment cubemap
         if (flatScene.selectedCamera != -1 && flatScene.cameras.size() > 0 && flatScene.cameras[flatScene.selectedCamera])
-            updateEnvironmentCubemap(device, *flatScene.cameras[flatScene.selectedCamera]);
+            updateEnvironmentCubemap(device, cmd, *flatScene.cameras[flatScene.selectedCamera], false);
+
+#if 1
+        for (auto&& probe : flatScene.probes)
+        {
+            if (probe->update(device, m_renderSetup->shaderStorage(), cmd, flatScene))
+            {
+                if ((flatScene.selectedCamera != -1) &&
+                    (flatScene.selectedCamera < flatScene.cameras.size()) &&
+                    (flatScene.cameras[flatScene.selectedCamera]))
+                {
+                    Camera& selectedCamera = *flatScene.cameras[flatScene.selectedCamera];
+                    selectedCamera.environmentMap(probe->cubemap());
+                    selectedCamera.environmentBrdfLUT(probe->brdf());
+                    selectedCamera.environmentIrradiance(probe->irradiance());
+                    selectedCamera.environmentSpecular(probe->specular());
+                }
+            }
+        }
+#endif
 
         // lighting update
-        updateLighting(device, cmd, flatScene);
+        updateLighting(cmd, flatScene);
 
-        // render shadow maps
-        renderShadows(device, cmd, flatScene);
-
-        // render environment cubemap
-        renderEnvironmentCubemap(device, cmd, flatScene);
-
-        // render models
-        renderModels(device, cmd, flatScene);
-
-        // render models
-        renderTransparentModels(device, cmd, flatScene);
-
-        // postprocess
-        renderPostprocess(device, cmd, flatScene);
+        
+        // render viewport
+        m_viewportRenderer->render(cmd, flatScene, m_renderSetup->currentRTV(), 
+            m_cameraInput.mousePosition().first,
+            m_cameraInput.mousePosition().second);
 
         // render debug view
         renderDebugView(cmd);
 
         // render log window
-        m_logWindow.render(m_renderSetup->window().width(), m_renderSetup->window().height());
+        m_logWindow.render(
+            m_renderSetup->window().width(), 
+            m_renderSetup->window().height());
+
+        // render debug menu
+        m_debugMenu.render(
+            m_renderSetup->window().width(), 
+            m_renderSetup->window().height());
 
         // draw gizmos
         /*if (flatScene.camera)
@@ -343,20 +410,30 @@ void Engine::render()
             CPU_MARKER("Imgui");
             GPU_MARKER(cmd, "Imgui");
 
-            m_imguiRenderer->render(flatScene);
+            m_imguiRenderer->render(device, flatScene);
 
             // Stop imgui
-            m_imguiRenderer->endFrame(device, m_renderSetup->currentRTV(), m_dsv, cmd);
+            m_imguiRenderer->endFrame(device, m_renderSetup->currentRTV(), m_viewportRenderer->dsv(), cmd);
         }
+    }
+
+    {
+        if (!m_cycleBufferView.valid())
+        {
+            m_cycleBufferView = device.createBufferUAV(device.modelResources().gpuBuffers().instanceTransform().buffer());
+        }
+        CPU_MARKER("Cycle transforms");
+        GPU_MARKER(cmd, "Cycle transforms");
+        m_cycleTransforms->cs.transformCount.x = device.modelResources().instanceCount();
+        m_cycleTransforms->cs.historyBuffer = m_cycleBufferView;
+        cmd.bindPipe(*m_cycleTransforms);
+        cmd.dispatch(roundUpToMultiple(device.modelResources().instanceCount(), 64) / 64, 1, 1);
     }
 
     // execute command list and present
     m_renderSetup->submit(std::move(cmd));
     m_renderSetup->present();
     //LOG("Picked object id: %u", m_modelRenderer->pickedObject(device));
-
-    // process shader hotreload
-    processShaderHotreload();
 
     // process window messages
     m_renderSetup->window().processMessages();
@@ -367,134 +444,52 @@ void Engine::clear(engine::CommandList& cmd)
     CPU_MARKER("Clear render targets");
     GPU_MARKER(cmd, "Clear render targets");
     cmd.clearRenderTargetView(m_renderSetup->currentRTV(), { 0.0f, 0.0f, 0.0f, 1.0f });
-    cmd.clearRenderTargetView(m_rtv, { 0.0f, 0.0f, 0.0f, 1.0f });
-    cmd.clearDepthStencilView(m_dsv, 0.0f);
 }
 
-void Engine::updateLighting(engine::Device& device, engine::CommandList& cmd, engine::FlatScene& flatScene)
+void Engine::updateLighting(engine::CommandList& cmd, engine::FlatScene& flatScene)
 {
     CPU_MARKER("Update lighting");
     GPU_MARKER(cmd, "Update lighting");
-    m_defaultMaterial->cpuRefresh(device);
-    m_defaultMaterial->gpuRefresh(m_renderSetup->device());
-    m_lightData->updateLightInfo(m_renderSetup->device(), cmd, flatScene.lights);
+    //m_defaultMaterial->cpuRefresh(device);
+    //m_defaultMaterial->gpuRefresh(m_renderSetup->device());
+    flatScene.lightData->updateLightInfo(m_renderSetup->device(), cmd, flatScene.lights);
     if (m_lightData->changeHappened())
     {
         m_scene.root()->invalidate();
-        m_shadowRenderer->refresh();
     }
 }
 
-void Engine::updateEnvironmentCubemap(engine::Device& device, engine::Camera& camera)
+void Engine::updateEnvironmentCubemap(engine::Device& device, engine::CommandList& cmd, engine::Camera& camera, bool force)
 {
     CPU_MARKER("Update environment cubemap");
     if (camera.environmentMap().valid())// && )
     {
-        if (camera.environmentMapPath() != m_lastEnvironmentMap)
+        if (camera.environmentMapPath() != m_lastEnvironmentMap || force)
         {
             // only one slice. we need equirect mapping to cubemap
             if (camera.environmentMap().texture().arraySlices() == 1)
             {
-                m_renderCubemap->createCubemapFromEquirect(device, camera.environmentMap());
-                m_renderCubemap->createIrradianceCubemap(device, m_renderCubemap->cubemap());
-                m_renderCubemap->prefilterConvolution(device, m_renderCubemap->cubemap());
-                m_renderCubemap->brdfConvolution(device);
+                m_viewportRenderer->cubemapRenderer().createCubemapFromEquirect(device, camera.environmentMap());
+                m_viewportRenderer->cubemapRenderer().createIrradianceCubemap(device, m_viewportRenderer->cubemapRenderer().cubemap(), cmd);
+                m_viewportRenderer->cubemapRenderer().prefilterConvolution(device, m_viewportRenderer->cubemapRenderer().cubemap(), cmd);
+                m_viewportRenderer->cubemapRenderer().brdfConvolution(cmd);
             }
             else
             {
-                m_renderCubemap->cubemap(camera.environmentMap());
-                m_renderCubemap->createIrradianceCubemap(device, camera.environmentMap());
-                m_renderCubemap->prefilterConvolution(device, camera.environmentMap());
-                m_renderCubemap->brdfConvolution(device);
+                m_viewportRenderer->cubemapRenderer().cubemap(camera.environmentMap());
+                m_viewportRenderer->cubemapRenderer().createIrradianceCubemap(device, camera.environmentMap(), cmd);
+                m_viewportRenderer->cubemapRenderer().prefilterConvolution(device, camera.environmentMap(), cmd);
+                m_viewportRenderer->cubemapRenderer().brdfConvolution(cmd);
             }
             
-            camera.environmentBrdfLUT(m_renderCubemap->brdfConvolution());
-            camera.environmentIrradiance(m_renderCubemap->irradiance());
-            camera.environmentSpecular(m_renderCubemap->prefilteredEnvironmentMap());
+            camera.environmentBrdfLUT(m_viewportRenderer->cubemapRenderer().brdfConvolution());
+            camera.environmentIrradiance(m_viewportRenderer->cubemapRenderer().irradiance());
+            camera.environmentSpecular(m_viewportRenderer->cubemapRenderer().prefilteredEnvironmentMap());
 
             m_lastEnvironmentMap = camera.environmentMapPath();
+            m_updateEnvironmentOnNextFrame = -1;
         }
     }
-}
-
-void Engine::renderEnvironmentCubemap(engine::Device& device, engine::CommandList& cmd, FlatScene& flatScene)
-{
-    CPU_MARKER("Render environment cubemap");
-    GPU_MARKER(cmd, "Render environment cubemap");
-    m_renderCubemap->render(
-        device,
-        m_rtv,
-        m_dsv,
-        ((flatScene.selectedCamera != -1) && flatScene.cameras[flatScene.selectedCamera]) ? *flatScene.cameras[flatScene.selectedCamera] : m_camera,
-        cmd);
-}
-
-void Engine::renderShadows(engine::Device& device, engine::CommandList& cmd, engine::FlatScene& flatScene)
-{
-    CPU_MARKER("Render shadows");
-    GPU_MARKER(cmd, "Render shadows");
-    m_shadowRenderer->render(
-        device,
-        m_rtv,
-        m_dsv,
-        cmd,
-        *m_defaultMaterial,
-        ((flatScene.selectedCamera != -1) && flatScene.cameras[flatScene.selectedCamera]) ? *flatScene.cameras[flatScene.selectedCamera] : m_camera,
-        *m_lightData,
-        flatScene);
-}
-
-void Engine::renderModels(engine::Device& device, engine::CommandList& cmd, FlatScene& flatScene)
-{
-    CPU_MARKER("Render models");
-    GPU_MARKER(cmd, "Render models");
-    m_modelRenderer->render(
-        device,
-        m_rtv,
-        m_dsv,
-        m_dsvSRV,
-        cmd,
-        *m_defaultMaterial,
-        ((flatScene.selectedCamera != -1) && flatScene.cameras[flatScene.selectedCamera]) ? *flatScene.cameras[flatScene.selectedCamera] : m_camera,
-        *m_lightData,
-        flatScene,
-        m_shadowRenderer->shadowMap(),
-        m_shadowRenderer->shadowVP(),
-        m_cameraInput.mousePosition().first,
-        m_cameraInput.mousePosition().second);
-}
-
-void Engine::renderTransparentModels(
-    engine::Device& /*device*/, 
-    engine::CommandList& cmd, 
-    engine::FlatScene& /*flatScene*/)
-{
-    CPU_MARKER("Render transparent models");
-    GPU_MARKER(cmd, "Render transparent models");
-    /*m_modelTransparentRenderer->render(
-        device,
-        m_rtv,
-        m_dsv,
-        cmd,
-        *m_defaultMaterial,
-        flatScene.camera ? *flatScene.camera : m_camera,
-        *m_lightData,
-        flatScene,
-        m_shadowRenderer->shadowMap(),
-        m_shadowRenderer->shadowVP());*/
-}
-
-void Engine::renderPostprocess(engine::Device& device, engine::CommandList& cmd, engine::FlatScene& flatScene)
-{
-    CPU_MARKER("Render postprocess");
-    GPU_MARKER(cmd, "Render postprocess");
-    if(flatScene.postprocess)
-        m_postProcess->render(
-            device, 
-            m_renderSetup->currentRTV(), 
-            m_modelRenderer->finalFrame(),//m_srv, 
-            cmd, 
-            *flatScene.postprocess);
 }
 
 void Engine::renderDebugView(engine::CommandList& cmd)
@@ -515,6 +510,13 @@ void Engine::renderDebugView(engine::CommandList& cmd)
         cmd,
         m_modelRenderer->ssaoSRV()
         //m_shadowRenderer->shadowMap()
+    );*/
+
+    /*m_debugViewer->render(
+        m_renderSetup->device(),
+        m_renderSetup->currentRTV(),
+        cmd,
+        m_renderCubemap->irradiance()
     );*/
 
     /*m_debugViewer->render(
@@ -545,22 +547,6 @@ void Engine::renderDebugView(engine::CommandList& cmd)
     );*/
 }
 
-void Engine::processShaderHotreload()
-{
-    CPU_MARKER("Process shader hotreload");
-    if (m_renderSetup->shaderStorage().fileWatcher().hasChanges())
-    {
-        m_renderSetup->device().waitForIdle();
-        if (m_renderSetup->shaderStorage().fileWatcher().processChanges())
-        {
-            // we had changes, pump the compilation messages to logging
-            std::vector<std::string>& lastMessages = m_renderSetup->shaderStorage().fileWatcher().lastMessages();
-            m_logWindow.pushMessages(lastMessages);
-            lastMessages.clear();
-        }
-    }
-}
-
 void Engine::refresh()
 {
     m_renderSetup->device().waitForIdle();
@@ -576,10 +562,10 @@ void Engine::refresh()
         m_renderSetup->createSwapChainSRVs();
     }
 
-    m_rtv = m_renderSetup->device().createTextureRTV(TextureDescription()
+    /*m_rtv = m_renderSetup->device().createTextureRTV(TextureDescription()
         .width(m_virtualResolution.x)
         .height(m_virtualResolution.y)
-        .format(engine::Format::Format_R16G16B16A16_FLOAT)
+        .format(engine::Format::R16G16B16A16_FLOAT)
         .usage(ResourceUsage::GpuRenderTargetReadWrite)
         .name("main render target")
         .dimension(ResourceDimension::Texture2D)
@@ -590,7 +576,7 @@ void Engine::refresh()
 
     m_dsv = m_renderSetup->device().createTextureDSV(TextureDescription()
         .name("Depth Buffer")
-        .format(Format::Format_D32_FLOAT)
+        .format(Format::D32_FLOAT)
         .width(m_virtualResolution.x)
         .height(m_virtualResolution.y)
         .usage(ResourceUsage::DepthStencil)
@@ -599,7 +585,10 @@ void Engine::refresh()
     );
     m_dsvSRV = m_renderSetup->device().createTextureSRV(m_dsv);
 
-    m_modelRenderer->resize(static_cast<uint32_t>(m_virtualResolution.x), static_cast<uint32_t>(m_virtualResolution.y));
+    m_modelRenderer->resize(static_cast<uint32_t>(m_virtualResolution.x), static_cast<uint32_t>(m_virtualResolution.y));*/
+    
+    m_viewportRenderer->refresh(m_virtualResolution);
+    //m_viewportRenderer = std::make_unique<ViewportRenderer>(m_renderSetup->device(), m_renderSetup->shaderStorage(), m_virtualResolution.x, m_virtualResolution.y);
 
     m_cameraSizeRefresh = true;
 
@@ -625,8 +614,12 @@ void Engine::onMouseDown(MouseButton button, int x, int y)
         m_cameraInput.onMouseDown(button, x, y);
     }
 
-    if(button == MouseButton::Left)
-        m_modelRenderer->setSelectedObject(static_cast<int64_t>(m_modelRenderer->pickedObject(m_renderSetup->device())));
+    if (button == MouseButton::Left)
+    {
+        auto pickObjectId = static_cast<int64_t>(m_viewportRenderer->pickedObject(m_renderSetup->device()));
+        m_viewportRenderer->setSelectedObject(pickObjectId);
+        m_lastPickedObject = pickObjectId;
+    }
 }
 
 void Engine::onMouseUp(MouseButton button, int x, int y)
@@ -649,21 +642,18 @@ void Engine::onMouseDoubleClick(MouseButton button, int x, int y)
 
 void Engine::shutdown()
 {
+    m_renderSetup->device().waitForIdle();
+    m_cycleBufferView = BufferUAV();
+    m_cycleTransforms.reset(nullptr);
+    m_scene.clear(true);
     m_renderSetup->device().resourceCache().clear();
-    m_scene.clear();
     m_renderSetup->shutdown();
-    m_modelRenderer->clearResources();
-    m_modelTransparentRenderer->clearResources();
-    m_shadowRenderer->clearResources();
-    m_renderCubemap->clearResources();
-    m_postProcess->clearResources();
 
-    m_lightData.reset(nullptr);
-    m_modelRenderer.reset(nullptr);
-    m_modelTransparentRenderer.reset(nullptr);
-    m_shadowRenderer.reset(nullptr);
-    m_renderCubemap.reset(nullptr);
-    m_postProcess.reset(nullptr);
+    m_viewportRenderer->clearResources();
+
+    m_lightData = nullptr;
+    
+    m_viewportRenderer.reset(nullptr);
     m_imguiRenderer.reset(nullptr);
     m_renderSetup.reset(nullptr);
 }

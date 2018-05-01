@@ -1,0 +1,64 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2010
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DarknessResourceTask", "DarknessResourceTask.vcxproj", "{39CA29F1-5F76-4C01-9E69-E9EE4CB0242B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5214C556-A443-4D25-A803-5B5EFCA0E522} = {5214C556-A443-4D25-A803-5B5EFCA0E522}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DarknessEngine", "..\..\..\darkness-engine\ide\VIsualStudio2015\DarknessEngine.vcxproj", "{5214C556-A443-4D25-A803-5B5EFCA0E522}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug DX12|x64 = Debug DX12|x64
+		Debug DX12|x86 = Debug DX12|x86
+		Debug Vulkan|x64 = Debug Vulkan|x64
+		Debug Vulkan|x86 = Debug Vulkan|x86
+		Release DX12|x64 = Release DX12|x64
+		Release DX12|x86 = Release DX12|x86
+		Release Vulkan|x64 = Release Vulkan|x64
+		Release Vulkan|x86 = Release Vulkan|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{39CA29F1-5F76-4C01-9E69-E9EE4CB0242B}.Debug DX12|x64.ActiveCfg = Debug DX12|x64
+		{39CA29F1-5F76-4C01-9E69-E9EE4CB0242B}.Debug DX12|x64.Build.0 = Debug DX12|x64
+		{39CA29F1-5F76-4C01-9E69-E9EE4CB0242B}.Debug DX12|x86.ActiveCfg = Debug DX12|Win32
+		{39CA29F1-5F76-4C01-9E69-E9EE4CB0242B}.Debug DX12|x86.Build.0 = Debug DX12|Win32
+		{39CA29F1-5F76-4C01-9E69-E9EE4CB0242B}.Debug Vulkan|x64.ActiveCfg = Debug Vulkan|x64
+		{39CA29F1-5F76-4C01-9E69-E9EE4CB0242B}.Debug Vulkan|x64.Build.0 = Debug Vulkan|x64
+		{39CA29F1-5F76-4C01-9E69-E9EE4CB0242B}.Debug Vulkan|x86.ActiveCfg = Debug Vulkan|Win32
+		{39CA29F1-5F76-4C01-9E69-E9EE4CB0242B}.Debug Vulkan|x86.Build.0 = Debug Vulkan|Win32
+		{39CA29F1-5F76-4C01-9E69-E9EE4CB0242B}.Release DX12|x64.ActiveCfg = Release DX12|x64
+		{39CA29F1-5F76-4C01-9E69-E9EE4CB0242B}.Release DX12|x64.Build.0 = Release DX12|x64
+		{39CA29F1-5F76-4C01-9E69-E9EE4CB0242B}.Release DX12|x86.ActiveCfg = Release DX12|Win32
+		{39CA29F1-5F76-4C01-9E69-E9EE4CB0242B}.Release DX12|x86.Build.0 = Release DX12|Win32
+		{39CA29F1-5F76-4C01-9E69-E9EE4CB0242B}.Release Vulkan|x64.ActiveCfg = Release Vulkan|x64
+		{39CA29F1-5F76-4C01-9E69-E9EE4CB0242B}.Release Vulkan|x64.Build.0 = Release Vulkan|x64
+		{39CA29F1-5F76-4C01-9E69-E9EE4CB0242B}.Release Vulkan|x86.ActiveCfg = Release Vulkan|Win32
+		{39CA29F1-5F76-4C01-9E69-E9EE4CB0242B}.Release Vulkan|x86.Build.0 = Release Vulkan|Win32
+		{5214C556-A443-4D25-A803-5B5EFCA0E522}.Debug DX12|x64.ActiveCfg = Debug DX12|x64
+		{5214C556-A443-4D25-A803-5B5EFCA0E522}.Debug DX12|x64.Build.0 = Debug DX12|x64
+		{5214C556-A443-4D25-A803-5B5EFCA0E522}.Debug DX12|x86.ActiveCfg = Debug DX12|Win32
+		{5214C556-A443-4D25-A803-5B5EFCA0E522}.Debug DX12|x86.Build.0 = Debug DX12|Win32
+		{5214C556-A443-4D25-A803-5B5EFCA0E522}.Debug Vulkan|x64.ActiveCfg = Debug Vulkan|x64
+		{5214C556-A443-4D25-A803-5B5EFCA0E522}.Debug Vulkan|x64.Build.0 = Debug Vulkan|x64
+		{5214C556-A443-4D25-A803-5B5EFCA0E522}.Debug Vulkan|x86.ActiveCfg = Debug Vulkan|Win32
+		{5214C556-A443-4D25-A803-5B5EFCA0E522}.Debug Vulkan|x86.Build.0 = Debug Vulkan|Win32
+		{5214C556-A443-4D25-A803-5B5EFCA0E522}.Release DX12|x64.ActiveCfg = Release DX12|x64
+		{5214C556-A443-4D25-A803-5B5EFCA0E522}.Release DX12|x64.Build.0 = Release DX12|x64
+		{5214C556-A443-4D25-A803-5B5EFCA0E522}.Release DX12|x86.ActiveCfg = Release DX12|Win32
+		{5214C556-A443-4D25-A803-5B5EFCA0E522}.Release DX12|x86.Build.0 = Release DX12|Win32
+		{5214C556-A443-4D25-A803-5B5EFCA0E522}.Release Vulkan|x64.ActiveCfg = Release Vulkan|x64
+		{5214C556-A443-4D25-A803-5B5EFCA0E522}.Release Vulkan|x64.Build.0 = Release Vulkan|x64
+		{5214C556-A443-4D25-A803-5B5EFCA0E522}.Release Vulkan|x86.ActiveCfg = Release Vulkan|Win32
+		{5214C556-A443-4D25-A803-5B5EFCA0E522}.Release Vulkan|x86.Build.0 = Release Vulkan|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {95D2E8C2-0EB8-4300-BA0E-BC986F6A1793}
+	EndGlobalSection
+EndGlobal

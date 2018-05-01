@@ -32,6 +32,7 @@ namespace engine
             bool vsync,
             SwapChain* /*oldSwapChain*/)
             : m_vsync{ vsync }
+            , m_needRefresh{ false }
         {
             ComPtr<IDXGIFactory4> factory;
             ComPtr<IDXGIAdapter> adapter;
@@ -40,7 +41,7 @@ namespace engine
             ComPtr<IDXGISwapChain> swapChain;
 
             // Create a DirectX graphics interface factory.
-            auto res = CreateDXGIFactory1(__uuidof(IDXGIFactory4), (void**)&factory);
+            auto res = CreateDXGIFactory1(DARKNESS_IID_PPV_ARGS(factory.GetAddressOf()));
             ASSERT(SUCCEEDED(res));
 
             // Use the factory to create an adapter for the primary graphics interface (video card).
@@ -156,7 +157,7 @@ namespace engine
 
             // Next upgrade the IDXGISwapChain to a IDXGISwapChain3 interface and store it in a private member variable named m_swapChain.
             // This will allow us to use the newer functionality such as getting the current back buffer index.
-            res = swapChain->QueryInterface(__uuidof(IDXGISwapChain3), (void**)m_swapChain.GetAddressOf());
+            res = swapChain->QueryInterface(DARKNESS_IID_PPV_ARGS(m_swapChain.GetAddressOf()));
             ASSERT(SUCCEEDED(res));
 
             createSwapChainTextures(device);
@@ -180,7 +181,7 @@ namespace engine
             for (int i = 0; i < BackBufferCount; ++i)
             {
                 ID3D12Resource* buffer;
-                auto res = m_swapChain->GetBuffer(static_cast<UINT>(i), __uuidof(ID3D12Resource), (void**)&buffer);
+                auto res = m_swapChain->GetBuffer(static_cast<UINT>(i), DARKNESS_IID_PPV_ARGS(&buffer));
                 ASSERT(SUCCEEDED(res));
 
                 m_swapChainTextures.emplace_back(
@@ -245,18 +246,26 @@ namespace engine
             if (m_vsync)
             {
                 auto res = m_swapChain->Present(1, 0);
-                ASSERT(SUCCEEDED(res));
+                if (!SUCCEEDED(res))
+                {
+                    m_needRefresh = true;
+                }
             }
             else
             {
                 auto res = m_swapChain->Present(0, 0);
-                ASSERT(SUCCEEDED(res));
+                if (!SUCCEEDED(res))
+                {
+                    m_needRefresh = true;
+                }
             }
         }
 
-        bool SwapChainImpl::needRefresh() const
+        bool SwapChainImpl::needRefresh()
         {
-            return false;
+            auto res = m_needRefresh;
+            m_needRefresh = false;
+            return res;
         }
     }
 }

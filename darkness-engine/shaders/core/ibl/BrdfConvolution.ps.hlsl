@@ -7,32 +7,31 @@ struct PSInput
     float2 uv               : TEXCOORD0;
 };
 
-/* for ES2.0
-float vanDerCorpus(uint n, uint base)
+// for ES2.0
+/*float vanDerCorpus(uint n, uint base)
 {
-float invBase = 1.0 / float(base);
-float denom = 1.0;
-float result = 0.0;
+    float invBase = 1.0 / float(base);
+    float denom = 1.0;
+    float result = 0.0;
 
-for (uint i = 0u; i < 32u; ++i)
-{
-if (n > 0u)
-{
-denom = mod(float(n), 2.0);
-result += denom * invBase;
-invBase = invBase / 2.0;
-n = uint(float(n) / 2.0);
-}
-}
+    for (uint i = 0u; i < 32u; ++i)
+    {
+        if (n > 0u)
+        {
+            denom = mod(float(n), 2.0);
+            result += denom * invBase;
+            invBase = invBase / 2.0;
+            n = uint(float(n) / 2.0);
+        }
+    }
 
-return result;
+    return result;
 }
 // ----------------------------------------------------------------------------
 float2 HammersleyNoBitOps(uint i, uint N)
 {
-return float2(float(i) / float(N), vanDerCorpus(i, 2u));
+    return float2(float(i) / float(N), vanDerCorpus(i, 2u));
 }*/
-
 
 float radicalInverse_VdC(uint bits)
 {
@@ -104,7 +103,7 @@ float2 integrateBRDF(float NdotV, float roughness)
 
     float3 N = float3(0.0, 0.0, 1.0);
 
-    const uint sampleCount = 1024u;
+    const uint sampleCount = 8192u;
     for (uint i = 0u; i < sampleCount; ++i)
     {
         float2 Xi = hammersley(i, sampleCount);
@@ -132,6 +131,6 @@ float2 integrateBRDF(float NdotV, float roughness)
 
 float4 main(PSInput input) : SV_Target
 {
-    float2 integratedBRDF = integrateBRDF(input.uv.x, -input.uv.y);
+    float2 integratedBRDF = integrateBRDF(input.uv.x, input.uv.y);
     return float4(integratedBRDF, 0.0f, 1.0f);
 }

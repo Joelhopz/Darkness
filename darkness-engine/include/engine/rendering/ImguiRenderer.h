@@ -1,20 +1,21 @@
 #pragma once
 
-#include "engine/graphics/CommandList.h"
-#include "components/Camera.h"
 #include "shaders/core/imgui/ImguiRender.h"
 #include "engine/graphics/ShaderStorage.h"
-#include "engine/graphics/Device.h"
 #include "engine/graphics/Pipeline.h"
 #include "engine/graphics/Resources.h"
-#include "engine/InputEvents.h"
-#include "external/imgui/imgui.h"
-#include "engine/Scene.h"
 
 #include <map>
 
 namespace engine
 {
+    class CommandList;
+    struct FlatScene;
+    enum class MouseButton;
+    struct BoundingSphere;
+
+    void renderBoxes(const FlatScene& scene, const std::vector<BoundingBox>& boxes, uint32_t color);
+
     class ImguiRenderer
     {
     public:
@@ -29,7 +30,10 @@ namespace engine
             TextureDSV& currentDepthTarget,
             CommandList& cmd);
 
-        void render(const FlatScene& scene);
+        void render(Device& device, const FlatScene& scene);
+
+        
+        void renderSpheres(const FlatScene& scene, const std::vector<BoundingSphere>& spheres, uint32_t color);
 
         void onMouseMove(int x, int y);
         void onMouseDown(MouseButton button, int x, int y);

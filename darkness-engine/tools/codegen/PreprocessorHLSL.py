@@ -96,6 +96,12 @@ class Preprocessor:
 					parts = rest_of_line.split(' ')
 					self.in_defined.append({ 'define' : parts[0], 'true': parts[0] in self.defines })
 					return ''
+				elif value == '#ifndef':
+					self.match(contents, ' ') # read away one space if it exists
+					rest_of_line = self.read_until(contents, '\n').strip()
+					parts = rest_of_line.split(' ')
+					self.in_defined.append({ 'define' : parts[0], 'true': False })
+					return ''
 				elif value == '#else':
 					self.in_defined[-1:][0]['true'] = not self.in_defined[-1:][0]['true']
 					return ''

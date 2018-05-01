@@ -40,6 +40,11 @@ namespace engine
 
             MeshRendererVS();
 
+            MeshRendererVS(const MeshRendererVS&);
+            MeshRendererVS(MeshRendererVS&&);
+            MeshRendererVS& operator=(const MeshRendererVS&);
+            MeshRendererVS& operator=(MeshRendererVS&&);
+
             BufferSRV vertices;
             BufferSRV normals;
             BufferSRV tangents;
@@ -48,7 +53,9 @@ namespace engine
 
             
 
-            protected:
+            
+
+        protected:
             friend class implementation::CommandListImpl;
             const TextureSRV& textureSrv(const std::string& name) const override;
             const TextureUAV& textureUav(const std::string& name) const override;
@@ -56,10 +63,26 @@ namespace engine
             const BufferUAV& bufferUav(const std::string& name) const override;
             const Sampler& sampler(const std::string& name) const override;
             
+            std::vector<std::string> textureSrvNames() const override;
+            std::vector<std::string> textureUavNames() const override;
+            std::vector<std::string> bufferSrvNames() const override;
+            std::vector<std::string> bufferUavNames() const override;
+            std::vector<std::string> samplerNames() const override;
+
+            std::vector<std::string> srvNames() const override;
+            std::vector<std::string> uavNames() const override;
+
+            engine::ResourceDimension textureDimension(const std::string& name) const;
+
             const TextureBindlessSRV& bindlessTextureSrv(const std::string& name) const override;
             const TextureBindlessUAV& bindlessTextureUav(const std::string& name) const override;
             const BufferBindlessSRV& bindlessBufferSrv(const std::string& name) const override;
             const BufferBindlessUAV& bindlessBufferUav(const std::string& name) const override;
+
+            void textureSrv(const std::string& name, TextureSRV& texture) override;
+            void textureUav(const std::string& name, TextureUAV& texture) override;
+            void bufferSrv(const std::string& name, BufferSRV& buffer) override;
+            void bufferUav(const std::string& name, BufferUAV& buffer) override;
 
             bool hasTextureSrv(const std::string& name) const override;
             bool hasTextureUav(const std::string& name) const override;
@@ -86,10 +109,13 @@ namespace engine
             
             std::vector<Shader::ConstantRange>& constants() override;
             std::vector<Sampler> samplers() const override;
+
+            const std::vector<ShaderInputParameter>& inputParameters() const override;
         private:
             friend class MeshRenderer;
             uint32_t descriptorCount() const;
             std::vector<Shader::ConstantRange> m_constantRange;
+            std::vector<ShaderInputParameter> m_inputParameters;
         };
     }
 }

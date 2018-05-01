@@ -61,7 +61,7 @@ void main(
 
             if (dotView < 0)
             {
-                float2 thickness = lineThickness * 1.8;
+                float2 thickness = lineThickness * 0.7;
 
                 float3 fromView = mul(modelViewMatrix, float4(vertices[i].position, 1)).xyz;
                 float3 toView = mul(modelViewMatrix, float4(vertices[iNextTri].position, 1)).xyz;

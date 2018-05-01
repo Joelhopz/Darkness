@@ -1,4 +1,6 @@
 
+#include "../Common.hlsli"
+
 struct PSInput
 {
     float4 position         : SV_Position0;
@@ -41,20 +43,6 @@ cbuffer ConstData
 
 sampler tex_sampler;
 SamplerComparisonState shadow_sampler;
-
-static const float PI = 3.14159265f;
-static const float TWO_PI = 6.2831853f;
-float2 envMapEquirect(float3 normal, float flipEnvMap)
-{
-    float phi = acos(normal.y);
-    float theta = atan2(flipEnvMap * normal.x, normal.z) + PI;
-    return float2(theta / TWO_PI, phi / PI);
-}
-
-float2 envMapEquirect(float3 normal)
-{
-    return envMapEquirect(normal, 1.0f);
-}
 
 float3x3 tangentFrame(float3 normal, float3 pos, float2 uv)
 {
@@ -111,26 +99,6 @@ float weight(float a, float depth)
             minValue, maxValue);
 }
 
-float4 sRGBtoLinear(float4 sRGB)
-{
-    float3 sr = sRGB.xyz;
-    //return float4(sr * (sr * (sr * 0.305306011 + 0.682171111) + 0.012522878), sRGB.w);
-
-    // from nvidia HDR sdk
-    return float4((sr <= 0.04045f) ? (sr / 12.92f) : (pow(sr + 0.055f, 2.4f) / 1.055f), sRGB.w);
-}
-
-float4 linearTosRGB(float4 RGB)
-{
-    /*float3 S1 = sqrt(RGB.xyz);
-    float3 S2 = sqrt(S1);
-    float3 S3 = sqrt(S2);
-    return float4(0.662002687 * S1 + 0.684122060 * S2 - 0.323583601 * S3 - 0.0225411470 * RGB.xyz, RGB.w);*/
-
-    float3 rg = RGB.xyz;
-    return float4((rg <= 0.0031308f) ? (rg*12.92f) : (1.055f * pow(rg, 1.0f / 2.4f) - 0.055f), RGB.w);
-}
-
 PsOutput main(PSInput input) : SV_Target
 {
     float2 uv = float2(input.uv.x * materialParameters.z, (input.uv.y * materialParameters.w));
@@ -142,10 +110,6 @@ PsOutput main(PSInput input) : SV_Target
     float4 albedoColor = albedo.Sample(tex_sampler, uv);
     float4 roughnessColor = roughness.Sample(tex_sampler, uv);
     float4 metalnessColor = metalness.Sample(tex_sampler, uv);
-
-    // Gamma correct textures
-    albedoColor = sRGBtoLinear(albedoColor);
-    roughnessColor = sRGBtoLinear(roughnessColor);
 
     // load normal map value and rescale to proper range
     float4 normalTex = normal.Sample(tex_sampler, float2(uv.x, uv.y));

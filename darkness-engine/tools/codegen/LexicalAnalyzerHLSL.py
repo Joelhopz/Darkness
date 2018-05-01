@@ -21,6 +21,7 @@ qualifiers = [
 	]
 
 complete_system_types = [
+	'void',
 	'bool',
 	'int',		# 32 bit signed integer
 	'uint',		# 32 bit unsigned integer
@@ -163,6 +164,9 @@ class LexicalAnalyzer:
 		while data_iterator:
 			try:
 				chr = data_iterator.next()
+				#print chr
+				#if chr == 'r':
+				#	print 'interesting'
 				if chr == '\n':
 					self.line_number += 1
 
@@ -182,6 +186,10 @@ class LexicalAnalyzer:
 						token.type = 'system_type'
 					else:
 						token.type = 'identifier'
+
+					#if token.type == 'identifier' and token.value == 'planePos':
+					#	print 'here'
+
 					data_iterator.prev()
 					return token
 
@@ -192,6 +200,9 @@ class LexicalAnalyzer:
 					chr = data_iterator.next()
 					while chr == ' ':
 						chr = data_iterator.next()
+				if negative_number:
+					if not chr.isdigit():
+						data_iterator.prev()
 
 				# parse numbers
 				if chr.isdigit():
@@ -239,7 +250,7 @@ class LexicalAnalyzer:
 					data_iterator.prev(received_characters)
 				
 				for operator in sorted(self.operators, key=len, reverse=True):
-					if operator == characters[:len(operator)]:
+					if operator == characters[:len(operator)].replace(" ", ""):
 						token.value = self.operators[operator]
 						token.type = 'operator'
 						for x in range(len(operator)-1):
@@ -249,6 +260,10 @@ class LexicalAnalyzer:
 				# parse other operators
 				if chr == '.':
 					token.value = 'dot_operator'
+					token.type = 'operator'
+					return token
+				if chr == ',':
+					token.value = 'comma_operator'
 					token.type = 'operator'
 					return token
 				if chr == '(':

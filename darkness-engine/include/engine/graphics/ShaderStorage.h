@@ -15,7 +15,9 @@ namespace engine
         std::shared_ptr<const ShaderBinary> loadShader(
             const Device& device, 
             const std::string& path,
-            const std::string& supportPath);
+            const std::string& supportPath,
+            int permutationId,
+            const std::vector<std::string>& defines);
         void clear();
 
         platform::FileWatcher& fileWatcher();

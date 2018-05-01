@@ -45,9 +45,14 @@ namespace engine
                 Uint hasEnvironmentSpecular;
                 Float environmentStrength;
                 Float padding;
+                Float4 probePositionRange;
+                Float4 probeBBmin;
+                Float4 probeBBmax;
                 Float4x4 cameraInverseProjectionMatrix;
                 Float4x4 cameraInverseViewMatrix;
                 Float2 shadowSize;
+                Uint2 frameSize;
+                Uint usingProbe;
                 };
         }
         class LightingPS : public PixelShader
@@ -57,18 +62,23 @@ namespace engine
 
             LightingPS();
 
+            LightingPS(const LightingPS&);
+            LightingPS(LightingPS&&);
+            LightingPS& operator=(const LightingPS&);
+            LightingPS& operator=(LightingPS&&);
+
             TextureSRV environmentIrradianceCubemap;
             TextureSRV environmentIrradiance;
             TextureSRV environmentSpecular;
             TextureSRV environmentBrdfLut;
-            TextureSRV albedo;
-            TextureSRV normal;
-            TextureSRV roughness;
-            TextureSRV metalness;
-            TextureSRV occlusion;
+            TextureSRV gbufferNormals;
+            TextureSRV gbufferUV;
+            TextureSRV gbufferInstanceId;
             TextureSRV shadowMap;
             TextureSRV ssao;
             TextureSRV depth;
+            TextureBindlessSRV materialTextures;
+            BufferSRV instanceMaterials;
             BufferSRV shadowVP;
             BufferSRV lightWorldPosition;
             BufferSRV lightDirection;
@@ -82,10 +92,31 @@ namespace engine
             
 
             Sampler tex_sampler;
+            Sampler tri_sampler;
             Sampler depth_sampler;
             Sampler point_sampler;
             Sampler shadow_sampler;
-            protected:
+            
+            enum class Drawmode
+            {
+                Full,
+                DebugClusters,
+                MipAlbedo,
+                MipRoughness,
+                MipMetalness,
+                MipAo,
+                Albedo,
+                Roughness,
+                Metalness,
+                Occlusion,
+                Uv,
+                DebugNormal,
+            };
+            Drawmode drawmode;
+            static constexpr unsigned int DrawmodeCount = 12;
+            
+
+        protected:
             friend class implementation::CommandListImpl;
             const TextureSRV& textureSrv(const std::string& name) const override;
             const TextureUAV& textureUav(const std::string& name) const override;
@@ -93,10 +124,26 @@ namespace engine
             const BufferUAV& bufferUav(const std::string& name) const override;
             const Sampler& sampler(const std::string& name) const override;
             
+            std::vector<std::string> textureSrvNames() const override;
+            std::vector<std::string> textureUavNames() const override;
+            std::vector<std::string> bufferSrvNames() const override;
+            std::vector<std::string> bufferUavNames() const override;
+            std::vector<std::string> samplerNames() const override;
+
+            std::vector<std::string> srvNames() const override;
+            std::vector<std::string> uavNames() const override;
+
+            engine::ResourceDimension textureDimension(const std::string& name) const;
+
             const TextureBindlessSRV& bindlessTextureSrv(const std::string& name) const override;
             const TextureBindlessUAV& bindlessTextureUav(const std::string& name) const override;
             const BufferBindlessSRV& bindlessBufferSrv(const std::string& name) const override;
             const BufferBindlessUAV& bindlessBufferUav(const std::string& name) const override;
+
+            void textureSrv(const std::string& name, TextureSRV& texture) override;
+            void textureUav(const std::string& name, TextureUAV& texture) override;
+            void bufferSrv(const std::string& name, BufferSRV& buffer) override;
+            void bufferUav(const std::string& name, BufferUAV& buffer) override;
 
             bool hasTextureSrv(const std::string& name) const override;
             bool hasTextureUav(const std::string& name) const override;
@@ -123,10 +170,13 @@ namespace engine
             
             std::vector<Shader::ConstantRange>& constants() override;
             std::vector<Sampler> samplers() const override;
+
+            const std::vector<ShaderInputParameter>& inputParameters() const override;
         private:
             friend class Lighting;
             uint32_t descriptorCount() const;
             std::vector<Shader::ConstantRange> m_constantRange;
+            std::vector<ShaderInputParameter> m_inputParameters;
         };
     }
 }

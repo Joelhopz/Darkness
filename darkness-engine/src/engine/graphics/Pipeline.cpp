@@ -25,9 +25,8 @@ namespace engine
 {
     PipelineAbs::PipelineAbs(
         Device& device,
-        shaders::PipelineConfiguration* configuration,
         ShaderStorage& storage)
-        : m_impl{ std::make_shared<implementation::PipelineImpl>(device, configuration, storage) }
+        : m_impl{ std::make_shared<implementation::PipelineImpl>(device, storage) }
     {}
 
     void PipelineAbs::setBlendState(const BlendDescription& desc) { m_impl->setBlendState(desc); };
@@ -59,8 +58,6 @@ namespace engine
     void PipelineAbs::setTextureSRV(const TextureSRV& srv) { m_impl->setTextureSRV(srv);  };
     void PipelineAbs::setSampler(const Sampler& sampler) { m_impl->setSampler(sampler); };
     void PipelineAbs::setDepthBufferView(std::shared_ptr<TextureDSV> view) { m_impl->setDepthBufferView(view); };
-
-    void PipelineAbs::setRenderTarget(TextureRTV rtv) { m_impl->setRenderTarget(rtv); }
 
     void PipelineAbs::configure(CommandListImpl& commandList, shaders::PipelineConfiguration* configuration) { m_impl->configure(commandList, configuration); }
 

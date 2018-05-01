@@ -26,7 +26,8 @@ public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
 
     std::shared_ptr<engine::SceneNode> node(const QModelIndex& index);
-	void removeNode(const QModelIndex& index);
+    QModelIndex node(engine::SceneNode* node);
+    void removeNode(const QModelIndex& index);
 
     Qt::DropActions supportedDragActions() const override;
     Qt::DropActions supportedDropActions() const override;
@@ -36,14 +37,32 @@ public:
 
     void addNode(std::shared_ptr<engine::SceneNode> node);
 
-	void beginModelReset()
-	{
-		beginResetModel();
-	}
-	void endModelReset()
-	{
-		endResetModel();
-	}
+    void beginModelReset()
+    {
+        beginResetModel();
+    }
+    void endModelReset()
+    {
+        endResetModel();
+    }
+
+    void startRemoveRows(const QModelIndex& parent, int first, int last)
+    {
+        beginRemoveRows(parent, first, last);
+    }
+    void stopRemoveRows()
+    {
+        endRemoveRows();
+    }
+
+    void startInsertRows(const QModelIndex& parent, int first, int last)
+    {
+        beginInsertRows(parent, first, last);
+    }
+    void stopInsertRows()
+    {
+        endInsertRows();
+    }
 
 private:
     void setupModelData(const QStringList& lines, engine::SceneNode* parent);

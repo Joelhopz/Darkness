@@ -232,6 +232,10 @@ namespace engine
             Texture& texture();
             const Texture& texture() const;
 
+            Format format() const;
+            uint32_t width() const;
+            uint32_t height() const;
+
             VkImageView& native();
             const VkImageView& native() const;
             
@@ -262,6 +266,10 @@ namespace engine
             Texture& texture();
             const Texture& texture() const;
 
+            Format format() const;
+            uint32_t width() const;
+            uint32_t height() const;
+
             VkImageView& native();
             const VkImageView& native() const;
 
@@ -290,6 +298,10 @@ namespace engine
             Texture& texture();
             const Texture& texture() const;
 
+            Format format() const;
+            uint32_t width() const;
+            uint32_t height() const;
+
             VkImageView& native();
             const VkImageView& native() const;
 
@@ -316,6 +328,10 @@ namespace engine
 
             Texture& texture();
             const Texture& texture() const;
+
+            Format format() const;
+            uint32_t width() const;
+            uint32_t height() const;
 
             VkImageView& native();
             const VkImageView& native() const;

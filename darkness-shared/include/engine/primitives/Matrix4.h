@@ -344,9 +344,9 @@ namespace engine
 		}
 
         Matrix4(const Matrix3<T>& mat)
-            : m00{ mat.m00 }, m01{ mat.m01 }, m02{ mat.m02 }, m03{ 0 },
-            , m10{ mat.m10 }, m11{ mat.m11 }, m12{ mat.m12 }, m13{ 0 },
-            , m20{ mat.m20 }, m21{ mat.m21 }, m22{ mat.m22 }, m23{ 0 },
+            : m00{ mat.m00 }, m01{ mat.m01 }, m02{ mat.m02 }, m03{ 0 }
+            , m10{ mat.m10 }, m11{ mat.m11 }, m12{ mat.m12 }, m13{ 0 }
+            , m20{ mat.m20 }, m21{ mat.m21 }, m22{ mat.m22 }, m23{ 0 }
             , m30{ 0 },       m31{ 0 },       m32{ 0 },       m33{ 1 }
         {
         }

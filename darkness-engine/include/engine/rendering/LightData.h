@@ -63,6 +63,11 @@ namespace engine
             return m_directions;
         }
 
+        const std::vector<float>& cpuranges() const
+        {
+            return m_ranges;
+        }
+
         const std::vector<bool>& shadowCaster() const
         {
             return m_shadowCaster;
@@ -93,6 +98,7 @@ namespace engine
         std::vector<engine::Matrix4f> m_transforms;
         std::vector<engine::Vector3f> m_positions;
         std::vector<engine::Vector3f> m_directions;
+        std::vector<float> m_ranges;
         std::vector<unsigned int> m_types;
         std::vector<bool> m_shadowCaster;
     };

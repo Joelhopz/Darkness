@@ -93,6 +93,12 @@
     <ClInclude Include="..\..\include\tools\Debug.h">
       <Filter>Header Files\tools</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\engine\primitives\BoundingSphere.h">
+      <Filter>Header Files\engine\primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\primitives\BoundingBox.h">
+      <Filter>Header Files\engine\primitives</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\Drawer.cpp">

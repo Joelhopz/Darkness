@@ -47,7 +47,7 @@ namespace engine
         float h = static_cast<float>(windowHeight);
 
         float logWidth = w;
-        float logHeight = 70.0f;
+        float logHeight = 170.0f;
 
         ImGui::SetNextWindowSizeConstraints(ImVec2(10.0f, 10.0f), ImVec2(logWidth, logHeight));
         if (ImGui::Begin("log", &open, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings))

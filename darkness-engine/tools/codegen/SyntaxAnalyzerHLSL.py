@@ -7,9 +7,6 @@ from LexicalAnalyzerHLSL import templated_system_types
 parsed_system_types = [
 	'vector',	# vector<float, 4>
 	'matrix',	# matrix<float, 3, 3>
-	'ByteAddressBuffer',
-	'StructuredBuffer',
-	'ConsumeStructuredBuffer',
 	'InputPatch',
 	'OutputPatch',
 	'struct',
@@ -78,15 +75,16 @@ class SyntaxNode:
 		self.register = ''
 		self.childs = []
 		self.parameters = []
-		self.interpolation_modifier = ''
+		self.semantic = ''
 		self.qualifiers = []
 		self.element_count = 1
 		self.value = ''
+		self.dimension = ''
 
 class SyntaxAnalyzer:
 	def __init__(self, tokens):
 		token_iterator = HistoryIter(tokens)
-		token_iterator.set_history_length(40)
+		token_iterator.set_history_length(4000)
 
 		self.syntax_nodes = []
 		self.known_structures = []
@@ -99,6 +97,19 @@ class SyntaxAnalyzer:
 		result = []
 		for node in self.root_node.childs:
 			if node.syntax_type == 'declaration':
+				result.append(node)
+			if node.syntax_type == 'function' and node.name == 'main':
+				# we want to reprocess the child list to include only native types
+				newChildList = []
+				for ch in node.childs:
+					if ch.type in complete_system_types:
+						newChildList.append(ch)
+					elif ch.type in self.known_structures:
+						for rn in self.root_node.childs:
+							if rn.name == ch.type:
+								for rnchild in rn.childs:
+									newChildList.append(rnchild)
+				node.childs = newChildList
 				result.append(node)
 		return result
 
@@ -113,6 +124,7 @@ class SyntaxAnalyzer:
 			token = token_iterator.next()
 			currentQualifiers = []
 			while token.value != 'eof':
+				#print token.type + " : " + token.value
 				if token.type == 'qualifier':
 					currentQualifiers.append(token.value)
 				if token.value == 'sampler':
@@ -191,36 +203,44 @@ class SyntaxAnalyzer:
 						token_iterator.prev(token_iterator.count_get())
 					else:
 						left_parenth = token_iterator.next()
-						if left_parenth.type != 'parentheses':
+						if left_parenth.value != 'left_parentheses':
 							token_iterator.prev(token_iterator.count_get())
 						else:
-							right_parent = token_iterator.next()
+							new_node = SyntaxNode()
+							new_node.type = token.value
+							new_node.syntax_type = 'function'
+							new_node.name = name.value
+							new_node.linenumber = token.linenumber
+							node.childs.append(new_node)
+
+							if new_node.name == 'main':
+								interesting = True
+
+							self.parse_syntax_tokens(token_iterator, new_node)
+
 							max_lookout = 100000
 							cur_lookout = 0
 							failure = False
-							while right_parent.value != 'right_parentheses':
-								right_parent = token_iterator.next()
+							left_brace = token_iterator.next()
+							if left_brace.type == 'colon':
+								while left_brace.value != 'left_brace':
+									left_brace = token_iterator.next()
+							brace_count = 1
+
+							while brace_count > 0:
+								ctoken = token_iterator.next()
+								if ctoken.value == 'left_brace':
+									brace_count += 1
+								if ctoken.value == 'right_brace':
+									brace_count -= 1
 								cur_lookout += 1
 								if cur_lookout > max_lookout:
 									failure = True
 									break
 							if failure:
-								print 'Failed to parse away function parameters'
+								print 'Failed to parse away function body'
 								token_iterator.prev(token_iterator.count_get())
-							else:
-								cur_lookout = 0
-								left_brace = token_iterator.next()
-								right_brace = token_iterator.next()
-								while right_brace.value != 'right_brace':
-									right_brace = token_iterator.next()
-									#print right_brace.type
-									cur_lookout += 1
-									if cur_lookout > max_lookout:
-										failure = True
-										break
-								if failure:
-									print 'Failed to parse away function body'
-									token_iterator.prev(token_iterator.count_get())
+							token.value = ''
 									
 				if token.value in self.known_structures:
 					new_node = SyntaxNode()
@@ -250,34 +270,57 @@ class SyntaxAnalyzer:
 						token_iterator.prev()
 					
 					next_token = token_iterator.next()
-					if next_token.value == 'colon':
-						next_token = token_iterator.next()
-						new_node.interpolation_modifier = next_token.value
-					elif next_token.value == 'left_bracket':
-						# it's an array declaration
-						next_token = token_iterator.next()
-						new_node.element_count = int(next_token.value)
-						next_token = token_iterator.next()
-						if next_token.value != 'right_bracket':
-							raise SyntaxAnalyzerException('Parsing array right bracket. got: '+next_token.value)
+					if next_token.value == 'comma_operator':
+						# this is most likely function parameter list
+						# jump right out to handle the next one
+						nop = True
 					else:
-						token_iterator.prev()
+						if next_token.value == 'colon':
+							next_token = token_iterator.next()
+							new_node.semantic = next_token.value
+						elif next_token.value == 'left_bracket':
+							# it's an array declaration
+							next_token = token_iterator.next()
+							new_node.element_count = int(next_token.value)
+							next_token = token_iterator.next()
+							if next_token.value != 'right_bracket':
+								raise SyntaxAnalyzerException('Parsing array right bracket. got: '+next_token.value)
+						else:
+							token_iterator.prev()
 
-					# might or might not have ; (this is also used with parameters)
-					token = token_iterator.next()
-					if token.type == 'operator' and token.value == 'assignment':
-						# we have initialization of the value(s)
-						next_token = token_iterator.next()
-						if next_token.type == 'number':
-							new_node.value = next_token.value
-						elif next_token.value == 'left_brace':
-							# initializer list
-							while next_token.value != 'right_brace':
-								next_token = token_iterator.next()
-							token = token_iterator.next()
-
-					if token.value != 'semicolon':
-						token_iterator.prev()
+						# might or might not have ; (this is also used with parameters)
+						temp_token = token_iterator.next()
+						readaway = False
+						if temp_token.type == 'operator' and temp_token.value == 'assignment':
+							# we have initialization of the value(s)
+							next_token = token_iterator.next()
+							if next_token.type == 'number':
+								new_node.value = next_token.value
+							elif next_token.value == 'left_brace':
+								# initializer list
+								cur_lookout = 0
+								max_lookout = 100000
+								brace_count = 1
+								readaway = True
+								failure = False
+								while brace_count > 0:
+								
+									ctoken = token_iterator.next()
+									#print ctoken.value
+									if ctoken.value == 'left_brace':
+										brace_count += 1
+									if ctoken.value == 'right_brace':
+										brace_count -= 1
+									cur_lookout += 1
+									if cur_lookout > max_lookout:
+										failure = True
+										break
+								if failure:
+									print 'Failed to parse away function body'
+									token_iterator.prev(token_iterator.count_get())
+						if not readaway:
+							if temp_token.value != 'semicolon':
+								token_iterator.prev()
 
 					node.childs.append(new_node)
 
@@ -287,6 +330,37 @@ class SyntaxAnalyzer:
 					new_node.syntax_type = 'declaration'
 					new_node.linenumber = token.linenumber
 
+					if token.value == 'Texture1D':
+						new_node.dimension = 'Texture1D'
+					if token.value == 'Texture2D':
+						new_node.dimension = 'Texture2D'
+					if token.value == 'Texture3D':
+						new_node.dimension = 'Texture3D'
+					if token.value == 'Texture1DArray':
+						new_node.dimension = 'Texture1DArray'
+					if token.value == 'Texture2DArray':
+						new_node.dimension = 'Texture2DArray'
+					if token.value == 'TextureCube':
+						new_node.dimension = 'TextureCubemap'
+					if token.value == 'TextureCubeArray':
+						new_node.dimension = 'TextureCubemapArray'
+
+					if token.value == 'Texture2DMS':
+						new_node.dimension = 'Texture2D'
+					if token.value == 'Texture2DMSArray':
+						new_node.dimension = 'Texture2DArray'
+
+					if token.value == 'RWTexture1D':
+						new_node.dimension = 'Texture1D'
+					if token.value == 'RWTexture2D':
+						new_node.dimension = 'Texture2D'
+					if token.value == 'RWTexture1DArray':
+						new_node.dimension = 'Texture1DArray'
+					if token.value == 'RWTexture2DArray':
+						new_node.dimension = 'Texture2DArray'
+					if token.value == 'RWTexture3D':
+						new_node.dimension = 'Texture3D'
+
 					next_token = token_iterator.next()
 					if next_token.value == 'lesser':
 						next_token = token_iterator.next()
@@ -295,7 +369,6 @@ class SyntaxAnalyzer:
 						next_token = token_iterator.next()
 					new_node.name = next_token.value
 					self.known_templated_types.append(new_node.type)
-					
 
 					next_token = token_iterator.next()
 					if next_token.type == 'bracket' and next_token.value == 'left_bracket':

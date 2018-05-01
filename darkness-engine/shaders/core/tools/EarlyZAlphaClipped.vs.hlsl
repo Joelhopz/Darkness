@@ -1,5 +1,6 @@
+#include "../VertexPacking.hlsli"
 
-Buffer<float3> vertices;
+Buffer<uint2> vertices;
 Buffer<float2> uv;
 
 cbuffer ConstData
@@ -16,7 +17,7 @@ struct VSOutput
 VSOutput main(uint id : SV_VertexID)
 {
     VSOutput output;
-    output.position = mul(jitterModelViewProjectionMatrix, float4(vertices[id], 1.0f));
+    output.position = mul(jitterModelViewProjectionMatrix, float4(unpackVertex(vertices[id]), 1.0f));
     output.uv = uv[id];
     return output;
 }

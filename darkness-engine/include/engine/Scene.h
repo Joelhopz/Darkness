@@ -25,6 +25,7 @@
 #include "components/PostprocessComponent.h"
 #include "components/RigidBodyComponent.h"
 #include "components/CollisionShapeComponent.h"
+#include "components/ProbeComponent.h"
 
 #include <iostream>
 #ifdef _WIN32
@@ -57,6 +58,7 @@ namespace engine
         Matrix4f transform;
         Vector3f position;
         Vector3f direction;
+        float range;
         Quaternionf rotation;
         LightType type;
         float outerCone;
@@ -65,26 +67,36 @@ namespace engine
         bool positionChanged;
         bool rotationChanged;
         std::shared_ptr<LightComponent> light;
+        std::shared_ptr<SceneNode> node;
     };
 
+    class LightData;
     struct FlatScene
     {
         std::vector<FlatSceneNode> nodes;
         std::vector<FlatSceneNode> transparentNodes;
         std::vector<FlatSceneNode> alphaclippedNodes;
         std::vector<std::shared_ptr<Camera>> cameras;
+        std::vector<std::shared_ptr<SceneNode>> cameraNodes;
+        std::vector<std::shared_ptr<ProbeComponent>> probes;
+        std::vector<std::shared_ptr<SceneNode>> probeNodes;
         int selectedCamera;
         std::shared_ptr<PostprocessComponent> postprocess;
         std::vector<FlatSceneLightNode> lights;
 
-        bool refreshed = false;
+        std::shared_ptr<LightData> lightData;
 
+        bool refreshed = false;
+        int64_t selectedObject;
         void clear()
         {
             nodes.clear();
             transparentNodes.clear();
             alphaclippedNodes.clear();
             cameras.clear();
+            cameraNodes.clear();
+            probes.clear();
+            probeNodes.clear();
             postprocess = nullptr;
             lights.clear();
         }
@@ -93,7 +105,7 @@ namespace engine
     class SceneNode : public std::enable_shared_from_this<SceneNode>
     {
     public:
-        SceneNode(std::shared_ptr<SceneNode> parent = nullptr);
+        SceneNode(SceneNode* parent = nullptr);
         ~SceneNode();
         SceneNode(SceneNode&&) = default;
         SceneNode(const SceneNode&) = default;
@@ -109,10 +121,10 @@ namespace engine
         const std::shared_ptr<SceneNode> operator[](size_t index) const;
         std::shared_ptr<SceneNode> operator[](size_t index);
 
-        void parent(std::shared_ptr<SceneNode> parent);
+        void parent(SceneNode* parent);
 
-        const std::shared_ptr<SceneNode> parent() const;
-        std::shared_ptr<SceneNode> parent();
+        const SceneNode* parent() const;
+        SceneNode* parent();
 
         void flatten(bool simulating, FlatScene& resultList, unsigned int& objectIndex);
 
@@ -190,12 +202,20 @@ namespace engine
                 m_parent->invalidate();
         }
 
+        int64_t id() const
+        {
+            return m_id;
+        }
+
+        std::shared_ptr<SceneNode> find(int64_t id);
+        std::vector<std::shared_ptr<SceneNode>> path(int64_t id);
+
         const Matrix4f& combinedTransform() const { return m_combinedTransform; }
     private:
         std::vector<std::shared_ptr<SceneNode>> m_childs;
         std::vector<std::shared_ptr<EngineComponent>> m_components;
         std::vector<TypeInstance> m_componentinstances;
-        std::shared_ptr<SceneNode> m_parent;
+        SceneNode* m_parent;
         std::string m_name;
 
         std::shared_ptr<Transform> m_transformComponent;
@@ -204,6 +224,7 @@ namespace engine
         void recalculateCombinedTransform();
 
         bool m_invalid;
+        int64_t m_id;
     };
 
     class Scene
@@ -249,7 +270,10 @@ namespace engine
         void saveTo(const std::string& filepath);
         void loadFrom(const std::string& filepath);
 
-        void clear();
+        void clear(bool full = false);
+
+        std::shared_ptr<SceneNode> find(int64_t id);
+        std::vector<std::shared_ptr<SceneNode>> path(int64_t id);
 
     private:
         FlatScene m_flatscene;
@@ -290,13 +314,13 @@ namespace engine
                     else
                         m_componentCurrent->insertLoadedValue<bool>(m_propertyName, readJsonValue_bool(b));
                 }
-                case serialization::TypeId::ButtonPush:
+                /*case serialization::TypeId::ButtonPush:
                 {
                     if (m_componentCurrent->hasVariant(m_propertyName))
                         m_componentCurrent->variant(m_propertyName).value<engine::ButtonPush>(readJsonValue_buttonPush(b));
                     else
                         m_componentCurrent->insertLoadedValue<engine::ButtonPush>(m_propertyName, readJsonValue_buttonPush(b));
-                }
+                }*/
                 case serialization::TypeId::ButtonToggle:
                 {
                     if (m_componentCurrent->hasVariant(m_propertyName))
@@ -491,6 +515,10 @@ namespace engine
                     newComponent = std::make_shared<LightComponent>();
                 else if (componentName == "PostprocessComponent")
                     newComponent = std::make_shared<PostprocessComponent>();
+                else if (componentName == "Probe")
+                    newComponent = std::make_shared<ProbeComponent>();
+                else
+                    ASSERT(false, "Scene could not deserialize component. Unknown component: %s", componentName.c_str());
                                 
                 m_nodeCurrent.top()->addComponent(newComponent);
                 m_componentCurrent = newComponent;

@@ -23,11 +23,84 @@ namespace engine
         return bytesRead;
     }
 
-    std::string recompile(const implementation::ShaderSupport& support)
+    std::string fixedLength(int value, int digits = 3) {
+        unsigned int uvalue;
+        if (value < 0) {
+            uvalue = -value;
+        }
+        else
+        {
+            uvalue = value;
+        }
+        std::string result;
+        while (digits-- > 0) {
+            result += ('0' + uvalue % 10);
+            uvalue /= 10;
+        }
+        if (value < 0) {
+            result += '-';
+        }
+        std::reverse(result.begin(), result.end());
+        return result;
+    }
+
+    std::string permutationName(const std::string& filename, int permutationId)
+    {
+        if (permutationId != -1)
+        {
+            auto ext = pathExtractExtension(filename);
+            auto file = pathExtractFilenameWithoutExtension(filename);
+            auto path = pathExtractFolder(filename);
+
+            return pathJoin(path, file + "_" + fixedLength(permutationId) + "." + ext);
+        }
+        return filename;
+    }
+
+    std::string permutationName(int permutationId)
+    {
+        if (permutationId != -1)
+        {
+            return fixedLength(permutationId);
+        }
+        return "";
+    }
+
+    std::string recompile(const implementation::ShaderSupport& support, int permutationId, const std::vector<std::string>& defines)
     {
 #ifdef UNICODE
         auto widePath = toWideString(support.executable);
-        auto wideParams = toWideString(support.executable + " \"" + support.shaderCompilerPath + "\"" + " -g " + support.graphicsApi + " -i " + support.file + " -o " + support.binaryFile + "\"");
+
+        std::string defineStr = "";
+        for (auto&& define : defines)
+        {
+            defineStr += " -D" + define;
+        }
+
+        auto binaryFileName = permutationName(support.binaryFile, permutationId);
+
+        std::wstring wideParams;
+        if (defines.size() > 0)
+        {
+            wideParams = toWideString(
+                support.executable + " \"" +
+                support.shaderCompilerPath + "\"" +
+                " -g " + support.graphicsApi +
+                " -i " + support.file +
+                " -o " + binaryFileName +
+                defineStr +
+                "\"");
+        }
+        else
+        {
+            wideParams = toWideString(
+                support.executable + " \"" +
+                support.shaderCompilerPath + "\"" +
+                " -g " + support.graphicsApi +
+                " -i " + support.file +
+                " -o " + binaryFileName +
+                "\"");
+        }
         auto wideRoot = toWideString(engine::pathExtractFolder(support.rootPath));
 
         SECURITY_ATTRIBUTES securityAttributes = {};

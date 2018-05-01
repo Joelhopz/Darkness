@@ -5,6 +5,7 @@
 #include "engine/graphics/Common.h"
 #include "engine/graphics/Pipeline.h"
 #include "engine/graphics/Fence.h"
+#include "engine/graphics/CommonNoDep.h"
 #include "tools/Measure.h"
 #include "tools/MeshTools.h"
 #include <climits>
@@ -20,59 +21,34 @@ namespace engine
         : m_device{ device }
         , m_shaderStorage{ shaderStorage }
         , m_outlinePipeline{ device.createPipeline<shaders::Outline>(shaderStorage) }
+        , m_createOutlineIndirectIndexedDrawArgs{ device.createPipeline<shaders::CreateOutlineIndirectIndexedDrawArgs>(shaderStorage) }
         , m_virtualResolution{ virtualResolution }
-        , m_adjacencyId{ std::numeric_limits<unsigned int>().max() }
+        , m_depthSampler{ device.createSampler(SamplerDescription().filter(Filter::Point)) }
+        , m_indexedDrawArguments{
+            device.createBuffer(BufferDescription()
+                .elementSize(sizeof(DrawIndexIndirectArgs))
+                .elements(1)
+                .usage(ResourceUsage::GpuReadWrite)
+                .structured(true)
+                .name("Occlusion culling dispatch args (DispatchIndirectArgs)")
+            ) }
+
+        , m_indexedDrawArgumentsUAV{
+            device.createBufferUAV(m_indexedDrawArguments) }
 
     {
         m_outlinePipeline.setPrimitiveTopologyType(PrimitiveTopologyType::TriangleList, true);
         m_outlinePipeline.setRasterizerState(RasterizerDescription().cullMode(CullMode::None));
-        m_outlinePipeline.setRenderTargetFormat(Format::Format_R16G16B16A16_FLOAT, Format::Format_UNKNOWN);
         m_outlinePipeline.setDepthStencilState(DepthStencilDescription().depthEnable(false));
-    }
-
-    void RenderOutline::rebuildAdjacencyData(FlatSceneNode& model)
-    {
-        m_adjacencySave.emplace_back(
-            std::pair<uint64_t, std::vector<BufferIBV>>{ 
-                m_device.frameNumber(), 
-                    std::move(m_adjacencyBuffers) });
-        m_adjacencyBuffers.clear();
-
-        for (auto&& subMesh : model.mesh->subMeshes())
-        {
-            auto adjacencyData = meshGenerateAdjacency(subMesh.indices, subMesh.position);
-
-            m_adjacencyBuffers.emplace_back(m_device.createBufferIBV(BufferDescription()
-                .usage(ResourceUsage::CpuToGpu)
-                .name("SubMesh Indices")
-                .setInitialData(BufferDescription::InitialData(adjacencyData))
-            ));
-        }
-    }
-
-    void RenderOutline::clearSaves()
-    {
-        bool found = true;
-        while (found)
-        {
-            found = false;
-            for (auto save = m_adjacencySave.begin(); save != m_adjacencySave.end(); ++save)
-            {
-                if (m_device.frameNumber() - (*save).first > BackBufferCount)
-                {
-                    m_adjacencySave.erase(save);
-                    found = true;
-                    break;
-                }
-            }
-        }
+        m_outlinePipeline.ps.depth_sampler = m_depthSampler;
     }
 
     void RenderOutline::render(
         Device& device,
         TextureRTV& currentRenderTarget,
-        TextureDSV& /*depthBuffer*/,
+        TextureSRV& depthBuffer,
         Camera& camera,
+        ModelResources& modelResources,
         CommandList& cmd,
         FlatSceneNode& model)
     {
@@ -83,14 +59,21 @@ namespace engine
             rebuildAdjacencyData(model);
         }*/
 
+        auto instance = model.mesh->meshBuffer().modelAllocations->subMeshInstance->instanceData.modelResource.gpuIndex;
+        m_createOutlineIndirectIndexedDrawArgs.cs.instanceId.x = instance;
+        m_createOutlineIndirectIndexedDrawArgs.cs.subMeshBinding = modelResources.gpuBuffers().instanceSubMeshBinding();
+        m_createOutlineIndirectIndexedDrawArgs.cs.subMeshAdjacency = modelResources.gpuBuffers().subMeshAdjacency();
+        m_createOutlineIndirectIndexedDrawArgs.cs.indexedDrawArguments = m_indexedDrawArgumentsUAV;
+        cmd.bindPipe(m_createOutlineIndirectIndexedDrawArgs);
+        cmd.dispatch(1, 1, 1);
+
+        // draw outline
         auto viewMatrix = camera.viewMatrix();
         auto cameraProjectionMatrix = camera.projectionMatrix(m_virtualResolution);
         auto jitterMatrix = camera.jitterMatrix(device.frameNumber(), m_virtualResolution);
         auto jitterValue = camera.jitterValue(device.frameNumber());
 
         cmd.setRenderTargets({ currentRenderTarget });
-        cmd.setViewPorts({ Viewport{ 0.0f, 0.0f, static_cast<float>(currentRenderTarget.width()), static_cast<float>(currentRenderTarget.height()), 0.0f, 1.0f } });
-        cmd.setScissorRects({ Rectangle{ 0, 0, currentRenderTarget.width(), currentRenderTarget.height() } });
         m_outlinePipeline.ps.color = Float4{ 0.0f, 1.0f, 0.0f, 1.0f };
 
         const auto& transformMatrix = model.transform;
@@ -107,17 +90,26 @@ namespace engine
             1.0f / static_cast<float>(camera.width()),
             1.0f / static_cast<float>(camera.height()) };
 
-        int index = 0;
-        for (auto&& subMesh : model.mesh->meshBuffers())
+        m_outlinePipeline.ps.depth = depthBuffer;
+        m_outlinePipeline.ps.inverseSize = Vector2f(
+            1.0f / static_cast<float>(camera.width()),
+            1.0f / static_cast<float>(camera.height()));
+
+        m_outlinePipeline.vs.vertices = modelResources.gpuBuffers().vertex();
+        m_outlinePipeline.vs.normals = modelResources.gpuBuffers().normal();
+        cmd.bindPipe(m_outlinePipeline);
+        cmd.drawIndexedIndirect(modelResources.gpuBuffers().adjacency(), m_indexedDrawArguments, 0);
+
+        /*int index = 0;
+        auto& subMesh = model.mesh->meshBuffer();
         {
             m_outlinePipeline.vs.vertices = subMesh.vertices;
             m_outlinePipeline.vs.normals = subMesh.normals;
             cmd.bindPipe(m_outlinePipeline);
             cmd.bindIndexBuffer(subMesh.indicesAdjacency);
-            //cmd.drawIndexed(m_adjacencyBuffers[index].desc().elements, 1, 0, 0, 0);
             cmd.drawIndexed(subMesh.indicesAdjacency.desc().elements, 1, 0, 0, 0);
             ++index;
-        }
+        }*/
     }
 
 }
